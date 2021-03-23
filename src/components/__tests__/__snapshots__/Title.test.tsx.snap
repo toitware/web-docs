@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Title renders correctly 1`] = `
+<h1
+  class="MuiTypography-root makeStyles-title MuiTypography-h1"
+>
+  title content
+</h1>
+`;
