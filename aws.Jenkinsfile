@@ -55,7 +55,7 @@ pipeline {
                 }
             }
             steps {
-                sh "tar -zcf ${BUILD_VERSION}.tgz -C build ."
+                sh "tar -zcf ${BUILD_VERSION}.tgz -C public ."
                 withCredentials([[$class: 'FileBinding', credentialsId: 'gcloud-service-auth', variable: 'GOOGLE_APPLICATION_CREDENTIALS']]) {
                     sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
                     sh "gcloud config set project infrastructure-220307"
