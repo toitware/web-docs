@@ -8,6 +8,7 @@ pipeline {
 
     environment {
         GITHUB_TOKEN = credentials('leon-github-npm')
+        BUILD_VERSION = sh(returnStdout: true, script: 'gitversion').trim()
     }
 
     options {
@@ -42,6 +43,29 @@ pipeline {
         stage("build") {
             steps {
                 sh "yarn build"
+            }
+        }
+
+        stage("upload") {
+            when {
+                anyOf {
+                    branch 'master'
+                    branch pattern: "release-v\\d+.\\d+", comparator: "REGEXP"
+                    tag "v*"
+                }
+            }
+            steps {
+                sh "tar -zcf ${BUILD_VERSION}.tgz -C build ."
+                withCredentials([[$class: 'FileBinding', credentialsId: 'gcloud-service-auth', variable: 'GOOGLE_APPLICATION_CREDENTIALS']]) {
+                    sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
+                    sh "gcloud config set project infrastructure-220307"
+                    sh "toitarchive ${BUILD_VERSION}.tgz toit-web docsv2.toit.io ${BUILD_VERSION}"
+                }
+            }
+            post {
+                always {
+                    sh "rm -rf ./build/"
+                }
             }
         }
     }

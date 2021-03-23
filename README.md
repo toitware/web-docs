@@ -1,3 +1,12 @@
+# General Documentation
+
+This repository contains the general documentation of toit served at
+[docs.toit.io](https://docs.toit.io).
+
+> This repo is still in development, and currently porting all files from
+> https://github.com/toitware/docs which is where the current documentation is
+> located.
+
 # Setup for development
 
 ## yarn
