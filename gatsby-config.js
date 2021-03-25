@@ -26,21 +26,34 @@ module.exports = {
       },
     },
     {
-      resolve: "gatsby-plugin-mdx",
+      resolve: "gatsby-source-filesystem",
       options: {
-        extensions: [".mdx", ".md"],
-        defaultLayouts: {
-          default: require.resolve("./src/components/layout/Layout.tsx"),
-        },
+        name: "pages",
+        path: `${__dirname}/src/pages/`,
       },
     },
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        name: "pages",
-        path: "./src/pages/",
+        name: "docs",
+        path: `${__dirname}/docs/`,
       },
-      __key: "pages",
+    },
+    {
+      resolve: "gatsby-plugin-page-creator",
+      options: {
+        path: `${__dirname}/docs`,
+      },
+    },
+    {
+      resolve: "gatsby-plugin-mdx",
+      options: {
+        extensions: [".mdx", ".md"],
+        defaultLayouts: {
+          docs: require.resolve("./src/components/layout/Layout.tsx"),
+          default: require.resolve("./src/components/layout/Layout.tsx"),
+        },
+      },
     },
   ],
 };

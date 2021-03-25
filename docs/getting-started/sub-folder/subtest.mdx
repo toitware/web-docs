@@ -1,0 +1,31 @@
+# Subtest
+
+## Fleet of devices
+
+To be able to update the firmware of several devices at once, or to deploy apps on several devices at once, it is possible to define a fleet of devices by naming them so they share an identical prefix.
+
+Using the CLI, you can then use
+
+```
+toit fleet -p <prefix> update
+```
+
+```
+toit fleet -p <prefix> deploy
+```
+
+For example, devices `Toitbox1`, `Toitbox2` and `Toitbox3` can be called a fleet using the prefix `-p toitbox`. Prefixes are case-insensitive.
+
+## Across organization
+
+If your devices are claimed across several organizations for which you have access, you can switch organizations to manage each set of devices independently.
+
+### "Console"
+
+Use the drop-down menu to the right of your organization name to choose which organization to be logged in.
+
+### "CLI"
+
+Use the `toit auth` menu to log in and out of a specific organization, list all organizations you belong to, and to switch from one organization to another. Organizations' names are case-sensitive.
+
+Devices can be moved across organizations by unclaiming them from one organization and reclaiming them in another.

@@ -18,7 +18,7 @@ interface GraphType {
 
 interface LayoutProps {
   children: ReactNode;
-  pageContext: {
+  pageContext?: {
     frontmatter: {
       title?: string;
       path?: string;
@@ -37,7 +37,7 @@ export function Layout(props: LayoutProps): JSX.Element {
     }
   `);
 
-  const pageTitle = props.pageContext.frontmatter.title;
+  const pageTitle = props.pageContext?.frontmatter.title;
 
   const title = `${pageTitle ? `${pageTitle} - ` : ""}${data.site.siteMetadata?.title}`;
 

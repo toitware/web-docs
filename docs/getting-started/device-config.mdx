@@ -1,0 +1,104 @@
+---
+title: Device Config
+order: 1
+---
+
+# Configure a device
+
+A device comes with the following default configuration:
+
+- The default WiFi settings is set to SSID 'toitwifi' and password 'toitware'.
+
+- The value of 'Max offline' for the device is '0 second' so the device is continuously awake.
+
+- The firmware version on the device is the one installed during initial device provisioning.
+
+How to change each configuration is explained below. Changes are applied only once the device comes online, or immediately if you manually reboot the device by interrupting the power.
+
+=== "Console"
+To change the configuration, navigate to the **Configuration** tab for a given device and edit the sections as described below.
+
+=== "CLI"
+When running Toit CLI commands against a specific device, the device name must be provided in each command as in `toit device -d <name> info`.
+
+    To make it easier to type your commands when working on a single device, you can set it as default to all `toit device` CLI commands with `toit device use <name>`.
+
+## Device firmware configuration
+
+=== "Console"
+The current version of the firmware installed on the device is displayed in the **SDK** section. Click on the **Edit** icon to change it to another version from the drop down menu, then click **Save**. The proposed change is displayed both in the **SDK** section and with an icon near the name of the device until it is installed next time the device comes online.
+
+    ![configsdkdevice](../img/configsdkdevice.png)
+
+=== "CLI"
+From the CLI, to view the firmware version of your device, run `toit device info`.
+
+    Update the firmware on your device (to the latest version) with `toit device update`.
+
+    You can also downgrade the device with another firmware version with `toit device update [<older-firmware-version>]`, with the firmware version being formatted as `vx.xx.x`
+
+## Device activation schedule
+
+By default, the device is configured to be continuously online (Max offline = 0s). If your device operates on battery, it is recommended to change this configuration so that the device is online only when necessary to extend battery life.
+
+=== "Console"
+
+    In the **Configuration** tab for a given device, go to the section **Max offline** and edit the parameter with the new value (using hours, minutes and seconds) before clicking **Save**. The parameter will be changed next time the console comes online.
+
+    ![maxofflineconfig](../img/maxofflineconfig.png)
+
+=== "CLI"
+
+    Set the device you want to reconfigure as your default device and choose how often you want your device to come online (once a day in this example) with `toit device config max-offline 24h`
+
+This means that if you install an application calculating the temperature every hour while the `max-offline` is set to 24 hours, the application will run the program every hour, even as the device is offline. Only once a day the device will connect and offload all the data to the Toit console.
+
+Note that a device can come online outside of the Max offline schedule when its storage capacity level reach a predefined threshold, as explained in the Advanced configuration section below.
+
+## Connections on device
+
+By default, a device connects to the console through the `toitwifi` WiFi (password `toitware`), using a smartphone as a hotspot. It is recommended to add additional connections on which the device can rely on to come online.
+
+!!! Warning ""
+The ESP32 cannot connect to 5GHz WiFi network.
+
+=== "Console"
+Navigate to the **Configuration** tab, **Connections** section for a given device. Click on the **Edit** button to open the pop-up window in which you can add or delete a connection.
+
+    ![wifinbiotconnections](../img/wifinbiotconnections.png)
+
+    When two or more connections are present, choose the order in which they should be used by moving the connections to use in priority above the others.
+
+=== "CLI"
+Beware that when using the CLI to configure the connection settings, you **need to type in all connections you want to use, in the order you want them to be used**. It is recommended to set up a device with at least 2 different connections, as in
+`toit device config connection -c wifi:<mywifi>:<mypassword> -c wifi:toitwifi:toitware`
+
+    Use `-c wifi:<nameofwifi>:<password>` for a new WiFi connection and `-c nbiot:<apn>:[<operator>[:<bands>[:<pin>]]]` for a Cellular one where operator, bands and pin are optional.
+
+    Note that this command will **automatically delete all previously configured connection** that are not included in the command line.
+
+If an **ESP32** is misconfigured without any valid connection, it will need to be flashed again with
+
+```
+toit serial flash -m esp32-4mb --firmware v0.xx.x -p wifi.ssid=<ssid> -p wifi.password=<password>
+```
+
+## Advanced configuration
+
+A device will attempt to come online based on the max offline parameter.
+When the device is offline, the data (such as logs, metrics, and data generated by the apps running on the device) is stored on the device.
+Reaching the full capacity of storage defined for this type of data means that the latest data will not be stored correctly.
+
+To avoid this situation, it is possible to filter which type of logs and metrics are saved in the device.
+
+In addition, a threshold of storage is set to trigger an online connection where data can be flushed from the device to the console.
+
+See how you can minimize data storage and frequent triggered online connection in the [Devices management](../console/deviceconsole.md) section.
+
+## Factory reset
+
+A factory reset of the device resets all the configurations on the device back to default settings (WiFi connection, 'Max offline' set to '0 second' and the firmware version that was initially installed during device provisioning). Note that it is only possible to to perform a remote factory reset if or when the device comes online. For a device that is not expected to be online soon enough, perform a manual reboot of the device by interrupting the power for the device.
+
+## Unclaim a device
+
+In the case a device gets bricked and stops responding even on the scheduled times of activity, it can be removed from a fleet of devices by unclaiming it with the **Unclaim** button.
