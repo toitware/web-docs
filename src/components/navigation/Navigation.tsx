@@ -1,6 +1,7 @@
 import { graphql, useStaticQuery } from "gatsby";
 import * as React from "react";
 import NavTree from "./NavTree";
+import { sortTree } from "./sort_tree";
 
 export type NavPage = {
   slug: string;
@@ -77,24 +78,6 @@ function getParentSubpages(pages: NavPage[], slugParts: string[], fullSlug: stri
     }
     if (parent.subPages === undefined) parent.subPages = [];
     return getParentSubpages(parent.subPages, slugParts.slice(1), fullSlug);
-  }
-}
-
-function sortTree(pages: NavPage[]): void {
-  pages.sort((a, b) => {
-    if (a.order !== undefined && b.order !== undefined) {
-      return a.order - b.order;
-    } else if (a.order !== undefined) {
-      return -1;
-    } else if (b.order !== undefined) {
-      return 1;
-    } else {
-      // Leave the sorting the way it came from GraphQl
-      return 0;
-    }
-  });
-  for (const page of pages) {
-    if (page.subPages !== undefined) sortTree(page.subPages);
   }
 }
 
