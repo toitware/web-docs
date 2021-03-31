@@ -1,7 +1,9 @@
-import { makeStyles, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 import { Link } from "gatsby";
 import * as React from "react";
+import { FiChevronDown } from "react-icons/fi";
+import { secondaryRed } from "../../theme";
 import { NavPage } from "./Navigation";
 
 // This style is just added for reference.
@@ -9,16 +11,34 @@ const useStyles = makeStyles((theme) => ({
   list: {
     listStyle: "none",
     padding: 0,
-    paddingLeft: "1.5rem",
+    paddingLeft: theme.spacing(2),
   },
   level0: {
-    paddingLeft: 0,
+    paddingLeft: theme.spacing(0),
   },
   link: {
     color: theme.palette.text.primary,
+    fontSize: "0.875rem",
+    fontFamily: theme.typography.fontFamily,
+    display: "block",
+    lineHeight: "1.75rem",
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    opacity: 0.7,
+  },
+  groupTitle: {
+    fontWeight: "bold",
+    opacity: 1,
+  },
+  subGroupTitle: {
+    opacity: 1,
+    textTransform: "uppercase",
+    marginTop: "0.5em",
   },
   active: {
-    fontWeight: "bold",
+    color: secondaryRed.string(),
+    opacity: 1,
+    // background: secondaryRed.lightness(98).string(),
   },
 }));
 
@@ -31,18 +51,48 @@ function NavTree({ pages, level = 0 }: Props): JSX.Element {
   const classes = useStyles();
 
   return (
-    <ul className={clsx(classes.list, { [classes.level0]: level === 0 })}>
+    <ul
+      className={clsx(classes.list, {
+        [classes.level0]: level === 0,
+      })}
+    >
       {pages.map((page) => {
-        return (
-          <li key={page.slug}>
-            <Typography>
-              <Link to={`/${page.slug}`} className={classes.link} activeClassName={classes.active}>
+        let to = `/${page.slug}`;
+        if (!to.endsWith("/")) to += "/";
+
+        if (page.subPages === undefined || page.subPages.length === 0) {
+          return (
+            <li key={page.slug}>
+              <Link to={to} className={classes.link} activeClassName={classes.active}>
                 {page.title}
               </Link>
-            </Typography>
-            {page.subPages !== undefined && <NavTree pages={page.subPages} level={level + 1} />}
-          </li>
-        );
+              {page.subPages !== undefined && <NavTree pages={page.subPages} level={level + 1} />}
+            </li>
+          );
+        } else {
+          return (
+            <>
+              <li key={`${page.slug}-title`}>
+                <span
+                  className={clsx(classes.link, {
+                    [classes.groupTitle]: level === 0,
+                    [classes.subGroupTitle]: level > 0,
+                  })}
+                >
+                  {page.title} {level == 0 && <FiChevronDown />}
+                </span>
+              </li>
+              <li key={page.slug}>
+                {page.subPages !== undefined && (
+                  <NavTree
+                    pages={[{ ...page, title: "Overview", subPages: undefined }, ...page.subPages]}
+                    level={level + 1}
+                  />
+                )}
+              </li>
+            </>
+          );
+        }
       })}
     </ul>
   );

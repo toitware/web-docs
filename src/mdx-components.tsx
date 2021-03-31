@@ -13,7 +13,7 @@ const H3 = (props: any) => <Typography variant="h3" {...props} />;
 const H4 = (props: any) => <Typography variant="h4" {...props} />;
 const H5 = (props: any) => <Typography variant="h5" {...props} />;
 const H6 = (props: any) => <Typography variant="h6" {...props} />;
-const A = (props: any) => <Link color="primary" {...props} />;
+const A = (props: any) => <Link color="textSecondary" {...props} />;
 
 export const components: MDXProviderComponentsProp = {
   p: P,

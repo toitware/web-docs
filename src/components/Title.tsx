@@ -5,7 +5,7 @@ import * as React from "react";
 // This style is just added for reference.
 const useStyles = makeStyles((theme) => ({
   title: {
-    borderBottom: `2px solid ${theme.palette.text.primary}`,
+    // borderBottom: `2px solid ${theme.palette.text.primary}`,
   },
 }));
 

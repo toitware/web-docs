@@ -5,7 +5,7 @@ import * as React from "react";
 import { ReactNode } from "react";
 import { Helmet } from "react-helmet";
 import { components, shorthands } from "../../mdx-components";
-import { primaryTheme } from "../../theme";
+import { darkTheme, lightTheme } from "../../theme";
 import Root from "./Root";
 
 interface GraphType {
@@ -26,6 +26,8 @@ interface LayoutProps {
   };
 }
 
+const dark = false;
+
 export function Layout(props: LayoutProps): JSX.Element {
   const data: GraphType = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -43,7 +45,7 @@ export function Layout(props: LayoutProps): JSX.Element {
 
   return (
     <MDXProvider components={{ ...shorthands, ...components }}>
-      <ThemeProvider theme={primaryTheme}>
+      <ThemeProvider theme={dark ? darkTheme : lightTheme}>
         <Helmet title={title}></Helmet>
         <Root>{props.children}</Root>
       </ThemeProvider>

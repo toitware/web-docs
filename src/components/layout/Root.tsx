@@ -1,8 +1,8 @@
 import { makeStyles } from "@material-ui/core";
+import Color from "color";
 import * as React from "react";
 import { ReactNode } from "react";
 import Navigation from "../navigation/Navigation";
-import Footer from "./Footer";
 import Header from "./Header";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,24 +20,47 @@ const useStyles = makeStyles((theme) => ({
     a: {
       textDecoration: `none`,
     },
+    "*": {
+      boxSizing: "border-box",
+    },
   },
   root: {
     backgroundColor: theme.palette.background.default,
-    minHeight: "100vh",
+    height: "100vh",
     display: "flex",
     flexDirection: "column",
   },
+  nav: {
+    width: "18rem",
+    flexShrink: 0,
+    borderRight: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
+    overflowY: "auto",
+    overflowX: "hidden",
+    padding: theme.spacing(4),
+    paddingRight: 0,
+  },
   main: {
-    flexGrow: 1,
+    height: "100%",
     display: "flex",
     flexDirection: "row",
+    padding: 0,
+    overflowY: "hidden",
   },
-  nav: {
-    width: "20rem",
-    flexShrink: 0,
+  contentContainer: {
+    flex: 1,
+    padding: 0,
+    overflowY: "auto",
+    overflowX: "hidden",
   },
   content: {
-    flex: 1,
+    height: "100%",
+  },
+  contentBody: {
+    width: "46rem",
+    padding: theme.spacing(6),
+
+    // Setting the color so things like list bullets are colored properly
+    color: theme.palette.text.primary,
   },
 }));
 
@@ -59,9 +82,12 @@ export function Root({ children }: Props): JSX.Element {
         <nav className={classes.nav}>
           <Navigation />
         </nav>
-        <div className={classes.content}>{children}</div>
+        <div className={classes.contentContainer}>
+          <div className={classes.content}>
+            <div className={classes.contentBody}>{children}</div>
+          </div>
+        </div>
       </main>
-      <Footer />
     </div>
   );
 }

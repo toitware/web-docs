@@ -5,7 +5,8 @@ const defaultSpacing = 8;
 
 // The color definitions provided by our corporate identity.
 export const primaryRed = Color.hsl(0, 100, 76);
-export const primaryBlue = Color.hsl(213, 29, 30);
+// export const primaryBlue = Color.hsl(213, 29, 30); // Actual original blue
+export const primaryBlue = Color.hsl(213, 60, 30);
 export const secondaryGold = Color.hsl(40, 94, 69);
 export const secondaryBlack = Color.hsl(0, 0, 16);
 export const secondaryRed = Color.hsl(0, 100, 70);
@@ -21,10 +22,17 @@ export const pinkWhiteTheme = createTheme({
 });
 export const whiteBlueTheme = createTheme({
   background: Color("white"),
-  text: primaryBlue,
+  text: primaryBlue.desaturate(0.9),
+});
+export const blueWhiteTheme = createTheme({
+  background: primaryBlue.desaturate(0.3).darken(0.5),
+  text: primaryBlue.desaturate(0.9).lightness(80),
 });
 
-export const primaryTheme = pinkWhiteTheme;
+export const primaryTheme = whiteBlueTheme;
+
+export const lightTheme = primaryTheme;
+export const darkTheme = blueWhiteTheme;
 
 type CreateThemeParameters = {
   type?: PaletteType;
@@ -113,22 +121,25 @@ export function createTheme({
           color: textColor,
         },
         fontFamily: bodyFontFamily,
-        fontSize: 16,
+        fontSize: 14,
         body1: {},
         body2: {
-          fontSize: "0.80rem",
+          fontSize: 13,
         },
         h1: {
-          fontSize: "3.5rem",
+          fontSize: 30,
           fontFamily: titleFontFamily,
+          fontWeight: "bold",
         },
         h2: {
-          fontSize: "3.0rem",
+          fontSize: 22,
           fontFamily: titleFontFamily,
+          fontWeight: "bold",
         },
         h3: {
-          fontSize: "2.0rem",
+          fontSize: 16,
           fontFamily: titleFontFamily,
+          fontWeight: "bold",
         },
       },
     })

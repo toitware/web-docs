@@ -18,6 +18,31 @@ module.exports = {
     "gatsby-plugin-eslint",
     "gatsby-plugin-material-ui",
     "gatsby-plugin-react-helmet",
+    {
+      resolve: `gatsby-plugin-svgr-svgo`,
+      options: {
+        inlineSvgOptions: [
+          {
+            test: /(\.inline\.svg)$/,
+            svgoConfig: {
+              plugins: [{ removeViewBox: false }],
+            },
+          },
+        ],
+        urlSvgOptions: [
+          {
+            test: /\.svg$/,
+            svgoConfig: {
+              plugins: [
+                {
+                  removeViewBox: false,
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
     "gatsby-plugin-sitemap",
     {
       resolve: "gatsby-plugin-manifest",
