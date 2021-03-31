@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 import { Link } from "gatsby";
 import * as React from "react";
+import { Fragment } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import { secondaryRed } from "../../theme";
 import { NavPage } from "./Navigation";
@@ -71,8 +72,8 @@ function NavTree({ pages, level = 0 }: Props): JSX.Element {
           );
         } else {
           return (
-            <>
-              <li key={`${page.slug}-title`}>
+            <Fragment key={page.slug}>
+              <li>
                 <span
                   className={clsx(classes.link, {
                     [classes.groupTitle]: level === 0,
@@ -82,7 +83,7 @@ function NavTree({ pages, level = 0 }: Props): JSX.Element {
                   {page.title} {level == 0 && <FiChevronDown />}
                 </span>
               </li>
-              <li key={page.slug}>
+              <li>
                 {page.subPages !== undefined && (
                   <NavTree
                     pages={[{ ...page, title: "Overview", subPages: undefined }, ...page.subPages]}
@@ -90,7 +91,7 @@ function NavTree({ pages, level = 0 }: Props): JSX.Element {
                   />
                 )}
               </li>
-            </>
+            </Fragment>
           );
         }
       })}
