@@ -123,5 +123,5 @@ The order can be any number, not just an integer. So if you have two pages, with
 `order: 1` and `order: 2` and you want to create a new page that is in between,
 you can use `order: 1.5`.
 
-If no `order` is provided, the page will always came *after* other pages that
+If no `order` is provided, the page will always come *after* other pages that
 have the order specified.
