@@ -16,14 +16,7 @@ export function sortTree(pages: NavPage[]): void {
     } else if (b.order !== undefined) {
       return 1;
     } else {
-      if (a.title < b.title) {
-        return -1;
-      }
-      if (a.title > b.title) {
-        return 1;
-      }
-      // names must be equal
-      return 0;
+      return a.title.localeCompare(b.title, undefined, {});
     }
   });
   for (const page of pages) {

@@ -35,5 +35,13 @@ describe("Navigation", () => {
         p(undefined, undefined, "z"),
       ]);
     });
+    it("handles special characters properly when sorting alphabetically", () => {
+      const pages: NavPage[] = ["réservé", "Premier", "Cliché", "communiqué", "café", "Adieu"].map((title) =>
+        p(undefined, undefined, title)
+      );
+      sortTree(pages);
+
+      expect(pages.map((page) => page.title)).toEqual(["Adieu", "café", "Cliché", "communiqué", "Premier", "réservé"]);
+    });
   });
 });
