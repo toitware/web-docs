@@ -2,6 +2,7 @@ import { makeStyles, Typography } from "@material-ui/core";
 import Color from "color";
 import * as React from "react";
 import ToitLogo from "../../assets/images/toit-logo.inline.svg";
+import SearchBar from "../search/SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -22,7 +23,7 @@ export function Header(): JSX.Element {
   return (
     <header className={classes.container}>
       <ToitLogo />
-      <Typography>Menu goes here</Typography>
+      <SearchBar />
     </header>
   );
 }
