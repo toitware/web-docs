@@ -1,0 +1,44 @@
+# Get started with Toit
+
+There is already a lot you can do with Toit as soon as you get a user account for `toit.io`.
+
+Access the <a href="https://console.toit.io/" target="_blank">Toit console</a> which runs in the Toit cloud to write and run Toit programs using the playground or a simulator. Both benefit from the Toit language extension that helps you get your Toit code right.
+
+Get familiar with the Toit console [here](../console/console.md).
+
+## Use the playground
+
+The playground includes a terminal window where you can write a Toit program. Click on **Run online** to try it on the console. The playground uses the latest firmware installed in your organization (see Organization | SDKS).
+
+![playground](../img/playground.png)
+
+You can try this binary search program in the playground.
+
+```
+main:
+  list := List 15: it * 2
+  print "Binary Search"
+  print "List: $list"
+
+  index := binary_search list 8
+  print "index of 8: $index"
+binary_search list needle:
+  from := 0
+  to := list.size
+  while from < to:
+    mid := from + (to - from) / 2
+    if list[mid] == needle: return mid
+    else if list[mid] < needle: from = mid + 1
+    else if list[mid] > needle: to = mid - 1
+  return -1
+```
+
+## Use a simulator
+
+Click on the **Start a simulator** button in the Devices page to start a simulator with the firmware version of your choice. Delete a simulator by clicking on the corresponding bin icon.
+
+![simulators](../img/simulators.png)
+
+Write a program in the Code tab of the simulator and click the **Run on Device** button.
+
+![runcodesimulator](../img/runcodesimulator.png)

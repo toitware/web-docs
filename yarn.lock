@@ -3747,7 +3747,7 @@ clone-response@1.0.2, clone-response@^1.0.2:
   dependencies:
     mimic-response "^1.0.0"
 
-clsx@^1.0.4:
+clsx@^1.0.4, clsx@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.1.1.tgz#98b3134f9abbdf23b2663491ace13c5c03a73188"
   integrity sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==
@@ -13848,6 +13848,35 @@ webpack@^5.16.0:
   version "5.26.2"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.26.2.tgz#b61c018c9abdb7c67b08e2783ba46fe8723f59e8"
   integrity sha512-h07tAPeQceEO3Idrevqv4ECcpMH8Zp0aUUJ+IytujWTVf6TF5PI3rKVw0Z+7rNjU4qJuEx18BykFxgRvR9VgEQ==
+  dependencies:
+    "@types/eslint-scope" "^3.7.0"
+    "@types/estree" "^0.0.46"
+    "@webassemblyjs/ast" "1.11.0"
+    "@webassemblyjs/wasm-edit" "1.11.0"
+    "@webassemblyjs/wasm-parser" "1.11.0"
+    acorn "^8.0.4"
+    browserslist "^4.14.5"
+    chrome-trace-event "^1.0.2"
+    enhanced-resolve "^5.7.0"
+    es-module-lexer "^0.4.0"
+    eslint-scope "^5.1.1"
+    events "^3.2.0"
+    glob-to-regexp "^0.4.1"
+    graceful-fs "^4.2.4"
+    json-parse-better-errors "^1.0.2"
+    loader-runner "^4.2.0"
+    mime-types "^2.1.27"
+    neo-async "^2.6.2"
+    schema-utils "^3.0.0"
+    tapable "^2.1.1"
+    terser-webpack-plugin "^5.1.1"
+    watchpack "^2.0.0"
+    webpack-sources "^2.1.1"
+
+webpack@^5.27.2:
+  version "5.27.2"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.27.2.tgz#44442219e1469ebe00292703b848580faae03f07"
+  integrity sha512-brNF3N/EdvMzkaZ/Xzb8sqPn5Si3iw6meqCnmNFtcnkorZsFZCBFMa2ElpIMjx6sKWYsnUpBO2dnX+7xgj+mjg==
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.46"

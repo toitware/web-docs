@@ -78,3 +78,50 @@ The same as `yarn develop` but it serves the **built** site.
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+# Writing docs
+
+All the documentation pages are in `docs/`. The folder and file hierarchy is
+also used in the navigation.
+
+The documentation pages are written in `.mdx` which are
+[markdown](https://www.markdownguide.org/basic-syntax/) files that can also
+import react components.
+
+## Frontmatter
+
+An `.mdx` file can start with something called a "frontmatter". This is a
+special section inside markdown files, that allows you to define metadata in
+your pages:
+
+```md
+---
+title: Getting Started
+order: 3
+---
+
+# How to get started
+
+Rest of the content comes here.
+```
+
+## Titles
+
+You can specify the title that should be used in the navigation by setting the
+title property in the frontmatter. If no title is provided, then the first
+header of your markdown document is chosen. So if the first headline in your
+document is `Getting Started` then this will also be the text used in the
+navigation.
+
+## Ordering pages
+
+In the navigation menu, pages are sorted alphabetically according to their
+title, but you can set another order by specifying `order: 4` in the
+frontmatter.
+
+The order can be any number, not just an integer. So if you have two pages, with
+`order: 1` and `order: 2` and you want to create a new page that is in between,
+you can use `order: 1.5`.
+
+If no `order` is provided, the page will always come *after* other pages that
+have the order specified.

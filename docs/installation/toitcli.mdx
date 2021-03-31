@@ -1,0 +1,106 @@
+# Install Toit
+
+## Install the Toit CLI
+
+The Toit command-line interface (CLI) is for interacting with the Toit console and devices.
+
+=== "Install on Windows"
+
+    ## Download the Toit installer
+
+    Download the <a href="https://archive.toit.io/cli/latest/windows/installer" target="_blank">Toit installer for Windows</a> and follow the instructions.
+
+    ## Check
+
+    Type `toit` in a terminal. 
+  
+=== "Install on macOS"
+
+    Note that mac users may need administrator rights to run Toit at the end of the installation process.
+
+    ## Download the toit executable
+
+    Download the <a href="https://archive.toit.io/cli/latest/darwin" target="_blank">Toit executable for macOS</a>.
+
+
+    Unpack the `toit_darwin.tgz` file and save the executable file named `toit` to a new folder (that you can call for example `toitware`) within your favorite installation folder (for example the Applications folder).
+
+    ## Add Toit to your PATH
+
+    To make sure you can **run the Toit CLI in a terminal from any directory**, add the toit executable to your PATH environment variable by editing the shell configuration script, depending on which shell you are using: open a `.zshrc` file (on Catalina) or a `.bash_profile` file (on older macOS versions) with `open ~/.zshrc` or `open ~/.bash_profile`. 
+    
+    Type in the shell configuration script
+    ```
+    export PATH=/Applications/toitware:$PATH
+    ```
+    where `Applications/toitware` is an example of where the `toit` executable is located. Save the file before closing it.
+
+    ![zshrcbashprofile](../img/zshrcbashprofile.png)
+
+    ## Configure VSCODE
+
+    You also need to configure VSCode PATH on macOS. If you have not done so yet, download <a href="https://code.visualstudio.com/download" target="_blank">Visual Studio Code</a> and launch VS Code. In the View menu, choose to open the **Command Palette**. Type 'shell command' to find the **Shell Command: Install 'code' command in PATH**.
+
+    ## Check 
+
+    To verify that you successfully configured the PATH with the toit executable, type `toit` in a **new** terminal. 
+
+    !!! warning ""
+
+        Note that Mac users may get the following warning when starting Toit for the first time. Click on the **?** and follow the instructions to **Allow anyway** the toit executable
+       ![macwarning1](../img/macwarning1.png)
+
+=== "Install on Linux"
+
+    ## Download the toit executable
+
+    Download the <a href="https://archive.toit.io/cli/latest/linux" target="_blank">Toit executable for Linux</a>.
+
+    When the download of the Toit CLI has completed, open the *Downloads* folder on your computer and copy the downloaded file to your preferred installation directory.
+
+    ![Downloadsfolder](../img/downloadsfolder.png)
+
+    Next, uncompress the downloaded Toit CLI, which is packed as a `tgz` file.
+
+    Open a terminal and navigate to the directory where you copied the downloaded file to.
+
+    To unpack, run `tar x -vzf toit_linux.tgz` 
+
+    The result of unpacking the Toit CLI is an executable file, named `toit`, and the result should look like this:
+
+    ![Extract](../img/extract.png)  
+
+    ## Add Toit to your PATH
+
+    Add the folder where the `toit` executable is located to your PATH environment variable so you can run the Toit CLI tool from any directory in a terminal. For example, add the following line to a shell script that runs before you open a terminal, such as `.bash_profile` or `rczsh` located in your home directory:
+    
+    `export PATH=$HOME/local/bin:$PATH`
+
+
+    ## Check
+
+    A logout/login is required for this to take effect. Reopen a terminal and type `toit` to verify that the changes have taken effect. 
+  
+The output of running `toit` in a terminal should be a list of all available commands for the Toit CLI.
+![toitcli](../img/toitcli.png)
+
+## Install the Toit SDK and the Toit language extension
+
+Assuming that you have installed Visual Studio Code as mentioned in the [Prerequisites](prerequisites.md), write the following CLI command in a terminal:
+
+    toit doctor fix
+
+This installs the **Toit language extension for VSCode** and the **latest Toit SDK**.
+
+The command `toit doctor` reports the health status of your local Toit installation. Its output should look like this:
+
+    Toit health:
+     [OK] Toit SDK
+     [OK] Visual Studio Code
+
+You can also check that the extension has been properly installed in VSCode as shown on the following figure.
+
+![langextinvscode](../img/langextinvscode.png)
+
+!!! warning ""
+    Note that the Toit Language Extension cannot be found using the "Search Extensions in Marketplace" dialog.
