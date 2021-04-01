@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { StoreItem, useFlexSearch } from "react-use-flexsearch";
-import { graphql, Link, useStaticQuery } from "gatsby";
 import { InputAdornment, makeStyles, OutlinedInput } from "@material-ui/core";
+import { graphql, Link, useStaticQuery } from "gatsby";
+import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { primaryBlue, whiteBlueTheme } from "../../theme";
+import { StoreItem, useFlexSearch } from "react-use-flexsearch";
 
 // This style is just added for reference.
 const useStyles = makeStyles((theme) => ({

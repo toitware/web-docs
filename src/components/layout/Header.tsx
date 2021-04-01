@@ -1,4 +1,4 @@
-import { makeStyles, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import Color from "color";
 import * as React from "react";
 import ToitLogo from "../../assets/images/toit-logo.inline.svg";

@@ -1,11 +1,8 @@
 import { makeStyles } from "@material-ui/core";
+import { globalHistory } from "@reach/router";
 import clsx from "clsx";
 import { Link } from "gatsby";
 import * as React from "react";
-import { globalHistory } from "@reach/router";
-import { Fragment } from "react";
-import { FiChevronDown } from "react-icons/fi";
-import { secondaryRed } from "../../theme";
 import { NavPage } from "./Navigation";
 
 // This style is just added for reference.

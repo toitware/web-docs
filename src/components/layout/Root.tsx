@@ -2,7 +2,6 @@ import { makeStyles } from "@material-ui/core";
 import Color from "color";
 import * as React from "react";
 import { ReactNode } from "react";
-import { useFlexSearch } from "react-use-flexsearch";
 import Navigation from "../navigation/Navigation";
 import Header from "./Header";
 
