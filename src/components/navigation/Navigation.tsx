@@ -44,7 +44,7 @@ export function Navigation(): JSX.Element {
     }
   `);
 
-  const pages: NavPage[] = [];
+  const pagesTree: NavPage[] = [{ slug: "", title: "Home", order: -100 }];
 
   for (const node of data.allMdx.nodes) {
     const page = {
@@ -54,13 +54,13 @@ export function Navigation(): JSX.Element {
     };
 
     const slugParts = node.slug.replace(/\/$/, "").split("/");
-    const parentSubPages = getParentSubpages(pages, slugParts, node.slug);
+    const parentSubPages = getParentSubpages(pagesTree, slugParts, node.slug);
     parentSubPages.push(page);
   }
 
-  sortTree(pages);
+  sortTree(pagesTree);
 
-  return <NavTree pages={pages} />;
+  return <NavTree pages={pagesTree} />;
 }
 
 /**

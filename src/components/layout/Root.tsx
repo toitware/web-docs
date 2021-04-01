@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core";
 import Color from "color";
 import * as React from "react";
 import { ReactNode } from "react";
+import { useFlexSearch } from "react-use-flexsearch";
 import Navigation from "../navigation/Navigation";
 import Header from "./Header";
 
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   nav: {
-    width: "18rem",
+    width: "15rem",
     flexShrink: 0,
     borderRight: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
     overflowY: "auto",
@@ -54,6 +55,8 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     height: "100%",
+    display: "flex",
+    justifyContent: "center",
   },
   contentBody: {
     width: "46rem",
@@ -61,6 +64,19 @@ const useStyles = makeStyles((theme) => ({
 
     // Setting the color so things like list bullets are colored properly
     color: theme.palette.text.primary,
+
+    "& p": {
+      marginTop: "0.75rem",
+    },
+    "& h1": {
+      margin: "1.5rem 0",
+      "&:first-child": {
+        marginTop: 0,
+      },
+    },
+    "& h2": {
+      margin: "1.5rem 0",
+    },
   },
 }));
 

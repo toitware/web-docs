@@ -3,6 +3,8 @@ import Color from "color";
 
 const defaultSpacing = 8;
 
+export const primaryColor = Color.hsl(222, 100, 60);
+
 // The color definitions provided by our corporate identity.
 export const primaryRed = Color.hsl(0, 100, 76);
 // export const primaryBlue = Color.hsl(213, 29, 30); // Actual original blue
@@ -21,12 +23,13 @@ export const pinkWhiteTheme = createTheme({
   primaryContrast: primaryRed,
 });
 export const whiteBlueTheme = createTheme({
-  background: Color("white"),
-  text: primaryBlue.desaturate(0.9),
+  background: primaryBlue.lightness(99).saturationl(30),
+  text: primaryBlue.desaturate(0.9).lighten(0.5),
 });
 export const blueWhiteTheme = createTheme({
-  background: primaryBlue.desaturate(0.3).darken(0.5),
-  text: primaryBlue.desaturate(0.9).lightness(80),
+  type: "dark",
+  background: primaryBlue.desaturate(0.5).darken(0.5),
+  text: primaryBlue.desaturate(0.9).lightness(70),
 });
 
 export const primaryTheme = whiteBlueTheme;
@@ -51,7 +54,7 @@ export function createTheme({
   background,
   text,
   errorColor = primaryRed,
-  primary = primaryBlue,
+  primary = primaryColor,
   primaryContrast = Color("white"),
   secondary = secondaryRed,
   secondaryContrast = Color("white"),
@@ -70,20 +73,24 @@ export function createTheme({
   // grey, which doesn't look too great on a colored background. But if you
   // blend it with the background, it will simply get closer to that color which
   // normally is what you want.
-  function lighten(color: Color): Color {
+  function lighten(color: Color, ratio = 0.2): Color {
     if (type == "dark") {
-      return color.lighten(0.2);
+      return color.lighten(ratio);
     } else {
-      return color.mix(background, 0.2);
+      return color.mix(background, ratio);
     }
   }
   // The exact opposite of lighten().
-  function darken(color: Color) {
+  function darken(color: Color, ratio = 0.2) {
     if (type == "light") {
-      return color.darken(0.2);
+      return color.darken(ratio);
     } else {
-      return color.mix(background, 0.2);
+      return color.mix(background, ratio);
     }
+  }
+
+  function increaseContrast(color: Color) {
+    return type == "light" ? darken(color, 0.6) : lighten(color, 0.6);
   }
 
   return responsiveFontSizes(
@@ -130,16 +137,19 @@ export function createTheme({
           fontSize: 30,
           fontFamily: titleFontFamily,
           fontWeight: "bold",
+          color: increaseContrast(text).string(),
         },
         h2: {
           fontSize: 22,
           fontFamily: titleFontFamily,
           fontWeight: "bold",
+          color: increaseContrast(text).string(),
         },
         h3: {
           fontSize: 16,
           fontFamily: titleFontFamily,
           fontWeight: "bold",
+          color: increaseContrast(text).string(),
         },
       },
     })

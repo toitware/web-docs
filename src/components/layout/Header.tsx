@@ -12,9 +12,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     borderBottom: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
     color: theme.palette.text.primary,
-    backgroundColor: Color(theme.palette.primary.main).alpha(0.1).string(),
+    backgroundColor: Color(theme.palette.primary.main).alpha(0.05).string(),
     height: "4.5rem",
-    padding: "0 1.5rem",
+    padding: "0 2rem",
   },
 }));
 

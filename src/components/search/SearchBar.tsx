@@ -30,12 +30,14 @@ const useStyles = makeStyles((theme) => ({
   },
   searchField: {
     position: "absolute",
-    top: "-1.75rem",
+    height: "3rem",
+    top: "-1.5rem",
     right: 0,
     width: "15rem",
     transition: "all 200ms ease-in-out",
+    background: "rgba(255, 255, 255, 0.1)",
     "&.Mui-focused": {
-      width: "25rem",
+      width: "30rem",
     },
   },
   noResults: {
@@ -45,16 +47,21 @@ const useStyles = makeStyles((theme) => ({
   },
   result: {
     margin: "0.75rem 0",
-    padding: "0.75rem",
-    borderRadius: "4px",
-    "&:hover": {
-      background: primaryBlue.alpha(0.1).string(),
-    },
     "&:first-of-type": {
       marginTop: 0,
     },
     "&:last-of-type": {
       marginBottom: 0,
+    },
+  },
+  resultLink: {
+    display: "block",
+    padding: "0.75rem",
+    borderRadius: "4px",
+    color: theme.palette.text.primary,
+    "&:hover": {
+      background: theme.palette.primary.main,
+      color: "white",
     },
   },
   resultTitle: {
@@ -64,9 +71,6 @@ const useStyles = makeStyles((theme) => ({
   resultExcerpt: {
     margin: 0,
     overflow: "ellipse",
-  },
-  resultLink: {
-    color: theme.palette.text.primary,
   },
 }));
 
