@@ -53,6 +53,7 @@
     "gatsby-plugin-svgr-svgo": "^1.2.0",
     "gatsby-plugin-typescript": "^3.1.0",
     "gatsby-plugin-typescript-checker": "^1.1.1",
+    "gatsby-remark-autolink-headers": "^3.2.0",
     "gatsby-source-filesystem": "^3.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

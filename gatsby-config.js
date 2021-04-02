@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: "Toit",
+    title: "Toit Documentation",
     siteUrl: "https://template.toit.io",
     // Put common data you want to reuse in the site here.
   },
@@ -64,12 +64,12 @@ module.exports = {
         path: `${__dirname}/docs/`,
       },
     },
-    {
-      resolve: "gatsby-plugin-page-creator",
-      options: {
-        path: `${__dirname}/docs`,
-      },
-    },
+    // {
+    //   resolve: "gatsby-plugin-page-creator",
+    //   options: {
+    //     path: `${__dirname}/docs`,
+    //   },
+    // },
     {
       resolve: "gatsby-plugin-mdx",
       options: {
@@ -78,6 +78,14 @@ module.exports = {
           docs: require.resolve("./src/components/layout/Layout.tsx"),
           default: require.resolve("./src/components/layout/Layout.tsx"),
         },
+        gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-autolink-headers`,
+            options: {
+              className: `table-of-contents-icon`,
+            },
+          },
+        ],
       },
     },
 

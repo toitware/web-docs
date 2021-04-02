@@ -1,9 +1,11 @@
 import { makeStyles } from "@material-ui/core";
+import { TableOfContents } from "./Layout";
 import Color from "color";
 import * as React from "react";
 import { ReactNode } from "react";
 import Navigation from "../navigation/Navigation";
 import Header from "./Header";
+import { TableOfContentsNav } from "./TableOfContents";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   nav: {
     width: "15rem",
     flexShrink: 0,
-    borderRight: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
+    // borderRight: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
     overflowY: "auto",
     overflowX: "hidden",
     padding: theme.spacing(4),
@@ -76,18 +78,27 @@ const useStyles = makeStyles((theme) => ({
     "& h2": {
       margin: "1.5rem 0",
     },
+    "& .table-of-contents-icon": {
+      position: "absolute",
+      left: "-1.5rem",
+      opacity: 0,
+    },
+    "& h1:hover .table-of-contents-icon, & h2:hover .table-of-contents-icon": {
+      opacity: 1,
+    },
   },
 }));
 
 type Props = {
   children: ReactNode;
+  tableOfContents?: TableOfContents;
 };
 
 /**
  * The actual content of the layout, separated into its own component so it has
  * access to the theme.
  */
-export function Root({ children }: Props): JSX.Element {
+export function Root({ children, tableOfContents }: Props): JSX.Element {
   const classes = useStyles();
 
   return (
@@ -100,6 +111,7 @@ export function Root({ children }: Props): JSX.Element {
         <div className={classes.contentContainer}>
           <div className={classes.content}>
             <div className={classes.contentBody}>{children}</div>
+            {tableOfContents?.items && <TableOfContentsNav table={tableOfContents} />}
           </div>
         </div>
       </main>

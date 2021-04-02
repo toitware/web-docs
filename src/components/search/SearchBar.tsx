@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
   },
   results: {
+    zIndex: 100,
     position: "absolute",
     top: "2.8rem",
     right: "0",
