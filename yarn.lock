@@ -1867,6 +1867,12 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
 
+"@toitware/code-block@file:../npm-packages/packages/code-block":
+  version "0.0.1"
+  dependencies:
+    clsx "^1.1.1"
+    react-codemirror2 "^7.2.1"
+
 "@toitware/testing-utils@^0.0.7":
   version "0.0.7"
   resolved "https://npm.pkg.github.com/download/@toitware/testing-utils/0.0.7/a909d79f9dd7aebe26bb49dd106ee6ffd247101b1c90b8096c4faa8b3e7b6b99#71e7223fe64fbe684e7a9a6e495b0eb4ecaa0fd4"
@@ -3880,6 +3886,11 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
+
+codemirror@^5.60.0:
+  version "5.60.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.60.0.tgz#00a8cfd287d5d8737ceb73987f04aee2fe5860da"
+  integrity sha512-AEL7LhFOlxPlCL8IdTcJDblJm8yrAGib7I+DErJPdZd4l6imx8IMgKK3RblVgBQqz3TZJR4oknQ03bz+uNjBYA==
 
 collapse-white-space@^1.0.2:
   version "1.0.6"
@@ -11154,6 +11165,11 @@ rc@^1.2.7, rc@^1.2.8:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-codemirror2@^7.2.1:
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-7.2.1.tgz#38dab492fcbe5fb8ebf5630e5bb7922db8d3a10c"
+  integrity sha512-t7YFmz1AXdlImgHXA9Ja0T6AWuopilub24jRaQdPVbzUJVNKIYuy3uCFZYa7CE5S3UW6SrSa5nAqVQvtzRF9gw==
 
 react-dev-utils@^11.0.3:
   version "11.0.4"

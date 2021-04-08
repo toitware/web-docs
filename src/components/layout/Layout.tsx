@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@material-ui/core";
 import { MDXProvider } from "@mdx-js/react";
-import { graphql, useStaticQuery } from "gatsby";
+import { graphql } from "gatsby";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import * as React from "react";
 import { ReactNode } from "react";

@@ -1,5 +1,5 @@
 import Color from "color";
-import { createTheme, primaryBlue } from "../theme";
+import { createTheme, primaryColor } from "../theme";
 
 describe("createTheme", () => {
   it("returns a Theme object with correct colors", () => {
@@ -10,7 +10,7 @@ describe("createTheme", () => {
     expect(theme.palette.text.secondary).toBe("rgba(255, 255, 255, 0.7)");
     expect(theme.palette.text.disabled).toBe("rgba(255, 255, 255, 0.5)");
 
-    expect(theme.palette.primary.main).toBe(primaryBlue.string());
-    expect(theme.palette.primary.dark).toBe("hsl(213, 29%, 24%)");
+    expect(theme.palette.primary.main).toBe(primaryColor.string());
+    expect(theme.palette.primary.dark).toBe("hsl(222, 100%, 48%)");
   });
 });
