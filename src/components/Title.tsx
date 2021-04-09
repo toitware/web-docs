@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import * as React from "react";
 
 // This style is just added for reference.
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   title: {
     // borderBottom: `2px solid ${theme.palette.text.primary}`,
   },

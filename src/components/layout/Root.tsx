@@ -1,6 +1,5 @@
 import { makeStyles } from "@material-ui/core";
 import { TableOfContents } from "./Layout";
-import Color from "color";
 import * as React from "react";
 import { ReactNode } from "react";
 import Navigation from "../navigation/Navigation";
