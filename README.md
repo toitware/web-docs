@@ -19,9 +19,9 @@ If you haven't installed `node` yet, install `node` from [nodejs.org](https://no
 
 The version of `node` must be >= v12.16.1, i.e. the version of node that comes with yarn is not the latest.
 
-In order to be able to install packages from this repository on your machine,
+**⚠️ In order to be able to install packages from this repository on your machine,
 you need to [authenticate with the GitHub
-registry](https://docs.github.com/en/packages/guides/configuring-npm-for-use-with-github-packages#authenticating-to-github-packages).
+registry](https://docs.github.com/en/packages/guides/configuring-npm-for-use-with-github-packages#authenticating-to-github-packages).**
 
 Here's a short summary of what you need to do:
 
