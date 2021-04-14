@@ -26,7 +26,7 @@ registry](https://docs.github.com/en/packages/guides/configuring-npm-for-use-wit
 Here's a short summary of what you need to do:
 
 1. [Create a personal access token](https://github.com/settings/tokens/new)
-   1. Name it appropriately
+   1. Name it appropriately (I suggest something like: `<your machine name> GitHub npm registry`) 
    2. Check `write:packages` and `read:packages`
 2. Copy the token
 3. Add the token to your `~/.npmrc`:  
