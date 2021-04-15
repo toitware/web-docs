@@ -156,7 +156,7 @@ module.exports = {
 
             return {
               id: node.id,
-              path: node.frontmatter.path ?? path,
+              path: node.frontmatter.path || path,
               title: node.frontmatter.title ? node.frontmatter.title : node.headings[0].value,
               body: node.rawBody,
               excerpt: node.excerpt,
