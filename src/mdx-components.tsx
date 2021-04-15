@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 import { CodeBlock } from "@toitware/code-block";
 import { Link, Typography } from "@material-ui/core";
@@ -15,6 +16,8 @@ const H4 = (props: any) => <Typography variant="h4" {...props} />;
 const H5 = (props: any) => <Typography variant="h5" {...props} />;
 const H6 = (props: any) => <Typography variant="h6" {...props} />;
 const A = (props: any) => <Link color="textSecondary" {...props} />;
+
+const Pre = (props: any) => <>{props.children}</>;
 
 const Code = (props: { children: React.ReactNode; className?: string }) => {
   let mode: string | undefined;
@@ -34,6 +37,7 @@ export const components: MDXProviderComponentsProp = {
   h6: H6,
   a: A,
   code: Code,
+  pre: Pre,
 };
 
 /**
