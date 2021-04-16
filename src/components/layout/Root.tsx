@@ -9,10 +9,9 @@ import { TableOfContentsNav } from "./TableOfContents";
 const useStyles = makeStyles((theme) => ({
   "@global": {
     html: {
-      // Make sure the scrollbar is always visible (on the devices that don't
-      // have a floating scrollbar), so the menu doesn't jump around when larger
-      // sections cause the scrollbar to appear.
-      overflowY: "scroll",
+      // Make sure the scrollbar is never visible, since the content div is
+      // scrollable by itself.
+      overflowY: "hidden",
     },
     body: {
       margin: 0,
@@ -34,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
   nav: {
     width: "15rem",
     flexShrink: 0,
-    // borderRight: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
     overflowY: "auto",
     overflowX: "hidden",
     padding: theme.spacing(4),

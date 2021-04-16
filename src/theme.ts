@@ -7,7 +7,6 @@ export const primaryColor = Color.hsl(222, 100, 60);
 
 // The color definitions provided by our corporate identity.
 export const primaryRed = Color.hsl(0, 100, 76);
-// export const primaryBlue = Color.hsl(213, 29, 30); // Actual original blue
 export const primaryBlue = Color.hsl(213, 60, 30);
 export const secondaryGold = Color.hsl(40, 94, 69);
 export const secondaryBlack = Color.hsl(0, 0, 16);

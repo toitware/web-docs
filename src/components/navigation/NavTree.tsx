@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
   active: {
     color: theme.palette.primary.main,
     opacity: 1,
-    // background: secondaryRed.lightness(98).string(),
   },
 }));
 
@@ -90,7 +89,6 @@ function NavTree({ pages, level = 0 }: Props): JSX.Element {
                 })}
               >
                 {page.title}
-                {/* {level == 0 && <FiChevronDown />} */}
               </span>
               {page.subPages !== undefined && (
                 <NavTree

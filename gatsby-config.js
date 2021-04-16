@@ -64,12 +64,6 @@ module.exports = {
         path: `${__dirname}/docs/`,
       },
     },
-    // {
-    //   resolve: "gatsby-plugin-page-creator",
-    //   options: {
-    //     path: `${__dirname}/docs`,
-    //   },
-    // },
     {
       resolve: "gatsby-plugin-mdx",
       options: {
