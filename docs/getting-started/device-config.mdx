@@ -15,22 +15,26 @@ A device comes with the following default configuration:
 
 How to change each configuration is explained below. Changes are applied only once the device comes online, or immediately if you manually reboot the device by interrupting the power.
 
-=== "Console"
+### "Console"
+
 To change the configuration, navigate to the **Configuration** tab for a given device and edit the sections as described below.
 
-=== "CLI"
+### "CLI"
+
 When running Toit CLI commands against a specific device, the device name must be provided in each command as in `toit device -d <name> info`.
 
-    To make it easier to type your commands when working on a single device, you can set it as default to all `toit device` CLI commands with `toit device use <name>`.
+> To make it easier to type your commands when working on a single device, you can set it as default to all `toit device` CLI commands with `toit device use <name>`.
 
 ## Device firmware configuration
 
-=== "Console"
+### "Console"
+
 The current version of the firmware installed on the device is displayed in the **SDK** section. Click on the **Edit** icon to change it to another version from the drop down menu, then click **Save**. The proposed change is displayed both in the **SDK** section and with an icon near the name of the device until it is installed next time the device comes online.
 
     ![configsdkdevice](../img/configsdkdevice.png)
 
-=== "CLI"
+### "CLI"
+
 From the CLI, to view the firmware version of your device, run `toit device info`.
 
     Update the firmware on your device (to the latest version) with `toit device update`.
@@ -41,7 +45,7 @@ From the CLI, to view the firmware version of your device, run `toit device info
 
 By default, the device is configured to be continuously online (Max offline = 0s). If your device operates on battery, it is recommended to change this configuration so that the device is online only when necessary to extend battery life.
 
-=== "Console"
+### "Console"
 
     In the **Configuration** tab for a given device, go to the section **Max offline** and edit the parameter with the new value (using hours, minutes and seconds) before clicking **Save**. The parameter will be changed next time the console comes online.
 

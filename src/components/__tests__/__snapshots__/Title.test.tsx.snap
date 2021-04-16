@@ -2,7 +2,7 @@
 
 exports[`Title renders correctly 1`] = `
 <h1
-  class="MuiTypography-root makeStyles-title MuiTypography-h1"
+  class="MuiTypography-root MuiTypography-h1"
 >
   title content
 </h1>
