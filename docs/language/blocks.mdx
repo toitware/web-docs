@@ -1,0 +1,460 @@
+---
+order: 5
+---
+
+# Toit blocks
+
+Blocks are a mechanism to conveniently and efficiently provide callbacks to functions. This mechanism is, for example, used for the methods `int.repeat` and `List.do`.
+
+<div class="toit">
+  ``` main: // Print the numbers from 1 to 10, one per line. 10.repeat: print it + 1 // Print the elements in the list,
+  one per line. ["what", "a", "list"].do: print it ```
+</div>
+
+Syntactically `repeat` and `do` look like they are built-in to the language like `for` and `if` are, but they are actually normal methods that use the block feature.
+
+## Basic use of blocks
+
+Blocks are used extensively in the Toit standard library, so you need to know the basics of calling functions that accept blocks.
+A function that takes a block as an argument surrounds the parameter with brackets `[ ]`. For example, the function signature of `int.repeat` is
+
+<div class="toit">``` repeat [block]: // ... ```</div>
+
+The `[block]` parameter states that the `repeat` function takes exactly one argument which must be a block (because of the `[` and `]`).
+
+On the caller side, block arguments look like a scope for `if` or `for`. For example, if you want to call `repeat`, you could write
+
+<div class="toit">``` main: 4.repeat: print "again" ```</div>
+
+Just like for `if` and `for`, you can choose to put single line blocks on the same line as the call. For example
+
+<div class="toit">``` main: 4.repeat: print "again" ```</div>
+
+Blocks often receive arguments when they are called as callbacks. For instance, `List.do` iterates over a list and calls the block with every element. When the block receives one argument you can refer to the argument with the keyword `it`. For example
+
+<div class="toit">``` main: ["Siri", "John", "Sue"].do: print it ```</div>
+
+prints
+
+```bash
+Siri
+John
+Sue
+```
+
+You can name the parameter of the block if you want to use something else than `it`. To do so, you start the block with the name enclosed in pipes `|`. For example
+
+<div class="toit">``` main: ["Siri", "John", "Sue"].do: | name | print name ```</div>
+
+prints
+
+```bash
+Siri
+John
+Sue
+```
+
+Some blocks receive more than one argument. In that case you have to use the `|` notation. You just write all the names in between the two pipes. For example, `Map.do` iterates all the key-value pairs of a `Map`, and calls the block with the key as the first argument and the value as the second:
+
+<div class="toit">
+```
+main:
+  map ::= {
+    1234: "Siri",
+    2345: "John",
+    3456: "Sue"
+    }
+  map.do: | id name |
+    print "$name has ID $id"
+```
+</div>
+
+which prints
+
+```bash
+Siri has ID 1234
+John has ID 2345
+Sue has ID 3456
+```
+
+If a block accepts multiple arguments, but you only need to refer to the first, then you can omit the naming and just use `it`. If there are parameters that you don't need, then you can use a wildcard `_` instead of giving them a name.
+
+## Returning from blocks and accessing variables
+
+Blocks look like they are built-in which makes it important that they also act like they are built-in. This means that returning from a block with `return`, or accessing local variables must just work.
+
+### Returning from a block
+
+#### Non-local return
+
+The non-local return is the most common return from blocks. It is best explained based on an example:
+
+<div class="toit">
+```
+/**
+Takes a list $list and returns the first negative number.
+Returns null if $list contains no negative number.
+*/
+first_negative list:
+  list.do:
+    if it < 0: return it
+  return null
+
+main:
+print
+first_negative [1, 2, 3, -3, -2, -1]
+
+````
+</div>
+
+which would print
+
+```bash
+-3
+````
+
+The `return it` in `first_negative` is a non-local return which means that it doesn't just return from the block or `do`, it returns from `first_negative`. This means that we can short circuit the search when we find the first negative number.
+
+#### Local return
+
+In some situations, it is useful to do a local return. That is, to just return from the block. To do this, you use the `continue` keyword followed by a dot `.` and the label of the function you want to continue in. For example
+
+<div class="toit">
+```
+/**
+Takes a list of integers $list and maps it to a list of
+  odd numbers by incrementing even numbers by one.
+*/
+oddify list:
+  return list.map:
+    if it % 2 == 0:
+      continue.map it + 1
+    continue.map it
+
+main:
+list := [1, 2, 3, 4]
+print
+oddify list
+
+````
+</div>
+
+which prints
+
+```bash
+[1, 3, 3, 5]
+````
+
+Here the block given to `map` uses `continue` to do a local return of an odd value when it sees an even value. The snippet `continue.map` can be read as "continue in the `map` function".
+
+#### Default return
+
+The default return of a block is a local return. The block returns the value of the last statement in the block. For example
+
+<div class="toit">
+```
+/**
+Takes a list of words, and returns a new list with only the
+  words that are 5 characters or fewer.
+*/
+short_words words:
+  return words.filter:
+    it.size < 6
+
+main:
+words := ["word", "small", "minuscule", "tiny"]
+print
+short_words words
+
+````
+</div>
+
+Here the block accepted by `filter` returns the value of the last statement which is `it.size < 6`, a boolean that indicates whether the size of the element is less than 6.
+
+It prints
+
+```bash
+[word, small, tiny]
+````
+
+In the `oddify` example in section [Local return](#local-return), the last local return was unnecessary. If you replace `continue.map it` with `it`, then the block uses the default local return to return `it` from the block. That is
+
+<!-- RESET CODE -->
+
+<div class="toit">
+```
+/**
+Takes a list of integers $list and maps it to a list of odd
+  numbers by incrementing even numbers by one.
+*/
+oddify list:
+  return list.map:
+    if it % 2 == 0:
+      continue.map it + 1
+    it
+
+main:
+list := [1, 2, 3, 4]
+print
+oddify list
+
+````
+</div>
+
+prints
+
+```bash
+ [1, 3, 3, 5]
+````
+
+## Blocks referencing variables
+
+Blocks can reference everything that can be referenced from the scope the block was defined in. This includes access to local variable, field variables, and globals.
+
+<div class="toit">
+```
+my_stringify list -> string:
+  is_first := true
+  str := "["
+  list.do:
+    str += "$(is_first ? "" : ", ")$it"
+    is_first = false
+  str += "]"
+  return str
+
+main:
+print
+my_stringify [1, 2, 3]
+
+````
+</div>
+
+Here the block (given to `do`) references both `is_first` and `str`.
+Notice that the block both accesses and modifies the variables.
+
+The function returns a string representation of the list corresponding to the exact syntactic construct that creates a list, and thus prints
+
+```bash
+ [1, 2, 3]
+````
+
+## Examples of block usage
+
+Many `for`-loops follow a common pattern, where the loop uses a loop-variable to count from 0 to a given limit. For example say you want a function that prints the numbers from 1 to `n`, you could write
+
+<div class="toit">
+```
+/// Prints the numbers from 1 to $n on separate lines.
+print_numbers n:
+  for i := 0; i < n; i++:
+    print i + 1
+
+main:
+print_numbers 5
+
+```
+</div>
+
+As you can see, the `for`-loop is mostly boilerplate code. All you want to express is that the `print` statement should be executed `n` times. This is where blocks come in handy. We can rewrite the above snippet using `int.repeat`:
+
+<!-- RESET CODE -->
+<div class="toit">
+```
+
+/// Prints the numbers from 1 to $n on separate lines.
+print_numbers n:
+n.repeat:
+print it + 1
+
+main:
+print_numbers 5
+
+```
+</div>
+
+The new code isn't just shorter, but also expresses the intent more clearly.
+
+We can do the same exercise for list iterations. Say you have written a function that prints the elements of a list:
+
+<div class="toit">
+```
+
+/// Prints the elements of the list on separate lines.
+print_list list:
+for i := 0; i < list.size; i++:
+print list[i]
+
+main:
+print_list [1, 2, 3, 4, 5]
+
+```
+</div>
+
+Again, you can use `int.repeat` to rewrite the `for`-loop:
+
+<!-- RESET CODE -->
+<div class="toit">
+```
+
+/// Prints the elements of the list on separate lines.
+print_list list:
+list.size.repeat:
+print list[it]
+
+main:
+print_list [1, 2, 3, 4, 5]
+
+```
+</div>
+
+Now the example is shorter, but it is still not clear what the intend is. You can do even better than the above. The collections in the Toit standard library have `do` functions that iterate the collections and call a block for each element. You can rewrite `print_list` to
+
+<!-- RESET CODE -->
+<div class="toit">
+```
+
+/// Prints the elements of the list on separate lines.
+print_list list:
+list.do:
+print it
+
+main:
+print_list [1, 2, 3, 4, 5]
+
+```
+</div>
+
+Now the intend is clear: you are `do`'ing something to the list which corresponds to visiting each element of the list.
+
+## Calling functions with named block parameters
+
+Block parameters can also be named. This is indicated in the function signature by enclosing the named parameter in brackets `[ ]` (the same as for other block parameters). For instance, the signature of `Map.remove` is
+
+<div class="toit">
+```
+
+remove key [--if_absent] -> none:
+
+```
+</div>
+
+The named parameter is given in the same way as normal block parameter. For
+example we could make a throwing remove for `Map`
+
+<div class="toit">
+```
+
+class Map:
+// ...
+
+throw_remove key:
+remove key --if_absent=:
+throw "No such entry"
+
+```
+</div>
+
+We could also implement a `remove` that ignores the absence of a key:
+
+<!-- SKIP CODE -->
+<div class="toit">
+```
+
+class Map:
+// ...
+
+remove key:
+remove key --if_absent=: null
+
+```
+</div>
+
+A function can take multiple blocks as arguments. Take the `Map.get` signature as an example:
+
+<div class="toit">
+```
+
+get key [--if_present] [--if_absent]:
+
+```
+</div>
+
+`Map.get` takes two block arguments. For the sake of readability, it is
+
+<div class="toit">
+```
+
+announcer map key:
+map.get key
+--if_present=: | value |
+print "Proudly presenting $value!"
+--if_absent=:
+print "Unable to find $key"
+
+main:
+map ::= {
+1: "Siri",
+2: "John",
+3: "Sue"
+}
+announcer map 1
+announcer map 4
+
+````
+</div>
+
+This prints
+
+```bash
+Proudly presenting Siri!
+Unable to find 4
+````
+
+Here we have formatted the arguments differently, so each of the block arguments are easily identified.
+
+## Blocks as values
+
+Blocks are values in Toit which is why functions accept them as arguments. A block value is defined as a colon `:` followed by the body of the block which is either a statement on the same line of the block, such as `: null`, or a series of statements on seperate lines following the `:` (all statements indented), such as
+
+<div class="toit">``` main: print "multi" print "line" ```</div>
+
+In all the examples so far where we have passed blocks as arguments to function, we were really defining the block value in place.
+Because blocks are values, they can be stored in local variables, just like other values. For example
+
+<div class="toit">``` main: block_variable := : print it + 1 10.repeat block_variable ```</div>
+
+Syntactically, it looks a bit cryptic when blocks are stored in local variables. However, the main purpose of blocks is to pass snippets of code to functions.
+
+Blocks aren't just "normal" functions as in other programming languages. They are much more efficient, but also come with some restrictions.
+
+### Restrictions
+
+Blocks are stack allocated, which is what makes them so efficient, but it also limits where they can be used:
+
+- Blocks cannot be stored in instance fields, static class fields, and globals.
+
+- Blocks cannot be returned from functions and methods.
+
+- Lambdas cannot capture blocks.
+
+- Blocks cannot take blocks as arguments.
+
+## Defining functions that take block arguments
+
+You can define your own functions that accept block arguments. You have already seen what the function signature should look like: block arguments must be enclosed by brackets `[ ]`.
+
+In order to execute a block, you simply call `call` on it. For example, this is how `int.repeat` is implemented:
+
+<!-- SKIP CODE -->
+
+<div class="toit">
+```
+class int:
+  // ...
+  repeat [block]:
+    for i := 0; i < this; i++:
+      block.call i
+```
+</div>
+
+Note: non-named block parameters have to be the last in the function signature.

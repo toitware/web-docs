@@ -1,0 +1,50 @@
+---
+order: 0
+---
+
+# Apps, communicate within a device
+
+[PubSub](../infrastructure/pubsub.md) is a service for bi-directional communication. In this tutorials, we show how PubSub can be used so that two apps can communicate with each other within a device. In this scenario, the data does not need to be sent out to the cloud to be received by the other app. We will be communicating on the device topic `device:hello-world`.
+
+## The subscriber
+
+The subscriber sets up a subscription on a topic.
+
+<div class="toit">
+```
+// filename: pubsub/subscribe_device.toit
+{include-file 3- third_party/toit/examples/PubSub/subscribe_device.toit}
+```
+</div>
+
+## The publisher
+
+The publisher publishes the message `"Hello, World!"` on the topic and then terminates.
+
+<div class="toit">
+```
+// filename: pubsub/publish_device.toit
+{include-file 3- third_party/toit/examples/PubSub/publish_device.toit}
+```
+</div>
+
+## Running the example
+
+To run the example, run `subscribe.toit` on your default device in a terminal window. Once the program is started, open a second terminal window and run `publish.toit`.
+
+Both windows are depicted here:
+
+ <div class="termynal" data-termynal>
+    <span data-ty="input"  data-ty-prompt="(MyToitBox@local) $">toit run subscribe.toit</span>
+    <span data-ty>2020-06-12T09:11:49.689210Z: &lt;process initiated&gt;</span>
+    <span data-ty>Received message 'Hello, World!' from Device(82df15db-4c03-4516-b846-df714577960c)</span>
+    <span data-ty>2020-08-04T10:45:46.397975Z: &lt;process terminated - exit code: 0&gt;</span>
+</div>
+
+ <div class="termynal" data-termynal>
+    <span data-ty="input"  data-ty-prompt="(MyToitBox@local) $">toit run publish.toit</span>
+    <span data-ty>2020-08-04T10:45:46.120857Z: &lt;process initiated&gt;</span>
+    <span data-ty>Hello, World!</span>
+    <span data-ty>2020-08-04T10:45:46.267676Z: &lt;process terminated - exit code: 0&gt;</span>
+    <span data-ty>[1]+  Done                    toit run subscribe.toit</span>
+</div>

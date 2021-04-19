@@ -1,0 +1,194 @@
+---
+order: 7
+---
+
+# Control flow in Toit
+
+## If-statements
+
+If-statements work in a very similar way to other languages.
+The condition is terminated with a colon, `:`, and the body
+is either a one-liner on the same line, or delimited by indentation:
+
+<!-- HIDDEN CODE main: -->
+<!-- HIDDEN CODE   i := 42 -->
+
+<div class="toit">
+```
+  if i == 42: print "Found the answer!"
+  if i < 100:
+    print "Found a smallish number!"
+```
+</div>
+
+Else-clauses work in the same way:
+
+<div class="toit">``` if i % 3 == 0: print "fizz" else: print i ```</div>
+
+Cascaded `if`s can be written with `else if`:
+
+<div class="toit">
+  ``` if i % 3 == 0: if i % 5 == 0: print "fizzbuzz" else: print "fizz" else if i % 5 == 0: print "buzz" else: print i
+  ```
+</div>
+
+Sometimes you may prefer the ternary `?:` operator instead of small `if`s:
+
+<div class="toit">
+  ``` buzz := i % 5 == 0 if i % 3 == 0: print (buzz ? "fizzbuzz" : "fizz") else if buzz: print "buzz" else: print i ```
+</div>
+
+## Loops
+
+Often, loops are used to iterate over a collection. In this case you should
+usually use the built-in
+[do method of the Collection class](<https://libs.toit.io/core/collections/class-Collection#do(block)>).
+Some collections also have
+[do --reversed](<https://libs.toit.io/core/collections/class-List#do(block%2Cbool)>)
+for looping from last to first.
+
+<!-- HIDDEN CODE main: -->
+<!-- HIDDEN CODE   list := List 30: it -->
+
+<div class="toit">
+```
+  // Loop over all elements in a list:
+  list.do: | element |
+    print element
+
+// Loop over elements 10 to 19 of a list, using a slice:
+list[10..20].do: | element |
+print element
+
+// Loop over all elements, except the first (the one with
+// index zero):
+list[1..].do:
+print it
+
+```
+</div>
+
+At an even higher level, the built-in collections have some
+[functional-style methods](../listsetmap/#functional_methods),
+like `any`, `every`, `reduce` and `map` that iterate over collections for you
+
+However, sometimes you have to write your own loops.  The rest of this section
+will explain how that works in Toit.
+
+If you simply want to execute a block of code multiple times you can use
+[`repeat`](https://libs.toit.io/core/numbers/class-int#repeat(block))
+which is a method on the [int class](https://libs.toit.io/core/numbers/class-int)
+that takes a [Toit block](blocks.md).
+
+Example of a loop that runs a fixed number of times, given by the `end` integer variable.
+
+<!-- HIDDEN CODE   start := 5 -->
+<!-- HIDDEN CODE   end := 10 -->
+<!-- HIDDEN CODE   step := 2 -->
+<div class="toit">
+```
+
+end.repeat: | i | print i
+
+```
+</div>
+
+To use steps, use a `for` loop as in:
+
+<div class="toit">
+```
+
+for i := start; i < end; i += step: print i
+
+```
+</div>
+
+Use a `while` loop to execute a code block as long as a condition is true, as in the following example:
+
+<div class="toit">
+```
+
+main:
+max := 5
+counter := 0
+
+while counter < max:
+print counter
+counter += 1
+
+```
+</div>
+
+## Breaking loops
+
+Sometimes, it is necessary to terminate a `for` loop or a `while` loop
+prematurely regardless of the results of the conditional tests. In these cases,
+you can use the break statement:
+
+<div class="toit">
+```
+
+main:
+max := 50
+counter := 0
+
+while counter < max:
+print counter
+counter += 1
+if counter > 20: break
+
+```
+</div>
+
+Similarly you can use the `continue` statement to skip the rest of a loop and go straight to the next iteration:
+
+<div class="toit">
+```
+
+main:
+sum := 0
+for i := 0; i < 10; i++:
+log sum
+if sum >= 10: continue
+// This line is skipped if sum is already >= 10.
+sum += i
+
+```
+</div>
+
+The `for` and `while` loops are control structures built into the language, which support `break` and `continue`. On the other hand, `repeat` and `do` are methods that take blocks. Here you have to add the method name (do or repeat) to the continue statement, to indicate which loop you wish to continue.
+
+<div class="toit">
+```
+
+main:
+sum := 0
+10.repeat:
+log sum
+if sum > 10:
+continue.repeat // Skip the rest of the block.
+sum += it
+
+```
+</div>
+
+The equivalent `break.do` and `break.repeat` are not yet implemented.
+
+Sometimes you can instead use a return statement that exits the method completely:
+
+<div class="toit">
+```
+
+my_function collection:
+collection.do:
+if it.is_the_one_we_want:
+// Returns from my_function, also breaks out of the
+// loop.
+return it
+return null
+
+```
+</div>
+
+If this is not possible, and you need an actual `break` statement, the `do` or `repeat` can be rewritten with a `for` loop.
+```

@@ -1,3 +1,7 @@
+---
+order: 1
+---
+
 # Install Toit
 
 The Toit command-line interface (CLI) is used for interacting with the Toit console and your devices.
@@ -24,17 +28,18 @@ Note that Mac users may need administrator rights to run Toit at the end of the 
 
 Download the <a href="https://archive.toit.io/cli/latest/darwin" target="_blank">Toit executable for macOS</a>.
 
-
 Unpack the `toit_darwin.tgz` file and save the executable file named `toit` to a new folder (that you can call for example `toit`) within your favorite installation folder (for example the Applications folder).
 
 ## Add Toit to your PATH
 
-To make sure you can **run the Toit CLI in a terminal window from any directory**, add the toit executable to your PATH environment variable by editing the shell configuration script, depending on which shell you are using: open a `.zshrc` file (on Catalina) or a `.bash_profile` file (on older macOS versions) with `open ~/.zshrc` or `open ~/.bash_profile`. 
+To make sure you can **run the Toit CLI in a terminal window from any directory**, add the toit executable to your PATH environment variable by editing the shell configuration script, depending on which shell you are using: open a `.zshrc` file (on Catalina) or a `.bash_profile` file (on older macOS versions) with `open ~/.zshrc` or `open ~/.bash_profile`.
 
 Type in the shell configuration script
+
 ```shell
 export PATH=/Applications/toit:$PATH
 ```
+
 where `Applications/toit` is an example of where the `toit` executable is located. Save the file before closing it.
 
 ![zshrcbashprofile](../img/zshrcbashprofile.png)
@@ -43,9 +48,9 @@ where `Applications/toit` is an example of where the `toit` executable is locate
 
 You also need to configure VSCode PATH on macOS. If you have not done so yet, download <a href="https://code.visualstudio.com/download" target="_blank">Visual Studio Code</a> and launch VS Code. In the View menu, choose to open the **Command Palette**. Type 'shell command' to find the **Shell Command: Install 'code' command in PATH**.
 
-## Check 
+## Check
 
-To verify that you successfully configured the PATH with the toit executable, type `toit` in a **new** terminal. 
+To verify that you successfully configured the PATH with the toit executable, type `toit` in a **new** terminal.
 
 <Note>
 
@@ -61,7 +66,7 @@ Note that Mac users may get the following warning when starting Toit for the fir
 
 Download the <a href="https://archive.toit.io/cli/latest/linux" target="_blank">Toit executable for Linux</a>.
 
-When the download of the Toit CLI has completed, open the *Downloads* folder on your computer and copy the downloaded file to your preferred installation directory.
+When the download of the Toit CLI has completed, open the _Downloads_ folder on your computer and copy the downloaded file to your preferred installation directory.
 
 ![Downloadsfolder](../img/downloadsfolder.png)
 
@@ -69,7 +74,7 @@ Next, uncompress the downloaded Toit CLI, which is packed as a `tgz` file.
 
 Open a terminal and navigate to the directory where you copied the downloaded file to.
 
-To unpack, run 
+To unpack, run
 
 ```shell
 tar x -vzf toit_linux.tgz
@@ -77,7 +82,7 @@ tar x -vzf toit_linux.tgz
 
 The result of unpacking the Toit CLI is an executable file, named `toit`, and the result should look like this:
 
-![Extract](../img/extract.png)  
+![Extract](../img/extract.png)
 
 ## Add Toit to your PATH
 
@@ -89,13 +94,11 @@ export PATH=$HOME/local/bin:$PATH
 
 ## Check
 
-A logout/login is required for this to take effect. Reopen a terminal and type `toit` to verify that the changes have taken effect. 
+A logout/login is required for this to take effect. Reopen a terminal and type `toit` to verify that the changes have taken effect.
 
 </div>
 </Tabs>
 
-
-  
 The output of running `toit` is a list of all available commands in the Toit CLI.
 
 ![toitcli](../img/toitcli.png)
@@ -110,7 +113,7 @@ toit doctor fix
 
 If you have installed Visual Studio Code as mentioned in [here](vscode.md), the command also installs the **Toit language extension for VSCode**.
 
-The command 
+The command
 
 ```shell
 toit doctor

@@ -1,0 +1,194 @@
+---
+order: 4
+---
+
+# Toit font basics
+
+This section explains how fonts work when using displays on the Toit SDK.
+
+## Introduction
+
+There is a selection of freely usable fonts available with the Toit SDK.
+
+The fonts are in the form of bitmaps, rather than scalable fonts.  For some
+fonts that were originally scalable, a selection of pixel sizes have been created ahead of time.
+They can be displayed in any of 4 orientations.  Most of the fonts are
+variable-width, but there are also some typewriter-style fixed-width fonts.
+
+In order to save space on the device, you must select which blocks of glyphs
+(letters) you require for each font you are using.  This will depend on the
+languages you wish to support on the display, and which special characters you
+need.  For English language text it will be enough to include the `ASCII` block.
+For the accented characters used in Western Europe you will need to add the
+`LATIN_1_SUPPLEMENT` block.  See the full list of blocks at
+[Wikipedia](https://en.wikipedia.org/wiki/Unicode_block).
+Not all blocks are available in every font.
+
+Note that the Toit font display code does not support composable accents, and
+so the characters in the text must be precomposed.  Thus the 4-character sequence,
+"A", "h", "e", acute-accent, cannot be displayed, whereas the 3-character
+sequence "A", "h", "é" will display if the correct Unicode block is included in
+the font.
+
+## Example
+
+<div class="toit">
+```
+// Import the font and size that you need, and give it a name.
+import font.x11_100dpi.sans.sans_14_bold as s14b
+
+// Other imports we need.
+import font show Font
+import pixel_display show TwoColorPixelDisplay
+
+// Select the Unicode blocks you need from the font.  In this
+// case we have the coverage needed for Western Europe, plus
+// the Euro sign, which is in the CURRENCY_SYMBOLS block.  We
+// call our subset of the font sans_10_bold.
+sans_14_bold ::= Font [s14b.ASCII, s14b.LATIN_1_SUPPLEMENT, s14b.CURRENCY_SYMBOLS]
+
+// For this example the display is black-and-white, and is called "eink"
+display ::= TwoColorPixelDisplay "eink"
+
+// Create a graphics context that uses this font.  Whenever we
+// add a text texture to a display using this context, the given
+// font will be used.
+context := display.context --landscape --font=sans_14_bold
+
+// An example function that adds a text to a display.
+my_fish_adding_function:
+
+  // Add the fish text to the display at coordinates (50, 50).
+  display.text context 50 50 "Ål, 3€/kg"
+
+  // Update the display with the latest addition.
+  display.draw
+
+```
+</div>
+
+## Available Fonts
+
+The fonts are arranged according to their origin.
+
+### x11_100dpi fonts
+
+These are taken from the X11 Windowing system commonly used with
+Linux.  They have been hand-optimized for low-resolution screens
+and are suitable for use cases where individual pixels are visible
+to the naked eye.
+
+#### sans
+
+A clean sans-serif variable-width font,
+available in sizes 6, 8, 10, 12, 14, 18, and 24.  The styles are default,
+oblique, bold and bold_oblique.  For example the default style is found
+with `import font.x11_100dpi.sans.sans_14` and the bold style can be
+found with `import font.x11_100dpi.sans.sans_14_bold`.  Coverage includes
+mainly Latin letters, including accented variants.
+See the [copyright message](licenses/adobe_copyright.md).
+
+
+#### book
+
+A serif variable-width font,
+available in sizes 6, 8, 10, 12, 14, 18, and 24.  The styles are default,
+italic, bold and bold_italic.  For example the default style is found
+with `import font.x11_100dpi.book.book_14` and the bold style can be
+found with `import font.x11_100dpi.book.book_14_bold`.  Coverage includes
+mainly Latin letters, including accented variants.
+See the [copyright message](licenses/adobe_copyright.md).
+
+#### serif
+
+A serif variable-width font,
+available in sizes 6, 8, 10, 12, 14, 18, and 24.  The styles are default,
+italic, bold and bold_italic.  For example the default style is found
+with `import font.x11_100dpi.serif.serif_14` and the bold style can be
+found with `import font.x11_100dpi.serif.serif_14_bold`.  Coverage includes
+mainly Latin and Greek letters, including accented variants.
+See the [copyright message](licenses/adobe_copyright.md).
+
+#### typewriter
+
+A serif fixed-width font,
+available in sizes 6, 8, 10, 12, 14, 18, and 24.  The styles are default,
+oblique, bold and bold_oblique.  For example the default style is found
+with `import font.x11_100dpi.typewriter.typewriter_14` and the bold style can be
+found with `import font.x11_100dpi.typewriter.typewriter_14_bold`.  Coverage includes
+mainly Latin letters, including accented variants.
+See the [copyright message](licenses/adobe_copyright.md).
+
+#### clear
+
+A serif variable-width font,
+available in sizes 8, 10, 12, 14, 18, 19, and 24.  The styles are default,
+italic, bold and bold_italic.  For example the default style is found
+with `import font.x11_100dpi.clear.clear_14` and the bold style can be
+found with `import font.x11_100dpi.clear.clear_14_bold`.  Coverage includes
+mainly Latin letters, including accented variants.
+See the [copyright message](licenses/bigelow_and_holmes_copyright.md).
+
+#### clear_sans
+
+A sans-serif variable-width font,
+available in sizes 8, 10, 12, 14, 18, 19, and 24.  The styles are default,
+italic, bold and bold_italic.  For example the default style is found
+with `import font.x11_100dpi.clear_sans.clear_sans_14` and the bold style can be
+found with `import font.x11_100dpi.clear_sans.clear_sans_14_bold`.  Coverage includes
+mainly Latin letters, including accented variants.
+See the [copyright message](licenses/bigelow_and_holmes_copyright.md).
+
+#### Clearly-U
+
+A sans-serif variable-width font,
+available only in size 12.  The styles are default and autobold, where
+the autobold variant has been generated automatically by Toit, so it
+can be a little crude-looking.
+For example the default style is found
+with `import font.x11_100dpi.clearly_u.clearly_u_12` and the bold style can be
+found with `import font.x11_100dpi.clearly_u.clearly_u_12_autobold`.
+It has
+good coverage of left-to-right alphabets, including Roman, Greek, Cyrillic,
+Armenian, Georgian, Ge'ez (Ethiopic), Cherokee, Unified Canadian Aboriginal,
+Runes, and Braille.  It also has some symbols, arrows and geometric shapes.
+See the [copyright message](licenses/nmsu_copyright.md)
+
+### Matthew Welch
+
+The font designer Matthew Welch has designed some freely available fonts
+of which we have chosen one for inclusion.
+
+#### tiny
+
+The tiny font has a normal height of only 4 pixels, plus one pixel for
+descenders.  Toit also provides a modified version of this font to
+expand digits into the
+descender area, which makes them 5 pixels high, and slightly more readable.
+It covers only the ASCII area and so has no accented or non-English
+characters.  Use with `import font.matthew_welch.tiny` or
+`import font.matthew_welch.tiny_bigger_digits`.
+See the [copyright message](licenses/matthew_welch_copyright.md).
+
+### Google
+
+The fonts in the Google Fonts project are distributed as TrueType
+scalable fonts.  We have converted one of them to our bitmap format.
+Some refinements, for example kerning of individual letter pairs,
+are not feasible to implement in a small platform, and have not
+been included in the version available here.
+
+#### Roboto
+
+This is a scalable sans-serif font used on Android phones among other places.
+The bitmap versions here have been automatically generated, and
+can be a little rough around the edges, especially on low resolution
+displays.  They are available in larger sizes than the hand-optimized
+bitmap fonts.  The styles are thin, light, regular, medium, bold, and black.
+Each style is also available in an italic variant.  Sizes are 10,
+11, 12, 14, 16, 18, 20, 22, 24, 28, 32, and 36.
+For example the regular style is found
+with `import font.google.roboto.roboto_14_regular` and the italic style can be
+found with `import font.google.roboto.roboto_14_regular_italic`.
+Roboto has good coverage of Roman, Greek, and Cyrillic alphabets.
+See the [copyright message](licenses/apache_font_license.md).

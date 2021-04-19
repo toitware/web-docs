@@ -1,0 +1,78 @@
+---
+order: 1
+---
+
+# PubSub
+
+Applications communicate with each other through pub/sub (publish/subscribe), an asynchronous messaging service that decouples services that produces messages from the services processing them.
+
+An application can publish serializable data on a topic which is then sent to all subscribers. Applications can also subscribe to a topic to receive all the publications on this topic.
+
+PubSub can be used both on devices through the [PubSub library](https://docs.toit.io/toitdocs/latest/lib_pubsub.html) and external systems using the [PubSub GRPC API](https://github.com/toitware/api/tree/master/proto/toit/api/pubsub).
+
+## Concepts
+
+* topic: A named resource which is used when messages are published.
+
+    * Device topic: A topic that enables intra-communication on the device. These topics will be prefixed with: `device:`
+
+    * Cloud topic: A topic that enables inter-communication between devices and external systems. These topics will be prefixed with: `cloud:`
+
+* subscription: an identifier of a stream of messages from a specific topic. Note that is possible to do concurrent reads on one subscription. When doing so, the concurrent reads will receive different batches of the same data set, making it easier to make ingestion concurrent.
+
+* message: the combination of the data from the publisher and an identification of the sender.
+
+See some examples of PubSub communication between apps in [Tutorials](../tutorials/pubsubint.md).
+
+## Cloud based PubSub subscriptions
+
+=== "Console"
+
+    Go to the **PubSub** page and click on **Create Subscription**. The topic is the one defined in the Publisher program **cloud:topic-name**. You can chose the name of the subscription.
+
+    ![pubsubsub](../img/pubsubsub.png)
+
+    Once you created a subscription, two graphs visualize the number of unacknowledged messages for that subscription, as well as the age of the oldest unacknowledged message for a specific time interval.
+    
+    Delete a subscription with a bin icon.
+    Use the CLI commands to acknowledge messages for a subscription.
+
+=== "CLI"
+
+    Create a subscription with 
+    ```
+    toit pubsub subscription create <cloud:topic-name> <subscription-name> 
+    ```
+    
+    To list existing subscriptions, 
+    ```
+    toit pubsub subscription list cloud:
+    ```
+
+    To read a subscription and acknowledge messages as they are read, use 
+    ```
+    toit data read <cloud:topic-name> <subscription-name> 
+    ```
+
+    To automatically acknowledge messages, add the `--auto-ack` flag.
+
+## Additional PubSub features
+
+PubSub messages can be sent from the cloud to one specific device only with
+
+```
+toit pubsub write cloud:<topic-name>?device-id=<id> <choose a name for the sender> -- <write a message>
+```
+
+For example, it can be
+
+```
+toit pubsub write cloud:<topic-name>?device-id=<id> <From my home computer> -- <Sending a message to the cloud!>
+```
+
+It is also possible to create server-side pubsub subscriptions across multiple topics as long as they share a common prefix.
+For example, create a subscription for the topics `cloud:foo/bar` and `cloud:foo/baz` with
+
+```
+toit pubsub subscription create "cloud:foo/*" <subscription-name>
+```

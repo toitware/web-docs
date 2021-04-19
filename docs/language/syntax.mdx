@@ -1,0 +1,315 @@
+---
+order: 3
+---
+
+# Toit syntax fundamentals
+
+This document describes the basics of the Toit language. To learn about Toit's documentation convention, see the [Language documentation convention](https://docs.toit.io/language/toitdoc/) section.
+
+## Whitespace and indentation
+
+Toit uses whitespace and indentation to construct the code structure:
+comment. For example:
+
+<div class="toit">
+```
+// Defines globals first, and then uses main function to
+// print out something.
+i := 1
+j := 10
+
+main:
+while i < j:
+print i
+i = i + 1
+
+```
+</div>
+
+## Comments
+
+In Toit, a single line comment begins with a double slash `//` followed by the comment. For example:
+<div class="toit">
+```
+
+// This is a single line comment in Toit.
+
+```
+</div>
+
+For multiline comments, use `*/`.
+
+<div class="toit">
+```
+
+/_
+some multiline
+comment
+_/
+
+```
+</div>
+
+
+
+## Identifiers and keywords
+
+Identifiers are names that identify globals, locals, functions, classes, modules, and other objects in Toit.
+
+* Identifier names can contain only letters, numbers, and underscores (_), but cannot contain spaces.
+* Identifiers need to start with a letter or an underscore (_), but not with a number. The following characters can be alphanumeric or underscore.
+* Toit identifiers are case-sensitive.
+* Identifier names cannot be the same as keywords and built-in functions in Toit.
+
+The following Toit keywords cannot be used for naming identifiers:
+
+<!-- SKIP CODE -->
+```
+
+as abstract assert
+break class continue
+else false finally
+for if import
+export null return
+static true try
+while or and not
+
+```
+
+In addition to these keywords, there are some "pseudo keywords" - like `constructor` - that cannot be used in certain contexts. Trying these pseudo-keywords as globals name will generally give an error message in the IDE.
+
+Another example of pseudo-keyword is `operator` that is allowed as a local but cannot be the name of a function. Similarly, `string` can be used like a normal global but would shadow the `string` type.
+
+## String and character literals
+
+Single quotes for are used for character literals and are equivalent to
+integer literals of the corresponding Unicode code point, or
+rune.
+
+<!-- RESET CODE -->
+<!-- HIDDEN CODE main: -->
+<div class="toit">
+```
+
+print 'A' // Prints "65", the ASCII code of 'A'.
+print '_' // Prints "42", the ASCII code of '_'.
+print 'æ' // Prints "230", the Unicode code point of 'æ'
+print '€' // Prints "8364", the Unicode code point of the Euro symbol.
+a /int := 'a' // a now contains the integer 97.
+
+```
+</div>
+
+Toit uses only double quotes `"` to denote a string literal:
+<div class="toit">
+```
+
+print "Hello, World!"
+str := "a string" // str has type string.
+
+```
+
+If a string contains a double quote, a backslash, or a dollar sign,
+you must use the backslash `\` to
+[escape](/language/strings/#escaped_characters) it. The backslash
+can also be used for characters that are [difficult to
+type](/language/strings/#escaped_characters)
+For example:
+<div class="toit">
+```
+
+message := "This is a \"valid\" string"
+
+```
+
+The unescaped operator `$` is used for [string
+interpolation](/language/strings/#string_interpolation).
+
+The methods available on string objects are documented in
+the [string class](https://libs.toit.io/core/class-string).
+See also the [guide to Toit strings](/language/strings/).
+
+## Toit globals and constants
+
+The `:=` operator introduces a new global variable with the name of the given identifier (here "global_name").
+
+<div class="toit">
+```
+
+global_name := 103
+
+```
+</div>
+
+If the global is final (that is, can't be assigned to), then you can use `::=` as in:
+<div class="toit">
+```
+
+global_number ::= 42
+
+```
+</div>
+Note that this in this case, `global_number` is actually a constant, and should thus be written in capital characters:
+<div class="toit">
+```
+
+GLOBAL_NUMBER ::= 42
+
+```
+</div>
+A final global that isn't a constant could be something that is mutable itself, such as
+<div class="toit">
+```
+
+some_global ::= []
+
+```
+</div>
+In this case the global is initialized with an empty list. The content of the list can change, but it will always be the same list.
+
+When you name a global, you should adhere to rules defined earlier about [identifiers](syntax.md#identifiers_and_keywords).
+
+Global variables (and [static class
+variables](/language/definitions/)) are initialized when
+they are first used.  This is noticeable if their value is
+determined by some function call, for example `Time.now`
+
+<div class="toit">
+```
+
+TIME ::= Time.now // Time.now is called on first use of TIME.
+
+main:
+print "time: $Time.now" // Print time at program start.
+sleep --ms=2000 // Sleep for two seconds.
+print "TIME: $TIME" // Print the global constant.
+sleep --ms=100
+print "TIME: $TIME" // The global constant remains unchanged.
+
+```
+</div>
+
+This program will print two different times, the second one twice.
+
+## Indexing syntax
+
+Indexing into lists, maps, byte arrays, and strings can be
+done with square brackets, `[]`.  The first element has an
+index of zero.
+
+For example, an ASCII string is a sequence of characters,
+and you can access can access its elements using square
+brackets [] and indexes.
+
+<!-- RESET CODE -->
+<div class="toit">
+```
+
+str := "Toit String"
+byte_array := #[1, 42, 103]
+list := [1, 10, 100, 1000]
+map := {
+"foo": 42,
+"bar": 103,
+}
+
+main:
+print str[0] // Prints "84", the ASCII code of 'T'.
+print byte_array[1] // Prints "42", the byte at position 1.
+print list[3] // Prints "1000", the integer at position 3.
+print map["foo"] // Prints "42", the value with the key "foo".
+
+```
+</div>
+
+Indexing into strings is done by [UTF-8 byte
+offset](/language/strings/#string_representation), so the
+story is a little more complex for non-ASCII strings.
+
+Toit also has support for slices.  These are views into part
+of a list, byte array, or string:
+
+<div class="toit">
+```
+
+print str[0..4] // Prints "Toit", the first 4 bytes of "Toit String".
+print str[..4] // Prints "Toit", the first 4 bytes of "Toit String".
+print str[5..] // Prints "String", the last part of "Toit String".
+
+```
+</div>
+
+See also the [description of slice
+syntax](/language/strings/#slices_of_strings) in the string
+guide.
+
+A slice may keep the underlying object alive, preventing a
+garbage collection.  To avoid that you can use `copy` to
+create a new object containing only the elements in the
+slice:
+
+<div class="toit">
+```
+
+long_lived_global/ByteArray := #[]
+
+my_function:
+huge := ByteArray 1000000
+// The slice keeps huge alive:
+long_lived_global = huge[1000..1050]
+// Makes a copy, so huge can be garbage collected:
+long_lived_global = long_lived_global.copy
+
+```
+</div>
+
+## Continuation of statements
+
+Toit uses a newline character to separate statements. It places each statement on one line.
+However in a long list of arguments for a function call you
+can use a new line for each argument.
+
+A long statement can also span multiple lines by using the backslash (\) character.
+
+The following example illustrates how to use per-argument
+newlines, or the backslash (\) character to continue a
+statement in the second line:
+<div class="toit">
+```
+
+// A method with many parameters.
+foo a b c d e f g h i j: ...
+
+main:
+some_long_local1 := 1
+some_long_local2 := 2
+some_long_local3 := 3
+some_long_local4 := 4
+some_long_local5 := 5
+some_long_local6 := 6
+some_long_local7 := 7
+some_long_local8 := 8
+some_long_local9 := 9
+some_long_local10 := 10
+// Once there is a newline, all further arguments must be
+// on their own line:
+foo some_long_local1 some_long_local2 some_long_local3
+some_long_local4
+some_long_local5
+some_long_local6
+some_long_local7
+some_long_local8
+some_long_local9
+some_long_local10
+// We can also write all of them in one line:
+foo some_long_local1 some_long_local2 some_long_local3 some_long_local4 some_long_local5 some_long_local6 some_long_local7 some_long_local8 some_long_local9 some_long_local10
+// But that becomes hard to read fast.
+// If we want to cut the line at some point we need a `\` to conceptually continue the first line:
+foo some_long_local1 some_long_local2 some_long_local3 \
+ some_long_local4 some_long_local5 some_long_local6 \
+ some_long_local7 some_long_local8 some_long_local9 \
+ some_long_local10
+
+```
+</div>
+```

@@ -1,0 +1,22 @@
+---
+order: 2
+---
+
+# Organize devices into a fleet of devices
+
+You can organize your devices by renaming them so they share an identical prefix.
+
+For example, devices `Toitbox1`, `Toitbox2` and `Toitbox3` are seen as a fleet of devices in the Toit CLI by using the prefix `-p toitbox` in the `toit fleet` command. Prefixes are case-insensitive.
+
+Update the firmware on several devices in one command, use the Toit CLI command:
+
+```
+toit fleet -p <prefix> update
+```
+
+or to deploy one or more apps on several devices at once, use the CLI command:
+
+```
+toit fleet -p <prefix> deploy
+```
+
