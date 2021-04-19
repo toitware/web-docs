@@ -18,7 +18,6 @@ In the following example, the comment does not add any information:
 ```
 /// Returns the size of this instance.
 int size
-   ...
 ```
 
 If preferred, or for completeness (if every other member has a comment), these comments may still be present.
@@ -33,7 +32,7 @@ Comments are recognized as Toitdocs if they are either:
 
 We recommend to use `///` only for one, or two-line comments. Even then, single-line `/** This is a comment. */` comments are preferred, since they have an easier time evolving to bigger comments.
 
-Multiline comments are the preferred documentation for longer comments. The individual lines should *not* have any leading `*`, and should be aligned with the first `/`.
+Multiline comments are the preferred documentation for longer comments. The individual lines should _not_ have any leading `*`, and should be aligned with the first `/`.
 
 Examples:
 
@@ -117,11 +116,12 @@ foo 1
 ```
 bar 2
 ```
+
 <!-- - Imported code blocks: ```` ``["file.toit":token]`` ````. In this case Toitdoc opens the referenced file, and extracts the code that is delimited by `/*token - start*/` and `/*token - end*/`. This is the preferred way of including longer examples. It also gives the possibility to move Toitdoc examples into test files. -->
 
 ### Emphasis
 
-Text enclosed by `*`, is rendered emphasized: *important*.
+Text enclosed by `*`, is rendered emphasized: _important_.
 
 ### Lists
 
@@ -132,19 +132,16 @@ Either bullet lists (starting a line with `-`, `+` or `*`), or ordered lists (st
 Lines beginning with `#` (or multiple `#`s) are sections. The more `#`s the deeper the section. Some sections have meaning and are treated specially in the output (like `# Advanced` or `# Inheritance`). See below.
 
 ### Links
-  
+
 - `$foo` links to the element (member, class, global variable or global function) with the resolved name.
-  
 - `$foo("foo.toit":id)` links to an element that is not in scope, but declared in the given file. Semantically, it's equivalent to searching for `id` in the scope introduced by importing "foo.toit".
-  
 - `$foo x y` resolves to the element `foo` that takes 2 arguments.
-  
 - URLs inside the comment are automatically linked: `http://www.example.com` or `file://foo.toit` don't need markers.
-  
+
 <!-- * `$foo("foo.toit":id)` links to an element that is not in scope, but declared in the given file. Semantically, it's equivalent to searching for `id` in the scope introduced by importing "foo.toit".
     * `$foo(foo x y)` resolves to the element `foo` that takes 2 arguments, but only shows `foo` in the emitted Toitdoc.
     * `[Foo](class Foo)` links to the class name, instead of the constructor. If the class doesn't contain a default constructor (with no arguments), then this is the default. -->
-  
+
 ## Sections
 
 Toitdoc supports sections, some of which have special meaning in Toitdoc.
