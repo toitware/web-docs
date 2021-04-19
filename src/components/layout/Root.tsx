@@ -52,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
     overflowX: "hidden",
   },
   content: {
-    height: "100%",
     display: "flex",
     justifyContent: "center",
   },
