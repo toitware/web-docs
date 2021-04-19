@@ -92,6 +92,39 @@ The documentation pages are written in `.mdx` which are
 [markdown](https://www.markdownguide.org/basic-syntax/) files that can also
 import react components.
 
+## Components
+
+There are multiple components to make the content more engaging:
+
+### `<Note />`
+
+```html
+<Note type="info">
+
+Content here can be markdown
+
+</Note>
+```
+
+The type can be `info` or `warning` for now.
+
+### `<Tabs />`
+
+```html
+<Tabs>
+<div title="Tab 1">
+
+Content of tab 1
+
+</div>
+<div title="Tab 2">
+
+Content of tab 2
+
+</div>
+</Tabs>
+```
+
 ## Frontmatter
 
 An `.mdx` file can start with something called a "frontmatter". This is a

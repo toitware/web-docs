@@ -7,6 +7,8 @@ import { Link, Typography } from "@material-ui/core";
 import { MDXProviderComponentsProp } from "@mdx-js/react";
 import React from "react";
 import Title from "./components/Title";
+import Note from "./components/Note";
+import { Tabs } from "./components/Tabs";
 
 const P = (props: any) => <Typography paragraph {...props} />;
 const H1 = (props: any) => <Typography variant="h1" {...props} />;
@@ -46,4 +48,6 @@ export const components: MDXProviderComponentsProp = {
 export const shorthands = {
   Title,
   CodeBlock,
+  Note,
+  Tabs,
 };
