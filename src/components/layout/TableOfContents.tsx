@@ -7,13 +7,14 @@ import { TableOfContents, TableOfContentsItem } from "./Layout";
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "sticky",
-    marginTop: theme.spacing(6),
+    top: theme.spacing(6),
+    alignSelf: "flex-start",
     width: "15rem",
     "& ul": {
       listStyle: "none",
       margin: 0,
       background: Color(theme.palette.primary.main).alpha(0.06).desaturate(0.6).string(),
-      padding: "1.5rem",
+      padding: "0.75rem 1.5rem",
       borderRadius: "5px",
     },
   },
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "0.875rem",
     fontFamily: theme.typography.fontFamily,
     opacity: 0.8,
-    marginBottom: "0.75rem",
+    margin: "0.75rem 0",
     display: "block",
     "&:hover": {
       color: theme.palette.primary.main,
