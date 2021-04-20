@@ -39,7 +39,6 @@ Static fields are often constants - which can be inferred from their capitalized
 
 Inside a class, you can refer to static entries directly. Outside the class, static entries must be prefixed with the class name.
 
-<div class="toit">
 ```
 class A:
   static some_static_field := 499
@@ -54,15 +53,11 @@ main:
 print A.some_static_field
 
 ```
-</div>
 
-* **Methods and instance fields**: everything that needs to go through an object.
-Methods without arguments behave similarly to instance fields.
+- **Methods and instance fields**: everything that needs to go through an object.
+  Methods without arguments behave similarly to instance fields.
 
-<!-- RESET CODE -->
-<div class="toit">
 ```
-
 // Implicitly static, not inside a class, and doesn't
 // require one.
 foo: print "foo"
@@ -134,10 +129,7 @@ a.field = 42 // Only changes the field in `a`, but
 // not a2 or a3.
 print a.field // => 42
 print a2.field // => 11
-
 ```
-</div>
-
 
 ## Type
 
@@ -148,9 +140,7 @@ For example, `foo x/y` means the function `foo` takes a variable `x` with type `
 By default types are non-nullable, which means null is not a valid
 value.
 
-<div class="toit">
 ```
-
 class Coordinate:
 // An instance field that must be initialized by
 // constructors.
@@ -170,24 +160,17 @@ a := Coordinate 0 0
 // constructor arguments) are non-nullable, so null is not
 // a valid argument here:
 b := Coordinate null null // Error!
-
 ```
-</div>
 
 If we want a nullable type, we write a question mark `?` after the
-type name.  For example in the following `Foo` class the `bar` variable can
+type name. For example in the following `Foo` class the `bar` variable can
 be a reference to an instance of the `Bar` class or interface, but
 it can also be null, which also happens to be the initial value:
 
-<!-- HIDDEN CODE class Bar: -->
-<div class="toit">
 ```
-
 class Foo:
 bar/Bar? := null
-
 ```
-</div>
 
 ### Any
 
@@ -201,17 +184,13 @@ The `rename` function in the example `rename from/any to/any -> any` returns `an
 
 In the following example the parameter `param`, the local `my_var`, and the global `glob` are all typed in the following example:
 
-<div class="toit">
 ```
-
 foo param/int: // The parameter 'param' must be of type int.
 // The variable 'my_var' is typed as 'float'. The second
 // '/' is a division.
 my_var /float := param / 3.14
 glob / string := "the global 'glob' is typed as string"
-
 ```
-</div>
 
 The type of variable is enforced by the Virtual Machine.
 Every time a value is stored in the variable, the VM checks that the type is correct.
@@ -225,7 +204,7 @@ Functions can also declare their return type by writing `->` followed by the ret
 The `-> type` can be anywhere in the signature, but it's convention to put it at the end of the line that declares the name of a function:
 
 <!-- RESET CODE -->
-<div class="toit">
+
 ```
 
 // A function that doesn't return anything.
@@ -244,7 +223,6 @@ different / bool
 return 3.14
 
 ```
-</div>
 
 ### None
 
@@ -258,4 +236,3 @@ We recommend to write types for fields, and in function signatures (parameters a
 
 Local variables often don't need explicit types as the IDE can often figure out the type of local variables.
 If the IDE can't infer the type it is a judgment call whether the type is warranted or not.
-```

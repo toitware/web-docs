@@ -9,7 +9,6 @@ In Toit, the boolean type is `bool` and its two values are written `true` and `f
 Whenever built-in constructs need to evaluate a condition (for example in an `if` or a `while`), then Toit first "boolifies" the given value. The values `false` and `null` are treated like `false` and every other value is converted to `true`.
 So in a condition context, `null` is falsy and other non-booleans are truthy.
 
-<div class="toit">
 ```
 main:
   t := true
@@ -42,6 +41,4 @@ b2/bool := s // Error: A string is not a bool!
 b3/bool := z // Error: A number is not a bool!
 b4/bool := l // Error: A list is not a bool!
 
-```
-</div>
 ```

@@ -21,7 +21,6 @@ The Joystick features a ATtiny85 microcontroller with a custom firmware. As desc
 
 We use a simple I2C setup, currently using pin `21` for `SDA` (blue) and pin `22` for `SCL` (yellow).
 
-<div class="toit">
 ```
 import gpio
 import serial.protocols.i2c as i2c
@@ -32,13 +31,11 @@ bus := i2c.Bus
 --scl=gpio.Pin 22
 
 ```
-</div>
 
 ## Driver
 
 As all I2C/SPI drivers that work using registers, the driver starts with the following skeleton.
 
-<div class="toit">
 ```
 
 import serial
@@ -56,7 +53,6 @@ on:
 off:
 
 ```
-</div>
 
 Note the address, as described in the hookup guide.
 
@@ -64,7 +60,6 @@ Note the address, as described in the hookup guide.
 
 The hookup guide has a table of I2C registers available in the custom firmware. At address `0x00` is the slave address assigned to the device (hardcoded to `0x20`). By reading this register, we can confirm the connectivity to the device is functional.
 
-<div class="toit">
 ```
 
 class SparkFunJoystick:
@@ -77,11 +72,9 @@ reg := registers*.read_u8 REG_DEFAULT_ADDRESS*
 if reg != I2C_ADDRESS: throw "INVALID_CHIP"
 
 ```
-</div>
 
 With this added, we can validate the setup:
 
-<div class="toit">
 ```
 
 main:
@@ -96,18 +89,17 @@ joystick.on
 print "SparkFunJoystick"
 
 ```
-</div>
 
 Running the code should print out the string `SparkFunJoystick` to the terminal. If not, the I2C bus is not configured to match the wiring.
 
-!!! note
-    If the Joystick is connected without the full breakout board from SparkFun, I2C pull-up resistors may be needed.
+<Note>
+  If the Joystick is connected without the full breakout board from SparkFun, I2C pull-up resistors may be needed.
+</Note>
 
 ### Read out data
 
 We're going to expand the driver with 3 new methods:
 
-<div class="toit">
 ```
 
 class SparkFunJoystick:
@@ -130,14 +122,14 @@ _/
 pressed -> bool:
 
 ```
-</div>
 
 Both the horizontal and vertical value is formatted the same way; 2 bytes in big endian order (MSB first). We want to transform this value to a float in the range [-1..1]. Let's create a helper function to perform this step:
 
-!!! note
-    The last 6 bits of the result are unused, but to keep the code simple we treat the result as an 16-bit unsigned integer.
+<Note>
+  The last 6 bits of the result are unused, but to keep the code simple we treat the result as an 16-bit unsigned
+  integer.
+</Note>
 
-<div class="toit">
 ```
 
 import binary
@@ -154,11 +146,9 @@ value -= binary.INT16_MAX
 return value.to_float / binary.INT16_MAX
 
 ```
-</div>
 
 With that in place, we can now finish the `horizontal` and `vertical` methods:
 
-<div class="toit">
 ```
 
 class SparkFunJoystick:
@@ -174,11 +164,9 @@ vertical -> float:
 return read*position* REG*VERTICAL_POSITION*
 
 ```
-</div>
 
 Lastly, we need to implement the `pressed` method. We're simply going to read out the 1-byte register value and check for `0`, with `0` meaning pressed.
 
-<div class="toit">
 ```
 
 class SparkFunJoystick:
@@ -190,11 +178,9 @@ pressed -> bool:
 return (registers*.read_u REG_BUTTON_POSITION*) == 0
 
 ```
-</div>
 
 Let's try it out:
 
-<div class="toit">
 ```
 
 main:
@@ -207,20 +193,23 @@ print "$joystick.horizontal - $joystick.vertical (pressed: $joystick.pressed)"
 sleep --ms=250
 
 ```
-</div>
 
 This code will run until aborted (Ctrl-C).
 
-!!! note
-    As the joystick is moved around, it's possible to get an I2C error if the I2C bus is accidentally short-circuited by the fingers.
-!!! note
-    To improve responsibility, the sensor should be read at a higher frequency. However no printing should be done at higher frequencies to avoid logging data building up.
+<Note>
+  As the joystick is moved around, it's possible to get an I2C error if the I2C bus is accidentally short-circuited by
+  the fingers.
+</Note>
+
+<Note>
+  To improve responsibility, the sensor should be read at a higher frequency. However no printing should be done at
+  higher frequencies to avoid logging data building up.
+</Note>
 
 ## Full code
 
 ### `main.toit`
 
-<div class="toit">
 ```
 
 import gpio
@@ -243,11 +232,9 @@ print "$joystick.horizontal - $joystick.vertical (pressed: $joystick.pressed)"
 sleep --ms=250
 
 ```
-</div>
-
 
 ### `driver.toit`
-<div class="toit">
+
 ```
 
 import binary
@@ -297,6 +284,4 @@ value -= binary.INT16_MAX
 // Perform floating-point division to get to [-1..1] range.
 return value.to_float / binary.INT16_MAX
 
-```
-</div>
 ```
