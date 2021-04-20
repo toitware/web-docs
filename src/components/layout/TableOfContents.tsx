@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import Color from "color";
 import { Link } from "gatsby";
 import * as React from "react";
 import { TableOfContents, TableOfContentsItem } from "./Layout";
@@ -10,8 +11,10 @@ const useStyles = makeStyles((theme) => ({
     width: "15rem",
     "& ul": {
       listStyle: "none",
-      padding: 0,
       margin: 0,
+      background: Color(theme.palette.primary.main).alpha(0.06).desaturate(0.6).string(),
+      padding: "1.5rem",
+      borderRadius: "5px",
     },
   },
   link: {
