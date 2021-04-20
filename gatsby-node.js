@@ -30,7 +30,6 @@ exports.createPages = async ({ graphql, actions }) => {
   // Create blog post pages.
   result.data.allMdx.nodes.forEach((node) => {
     const path = !node.frontmatter.path ? `/${node.slug}` : node.frontmatter.path;
-    console.log(`path ${path} slug(${node.slug}) front(${node.frontmatter.path})`);
     createPage({
       // Path for this page — required
       path: path,
