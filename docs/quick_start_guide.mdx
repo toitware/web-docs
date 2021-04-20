@@ -1,0 +1,104 @@
+---
+order: 0
+---
+
+# Quick Start Guide
+
+This quick start guide takes you from signing up for a Toit account, get an <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank">ESP32</a> microcontroller, and finally deploy a Toit app on your device.
+
+## 1. Sign up
+
+Create a free Toit account to get access to the Toit cloud. Go to <a href="https://toit.io/#sign-up" target="_blank">toit.io</a> and follow the sign-up instructions.
+
+Shortly after, you'll receive a welcome email with a link to set the password for your Toit account.
+
+## 2. Install Toit
+
+Next, install the Toit CLI which is used for preparing your ESP32 with Toit, and to deploy Toit apps.
+
+Download the version that matches your current operating system:
+
+- <a href="https://archive.toit.io/cli/latest/windows/installer" target="_blank">
+    Windows
+  </a>
+
+- <a href="https://archive.toit.io/cli/latest/darwin" target="_blank">
+    macOS
+  </a>
+
+- <a href="https://archive.toit.io/cli/latest/linux" target="_blank">
+    Linux
+  </a>
+
+On **macOS** and **Linux**, put the [Toit CLI](installation/toitcli.md) manually to PATH. On **Windows**, this is done automatically with the installer.
+
+## 3. Get an ESP32
+
+You can buy an ESP32 <a href="https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990" target="_blank">here</a>. If you already have one available, jump to [step 4](#4_provision_and_claim) to continue.
+
+<Note title="Don't have an ESP32 yet?">
+
+In the meantime, use the <a href="https://console.toit.io/playground" target="_blank">playground</a> or a simulated device to continue learning about the Toit platform. Start a new Toit simulator from the <a href="https://console.toit.io/" target="_blank">Toit console</a> by clicking the "Start simulator" button, or run the following command in the Toit CLI:
+
+```
+toit simulator start --alias MyToitDevice
+```
+
+Next, jump to [step 5](#5-get-examples) to continue.
+
+</Note>
+
+## 4. Provision and claim
+
+With your ESP32 ready for use, the first step is to [initially provision](getstarted/provision.md) your ESP32.
+
+Connect the ESP32 with a USB cable to your computer where the Toit CLI is installed.
+
+Replace `SSID` and `WiFi-password` with your own WiFi credentials, and run the Toit CLI command:
+
+```
+toit serial provision -p wifi.ssid=<SSID> -p wifi.password=<WiFi-password>
+```
+
+Note the hardware ID printed when the command terminates.
+
+Next, [claim](getstarted/claim.md) the ESP32 into your organization in the Toit console. Replace `<hardware-ID>` with the hardware ID from the provision command above,
+and run:
+
+```
+toit device claim <hardware-ID> --name MyToitDevice
+```
+
+The claimed ESP32 can be seen in the list of devices with the CLI command:
+
+```
+toit devices
+```
+
+## 5. Get examples
+
+Download Toit sample code and save it in a folder named `toit-examples` with the CLI command:
+
+```
+toit sdk examples toit-examples --version v1.0.2
+```
+
+## 6. Deploy Toit app
+
+Deploying a Toit app on your device means that the Toit code will be executed repeatedly according to the scheduling defined in `hello.yaml`.
+
+Deploy a Toit app on your device with the command:
+
+```
+toit deploy -d MyToitDevice toit-examples/examples_v1.0.2/hello/hello.yaml
+```
+
+When deploying an app, the device is not required to be online. The app will be installed on the device when it comes online.
+
+Verify that the app has been deployed with the command:
+
+```
+toit device -d MyToitDevice ps
+```
+
+or go to the <a href="https://console.toit.io/" target="_blank">Apps tab</a> of your device to view the list of apps deployed.
