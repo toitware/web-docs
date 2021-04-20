@@ -9,18 +9,35 @@ In Toit, everything is an object, including things that may be non-Object
 is an object, and has methods like `abs`:
 
 <div class="toit">
-  ``` // Method that takes an `int` and returns an `int`. foo x/int -> int: return x.abs // The absolute value of x. ```
+```
+// Method that takes an `int` and returns an `int`.
+foo x/int -> int:
+  return x.abs  // The absolute value of x.
+```
 </div>
 
 To create custom objects, we must first define a class:
 
-<div class="toit">``` class Point: x/int := 42 y/int := 103 ```</div>
+<div class="toit">
+```
+class Point:
+  x/int := 42
+  y/int := 103
+```
+</div>
 
 Here we have given our new class two fields, with integer types, and they are
 by default initialized to 42 and 103. We create new instance objects of the
 class by naming the class, no `new` keyword is needed:
 
-<div class="toit">``` main: p := Point // Creates a new Point object print p.x // >> 42 print p.y // >> 103 ```</div>
+<div class="toit">
+```
+main:
+  p := Point  // Creates a new Point object
+  print p.x  // >> 42
+  print p.y  // >> 103
+```
+</div>
 
 There are various ways to declare fields in objects:
 
@@ -47,9 +64,8 @@ class Foo:
   // PASSWORD is a static constant.
   static PASSWORD/string ::= "hunter2"
 
-constructor:
-x = y = z = 0 // Set the fields that must be set.
-
+  constructor:
+    x = y = z = 0   // Set the fields that must be set.
 ```
 </div>
 
@@ -62,25 +78,23 @@ system.
 <!-- RESET CODE -->
 <div class="toit">
 ```
-
 class Point:
-x/int := 0
-y/int := 0
+  x/int := 0
+  y/int := 0
 
 class Point3D extends Point:
-z/int := 0
+  z/int := 0
 
 main:
-p/Point? := null // Local variable p has type Point (nullable).
-p = Point // Create point.
-// Since a Point3D is a type of point we can
-// assign p to refer to a Point3D.
-p = Point3D // Create 3d point.
-p.x = 42 // OK because Point has a field called x.
-p.z = 103 // Compile-time error: Point has no z field!
-p3 := p as Point3D // Cast p to a Point3D (with run-time check).
-p3.z = 103 // OK because p3 has the right static type.
-
+  p/Point? := null   // Local variable p has type Point (nullable).
+  p = Point          // Create point.
+  // Since a Point3D is a type of point we can
+  // assign p to refer to a Point3D.
+  p = Point3D        // Create 3d point.
+  p.x = 42           // OK because Point has a field called x.
+  p.z = 103          // Compile-time error: Point has no z field!
+  p3 := p as Point3D // Cast p to a Point3D (with run-time check).
+  p3.z = 103         // OK because p3 has the right static type.
 ```
 </div>
 
@@ -95,33 +109,31 @@ line is omitted:
 
 <div class="toit">
 ```
-
 // To implement the Turtle interface, a class must have
 // these two methods.
 interface Turtle:
-forwards mm/int -> none
-turn degrees/int -> none
+  forwards mm/int -> none
+  turn degrees/int -> none
 
 // To be used as a Drawable, a class must have a method
 // called draw, which takes a Turtle and returns no value.
 interface Drawable:
-// No colon on the method declaration
-draw turtle/Turtle -> none
+  // No colon on the method declaration
+  draw turtle/Turtle -> none
 
 // To have the type `Drawable` the Square class must both
 // declare that it `implements Drawable`, and contain the
 // `draw` method.
 class Square implements Drawable:
-draw turtle/Turtle -> none:
-4.repeat:
-turtle.forwards 10
-turtle.turn 90
+  draw turtle/Turtle -> none:
+    4.repeat:
+      turtle.forwards 10
+      turtle.turn 90
 
 main:
-// Variables can have interface types. Here `d` has the
-// type `Drawable`.
-d/Drawable := Square
-
+  // Variables can have interface types.  Here `d` has the
+  // type `Drawable`.
+  d/Drawable := Square
 ```
 </div>
 
@@ -136,40 +148,38 @@ it extends:
 
 <div class="toit">
 ```
-
 // Classes that extend `TurtleBase` must implement two
 // methods.
 abstract class TurtleBase:
-mileage := 0
+  mileage := 0
 
-// Classes that extend `TurtleBase` should call this after
-// moving a distance to register the distance the Turtle
-// has moved.
-register_mileage mm/int -> none:
-mileage += mm
+  // Classes that extend `TurtleBase` should call this after
+  // moving a distance to register the distance the Turtle
+  // has moved.
+  register_mileage mm/int -> none:
+    mileage += mm
 
-// Concrete (non-abstract) classes that extend TurtleBase
-// must implement these two methods.
-abstract forwards mm/int -> none
-abstract turn degrees/int -> none
+  // Concrete (non-abstract) classes that extend TurtleBase
+  // must implement these two methods.
+  abstract forwards mm/int -> none
+  abstract turn degrees/int -> none
 
 // The LogTurtle doesn't actually perform the drawing moves,
 // it just logs the moves a real turtle would make.
 class LogTurtle extends TurtleBase:
-forwards mm/int -> none:
-print "I moved forwards $(mm)mm."
-register_mileage mm
+  forwards mm/int -> none:
+    print "I moved forwards $(mm)mm."
+    register_mileage mm
 
-turn degrees/int -> none:
-print "I turned $degrees degrees"
+  turn degrees/int -> none:
+    print "I turned $degrees degrees"
 
 main:
-turtle := LogTurtle
-4.repeat:
-turtle.forwards 10 // >> I moved forwards 10mm.
-turtle.turn 90 // >> I turned 90 degrees.
-print "The turtle has travelled $(turtle.mileage)mm."
-
+  turtle := LogTurtle
+  4.repeat:
+    turtle.forwards 10  // >> I moved forwards 10mm.
+    turtle.turn 90      // >> I turned 90 degrees.
+  print "The turtle has travelled $(turtle.mileage)mm."
 ```
 </div>
 
@@ -183,19 +193,17 @@ than having the same name as the class:
 <!-- RESET CODE -->
 <div class="toit">
 ```
-
 import math
 
 class Vector:
-x/float
-y/float
-length/float
+  x/float
+  y/float
+  length/float
 
-constructor x_arg/float y_arg/float:
-x = x_arg
-y = y_arg
-length = math.sqrt x _ x + y _ y
-
+  constructor x_arg/float y_arg/float:
+    x = x_arg
+    y = y_arg
+    length = math.sqrt x * x + y * y
 ```
 </div>
 
@@ -207,19 +215,17 @@ name:
 <!-- RESET CODE -->
 <div class="toit">
 ```
-
 import math
 
 class Vector:
-x/float
-y/float
-length/float
+  x/float
+  y/float
+  length/float
 
-// The dots initialize fields x and y. No need to restate
-// the types of x and y here.
-constructor .x .y:
-length = math.sqrt x _ x + y _ y
-
+  // The dots initialize fields x and y.  No need to restate
+  // the types of x and y here.
+  constructor .x .y:
+    length = math.sqrt x * x + y * y
 ```
 </div>
 
@@ -232,12 +238,10 @@ the name of the class.  For example, the above unnamed constructor for the
 
 <div class="toit">
 ```
-
 main:
-// Create a new Vector using the unnamed constructor.
-// Note that there is no `new` keyword in Toit.
-v := Vector 10.0 7.5
-
+  // Create a new Vector using the unnamed constructor.
+  // Note that there is no `new` keyword in Toit.
+  v := Vector 10.0 7.5
 ```
 </div>
 
@@ -251,28 +255,26 @@ names.  For example, the `Vector` class might have a polar constructor:
 <!-- RESET CODE -->
 <div class="toit">
 ```
-
 import math
 
 class Vector:
-x/float
-y/float
-length/float
+  x/float
+  y/float
+  length/float
 
-constructor .x .y:
-length = math.sqrt x _ x + y _ y
+  constructor .x .y:
+    length = math.sqrt x * x + y * y
 
-constructor.polar angle/float .length:
-// The dot above initializes the length field.
-x = length _ (math.cos angle)
-y = length _ (math.sin angle)
+  constructor.polar angle/float .length:
+    // The dot above initializes the length field.
+    x = length * (math.cos angle)
+    y = length * (math.sin angle)
 
 main:
-// Use the unnamed Cartesian constructor.
-v := Vector 10.0 7.5
-// Use the polar constructor.
-v2 := Vector.polar math.PI/6 8.0
-
+  // Use the unnamed Cartesian constructor.
+  v := Vector 10.0 7.5
+  // Use the polar constructor.
+  v2 := Vector.polar math.PI/6 8.0
 ```
 </div>
 
@@ -283,20 +285,18 @@ for the class you are extending.  This is done with the `super` keyword:
 
 <div class="toit">
 ```
-
 class Color:
-r/int
-g/int
-b/int
+  r/int
+  g/int
+  b/int
 
-constructor .r .g .b:
+  constructor .r .g .b:
 
 class ColoredVector extends Vector:
-color/Color
+  color/Color
 
-constructor x/float y/float .color:
-super x y // Calls the constructor of `Vector`.
-
+  constructor x/float y/float .color:
+    super x y  // Calls the constructor of `Vector`.
 ```
 </div>
 
@@ -326,21 +326,19 @@ creating a lambda that captures `this`.
 <!-- SKIP CODE -->
 <div class="toit">
 ```
-
 class Point:
-x/float // This must be set during field initialization...
-y/float // ...of the constructor.
+  x/float // This must be set during field initialization...
+  y/float // ...of the constructor.
 
-// A method on the Point class
-stringify -> string:
-return "$x, $y"
+  // A method on the Point class
+  stringify -> string:
+    return "$x, $y"
 
-constructor x_arg/float y_arg/float:
-// Calling the stringify method uses "this".
-print "Created " + stringify
-x = x_arg // Error - this happens in the instance...
-y = y_arg // ...part of the constructor.
-
+  constructor x_arg/float y_arg/float:
+    // Calling the stringify method uses "this".
+    print "Created " + stringify
+    x = x_arg  // Error - this happens in the instance...
+    y = y_arg  // ...part of the constructor.
 ```
 </div>
 
@@ -352,16 +350,14 @@ you can call the `super` constructor with no arguments:
 
 <div class="toit">
 ```
-
 class Foo:
-x/int
-constructor:
-x = 12
-// Explicit 'super' calls are possible but rare.
-super
-// Explicit `this` is also not normally needed.
-print this.x
-
+  x/int
+  constructor:
+    x = 12
+    // Explicit 'super' calls are possible but rare.
+    super
+    // Explicit `this` is also not normally needed.
+    print this.x
 ```
 </div>
 
@@ -376,28 +372,25 @@ to the newly constructed object before the `super` call.
 <!-- RESET CODE -->
 <div class="toit">
 ```
-
 import math
 
 class Vector:
-x/float // These must be initialized in the intializer...
-y/float // ...part of the constructor, not later.
-length/float
+  x/float  // These must be initialized in the intializer...
+  y/float  // ...part of the constructor, not later.
+  length/float
 
-// A method on the Point class
-stringify -> string:
-return "$x, $y"
+  // A method on the Point class
+  stringify -> string:
+    return "$x, $y"
 
-constructor.unit:
-x = 1.0
-y = 1.0
-// It is ok to access fields in the initializer part of
-// the constructor.
-length = math.sqrt x _ x + y _ y
-super
-// Implicit use of this when calling stringify.
-print stringify
-
+  constructor.unit:
+    x = 1.0
+    y = 1.0
+    // It is ok to access fields in the initializer part of
+    // the constructor.
+    length = math.sqrt x * x + y * y
+    super
+    // Implicit use of this when calling stringify.
+    print stringify
 ```
 </div>
-```

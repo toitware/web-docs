@@ -19,7 +19,12 @@ Now, let's get started with some programming!
 
 A local installation of Toit comes with support for running small programs directly from the command line. If you put the following code in a file called `hello.toit`
 
-<div class="toit">``` main: print "Hello World!" ```</div>
+<div class="toit">
+```
+main:
+  print "Hello World!"
+```
+</div>
 
 you can run it from the command line like this:
 
@@ -32,7 +37,13 @@ What just happened? The `toit` command line tool read your source code (`hello.t
 
 Once the program ran, it printed `Hello World!` in your terminal. This is because the only statement in `hello.toit` is a method call, where you invoke the `print` method with a single argument, which is the string to be printed (in this case to the terminal). If you wanted to output more than one line from your program, you could update it to:
 
-<div class="toit">``` main: print "Hello World!" print "Hello World!" ```</div>
+<div class="toit">
+```
+main:
+  print "Hello World!"
+  print "Hello World!"
+```
+</div>
 
 When you run the updated program, you will see two lines of output:
 
@@ -46,21 +57,43 @@ Hello World!
 
 What if you want to say "Hello" a lot without getting your fingers all tired? You should define another method:
 
-<div class="toit">``` hi: print "Hello World!" ```</div>
+<div class="toit">
+```
+hi:
+  print "Hello World!"
+```
+</div>
 
 and call that from `main`:
 
-<div class="toit">``` main: hi hi ```</div>
+<div class="toit">
+```
+main:
+  hi
+  hi
+```
+</div>
 
 Calling a method in Toit is as simple as mentioning its name. If the method doesn’t take arguments that’s all you need.
 
 What if we want to say hello to one person, and not the whole world? Just redefine hi to take a name as an argument.
 
-<div class="toit">``` hi name: print "Hello $name!" ```</div>
+<div class="toit">
+```
+hi name:
+  print "Hello $name!"
+```
+</div>
 
 This way, `hi` is a method that takes a single argument. We can use that from `main`:
 
-<div class="toit">``` main: hi "Lars" hi "Kasper" ```</div>
+<div class="toit">
+```
+main:
+  hi "Lars"
+  hi "Kasper"
+```
+</div>
 
 and it works!
 
@@ -74,9 +107,14 @@ Hello Kasper!
 
 What’s the `$name` bit? That’s Toit's way of inserting something into a string. It is called _string interpolation_. The bit after the `$` is turned into a string (if it isn’t one already) and then substituted into the outer string at that point. You can also use this to make sure that someone’s name is properly trimmed so leading and trailing whitespace is ignored:
 
-<div class="toit">``` hi name = "World": print "Hello, $name.trim!" ```</div>
+<div class="toit">
+```
+hi name = "World":
+  print "Hello, $name.trim!"
+```
+</div>
 
-This way, we call the `trim` method on the `name` string before we insert it into the outer string. If we call `hi " Lars "` we still get the familiar greeting `Hello Lars!` and not `Hello Lars !`. You can add parentheses around the `name.trim` expression in the string to make it clearer which parts belong to the outer string:
+This way, we call the `trim` method on the `name` string before we insert it into the outer string. If we call `hi "   Lars  "` we still get the familiar greeting `Hello Lars!` and not `Hello   Lars  !`. You can add parentheses around the `name.trim` expression in the string to make it clearer which parts belong to the outer string:
 
 ```
   print "Hello, $(name.trim)!"
@@ -84,7 +122,13 @@ This way, we call the `trim` method on the `name` string before we insert it int
 
 Maybe you already spotted that we went ahead and added one other trick to the code above? We added a default value for the `name` parameter, so if the name isn’t supplied when you call `hi`, we use the default name "World". Now we can try:
 
-<div class="toit">``` main: hi hi "Kasper" ```</div>
+<div class="toit">
+```
+main:
+  hi
+  hi "Kasper"
+```
+</div>
 
 and get the following output:
 
@@ -103,12 +147,11 @@ What if we want a real greeter around, one that remembers your name and welcomes
 class Greeter:
   name := null
 
-constructor .name = "World":
+  constructor .name = "World":
 
-say_hi: print "Hi $name.trim!"
+  say_hi: print "Hi $name.trim!"
 
-say_bye: print "Bye $name.trim, come back soon."
-
+  say_bye: print "Bye $name.trim, come back soon."
 ```
 </div>
 
@@ -117,9 +160,7 @@ The new keyword here is `class`. This defines a new class called `Greeter` and a
 <!-- SKIP CODE -->
 <div class="toit">
 ```
-
-constructor .name = "World":
-
+  constructor .name = "World":
 ```
 </div>
 
@@ -135,13 +176,11 @@ Now let’s create a greeter object and use it:
 
 <div class="toit">
 ```
-
 main:
-greeter := Greeter " Helena "
-greeter.say_hi
-greeter.say_bye
-
-````
+  greeter := Greeter " Helena "
+  greeter.say_hi
+  greeter.say_bye
+```
 </div>
 
 We create an object simply by mentioning the constructor, `Greeter`. The greeter object remembers the name and uses it for the two separate greetings. If we run this, we get the following output:
@@ -150,37 +189,46 @@ We create an object simply by mentioning the constructor, `Greeter`. The greeter
 $ toit execute hello.toit
 Hi Helena!
 Bye Helena, come back soon.
-````
+```
 
 If you want to get the name from a greeter, you can ask a greeter by calling the `name` method on it:
 
-<div class="toit">``` main: greeter := Greeter " Helena " print "How are you $(greeter.name)?" ```</div>
+<div class="toit">
+```
+main:
+  greeter := Greeter " Helena "
+  print "How are you $(greeter.name)?"
+```
+</div>
 
-This would show `How are you Helena ?`. Almost neat, right? Unfortunately, the name isn’t trimmed like we expected. Let’s fix that!
+This would show `How are you  Helena ?`. Almost neat, right? Unfortunately, the name isn’t trimmed like we expected. Let’s fix that!
 
 ## Fields and methods
 
 As you have just seen, a field on an object introduces a method with the same name. If you wanted to hide a field from the outside world, you could make it private. By convention, methods and fields that end with an underscore (`_`) are private and not supposed to be touched from the outside:
 
 <!-- RESET CODE -->
-
-<div class="toit">``` class Greeter: name_:= null constructor .name_ = "World": ```</div>
+<div class="toit">
+```
+class Greeter:
+  name_:= null
+  constructor .name_ = "World":
+```
+</div>
 
 This removes the `name` method from greeters, but if we really want to allow accessing the name from the outside, we could reintroduce a getter with the same meaning as before.
 
 <!-- RESET CODE -->
-
 <div class="toit">
 ```
 class Greeter:
   name_ := null
 
-constructor .name\_ = "World":
+  constructor .name_ = "World":
 
-name: return name*
-say_hi: print "Hi $name*.trim!"
-say*bye: print "Bye $name*.trim, come back soon."
-
+  name: return name_
+  say_hi: print "Hi $name_.trim!"
+  say_bye: print "Bye $name_.trim, come back soon."
 ```
 </div>
 
@@ -189,9 +237,7 @@ Here we use the new keyword `return` to specify the value a method returns. We c
 <!-- SKIP CODE -->
 <div class="toit">
 ```
-
-name: return name\_.trim
-
+  name: return name_.trim
 ```
 </div>
 
@@ -200,16 +246,14 @@ In this way, access to the name from the outside also gets the trimming and we c
 <!-- RESET CODE -->
 <div class="toit">
 ```
-
 class Greeter:
-name\_ := null
+  name_ := null
 
-constructor .name\_ = "World":
+  constructor .name_ = "World":
 
-name: return name\_.trim
-say_hi: print "Hi $name!"
-say_bye: print "Bye $name, come back soon."
-
+  name: return name_.trim
+  say_hi: print "Hi $name!"
+  say_bye: print "Bye $name, come back soon."
 ```
 </div>
 
@@ -217,11 +261,9 @@ We can check that it works by running:
 
 <div class="toit">
 ```
-
 main:
-greeter := Greeter " Erik "
-print "How are you $(greeter.name)?"
-
+  greeter := Greeter " Erik "
+  print "How are you $(greeter.name)?"
 ```
 </div>
 
@@ -235,13 +277,11 @@ This greeter isn’t all that interesting though, it can only deal with one pers
 
 <div class="toit">
 ```
-
 class MegaGreeter:
-names := []
+  names := []
 
-constructor name = "World":
-names.add name
-
+  constructor name = "World":
+    names.add name
 ```
 </div>
 
@@ -251,10 +291,10 @@ So MegaGreeter objects have a list of `names`. The `names` field is initialized 
 ```
 
 main:
-greeter := MegaGreeter
-print "The names are $greeter.names"
+  greeter := MegaGreeter
+  print "The names are $greeter.names"
 
-````
+```
 </div>
 
 will lead to this output:
@@ -262,40 +302,38 @@ will lead to this output:
 ```bash
 $ toit execute hello.toit
 The names are ["World"]
-````
+```
 
 We can now go ahead and add greeter methods that show all the names:
 
 <!-- RESET CODE -->
-
 <div class="toit">
 ```
 // Greeter that says hi to everybody.
 class MegaGreeter:
   names := []
 
-constructor name = "World":
-names.add name
+  constructor name = "World":
+    names.add name
 
-say_hi:
-// Greet everyone individually!
-names.do: print "Hello $it!"
-say_bye:
-everyone := names.join ", "
-print "Bye $everyone, come back soon."
+  say_hi:
+    // Greet everyone individually!
+    names.do: print "Hello $it!"
+  say_bye:
+    everyone := names.join ", "
+    print "Bye $everyone, come back soon."
 
 main:
-greeter := MegaGreeter
-greeter.say_hi
-greeter.say_bye
+  greeter := MegaGreeter
+  greeter.say_hi
+  greeter.say_bye
 
-greeter.names.add "Lars"
-greeter.names.add "Kasper"
-greeter.names.add "Rikke"
-greeter.say_hi
-greeter.say_bye
-
-````
+  greeter.names.add "Lars"
+  greeter.names.add "Kasper"
+  greeter.names.add "Rikke"
+  greeter.say_hi
+  greeter.say_bye
+```
 </div>
 
 
@@ -310,7 +348,7 @@ Hello Lars!
 Hello Kasper!
 Hello Rikke!
 Bye World, Lars, Kasper, Rikke, come back soon.
-````
+```
 
 Let’s dive into the new constructs in the next sections.
 
@@ -319,8 +357,12 @@ Let’s dive into the new constructs in the next sections.
 Not everything in your source files is meant to be run by the Toit compiler. Sometimes, it is nice just to add comments that explain interesting things related to your code. In the example in the last section, there were a few single line comments:
 
 <!-- SKIP CODE -->
-
-<div class="toit">``` // Greeter that says hi to everybody. class MegaGreeter: ```</div>
+<div class="toit">
+```
+// Greeter that says hi to everybody.
+class MegaGreeter:
+```
+</div>
 
 Such comments start with `//` and tell the system to ignore the rest of the line.
 
@@ -330,8 +372,7 @@ You have already seen the use of indentation to give hierarchical structure to y
 ```
 class SimpleGreeter:
 
-say_hi: print "Hi!" // Method all on one line.
-
+  say_hi: print "Hi!"  // Method all on one line.
 ```
 </div>
 
@@ -339,14 +380,12 @@ or you can add a newline after the `:` and let the following lines that are inde
 
 <div class="toit">
 ```
+  names := []
 
-names := []
-
-// Method delimited by indentation
-say_bye:
-everyone := names.join ", "
-print "Bye $everyone, come back soon."
-
+  // Method delimited by indentation
+  say_bye:
+    everyone := names.join ", "
+    print "Bye $everyone, come back soon."
 ```
 </div>
 
@@ -357,12 +396,10 @@ For a class, everything that is indented under the class declaration line belong
 <!-- RESET CODE -->
 <div class="toit">
 ```
-
 class MegaGreeter:
-// class members start
-// ...
-// class members end
-
+  // class members start
+  // ...
+  // class members end
 ```
 </div>
 
@@ -371,17 +408,15 @@ For methods in a class, the statements in them are nested one level further (two
 <!-- RESET CODE -->
 <div class="toit">
 ```
-
 class MegaGreeter:
-// class members start
-// ...
-say_hi:
-// method body start
-// ...
-// method body end
-// ...
-// class members end
-
+  // class members start
+  // ...
+  say_hi:
+    // method body start
+    // ...
+    // method body end
+  // ...
+  // class members end
 ```
 </div>
 
@@ -396,11 +431,9 @@ Let’s return to the `MegaGreeter` example and take a look at another place whe
 <!-- HIDDEN CODE   names := [] -->
 <div class="toit">
 ```
-
-say_hi:
-// Greet everyone individually!
-names.do: print "Hello $it!"
-
+  say_hi:
+    // Greet everyone individually!
+    names.do: print "Hello $it!"
 ```
 </div>
 
@@ -412,14 +445,14 @@ You can play with the methods on list by modifying and running the sample below:
 ```
 
 main:
-list := [ "Horse", "Fish", "Radish", "Baboon" ]
-print "There are $(list.size) elements in the list"
-print "Here they are:"
-list.do: print "Element = $it"
+  list := [ "Horse", "Fish", "Radish", "Baboon" ]
+  print "There are $(list.size) elements in the list"
+  print "Here they are:"
+  list.do: print "Element = $it"
 
-print "Here they are (sorted):"
-list.sort
-list.do: print "Element = $it"
+  print "Here they are (sorted):"
+  list.sort
+  list.do: print "Element = $it"
 
 ```
 </div>
@@ -431,11 +464,9 @@ One of the methods on lists that is very useful when constructing strings is `jo
 <!-- HIDDEN CODE   names := [] -->
 <div class="toit">
 ```
-
-say_bye:
-everyone := names.join ", "
-print "Bye $everyone, come back soon."
-
+  say_bye:
+    everyone := names.join ", "
+    print "Bye $everyone, come back soon."
 ```
 </div>
 
@@ -445,11 +476,9 @@ Perhaps you don’t always want to say "Hello", so you add an argument with a de
 
 <div class="toit">
 ```
-
-say_hi greeting = "Hello,":
-// Greet everyone individually!
-names.do: print "$greeting $it!"
-
+  say_hi greeting = "Hello,":
+    // Greet everyone individually!
+    names.do: print "$greeting $it!"
 ```
 </div>
 
@@ -457,14 +486,12 @@ Now the user of your class can write:
 
 <div class="toit">
 ```
-
 main:
-greeter := MegaGreeter
-greeter.names.add "Lars"
-greeter.names.add "Kasper"
-greeter.say_hi "Kaixo,"
-
-````
+  greeter := MegaGreeter
+  greeter.names.add "Lars"
+  greeter.names.add "Kasper"
+  greeter.say_hi "Kaixo,"
+```
 </div>
 
 Which produces the output:
@@ -472,23 +499,31 @@ Which produces the output:
 Kaixo, World!
 Kaixo, Lars!
 Kaixo, Kasper!
-````
-
+```
 However, at the calling site it may not be clear what the argument "Kaixo" is for. We can make it clearer with a named argument:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
 <!-- HIDDEN CODE   names := [] -->
-
 <div class="toit">
-  ``` say_hi --greeting="Hello,": // Greet everyone individually! names.do: print "$greeting $it!" ```
+```
+  say_hi --greeting="Hello,":
+    // Greet everyone individually!
+    names.do: print "$greeting $it!"
+```
 </div>
 
 Now we can use this with:
 
 <div class="toit">
-  ``` main: greeter := MegaGreeter greeter.say_hi greeter.names.add "Lars" greeter.names.add "Kasper" greeter.say_hi
-  --greeting="Hej," ```
+```
+main:
+  greeter := MegaGreeter
+  greeter.say_hi
+  greeter.names.add "Lars"
+  greeter.names.add "Kasper"
+  greeter.say_hi --greeting="Hej,"
+```
 </div>
 
 which outputs:
@@ -508,11 +543,11 @@ We can program a ridiculously inefficient Fibonnaci sequence generator using `if
 ```
 
 fib n:
-if n <= 1: return n
-return (fib n-1) + (fib n-2)
+  if n <= 1: return n
+  return (fib n-1) + (fib n-2)
 
 main:
-print "The 10th Fibonnaci number is $(fib 10)"
+  print "The 10th Fibonnaci number is $(fib 10)"
 
 ```
 </div>
@@ -525,11 +560,9 @@ Toit also has the usual array of infix operators, `+`, `-`, `*`, `/`, `%` etc. a
 
 <!-- RESET CODE -->
 ```
-
 fib n:
-if n <= 1: return n
-return (fib n - 1) + (fib n - 2)
-
+  if n <= 1: return n
+  return (fib n - 1) + (fib n - 2)
 ```
 
 ## Loops
@@ -538,16 +571,14 @@ This is a terribly slow way to calculate a Fibonnaci number though, and we could
 
 <div class="toit">
 ```
-
 fib2 n:
-s1 := 0
-s2 := 1
-n.repeat:
-s3 := s1 + s2
-s1 = s2
-s2 = s3
-return s1
-
+  s1 := 0
+  s2 := 1
+  n.repeat:
+    s3 := s1 + s2
+    s1 = s2
+    s2 = s3
+  return s1
 ```
 </div>
 
@@ -555,11 +586,9 @@ Here we are using the `repeat` method on numbers, which runs a block a given num
 
 <div class="toit">
 ```
-
 // Prints the numbers from 0 to n (exclusive).
 print_n_numbers n:
-n.repeat: print it
-
+  n.repeat: print it
 ```
 </div>
 
@@ -567,17 +596,16 @@ The `repeat` method is simple and efficient, but sometimes we need something mor
 
 <div class="toit">
 ```
-
 // Prints the odd numbers less than n.
 print_odd_numbers n:
-for i := 1; i < n; i += 2:
-print i
+  for i := 1; i < n; i += 2:
+    print i
 
 // Returns if the Collatz conjecture is true.
 collatz n:
-while n > 1:
-if n % 2 == 0: n = n / 2
-else: n = n \* 3 + 1
+  while n > 1:
+    if n % 2 == 0: n = n / 2
+    else: n = n * 3 + 1
 
 ```
 </div>
@@ -589,27 +617,25 @@ Perhaps we need titles for our greeters:
 <!-- RESET CODE -->
 <div class="toit">
 ```
-
 class MegaGreeter:
-names := []
-titles := {:}
+  names := []
+  titles := {:}
 
-constructor:
+  constructor:
 
-add name title:
-names.add name
-titles[name] = title
-say_hi:
-// Greet everyone individually!
-names.do: print "Hello, $titles[it] $it!"
+  add name title:
+    names.add name
+    titles[name] = title
+  say_hi:
+    // Greet everyone individually!
+    names.do: print "Hello, $titles[it] $it!"
 
 main:
-greeter := MegaGreeter
-greeter.add "Lars" "Mr."
-greeter.add "Rikke" "Dr."
-greeter.add "Günter" "Herr Professor Doktor Doktor"
-greeter.say_hi
-
+  greeter := MegaGreeter
+  greeter.add "Lars" "Mr."
+  greeter.add "Rikke" "Dr."
+  greeter.add "Günter" "Herr Professor Doktor Doktor"
+  greeter.say_hi
 ```
 </div>
 
@@ -620,11 +646,9 @@ Here we use a hashmap to store the appropriate title for each name.  The empty m
 <!-- HIDDEN CODE   names := [] -->
 <div class="toit">
 ```
-
-say_hi:
-for i := 0; i < names.size; i++:
-print "Hello, $names[i]"
-
+  say_hi:
+    for i := 0; i < names.size; i++:
+      print "Hello, $names[i]"
 ```
 </div>
 
@@ -634,16 +658,14 @@ We already saw the `repeat` method on integers and the `do` method on lists:
 
 <div class="toit">
 ```
-
 main:
-// Print the numbers from 1 to 10, one per line.
-10.repeat:
-print it + 1
-my_list := [1, 2, 3]
-// Print the elements in my_list, one per line.
-my_list.do:
-print it
-
+  // Print the numbers from 1 to 10, one per line.
+  10.repeat:
+    print it + 1
+  my_list := [1, 2, 3]
+  // Print the elements in my_list, one per line.
+  my_list.do:
+    print it
 ```
 </div>
 
@@ -652,18 +674,16 @@ Syntactically they look like they are built in to the language like `if` and `fo
 <!-- SKIP CODE -->
 <div class="toit">
 ```
-
 class List:
-// ...
-do [block]:
-size.repeat: block.call this[it]
+  // ...
+  do [block]:
+    size.repeat: block.call this[it]
 
 class Integer:
-// ...
-repeat [block]:
-for i := 0; i < this; i++:
-block.call i
-
+  // ...
+  repeat [block]:
+    for i := 0; i < this; i++:
+      block.call i
 ```
 </div>
 
@@ -675,13 +695,11 @@ A block can return a value each time it is run.  This is used for example in the
 
 <div class="toit">
 ```
-
 // Takes a list of words, and returns a new list with only the
 // words that are 5 characters or fewer.
 short_words words:
-return words.filter:
-it.size <= 5
-
+  return words.filter:
+    it.size <= 5
 ```
 </div>
 
@@ -693,18 +711,15 @@ If you use the `return` keyword in a block then it returns from the syntactic fu
 
 <div class="toit">
 ```
-
 wheres_walter list:
-list.do:
-if it.starts_with "Walter ":
-return it
-return null
+  list.do:
+    if it.starts_with "Walter ":
+      return it
+  return null
 
 main:
-print (wheres_walter ["Ib Michael", "Walter White", "Marie Curie"])
-
+  print (wheres_walter ["Ib Michael", "Walter White", "Marie Curie"])
 ```
 </div>
 
 The `return` keyword is inside a block that is passed to the `do` method.  When the name that starts with `"Walter "` is found we immediately return the full name from the `wheres_walter` function without continuing to iterate over the list.
-```

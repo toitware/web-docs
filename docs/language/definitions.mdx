@@ -48,15 +48,15 @@ class A:
     print some_static_field
 
 main:
-// But outside the class, they must be referred to through
-// the class name:
-print A.some_static_field
-
+  // But outside the class, they must be referred to through
+  // the class name:
+  print A.some_static_field
 ```
 
 - **Methods and instance fields**: everything that needs to go through an object.
   Methods without arguments behave similarly to instance fields.
 
+<!-- RESET CODE -->
 ```
 // Implicitly static, not inside a class, and doesn't
 // require one.
@@ -69,66 +69,68 @@ some_global := 499
 CONSTANT ::= 42
 
 class A:
-// Static, as you can write `A` without creating an `A`
-// first.
-constructor: ...
+  // Static, as you can write `A` without creating an `A`
+  // first.
+  constructor: ...
 
-// Static, or just a different way to write a constructor.
-constructor.named: ...
+  // Static, or just a different way to write a constructor.
+  constructor.named:  ...
 
-// A factory is just a constructor with a `return`. From
-// the outside there is no difference to a constructor.
-constructor.my_factory:
-return singleton
+  // A factory is just a constructor with a `return`. From
+  // the outside there is no difference to a constructor.
+  constructor.my_factory:
+    return singleton
 
-// A static field.
-static singleton ::= A
+  // A static field.
+  static singleton ::= A
 
-// A static function that doesn't require the creation of
-// an object `A`. It's important to see that
-// `A.static_in_A` doesn't first create `A` and then call
-// `static_in_A`. The leading `A.` is just so we can find
-// the static function.
-static static_in_A: print "static fun"
+  // A static function that doesn't require the creation of
+  // an object `A`.  It's important to see that
+  // `A.static_in_A` doesn't first create `A` and then call
+  // `static_in_A`.  The leading `A.` is just so we can find
+  // the static function.
+  static static_in_A: print "static fun"
 
-// Same as for the static function: this is a field that
-// lives independent of an instance.
-// If you write `A.static_field = 1` followed by `print // A.static_field`, then you would get `1`. Static fields
-// are really just like scoped globals.
-static static_field := 42
+  // Same as for the static function: this is a field that
+  // lives independent of an instance.
+  // If you write `A.static_field = 1` followed by `print
+  // A.static_field`, then you would get `1`.  Static fields
+  // are really just like scoped globals.
+  static static_field := 42
 
-// This non-static method can only be used on an object,
-// like `a := A` followed by `a.method`.
-method: print "method"
+  // This non-static method can only be used on an object,
+  // like `a := A` followed by `a.method`.
+  method: print "method"
 
-// An instance field.
-// Operates on an object: `a := A` followed by `a.field = // 42` would change the field of the object. A new,
-// unmodified, object would again be constructed with
-// 11 in this field: `a2 := A` followed by `print a2.field`
-// would print 11.
-field := 11
+  // An instance field.
+  // Operates on an object: `a := A` followed by `a.field =
+  // 42` would change the field of the object.  A new,
+  // unmodified, object would again be constructed with
+  // 11 in this field: `a2 := A` followed by `print a2.field`
+  // would print 11.
+  field := 11
 
 main:
-// Statics can be accessed directly or must be prefixed
-// with the class name:
-foo // Calls foo
-print some_global // Prints the global
-print CONSTANT // Prints the constant.
-a := A // Creates a new A.
-a2 := A.named // Creates a new A.
-a3 := A.my_factory // From the outside the same syntax as
-// `A.named`.
-A.static_in_A // Calls the static function _without_
-// creating an object first.
-A.static_field = 11 // Does _not_ create an object first.
-print A.static_field // Prints the static field 11.
-a.method // Invokes the instance method on `a`.
-a2.method // Invokes it on `a2`.
-print a.field // Reads the field in `a`. => 11
-a.field = 42 // Only changes the field in `a`, but
-// not a2 or a3.
-print a.field // => 42
-print a2.field // => 11
+  // Statics can be accessed directly or must be prefixed
+  // with the class name:
+  foo  // Calls foo
+  print some_global  // Prints the global
+  print CONSTANT     // Prints the constant.
+  a := A             // Creates a new A.
+  a2 := A.named      // Creates a new A.
+  a3 := A.my_factory // From the outside the same syntax as
+                     // `A.named`.
+  A.static_in_A      // Calls the static function *without*
+                     // creating an object first.
+  A.static_field = 11  // Does *not* create an object first.
+  print A.static_field  // Prints the static field 11.
+  a.method           // Invokes the instance method on `a`.
+  a2.method          // Invokes it on `a2`.
+  print a.field      // Reads the field in `a`. => 11
+  a.field = 42       // Only changes the field in `a`, but
+                     // not a2 or a3.
+  print a.field      // => 42
+  print a2.field     // => 11
 ```
 
 ## Type
@@ -142,24 +144,24 @@ value.
 
 ```
 class Coordinate:
-// An instance field that must be initialized by
-// constructors.
-// By writing `:= ?` we indicate that all constructors
-// must initialize the field.
-x/int := ?
-y/int := ?
+  // An instance field that must be initialized by
+  // constructors.
+  // By writing `:= ?` we indicate that all constructors
+  // must initialize the field.
+  x/int := ?
+  y/int := ?
 
-// We don't need to specify the type for constructor
-// arguments that are written directly to a typed field.
-constructor .x .y:
+  // We don't need to specify the type for constructor
+  // arguments that are written directly to a typed field.
+  constructor .x .y:
 
 main:
-a := Coordinate 0 0
+  a := Coordinate 0 0
 
-// Error! The types of the fields (and therefore the
-// constructor arguments) are non-nullable, so null is not
-// a valid argument here:
-b := Coordinate null null // Error!
+  // Error! The types of the fields (and therefore the
+  // constructor arguments) are non-nullable, so null is not
+  // a valid argument here:
+  b := Coordinate null null  // Error!
 ```
 
 If we want a nullable type, we write a question mark `?` after the
@@ -167,9 +169,10 @@ type name. For example in the following `Foo` class the `bar` variable can
 be a reference to an instance of the `Bar` class or interface, but
 it can also be null, which also happens to be the initial value:
 
+<!-- HIDDEN CODE class Bar: -->
 ```
 class Foo:
-bar/Bar? := null
+  bar/Bar? := null
 ```
 
 ### Any
@@ -185,10 +188,10 @@ The `rename` function in the example `rename from/any to/any -> any` returns `an
 In the following example the parameter `param`, the local `my_var`, and the global `glob` are all typed in the following example:
 
 ```
-foo param/int: // The parameter 'param' must be of type int.
-// The variable 'my_var' is typed as 'float'. The second
-// '/' is a division.
-my_var /float := param / 3.14
+foo param/int:  // The parameter 'param' must be of type int.
+  // The variable 'my_var' is typed as 'float'. The second
+  // '/' is a division.
+  my_var /float := param / 3.14
 glob / string := "the global 'glob' is typed as string"
 ```
 
@@ -204,24 +207,21 @@ Functions can also declare their return type by writing `->` followed by the ret
 The `-> type` can be anywhere in the signature, but it's convention to put it at the end of the line that declares the name of a function:
 
 <!-- RESET CODE -->
-
 ```
-
 // A function that doesn't return anything.
 foo -> none:
-print "not returning anything"
+  print "not returning anything"
 
 // A function that takes an int and returns an int.
 bar x/int -> int:
-return x + 1
+  return x + 1
 
-gee with / string -> float // Returns a float.
-arguments / int
-on / string
-different / bool
---lines:
-return 3.14
-
+gee with / string  -> float  // Returns a float.
+    arguments / int
+    on / string
+    different / bool
+    --lines:
+  return 3.14
 ```
 
 ### None
