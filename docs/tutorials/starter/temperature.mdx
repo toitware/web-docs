@@ -1,0 +1,121 @@
+---
+order: 1
+---
+
+# Temperature, Humidity and Pressure
+
+In this tutorial we are using an ESP32 with the Bosh [BME280 sensor](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf); an environmental sensor measuring temperature, the relative humidity, and the atmospheric pressure.
+
+This example illustrates the difference between running a Toit program once on an ESP32 and deploying the same code as an app together with a specification file.
+
+## Run on an ESP32
+
+To get data from the sensors, we make use of the [sensor driver](../getstarted/examples/bme280.md) by importing it in the program with `import drivers.bme280`.
+
+We also need to specify the [GPIO pins](../getstarted/gpio.md) and the relevant [connection bus](../getstarted/protocols.md).
+
+<div class="toit">
+```
+// Save this program in a file named thp.toit
+import gpio
+import serial.protocols.i2c as i2c
+import drivers.bme280
+
+main:
+  bus := i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
+
+  device := bus.device 0x77
+
+  bme := drivers.Bme280 device
+
+  bme.on
+  print "Temperature: $bme.read_temperature C"
+  print "Humidity: $bme.read_humidity %"
+  print "Pressure: $bme.read_pressure Pa"
+  bme.off
+```
+</div>
+
+ Save the above Toit program in a file named `thp.toit`.
+
+=== "Console"
+    Copy and paste the program above into the Code tab of an online ESP32 with the temperature sensor, press the **Run on device** button and go to the **Logs tab** (or the Humio tab) of the device to see the logged temperature, humidity and pressure from the ESP32.
+
+=== "CLI"
+    To run the program once on the ESP32, execute the CLI command 
+    
+    ```
+    toit run thp.toit
+    ```
+    If you haven't set your default device in the CLI, add `-d <device-name>` to the run command, where `<device-name>` is the name of your ESP32.
+
+    <div class="termynal" data-termynal>
+        <span data-ty="input"  data-ty-prompt="$">toit run thp.toit</span>
+        <span data-ty>2021-04-14T13:09:04.801533Z: &lt;process initiated&gt;</span>
+        <span data-ty>Temperature is 23.1 C</span>
+        <span data-ty>Humidity is 29%</span>
+        <span data-ty>Atmospheric Pressure is 1006.0 Pa</span>
+        <span data-ty>2021-04-14T13:09:05.020756Z: &lt;process terminated - exit code: 0&gt;</span>
+    </div>
+  
+Running a Toit program in this way means that it will be uninstalled from the device once the program has terminated.
+
+## Deploy on an ESP32
+
+We can use the same Toit program to repeatedly measure the temperature, humidity, and pressure once every hour by deploying it on the ESP32 using the following app specification file:
+
+```yaml
+# filename: thp.yaml
+
+# This app specification file executes the 'Hourly THP' app on install
+# and subsequently every hour.
+
+name: Hourly THP
+entrypoint: thp.toit
+triggers:
+    on_install: true
+    on_interval: 1h
+```
+
+Save the content of the above yaml specification into a file named `thp.yaml` located in the same directory as the `thp.toit` file from the [previous step](#run-on-an-esp32).
+
+Deploy the "Hourly THP" app on your ESP32 with the CLI command
+
+    toit deploy thp.yaml
+
+If you haven't set your default device in the CLI, add `-d <device-name>` to the deploy command, where `<device-name>` is the name of your ESP32.
+
+The device log will show the three measurements every hour after the program has been installed on the device.
+
+Note that the device is not required to be online when the app is deployed. When the device comes online, the app will be installed on the device and start it's scheduled execution.
+
+View all apps installed (or waiting to be installed) on your ESP32 from the Apps tab
+
+![deployedapp](../img/apps.png)
+
+## Uninstall an app
+
+=== "Console"
+    To uninstall an app, click on the **Uninstall** button in the Apps tab of the device.
+
+=== "CLI"
+    To uninstall an app, run 
+    
+    ```
+    toit device ps
+    ``` 
+    
+    to get the list of installed apps on your device. 
+    
+    Note the app ID or the app name, and replace it in the command:
+    
+    ```
+    toit device uninstall <app-ID or app-name>
+    ```
+
+    For example,
+    ```
+    toit device uninstall "Hourly THP"
+    ```

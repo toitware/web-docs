@@ -1,0 +1,228 @@
+---
+order: 6
+---
+
+# List, Set and Map in Toit
+
+The following classes are included in the core SDK as part of the [collections.toit module](https://libs.toit.io/core/collections/library-summary):
+
+`List` provides an ordered and indexed collection which may contain duplicates. This is roughly analogous to extendable arrays in other languages.
+
+`Set` provides a collection of unique objects. When iterating over a `Set`, the objects are processed in insertion ordered.
+
+`Map` provides a data structure mapping keys to values. Like `Set`, iteration is in insertion order. Overwriting the value associated with a key does not change the order of the key-value pair.
+
+The `Set` and `Map` implementations use hashing to do their operations in constant speed. As a consequence their keys must have a `hash_code` member.
+
+There are two concrete implementations of `Set` and `Map`:
+`Set`/`Map` use the overwritable `==` operator to determine whether two keys are equal, whereas `IdentitySet`/`IdentityMap` use `identical`.
+
+See some examples of use of `List` and `Map` in the section [Toit blocks](blocks.md).
+
+See also the documentation for the [List](https://libs.toit.io/core/collections/class-List), [Set](https://libs.toit.io/core/collections/class-Set), and [Map](https://libs.toit.io/core/collections/class-Map) classes.
+
+## Set versus List versus Map
+
+- **Duplicates**: A big difference between `List` and `Set` class is that `List` allows duplicates while `Set` doesn't allow duplicates.
+  `Map` holds two objects per entry (a key and a value).
+  It may contain duplicate values but keys are always unique.
+
+- **Removing and finding entries**: A Set has efficient implementations of
+  the `contains` and the `remove` methods, whereas a List must perform a linear
+  search or copy operation that depends on the size of the list.
+
+- **Null elements**: `List` allows null elements. It is possible to have many null
+  objects in a `List` because duplicates are allowed.
+  `Set` does not allow null elements, and `Map` does not allow null keys.
+
+- **Indexing**: Although sets and lists are both insertion-ordered it is not possible to
+  access an arbitrary entry in the set with its insertion order. The entries must be
+  accessed by lookup or by iterating over all entries. However, Set and Map both have
+  methods `first` and `last` that are useful when using them as deduplicating queues or
+  fifos.
+
+- **Literals**: Lists, Sets and Maps have literals:
+
+<div class="toit">
+```
+list := []
+set := {}
+map := {:}
+```
+</div>
+
+These are the preferred short cuts for:
+
+<!-- RESET CODE -->
+
+<div class="toit">``` list := List set := Set map := Map ```</div>
+
+Literals may also contain values:
+
+<div class="toit">
+```
+list_with_values := [1, 2, 3]
+set_with_values := {1, 2}  
+map_with_values := {
+  "key": 499,
+  "key2": 42,
+}
+```
+</div>
+
+Note that both `Set` and `Map` use hash values to place elements into the underlying data structure.
+This means that all keys must implement the `hash_code` method. The performance of sets and
+maps is best if two different keys have (with high probability) a different hash code.
+
+!!! warning ""
+Sets and Maps only use the `hash_code` function if their size is big enough. Objects that
+don't implement `hash_code` might thus not yield errors until the collections grow big enough.
+where the chance of two different objects having the same hash code should be
+low.
+
+## Examples of using Map
+
+Lookup in a map is done with the indexing operator, `[]`:
+
+<!-- HIDDEN CODE main: -->
+<!-- HIDDEN CODE   scores := {"":null} -->
+<!-- HIDDEN CODE   team := "" -->
+
+<div class="toit">``` score := scores[team] print "The score for $team is $score" ```</div>
+
+The index operator syntax is understood by the string interpolation syntax, so you can simply write:
+
+<div class="toit">``` print "The score for $team is $scores[team]" ```</div>
+
+Updating or adding to a map is done with the `[]=` operator:
+
+<!-- HIDDEN CODE title_map := {:} -->
+
+<div class="toit">``` graduate name/string: title_map[name] = "PhD" ```</div>
+
+The index operator, `[]` requires the key to be present in the map, otherwise
+it throws an exception. As an alternative, you can use the `get` method which
+by default returns null for a missing key:
+
+<div class="toit">
+```
+class Scoring:
+  // scorers is a map where the key is a team and the value
+  // is a set of those that have scored goals for the team.
+  scorers / Map ::= {:}
+  
+  register_goal team/string new_scorer/string -> none:
+    goal_scorers/Set? := scorers.get team
+    if goal_scorers == null:
+      // First time the team scores, there is no set of
+      // goal scorers in the map.  We insert an empty set
+      // into which we can insert the new goal scorer.
+      goal_scorers = {}  // Empty set.
+      scorers[team] = goal_scorers
+    goal_scorers.add new_scorer
+```
+</div>
+
+Often there are more succinct ways to achieve the same with variations of the
+`get` method. The above could be written:
+
+<!-- RESET CODE -->
+<!-- HIDDEN CODE class Scoring: -->
+<!-- HIDDEN CODE   scorers / Map ::= {:} -->
+
+<div class="toit">
+  ``` register_goal team/string new_scorer/string -> none: // Get the set of goal-scorers for this team, // initializing
+  with the empty set if necessary. goal_scorers/Set := scorers.get team --init=: {}
+  goal_scorers.add new_scorer ```
+</div>
+
+The full set of map methods is available in the [class
+documentation](https://libs.toit.io/core/collections/class-Map). See also the
+guide to [using named block
+parameters](../blocks/#calling_functions_with_named_block_parameters)
+
+## Functional methods
+
+Toit contains a full set of the collection methods like `map` and `reduce` which
+are known from functional languages. Often you can use these instead of explicitly
+iterating over the collection.
+
+Instead of:
+
+<div class="toit">
+  ``` report_odd collection/List: found := false collection.do: if it % 2 == 1: found = true if found: print "The
+  collection contains at least one odd number" ```
+</div>
+
+You can use the [any](<https://libs.toit.io/core/collections/class-Collection#any(block)>)
+method, which also has the advantage that it stops
+when it has found a object in the collection which fulfills the predicate:
+
+<div class="toit">
+  ``` if (collection.any: it % 2 == 1): print "The collection contains at least one odd number" ```
+</div>
+
+(In this case we added parentheses around the `if`-condition so the colon that
+introduces the block argument to `any` does not get mistaken for the colon of the
+if-statement. The `any` method is often called `some` in functional languages.)
+
+Similarly, Toit collections have the [`every`](<https://libs.toit.io/core/collections/class-Collection#every(block)>)
+method known from functional languages:
+
+<div class="toit">``` if (collection.every: it % 2 == 1): print "The collection contains only odd numbers" ```</div>
+
+The reduce method:
+
+(The example shows the use of a
+[block](blocks.md) with two named arguments).
+
+<div class="toit">``` sum := collection.reduce: | a b | a + b ```</div>
+
+This only works if the collection has at least one element and that element is
+a good starting point for the reduction operation. Otherwise you need to add
+the optional `--initial` argument. For example in the following example the
+elements of the collection are integers, but the result of the `reduce`
+operation has a different type, `float`.
+
+<div class="toit">
+  ``` sum_of_roots collection/Collection -> float: return collection.reduce --initial=0.0: | sum_so_far integer |
+  sum_so_far + integer.sqrt ```
+</div>
+
+The version of `reduce` with an initial value is called `fold` in functional
+languages.
+
+Similarly the `List` and `Set` classes have `map`:
+
+<div class="toit">
+  ``` // Creates a comma-separated list of quoted strings. csv list/List -> string: Q ::= "\"" // A double quote. if
+  (list.any: it.contains Q): throw "Can't handle strings containing quotes" quoted_list := list.map: "$Q$it$Q" return
+  quoted_list.join "," ```
+</div>
+
+A more advanced version would handle strings containing quotes:
+
+<!-- RESET CODE -->
+
+<div class="toit">
+  ``` // Creates a comma-separated list of quoted strings, // escaping quotes. csv list/List -> string: Q ::= "\"" // A
+  double quote. escaped_list := list.map: str := "$it" if str.contains Q: // In CSV quotes are escaped as two quotes.
+  str.replace --all Q "$Q$Q" else: str quoted_list := escaped_list.map: "$Q$it$Q" return quoted_list.join "," ```
+</div>
+
+That example also illustrates that the value of the block (returned to the
+`map` method) is the result of the last statement. In this case one of the
+branches of the `if` will be the last statement, producing the return value.
+An alternative way to do this would be to use
+[continue.map](http://localhost:8000/language/blocks/#local_return)
+
+We could also reduce it to an almost unreadable one-liner by putting an
+arbitrary expression in a string interpolation, surrounding it with `$(` and
+`)`:
+
+<!-- RESET CODE -->
+
+<div class="toit">
+  ``` // Creates a comma-separated list of quoted strings, // escaping quotes. csv list/List -> string: return
+  (list.map: "\"$("$it".replace --all "\"" "\"\"")\"").join "," ```
+</div>

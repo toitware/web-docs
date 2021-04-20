@@ -1,0 +1,263 @@
+---
+order: 11
+---
+
+# Tasks in Toit
+
+## Introduction
+
+Some languages, like Java or C#, have multiple threads running at the same
+time. These are separate control flows that can manipulate each other's data.
+Because there can be different threads using the same objects, it is easy to
+make programming mistakes called race conditions.
+
+Other languages, like JavaScript, have only one thread. This is very limiting
+in that your program constantly has to return to an _event loop_, which makes
+it much harder to program. Your code must be written in a _non-blocking_ style
+with no long-running loops.
+
+## Tasks
+
+Toit has a third option instead: Tasks (sometimes called fibers in other
+languages). Tasks have independent control flow but do not run simultaneously.
+An example:
+
+<!-- ANALYZE CODE -->
+
+<div class="toit">
+```
+import gpio
+
+// The red LED is connected to pin 17.
+LED1 ::= gpio.Pin.out 17
+// The green LED is connected to pin 18.
+LED2 ::= gpio.Pin.out 18
+
+main:
+// Note the double `::` on the next two lines.
+// Start a task that runs the my_task_1 function.
+task:: my_task_1
+// Start a second task that runs my_task_2.
+task:: my_task_2
+
+my_task_1:
+while true:
+sleep --ms=500
+LED1.set 1
+sleep --ms=500
+LED2.set 0
+
+my_task_2:
+while true:
+sleep --ms=123
+LED2.set 1
+sleep --ms=123
+LED2.set 0
+
+```
+</div>
+
+In this program, there are two tasks started with `task::`. Each of them has an
+infinite loop (`while true`), but because they have independent control flow,
+they can both take turns to run. They run in the same heap, so they see the
+same objects (in theory task 1 could access the same LED as task 2, though it
+might be confusing).
+
+In this example, we can see that tasks or threads simplify the programming
+considerably. One LED is flashing once per second, while the other is flashing
+every 246ms. To code this in one loop, we would have to write a program that
+switched the LEDs at the times 0, 123, 246, 369, 492, 500, 615ms etc.
+Alternatively to code this in an event-driven language like JavaScript, we
+would have to remove all the loops and instead use a state machine with
+scheduled callbacks to perform the LED switching and update variables that
+represent state (in this case to track whether the next callback should switch
+on or off).
+
+## Cooperative scheduling
+
+Unlike threads, the tasks in Toit do not actually run at the same time as each
+other. The program only switches to a different task when the previous task
+stops to wait for something. One way to wait is with the `sleep` function, but
+there are other ways, for example waiting for a GPIO pin to change with
+`pin.wait_for`. This is both a limitation and a simplification for the
+programmer. On the negative side, a task can block all other tasks, by never
+waiting (also called _yielding_). For example:
+
+<div class="toit">
+```
+
+main:
+task:: my_uncooperative_task
+task:: my_starved_task
+
+my_uncooperative_task:
+M ::= 1_000_000
+M.repeat:
+x := it + 1
+M.repeat:
+y := it + 1
+M.repeat:
+z := it + 1
+if x*x*x + y*y*y == z*z*z:
+print """
+Fermat's last theorem disproved! \
+ $x^3 + $y^3 = $z^3"""
+return
+
+my_starved_task:
+while true:
+sleep --ms=100
+print "If you see this, the task is running."
+
+```
+</div>
+
+In this example, the first task is attempting to find a counterexample to
+Fermat's Last Theorem. This will take a long time, since no such counterexample
+exists. While it is calculating, it doesn't wait for anything (yield), and so
+no other tasks can run. As soon as the uncooperative task starts running it hogs
+the CPU and prevents other tasks from running, stopping 'my_starved_task' from
+emitting messages (if it ever did so).
+task will stop appearing.
+
+The advantage of tasks in comparison with threads is that they take turns. To
+take an oversimplified example:
+
+<!-- RESET CODE -->
+<!-- ANALYZE CODE -->
+<div class="toit">
+```
+
+import gpio
+import gpio.adc
+
+// The analog input is connected to pin 17.
+ADC1 ::= gpio.Adc (gpio.Pin.in 17)
+
+class VoltageStatus:
+mv/int := 0
+missing_mv/int := 0
+goal/int := ?
+
+constructor .goal:
+
+update new_mv/int -> none:
+mv = new_mv
+missing_mv = goal - mv
+
+status := VoltageStatus 554 // Aim for 554millivolts.
+
+main:
+task:: my_task_1
+task:: my_task_2
+
+/\*_
+Updates the status object with the measured voltage
+every 100ms.
+_/
+my_task_1:
+while true:
+sleep --ms=100
+mv := ADC1.get
+status.update mv
+
+/// Prints the current status every 123ms.
+my_task_2:
+while true:
+sleep --ms=123
+print "Voltage is $(status.mv)mV"
+print "We are $(status.missing_mv)mV from our target"
+
+````
+</div>
+
+This code looks rather simple and would work OK in Toit, but if we had threads
+instead of tasks it would contain a race condition. The two fields of the
+status object, `mv` and `missing_mv` are not updated at the exact same moment.
+The printing thread might read values of `mv` and `missing_mv` that do not fit
+together because the other thread has updated one, but not the other.
+
+In Toit we only switch tasks at yield points. In this case the yield points are
+`sleep` and `print`. There is no yield point in the middle of the `update`
+method, and there is also no yield point while building up the string to be
+printed, so the tasks do not see inconsistent versions of the `status` object.
+
+This rather contrived example also illustrates that the two tasks are running
+on the same heap, and see the same instance of the `status` object. The two
+tasks are part of the same program even though they have independent call
+stacks and loops.
+
+## Synchronizing between tasks with Monitors
+
+Sometimes you need to control when two tasks run, relative to each other. For
+this there are some useful classes in the `import monitor` library.
+
+### Latch
+
+One of the simplest of the classes in `import monitor` is `Latch` that allows
+one task to wait until a value (object) has been provided by another task.
+
+<div class="toit">
+``` toit
+import monitor
+
+// Create a Latch object.
+latch := monitor.Latch
+
+main:
+  task:: producer_task_code
+  task:: consumer_task_code
+
+producer_task_code:
+  // Call some do_other_processing function (defined
+  // elsewhere) to compute some value.
+  result := do_other_processing
+
+  // This unblocks the other task, if it is already waiting
+  // on latch.get.
+  latch.set result
+
+consumer_task_code:
+  // Call some do_processing function (defined elsewhere) to
+  // compute some value.
+  my_result := do_processing
+  // Blocks until the other task is done collecting a
+  // result.
+  other_result := latch.get
+  print "Result was $(my_result + other_result)"
+````
+
+</div>
+
+Note that in this example we use the Latch class, but we don't inherit from it.
+In general, inheriting from classes from `import monitor` will cause unexpected
+deadlocks in your program and is not recommended.
+
+### Channel
+
+`Channel` is like `Latch`, but supports multiple messages, sent from the
+producer to the consumer. The channel has a capacity, which controls how many
+messages (objects) can be buffered. If the producer tries send more than
+`capacity` unread messages in the channel, the producer blocks until the
+consumer task receives a message, freeing up capacity.
+
+### Semaphore
+
+The Semaphore is a [well
+known](<https://en.wikipedia.org/wiki/Semaphore_(programming)>) synchronization
+object. The counter is incremented
+with the `up` method, which cannot block (originally called V). The counter is
+decremented with the `down` method (originally called P) which blocks until it
+has a non-zero internal counter to decrement.
+
+### Mutex
+
+The Mutex has a single method, `do` which takes a block of code to execute.
+Only one task can run code at a time. The mutex is not reentrant.
+
+### Mailbox
+
+The Mailbox can send multiple messages between tasks. Like the latch (and
+unlike the Channel) it doesn't have the ability to buffer messages. The
+receiver (consumer) must acknowledge each message with a response, sent with
+the `reply` method.

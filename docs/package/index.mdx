@@ -1,0 +1,115 @@
+---
+order: 11
+---
+
+# Toit packages
+
+The Toit language comes with its own package manager. This document describes how Toit packages work, and how users can take advantage of them.
+
+## Introduction
+
+The Toit package manager (henceforth TPM) is integrated with the `toit` CLI.
+All of its commands start with the "pkg" command.
+For example `toit pkg install github.com/toitware/toit-morse` installs the package 'morse'.
+
+TPM is a powerful, yet convenient package manager with lots of inspiration from Linux package managers and other languages' package managers.
+It combines the best properties of them:
+
+- Decentralized: TPM is decentralized. There isn't a single entity that is in control of package management.
+
+- Offline: TPM works mostly offline. It only goes online for synchronization and package downloading, and even these steps may be limited to intranets.
+  This makes it faster, and easier to work with in environments with restricted or bad internet connections.
+
+- Packages are identified by their download location. As such, there isn't a single entity being in charge of keeping track of all used names. This means that early adopters can't just snatch the best names. It also means that private packages don't need to worry about conflicting names with public packages.
+
+- Packages are downloaded through Git. The effort to publish a package is kept minimal. Users don't need to create bundles and upload them to a specific place.
+
+## Life of a Package
+
+This section describes how a package is created and then used.
+
+A package starts out as a folder with Toit files. If they are useful, it makes sense to create a package so they can be shared among different projects and so they can be contributed to the community.
+
+The developer creates a fresh Git repository with these files and adds a _specification_ file. This specification file serves as a signal to TPM that the repository is intended to be used as a package.
+It also contains information such as the package's name, a description, and its dependencies. (See the "specification" section for more details).
+Then the package author creates a Git-tag with the version number.
+TPM uses semantic versioning, so typically, the tag would look something like "v1.2.1" or "v2.0.0".
+
+The developer now needs to register the package. TPM is decentralized and there can be many different registries, but Toit's registry service is a good choice as it is installed by default for Toit programmers.
+As of the writing of this document, the easiest way to register a package is to [file an issue](https://github.com/toitware/registry/issues) in the Toit registry repository.
+
+Registries create descriptions of the known packages and store them in a Git repository. The [Toit registry](http://github.com/toitware/registry) is just a public Git repository with description files.
+
+Toit programmers synchronize this repository, giving them access to all the descriptions in that registry. This is done through the `toit pkg sync` command which simply pulls the latest changes.
+
+With all the descriptions, Toit programmers can find the package they want. The `toit pkg search <keyword>` command searches for relevant packages.
+Note that searching or browsing packages is done locally in the synchronized registries.
+Developers can then install any of the packages by writing `toit pkg install <package>`.
+
+The name of the package must be non-ambiguous, and thus might need a qualifier. Since TPM doesn't have a single namespace, many packages can have a similar short name. This is by design (as it allows decentralized and private packages), but it might sometimes require to be a little bit more specific when installing a package. For example, `toit pkg install utils` might not be specific enough to uniquely identify a package, and a more qualified name, such as `toit pkg install some_company/utils` could be necessary.
+
+Before TPM downloads the sources of a package it first looks at all of the package's dependencies and finds versions that work. This is, again, done locally using the synchronized descriptions.
+
+TPM then downloads the packages from their original locations (or, potentially, a mirror). It stores the downloaded packages in a cache directory, by default `$HOME/.cache/toit/tpkg`, so that future references to the package can reuse the downloaded code. For safety, downloaded packages are checked against their descriptions to make sure that they haven't been tampered with.
+
+After the package and its dependencies have all been successfully downloaded and verified, a reference to them is added to the application's package.lock file (assuming that the `install` command was done inside an application). If no such file exists, it is created.
+
+At this point the application can use the newly installed package with its prefix (by default the package name, but can also be changed during installation). For example, for the package 'morse' the user would write:
+
+```
+import morse
+
+main:
+  print XXX.something
+```
+
+Since the `package.lock` specifies the dependencies of an application it should be checked in and shared with other developers who want to work on the same application.
+On different computers, dependent packages aren't necessarily downloaded yet. The command `toit pkg download` fixes that by downloading all referenced packages (with the same versions).
+
+## Good Practice
+
+Packages are ideally used by many developers. As such, we advise developers to spend some time polishing their packages. None of the following suggestions are mandatory, but they increase the quality of the package, and may eventually lead to improve their ranking in search results.
+
+### License
+
+Packages should have a license file. Without it, they are considered proprietary which almost always means that other developers can't really use them.
+If a package is just shared internally in a company a license file is not necessary.
+
+### README
+
+Packages should have a `README.md` that explains what the package does. The following convention make READMEs more uniform and are recognized by TPM:
+
+- A title with the name of the package.
+
+- A first paragraph with a short description that makes sense on its own.
+
+Unless the `package.yaml` file contains a `description` entry, the first paragraph of the README is used as the description of the package.
+Descriptions are used in TPM's search, as well as when showing a package to the user _before_ the package is installed.
+
+A good guideline is to write the first paragraph as if it was preceded by "This is a package containing". For example:
+
+- "A driver for the Acme Corp. GPS module".
+
+- "Utility functions to make working with large collections more efficient. The load is distributed among several threads, thus increasing the throughput by a factor of two".
+
+- "Algorithms to rank players using the ELO ranking system or the Bradley-Terry model".
+
+- "A generic file system abstraction layer".
+
+- "An API to upload and run Google Apps scripts".
+
+It is also good practice to provide a small usage example, and information on how to report bugs and request features.
+
+### Toitdocs
+
+The public code of a package should have toitdocs. See the [language documentation conventions](https://docs.toit.io/language/toitdoc/), to learn how to write good inline documentation.
+
+### Types
+
+Toit is optionally typed, and developers are free to write as many types as they think make sense. In many respects, types are similar to documentation: they help the developer, but can be a burden (and clutter the code base) if they are required to be everywhere.
+
+For code that is accessed by users of packages, having more documentation and also types can be very helpful. For example, code completion and warnings work much better with types. We therefore recommend to put types on code that is exposed from a package.
+
+### Examples
+
+A high quality package should have an example folder. Examples don't need to be big, but should show key-features of the package.

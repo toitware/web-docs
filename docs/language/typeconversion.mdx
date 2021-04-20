@@ -1,0 +1,146 @@
+---
+order: 10
+---
+
+# Common conversions
+
+The following examples show how to convert between strings, integers, floating point
+numbers, characters (integer code points), and fixed point numbers in Toit.
+
+Some of these require the import of the [fixed_point library](https://libs.toit.io/lib/fixed_point.toit).
+
+<div class="toit">
+```
+import fixed_point show FixedPoint
+
+main:
+str := "123"
+// Convert a string to an integer (base 10).
+i := int.parse str // i is of type int.
+print i is int // => true
+print i // => 123
+
+// Convert a string to an integer (base 16).
+// As of 2020-12-10 only base 10 and 16 are supported.
+i2/int := int.parse --radix=16 "A0"
+print i2 is int // => true
+print i2 // => 160
+
+// Convert a number to a string (direct conversion)
+s2/string := "$i"
+print s2 + " fish" // => "123 fish".
+
+// Also convert a number to a string (string
+// interpolation)
+s3/string := i.stringify
+print s3 + " fish" // => "123 fish".
+
+// Convert a number to a string, base 16.
+// Format specifiers like %x are well known from printf
+// which exists in many languages. In Toit they are
+// placed in front of the value in a string interpolation
+// like this.
+s4/string := "$(%x i2)"
+print s4 + " fish" // => "a0 fish".
+
+// Gets a rune (unicode code point) from a string. This
+// gets the integer representing the character at the
+// position 0.
+u/int := "x"[0]
+print u // => 120 because the Unicode value of 'x' is 120.
+
+// Gets the integer representing the Euro sign at position
+// 2.
+u2/int := "24€"[2]
+print u2 // => 8364 because the Euro sign is Unicode 8364.
+
+// Convert a unicode value to a string.
+print (string.from_rune '\u20ac') // => the Euro sign, €.
+print (string.from_rune 0x20ac) // => the Euro sign, €.
+
+// Also convert a unicode value to a string. Here we are
+// also using a format specifier inspired by printf. In
+// Toit the %c format works for all Unicode values.
+s5/string := "a string with $(%c u2) in the middle"
+print s5 // => the Euro sign, €.
+
+// Convert a string to a floating point number.
+f/float := float.parse "1.5"
+print f // => 1.5.
+
+// Convert a floating point number to a string.
+s6/string := "$f"
+print s6 // => "1.5".
+
+//Also convert a floating point number to a string.
+print f.stringify
+
+// We can specify the precision after the decimal point
+// using the %f format specifier.
+PI ::= 3.1415926536
+s7/string := "$(%0.3f 1.2) $(%0.2f PI)"
+print s7 // => "1.200 3.14"
+//or
+print (f.stringify 3)
+print (PI.stringify 2)
+
+// Convert an integer to a floating point number
+f2/float := i.to_float
+print f2/2 // => 61.5, half of 123.
+
+// Convert a floating point number to an integer, rounding
+// towards zero.
+i3/int := (61.9).to_int
+print i3 // => 61, rounded towards zero from 61.9.
+i4/int := (-61.9).to_int
+print i4 // => -61, rounded towards zero from -61.9
+
+// Convert a floating point number to an integer, rounding
+// to nearest.
+i5/int := (61.9).round
+print i5 // => 62, rounded to nearest integer.
+i6/int := (-61.9).round
+print i6 // => -62, rounded to nearest integer.
+
+// Convert a floating point number to a fixed point
+// number.
+fix/FixedPoint := FixedPoint 4.0 / 3.0
+// Precision defaults to two decimal places:
+print fix // => 1.33
+
+fix2/FixedPoint := FixedPoint --decimals=3 PI
+// This is pi, rounded to three places.
+print fix2 // => 3.142
+
+// Convert a fixed point number to a floating point
+// number. The long number is the consequence of working
+// with floating-point numbers.
+print fix2.to_float // => 3.1419999999999999041
+
+// Convert a fixed point number to an integer, rounding
+// towards zero.
+print fix2.to_int // => 3, rounding towards zero.
+print (-fix2).to_int // => 3, rounding towards zero.
+
+// Convert a string to a fixed point number.
+fix3 := FixedPoint "3.1415"
+// Precision is inferred from the string:
+print fix3 // => 3.1415
+
+fix4 := FixedPoint --decimals=2 "3.1415"
+// The precision was given explicitly:
+print fix4 // => 3.14
+
+// Convert a fixed point number to a string.
+s8/string := "$fix4"
+print s8 // => "3.14"
+// or
+print s8.stringify // => "3.14"
+
+```
+</div>
+
+To write literal strings or literal character constants with
+special characters, see also the
+[escape syntax](/language/strings/#escaped_characters).
+```

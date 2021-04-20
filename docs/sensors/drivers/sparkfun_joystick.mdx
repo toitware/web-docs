@@ -1,0 +1,302 @@
+---
+order: 0
+---
+
+# Write a driver
+
+We are using the [SparkFun Qwiic Joystick](https://www.sparkfun.com/products/15168) as an example of how to write a driver for a sensor. The SparkFun Qwiic Joystick is a 2-axis joystick with a single button. Using a qwiic connector, it's very simple to get the joystick connected.
+
+This guide will walk through the steps of identifying how the sensor communicates and how to write a fully working driver for it.
+
+## Approach
+
+The Joystick features a ATtiny85 microcontroller with a custom firmware. As described in the [Hookup Guide](https://learn.sparkfun.com/tutorials/qwiic-joystick-hookup-guide), the firmware exposes several registers. With that in mind, we're going to do the following steps:
+
+1. Connect the Joystick to an I2C bus, configuring the I2C device.
+2. Use the `Registers` abstraction to communicate with the chip.
+3. Validate connectivity to the device.
+4. Read out Axis and Button values.
+
+## I2C setup
+
+We use a simple I2C setup, currently using pin `21` for `SDA` (blue) and pin `22` for `SCL` (yellow).
+
+<div class="toit">
+```
+import gpio
+import serial.protocols.i2c as i2c
+
+main:
+bus := i2c.Bus
+--sda=gpio.Pin 21
+--scl=gpio.Pin 22
+
+```
+</div>
+
+## Driver
+
+As all I2C/SPI drivers that work using registers, the driver starts with the following skeleton.
+
+<div class="toit">
+```
+
+import serial
+
+class SparkFunJoystick:
+static I2C_ADDRESS ::= 0x20
+
+registers\_/serial.Registers
+
+constructor device/serial.Device:
+registers\_ = device.registers
+
+on:
+
+off:
+
+```
+</div>
+
+Note the address, as described in the hookup guide.
+
+### Validate connectivity
+
+The hookup guide has a table of I2C registers available in the custom firmware. At address `0x00` is the slave address assigned to the device (hardcoded to `0x20`). By reading this register, we can confirm the connectivity to the device is functional.
+
+<div class="toit">
+```
+
+class SparkFunJoystick:
+static REG*DEFAULT_ADDRESS* ::= 0x00
+
+[...]
+
+on:
+reg := registers*.read_u8 REG_DEFAULT_ADDRESS*
+if reg != I2C_ADDRESS: throw "INVALID_CHIP"
+
+```
+</div>
+
+With this added, we can validate the setup:
+
+<div class="toit">
+```
+
+main:
+
+[...]
+
+device := bus.device SparkFunJoystick.I2C_ADDRESS
+
+joystick := SparkFunJoystick device
+
+joystick.on
+print "SparkFunJoystick"
+
+```
+</div>
+
+Running the code should print out the string `SparkFunJoystick` to the terminal. If not, the I2C bus is not configured to match the wiring.
+
+!!! note
+    If the Joystick is connected without the full breakout board from SparkFun, I2C pull-up resistors may be needed.
+
+### Read out data
+
+We're going to expand the driver with 3 new methods:
+
+<div class="toit">
+```
+
+class SparkFunJoystick:
+
+[...]
+
+/\*_
+Returns the horizontal value in the range [-1..1].
+_/
+horizontal -> float:
+
+/\*_
+Returns the vertical value in the range [-1..1].
+_/
+vertical -> float:
+
+/\*_
+Returns true if the button is pressed.
+_/
+pressed -> bool:
+
+```
+</div>
+
+Both the horizontal and vertical value is formatted the same way; 2 bytes in big endian order (MSB first). We want to transform this value to a float in the range [-1..1]. Let's create a helper function to perform this step:
+
+!!! note
+    The last 6 bits of the result are unused, but to keep the code simple we treat the result as an 16-bit unsigned integer.
+
+<div class="toit">
+```
+
+import binary
+
+class SparkFunJoystick:
+
+[...]
+
+read*position* reg/int -> float:
+value := registers\_.read_u16_be reg
+// Move from uint16 range to int16 range.
+value -= binary.INT16_MAX
+// Perform floating-point division to get to [-1..1] range.
+return value.to_float / binary.INT16_MAX
+
+```
+</div>
+
+With that in place, we can now finish the `horizontal` and `vertical` methods:
+
+<div class="toit">
+```
+
+class SparkFunJoystick:
+static REG*HORIZONTAL_POSITION*::= 0x03 // (to 0x04)
+static REG*VERTICAL_POSITION* ::= 0x05 // (to 0x06)
+
+[...]
+
+horizontal -> float:
+return read*position* REG*HORIZONTAL_POSITION*
+
+vertical -> float:
+return read*position* REG*VERTICAL_POSITION*
+
+```
+</div>
+
+Lastly, we need to implement the `pressed` method. We're simply going to read out the 1-byte register value and check for `0`, with `0` meaning pressed.
+
+<div class="toit">
+```
+
+class SparkFunJoystick:
+static REG*BUTTON_POSITION* ::= 0x07
+
+[...]
+
+pressed -> bool:
+return (registers*.read_u REG_BUTTON_POSITION*) == 0
+
+```
+</div>
+
+Let's try it out:
+
+<div class="toit">
+```
+
+main:
+
+[...]
+
+joystick.on
+while true:
+print "$joystick.horizontal - $joystick.vertical (pressed: $joystick.pressed)"
+sleep --ms=250
+
+```
+</div>
+
+This code will run until aborted (Ctrl-C).
+
+!!! note
+    As the joystick is moved around, it's possible to get an I2C error if the I2C bus is accidentally short-circuited by the fingers.
+!!! note
+    To improve responsibility, the sensor should be read at a higher frequency. However no printing should be done at higher frequencies to avoid logging data building up.
+
+## Full code
+
+### `main.toit`
+
+<div class="toit">
+```
+
+import gpio
+import serial.protocols.i2c as i2c
+
+import .driver
+
+main:
+bus := i2c.Bus
+--sda=gpio.Pin 21
+--scl=gpio.Pin 22
+
+device := bus.device SparkFunJoystick.I2C_ADDRESS
+
+joystick := SparkFunJoystick device
+
+joystick.on
+while true:
+print "$joystick.horizontal - $joystick.vertical (pressed: $joystick.pressed)"
+sleep --ms=250
+
+```
+</div>
+
+
+### `driver.toit`
+<div class="toit">
+```
+
+import binary
+import serial
+
+class SparkFunJoystick:
+static I2C_ADDRESS ::= 0x20
+
+static REG*DEFAULT_ADDRESS*::= 0x00
+static REG*HORIZONTAL_POSITION* ::= 0x03 // (to 0x04)
+static REG*VERTICAL_POSITION*::= 0x05 // (to 0x06)
+static REG*BUTTON_POSITION* ::= 0x07
+
+registers\_/serial.Registers
+
+constructor device/serial.Device:
+registers\_ = device.registers
+
+on:
+reg := registers*.read_u8 REG_DEFAULT_ADDRESS*
+if reg != I2C_ADDRESS: throw "INVALID_CHIP"
+
+off:
+
+/\*_
+Returns the horizontal value in the range [-1..1].
+_/
+horizontal -> float:
+return read*position* REG*HORIZONTAL_POSITION*
+
+/\*_
+Returns the vertical value in the range [-1..1].
+_/
+vertical -> float:
+return read*position* REG*VERTICAL_POSITION*
+
+/\*_
+Returns true if the button is pressed.
+_/
+pressed -> bool:
+return (registers*.read_u8 REG_BUTTON_POSITION*) == 0
+
+read*position* reg/int -> float:
+value := registers\_.read_u16_be reg
+// Move from uint16 range to int16 range.
+value -= binary.INT16_MAX
+// Perform floating-point division to get to [-1..1] range.
+return value.to_float / binary.INT16_MAX
+
+```
+</div>
+```

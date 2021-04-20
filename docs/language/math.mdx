@@ -1,0 +1,128 @@
+---
+order: 9
+---
+
+# Mathematics in Toit
+
+Find mathematical algorithms in the [math module](https://libs.toit.io/#/lib/math.toit), and the numbers available in the [numbers module](https://libs.toit.io/#/lib.core/numbers.toit) of the core library.
+
+## Numbers
+
+Toit [numbers](https://libs.toit.io/#/lib.core/numbers.toit) support integers and floats.
+
+### Integers and floats
+
+[Integers](https://libs.toit.io/#/lib.core/numbers.toit/int) are whole numbers such as -1, 0, 1, 2, 3, .. and they have type `int`.
+[Floats](https://libs.toit.io/#/lib.core/numbers.toit/float) are numbers with a decimal point. Floats are contagious, meaning that any binary operation involving a float forces the other operand to be converted to a float before doing the operation (thus yielding a float as result).
+
+Integers are 64-bit signed integers.
+Floats are of size 64-bit, following the [IEEE 754-1985 double format](https://en.wikipedia.org/wiki/Double-precision_floating-point_format).
+
+To make large numbers more readable, digits are often grouped using underscores.
+When storing these values and when displaying them on screen, Toit just ignores the underscores.
+
+Underscores work for both [integers](https://libs.toit.io/#/lib.core/numbers.toit/LargeInteger) and floats.
+
+You can use the [mathematics operators](https://libs.toit.io/#/lib.core/numbers.toit/num) such as `+`, `-`, `*`, and `/` to form expressions that include numbers.
+The [int class](https://libs.toit.io/#/lib.core/numbers.toit/int) has additional operations (like bit-shifting) that are not supported by the floating point numbers.
+
+Additional mathematical constants and functions are available in the [math module](https://libs.toit.io/#/lib/math.toit).
+
+```
+import math
+
+main:
+  print (math.pow 2 10)
+```
+
+## Randomization
+
+`random` is a function included in the core library.
+
+`random 10` gives you a random number between 0 and 10 (10 exclusive).
+
+`random 3 5` gives you a random number between 3 and 5 (5 exclusive).
+
+## Range
+
+To create a range similar to the built-in function in Python:
+
+```
+range from/int to/int step=1 [block]:
+  if step > 0:
+    for i := from; i < to; i += step:
+      block.call i
+  else:
+    for i := from; i > to; i += step:
+      block.call i
+
+main:
+  range 5 10:
+    print it  // Logs 5, 6, 7, 8, 9.
+  range 10 20 2:
+    print it  // Logs 10, 12, 14, 16, 18.
+```
+
+## Sorting
+
+`sort` is a method of the class [List](https://libs.toit.io/#/lib.core/collections.toit/List).
+
+To sort a list of numbers from biggest to smallest number and extract the smallest number
+
+```
+main:
+  list := [3, 2, 5, 1]
+  sorted := list.sort
+  print sorted[0]
+```
+
+If the list should be sorted in place, avoiding the allocation of a fresh list
+
+```
+main:
+  list := [3, 2, 5, 1]
+  list.sort --in_place
+  print list.first
+```
+
+To get the highest number of the sorted list
+
+```
+  print list.last
+```
+
+It is also possible to sort with a custom comparison by passing a block to the `sort` function
+
+```
+main:
+  my_list := [1, 2, 5, 9]
+  my_list.sort --in_place: | a b | b - a
+  print my_list[0]
+```
+
+The block takes two arguments, which are here called `a` and `b` and should return (implicitly) a value that can be negative, zero, or positive.
+Note that `| b -a | sorts in descending order.
+
+## Sums
+
+The Toit language has some features normally used in functional languages. One of those is the reduce function, which combines all the elements using a custom combiner.
+
+To add all the number in a list
+
+```
+  sum := my_list.reduce: | a b | a + b
+```
+
+To get the largest
+
+```
+  largest := my_list.reduce: | a b | max a b
+```
+
+Note that it is still possible to code in a more traditional way such as
+
+```
+  largest2 := my_list[0]
+  for i := 1; i < my_list.size; i++:
+    largest2 = max largest2 my_list[i]
+```

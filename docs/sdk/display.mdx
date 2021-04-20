@@ -1,0 +1,107 @@
+---
+order: 3
+---
+
+# Display
+
+The Toit SDK [pixel_display module](https://libs.toit.io/lib/pixel_display.toit) includes support for writing text and printing icons on displays.
+We highlight in this section the basic functions of display use. You can also learn more about the different fonts available in the SDK by reading [Toit font basics](fonts.md).
+
+## Write with built-in sans font
+
+<!-- RESET CODE -->
+<!-- ANALYZE CODE -->
+
+```
+import font show *
+import texture show *
+import two_color show BLACK
+import pixel_display show *
+
+sans ::= font_get "sans10"
+display ::= TwoColorPixelDisplay "eink"
+
+main:
+context := display.context --landscape --color=BLACK --font=sans
+display.text context 60 50 "Hello from Toitbox!"
+// While display.draw is enough to render on the E-ink display,
+// we recommend repeating at least twice to increase contrast and remove
+// shadows from previous content on the display.
+2.repeat: display.draw --speed=10
+```
+
+## Import additional font
+
+Import specific fonts from `font.x11_100dpi` with:
+
+<!-- RESET CODE -->
+<!-- ANALYZE CODE -->
+
+```
+import font show *
+import font.x11_100dpi.sans.sans_10_bold as sans_10_bold
+import font.x11_100dpi.sans.sans_24_bold as sans_24_bold
+import texture show*
+import two_color show WHITE BLACK
+import pixel_display show TwoColorPixelDisplay
+
+main:
+sans_10_bold ::= Font [sans_10_bold.ASCII, sans_10_bold.LATIN_1_SUPPLEMENT]
+sans_24_font ::= Font.from_pages [sans_24_bold.ASCII, sans_24_bold.LATIN_1_SUPPLEMENT]
+display ::= TwoColorPixelDisplay "eink"
+
+sans_10 := display.context
+--landscape
+--font = sans_10_bold
+--color = BLACK
+--alignment = TEXT_TEXTURE_ALIGN_RIGHT
+
+sans_24 := display.context
+--landscape
+--font = sans_24_font
+--color = BLACK
+--alignment = TEXT_TEXTURE_ALIGN_CENTER
+
+context := display.context --landscape --color=BLACK
+display.text sans_10 140 40 "Hello from"
+display.text sans_24 118 85 "TOITWARE"
+2.repeat: display.draw --speed=10
+```
+
+Learn more about all available fonts [here](fonts.md).
+
+## Add icons
+
+All [Material Design](https://materialdesignicons.com/) icons are available for use in Toit programs.
+
+<!-- RESET CODE -->
+<!-- ANALYZE CODE -->
+
+```
+import device
+import pixel_display show TwoColorPixelDisplay
+import font.templarian.material_design_icons.icons_96 as icons
+
+main:
+display := TwoColorPixelDisplay "eink"
+context := display.context --landscape
+icon := display.icon context 63 85 icons.HUMAN_SCOOTER
+2.repeat: display.draw --speed=10
+```
+
+## Clear the display
+
+A simple `display.draw` is needed to clear a display, but to avoid any remaining
+shadow from previous content, repeat 3 times as in:
+
+<!-- RESET CODE -->
+<!-- ANALYZE CODE -->
+
+```
+import pixel_display show *
+
+display := TwoColorPixelDisplay "eink"
+
+main:
+3.repeat: display.draw --speed=10
+```

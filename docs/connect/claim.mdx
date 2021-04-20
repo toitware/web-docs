@@ -1,0 +1,51 @@
+---
+order: 1
+---
+
+# Claim an ESP32
+
+When the ESP32 has been initially provisioned, you must claim the device into your organization in the Toit console in order to see the device and communicate with it using either WiFi or cellular connection.
+
+After the device is claimed into your organization, only users that belong to the same organization can monitor the device, deploy apps on it, see logs, and change device configurations.
+
+## Get the hardware ID
+
+Connect the ESP32 to a computer with a serial connection. It requires 3.3V voltage. The red light indicates that your ESP32 is properly connected.
+
+To get the hardware ID of your device, run the following command with the Toit CLI
+
+```
+toit serial info
+```
+
+The output confirms that the ESP32 is provisioned by printing its hardware ID:
+
+```
+{
+	"name": "7555c528-9eb9-48d1-a93d-42b4f246f442.359.2020-11-10.device.toitware.com",
+	"model": "esp32-4mb",
+	"hardware_id": "7555c528-9eb9-48d1-a93d-42b4f246f442"
+}
+```
+
+Note that in cases where the ESP32 is unprovisioned, the command does not terminate.
+Therefore, if the command takes more than 5 seconds to print the device's information, you must provision the device as explained in the [device provisioning](provision.md) section.
+
+## Claim ESP32 into your organization
+
+The ESP32 must be online before you can claim it into your organization. Start by ensuring that the WiFi connection with the correct WiFi credentials, that were provided in the `toit serial provision` command, is available.
+
+Follow the steps to **claim** the ESP32:
+
+1. Connect the ESP32 with a **USB cable** to your computer.
+
+2. Note the hardware ID of the ESP32 to be claimed.
+
+3. Go to the <a href="https://console.toit.io/" target="_blank">Toit console</a> where you are required to **log in** with your `toit.io` account.
+
+4. Once logged in, click the **"Claim or Replace device"** button in the upper right corner of the console. In the "Claim new" tab, enter the hardware ID of the ESP32 you want to claim.
+   An optional device name can be provided. If left blank, a random name will be assigned to your ESP32.
+
+5. Click **Claim**. The device is assigned a virtual device ID.
+
+The device has now been claimed by your organization, and can be viewed in the Devices list from the <a href="https://console.toit.io/" target="_blank">Toit console</a>.

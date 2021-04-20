@@ -1,0 +1,89 @@
+---
+order: 1
+---
+
+# Packages quick start
+
+This document provides instructions on how to use the Toit package manager (henceforth TPM) for common operations. See [Packages](packages.md) for a full documentation.
+
+## Installing a package
+
+The very first time, users might need to install a registry first (see below "Adding a Registry").
+
+The following commands update the local registry, search for a package, and then install it.
+
+```
+toit pkg sync          # Synchronize the installed registries.
+toit pkg search morse  # Search for a package "morse".
+toit pkg install morse # Install package "morse".
+```
+
+Note that the installation of "morse" only works if the name is unambiguous. If there are multiple "morse" packages, then one has to use the URL. It is possible to omit leading segments, if that makes the package unique:
+
+```
+toit pkg install github.com/toitware/toit-morse
+toit pkg install toitware/toit-morse  # Probably already unique.
+```
+
+## Adding a Registry
+
+Before being able to install any package, one must have a registry installed. Newer toit versions do this automatically, but it never hurts to check:
+
+See which registries are installed:
+
+```
+toit pkg registry list
+```
+
+You should have one or more registries:
+
+```
+toitware: github.com/toitware/registry (git)
+```
+
+If not, add a registry; for example the Toitware registry:
+
+```
+toit pkg registry add toitware github.com/toitware/registry
+```
+
+## Creating a Package
+
+Create a new Git repository (for example `github.com/toitware/toit-morse`).
+
+Add or move code into the `src` folder of the new repository.
+
+Optionally (but strongly recommended) add a LICENSE file. We recommend a [permissive free software license](https://en.wikipedia.org/wiki/Permissive_software_license), such as MIT.
+
+Optionally (but strongly recommended) add a README.md. The title should be the package-name. The first paragraph should start as if prefixed with "This is a package containing". The first paragraph should have meaning on its own.
+
+Optionally (but recommended) add a CHANGELOG.md.
+
+Optional (but strongly recommended): polish the package, with an eye on
+- toitdocs,
+- types,
+- examples, and
+- tests
+
+Create a `package.yaml` in the root of the repository, with the following entries:
+
+* `name`: The name of the package. Don't add this entry if the README's title is the package-name.
+
+* `description`: A short description of the package. Don't add this entry if the README's first paragraph is a good description.
+
+* `license`: The license of the package. Don't add this entry if there is a LICENSE file. The license file or entry should follow [github conventions](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository).
+
+* `dependencies`: a map of dependencies. Each entry should look as follows:
+  ```
+    prefix:
+      url: <PKG_URL>
+      version: <VERSION_CONSTRAINT, such as ^1.0.0>
+  ```
+
+Commit everything and tag it with the version number of the package. If you think that the package should be used by other developers, consider giving it a `v1.0.0` version number. (There is nothing gained by calling it `v0.0.1`).
+
+Version numbers must be prefixed with `v` and follow [semantic versioning](http://semver.org).
+
+Push your changes to the public repository (if not yet done), and inform a registry of its existence.
+
+For the Toitware registry, file an issue [here](https://github.com/toitware/registry/issues).

@@ -1,0 +1,380 @@
+---
+order: 2
+---
+
+# Package tutorial
+
+This tutorial shows how to create a Toit package.
+
+We will recreate a simplified version of the [toitware/toit-morse](https://github.com/toitware/toit-morse) package which adds support for morse code. We have uploaded the simplified version to https://github.com/toitware/toit-morse-tutorial.
+
+## Steps
+
+Here are the common steps for creating a package:
+
+1. Develop code that should be shared with others.
+
+2. Polish the package, with eyes on:
+
+    * The license
+  
+    * A README
+  
+    * Types
+  
+    * Toitdocs
+  
+    * Examples
+  
+    * Tests
+  
+    * A CHANGELOG file
+  
+3. Create a `package.yaml` file.
+  
+4. Tag and Upload.
+  
+5. Notify a Toit registry.
+
+## Develop Code
+
+In this section we write the Morse code module. We are simplifying the code a lot, so that it fits into the tutorial.
+
+Usually, the code for a package is initially developed as part of an application. This can be a simple example
+program, or a bigger existing application. Once the code looks ready for other developers, the code that should
+become a package must be moved to its own repository. Indeed, a package is identified by its repository URL (together with its version number).
+
+All package code lives in the `src` directory of the repository.
+
+For the Morse example, we have only one file, `src/morse.toit`.
+
+In it we start with some constants:
+<div class="toit">
+
+```
+DOT ::= 0
+DASH ::= 1
+SPACE_LETTER ::= 2
+
+
+
+MORSE_CODE_ ::= {
+  'a': [ DOT, DASH ],
+  'b': [ DASH, DOT, DOT, DOT ],
+  'c': [ DASH, DOT, DASH, DOT ],
+}
+
+/// The dash duration is three times that of the dot.
+DASH_DURATION_FACTOR_ ::= 3
+/// The duration between characters is three times the one of a dot.
+SPACE_LETTER_FACTOR_ ::= 3
+```
+</div>
+
+In the tutorial we only support the characters 'a', 'b', and 'c'. We are also skipping the constants necessary to encode word boundaries.
+
+A simple function converts a string from ASCII to Morse code:
+
+<div class="toit">
+
+```
+encode_string str:
+  result := []
+  str.do:
+    result.add_all MORSE_CODE_[it]
+    result.add SPACE_LETTER
+  return result
+```
+</div>
+
+Similarly, we want to have a function that emits the symbols with the correct timing:
+
+<div class="toit">
+
+```
+emit symbols --dot_duration [--on] [--off]:
+  symbols.do:
+    if it == DOT or it == DASH:
+      on.call
+      sleep (it == DOT ? dot_duration : dot_duration * DASH_DURATION_FACTOR_)
+      off.call
+      sleep dot_duration // The space between symbols.
+    else:
+      assert: it == SPACE_LETTER
+      // We already waited a dot-duration after the last character, so we have to
+      // wait a bit shorter.
+      sleep dot_duration * (SPACE_LETTER_FACTOR_ - 1)
+```
+</div>
+
+There is much more functionality we could add, but for the purpose of this tutorial we are happy now. The next step is to polish the package.
+
+## Polishing
+It's always a good idea to polish code, but for code that is published for external developers that it's even more the case.
+
+### License
+Packages should have a license. We recommend a [permissive free software license](https://en.wikipedia.org/wiki/Permissive_software_license), such as MIT, or BSD for packages that are published publicly. This is not a requirement, but more restrictive licenses are often avoided and would lead to fewer users of a package.
+
+For our tutorial we use the MIT license. Our LICENSE file thus has the following text in it:
+```
+MIT License
+
+Copyright (c) 2021 Toitware
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+You should also add copyright headers to the source files.
+```
+// Copyright <year> <author>. All rights reserved.
+// Use of this source code is governed by a <license>-style license that can be
+// found in the LICENSE file.
+```
+
+### README
+Packages (and generally all repositories) should have a `README.md` file describing the package. Unless given already in the `package.yaml`, this is also the place where the package gets its description from.
+
+We recommend to have a title `# <package-name>`, followed by a paragraph that makes sense on its own and describes the project. The first paragraph should start as if preceded by "This is a package containing".
+
+These conventions (package name and good first-paragraph description) are not just to make it easier for users to understand the package, but they are also used by the package manager to infer the name and description. See the `package.yaml` section.
+
+For the tutorial we add the following `README.md` (again, simplified to save space):
+
+~~~
+# Morse Tutorial
+A tutorial version of the Morse package. Not intended for use as package.
+
+Encodes string to Morse code. Also provides convenience methods
+that call given blocks `on` and `off` with the correct timing.
+
+## Usage
+A simple usage example.
+
+```
+import morse_package_tutorial
+
+main:
+  ...
+```
+
+See the `examples` folder for more examples.
+
+## Features and bugs
+
+Please file feature requests and bugs at the [issue tracker][tracker].
+
+[tracker]: https://github.com/toitware/toit-morse-tutorial/issues
+~~~
+
+### Types
+Toit doesn't require any types, but we strongly recommend to add some on API boundaries of a package. It helps new users to understand the package more easily, and also helps the IDE for exploratory development where users use auto-completion and similar IDE features to discover a package.
+
+In our example we will change the signatures of the two exposed functions:
+
+<div class="toit">
+
+```
+encode_string str/string -> List:
+```
+</div>
+and
+<div class="toit">
+
+```
+emit symbols/List --dot_duration/Duration [--on] [--off] -> none:
+```
+</div>
+
+### Toitdoc
+Similar to types, it's always a good idea to have good documentation; even more so for API boundaries.
+
+We suggest the following changes:
+<div class="toit">
+
+```
+/**
+The dot symbol.
+Also known as "di", or "dit".
+*/
+DOT ::= 0
+
+/**
+The dash symbol.
+Also known as "dah".
+*/
+DASH ::= 1
+
+/**
+A symbol representing the space between two characters.
+*/
+SPACE_LETTER ::= 2
+
+/**
+Encodes the given string $str to Morse code.
+Returns a list of $DOT, $DASH and $SPACE_LETTER.
+The characters of $str must only be equal to 'a', 'b' or 'c'.
+*/
+encode_string str/string -> List:
+  ...
+
+/**
+Emits the given Morse symbols.
+Uses the $on and $off blocks to turn the "emitter" on or off. The blocks
+  could, for example, manipulate an LED, or a speaker.
+The given $symbols should be Morse symbols. See $encode_string for a function
+  that generates Morse symbols from a string.
+*/
+emit symbols/List --dot_duration/Duration [--on] [--off] -> none:
+  ...
+```
+</div>
+
+### Examples
+Examples are a good way to introduce users to the functionality of the package, and should thus contain typical code with lots of documentation.
+
+A typical use case would be to emit morse on a GPIO pin (`examples/gpio.toit`):
+
+<div class="toit">
+
+
+```
+// Copyright (C) 2021 Toitware ApS. All rights reserved.
+// Use of this source code is governed by an MIT-style license that can be
+// found in the LICENSE file.
+
+/**
+This example demonstrates the use of the morse package with an ESP32.
+It assumes that pin 23 is connected to an LED (and an appropriate resistor).
+*/
+
+import morse
+import gpio
+
+// Update the pin here if you use a different one.
+LED_PIN ::= 23
+
+main:
+ pin := gpio.Pin.out LED_PIN
+
+ 10.repeat:
+   morse.emit
+       morse.encode_string "ababc"
+       --dot_duration= Duration --ms=250
+       --on=:  pin.set 1
+       --off=: pin.set 0
+   sleep (Duration --ms=3000)
+```
+</div>
+
+Since this example uses the morse package, we need to install the package first. Instead of relying on the uploaded package (which would be a bit circular), we use the package locally:
+
+```
+# In the examples directory:
+toit pkg init --app
+toit pkg install --local --prefix=morse ..
+```
+
+This creates a `package.lock` file mapping the prefix "morse" to the package at location `..`.
+
+Note that we use `toit pkg init` to ensure that the `package.lock` file is created in the current directory. If we just used `toit pkg install` we would risk adding a new dependency to our package and not to the example.
+
+### Tests
+Toit doesn't have a testing framework, yet. For now, developers need to write their tests without much help from the Toit framework. We recommend to simply write executables that use the `expect` module to test the package. Tests should live in the `tests` folder.
+
+Here is a simple test (`tests/morse_test.toit`) for ensuring that an 'a' is correctly translated:
+
+<div class="toit">
+
+```
+// Copyright (C) 2021 Toitware ApS. All rights reserved.
+// Use of this source code is governed by an MIT-style license that can be
+// found in the LICENSE file.
+
+import ..src.morse
+import expect show *
+
+main:
+  encoded := encode_string "a"
+  expect_list_equals [DOT, DASH, SPACE_LETTER] encoded
+```
+</div>
+
+Similarly to the examples, it's necessary to install the local package to be able to use it first:
+
+```
+# In the test directory:
+toit pkg init --app
+toit pkg install --local --prefix=morse ..
+```
+
+The test should then execute successfully by running:
+```
+toit exec morse_test.toit
+```
+
+### Changelog
+It's good practice to have a `CHANGELOG.md` file in the project root. There are many variations on how to structure this file.
+
+We recommend having the newest entries on the top. `## <Version> - <Date>`. For example:
+```
+## 1.0.1 - 2021-03-12
+* Add library toitdoc.
+* Add another example.
+
+## 1.0.0 - 2021-03-05
+Initial version.
+```
+
+## Package.yaml
+A package must have a `package.yaml` file at the root of the package. The file can be empty, but it must exist.
+
+Since we already added a license and a README file, we don't need to worry about the license and description entries. The name, too, could be inferred from the README, but we used "Morse Tutorial" as title, which isn't a valid identifier. In this tutorial we thus need explicitly provide a `name` entry in the package.yaml:
+
+```
+name: morse_package_tutorial
+```
+
+### Dependencies
+We don't use dependencies in this package, but for completeness sake here is an example of how we would add one:
+
+```
+dependencies:
+  prefix1:
+    url: github.com/toitware/toit-morse
+    version: ^1.0.0
+  prefix2:
+    url: github.com/toitware/toit-fahrenheit
+    version: ^1.0.0
+```
+
+When starting from an application, you can find the dependency information in its `package.lock` file.
+
+## Tag and Upload
+As one of the last steps we need to tag the sources with a version. Version numbers follow [semantic versioning](http://semver.org), and the corresponding git-tag is simply a "v" followed by the version.
+
+After committing all sources, we simply execute `git tag v1.0.0`.
+
+Then we need to upload the package to a Git repository. Toit packages are downloaded from the original sources, and (if published publicly) must be accessible through a public Git repository. The URL of the Git repository is part of the ID of a package (together with its version tag). As such, we advise to use the one of the following choices as repository name:
+the package name, or
+"toit-" followed by the package name.
+
+## Notify a Registry
+As the last step we need to inform a registry about the existence of the (new version of the) package. For the Toitware registry, it's enough to simply file an issue at https://github.com/toitware/registry/issues.
+
+Once added, the registry will distribute a description of the package so that anyone can start using the package with a simple `toit pkg install`.

@@ -1,0 +1,261 @@
+---
+order: 1
+---
+
+# Toit definitions
+
+## Module
+
+A module is a code unit developers can import. There is a one-to-one relationship between a Toit file and a module.
+
+Modules can be imported with the `import` clause.
+
+## SDK libraries
+
+The SDK comes with libraries documented in the [Toit standard libraries](https://libs.toit.io/) browser.
+
+The `core` module (<https://libs.toit.io/lib.core/core.toit>) is automatically imported into every file. It contains common classes, like `int`, `string`, or `List`.
+
+## Terms
+
+- **Locals**: a variable which is either declared within the function or is an argument passed to a function, where it is received as a parameter.
+
+- **Globals**: a variable declared outside the scope of a function or class. Globals are initialized at first access, and remain alive until the end of the program.
+
+- **Constants** are a special case of globals, defined with a `::=` assignment. By convention they have an ALL_CAPS_NAME (see [Toit globals and constants](https://docs.toit.io/language/syntax/#toit_globals_and_constants)).
+
+Within a class, the following items are available: constructors, statics, factories, fields, methods.
+
+- **Constructor**: a way to construct an object of the given type, always defined by the `constructor` keyword.
+  See [more details here](/language/objects-constructors-inheritance-interfaces/#constructors).
+- **Named constructors** allow more than one constructor with the same signature, and often make code more readable.
+  See [more details here](/language/objects-constructors-inheritance-interfaces/#named_constructors]).
+  For example, in the [string class](https://libs.toit.io/core/string/class-string) we have a constructor called `constructor.from_rune rune/int`. Thus, when reading the instantiation point `x := string.from_rune 'X'` it is clear that we construct a string with the character 'X'.
+- A **Factory** is a constructor or named constructor with a return. See below.
+- **Static functions and fields**: Static functions and fields are tied to the class rather than individual objects.
+  Inside a class, static fields and functions are marked with the keyword `static`. Constructors and factories are implicitly static.
+
+Static fields are often constants - which can be inferred from their capitalized names, and whether they are final (defined with `::=`).
+
+Inside a class, you can refer to static entries directly. Outside the class, static entries must be prefixed with the class name.
+
+<div class="toit">
+```
+class A:
+  static some_static_field := 499
+  foo:
+    // Inside the class, static entries can be referred to
+    // directly.
+    print some_static_field
+
+main:
+// But outside the class, they must be referred to through
+// the class name:
+print A.some_static_field
+
+```
+</div>
+
+* **Methods and instance fields**: everything that needs to go through an object.
+Methods without arguments behave similarly to instance fields.
+
+<!-- RESET CODE -->
+<div class="toit">
+```
+
+// Implicitly static, not inside a class, and doesn't
+// require one.
+foo: print "foo"
+
+// Implicitly static, can be accessed without a class.
+some_global := 499
+
+// A static constant.
+CONSTANT ::= 42
+
+class A:
+// Static, as you can write `A` without creating an `A`
+// first.
+constructor: ...
+
+// Static, or just a different way to write a constructor.
+constructor.named: ...
+
+// A factory is just a constructor with a `return`. From
+// the outside there is no difference to a constructor.
+constructor.my_factory:
+return singleton
+
+// A static field.
+static singleton ::= A
+
+// A static function that doesn't require the creation of
+// an object `A`. It's important to see that
+// `A.static_in_A` doesn't first create `A` and then call
+// `static_in_A`. The leading `A.` is just so we can find
+// the static function.
+static static_in_A: print "static fun"
+
+// Same as for the static function: this is a field that
+// lives independent of an instance.
+// If you write `A.static_field = 1` followed by `print // A.static_field`, then you would get `1`. Static fields
+// are really just like scoped globals.
+static static_field := 42
+
+// This non-static method can only be used on an object,
+// like `a := A` followed by `a.method`.
+method: print "method"
+
+// An instance field.
+// Operates on an object: `a := A` followed by `a.field = // 42` would change the field of the object. A new,
+// unmodified, object would again be constructed with
+// 11 in this field: `a2 := A` followed by `print a2.field`
+// would print 11.
+field := 11
+
+main:
+// Statics can be accessed directly or must be prefixed
+// with the class name:
+foo // Calls foo
+print some_global // Prints the global
+print CONSTANT // Prints the constant.
+a := A // Creates a new A.
+a2 := A.named // Creates a new A.
+a3 := A.my_factory // From the outside the same syntax as
+// `A.named`.
+A.static_in_A // Calls the static function _without_
+// creating an object first.
+A.static_field = 11 // Does _not_ create an object first.
+print A.static_field // Prints the static field 11.
+a.method // Invokes the instance method on `a`.
+a2.method // Invokes it on `a2`.
+print a.field // Reads the field in `a`. => 11
+a.field = 42 // Only changes the field in `a`, but
+// not a2 or a3.
+print a.field // => 42
+print a2.field // => 11
+
+```
+</div>
+
+
+## Type
+
+Toit is optionally typed. That is, it is possible, but not required, to annotate variable declarations with types.
+A variable is typed if it is followed by a `/` and a type name.
+For example, `foo x/y` means the function `foo` takes a variable `x` with type `y`.
+
+By default types are non-nullable, which means null is not a valid
+value.
+
+<div class="toit">
+```
+
+class Coordinate:
+// An instance field that must be initialized by
+// constructors.
+// By writing `:= ?` we indicate that all constructors
+// must initialize the field.
+x/int := ?
+y/int := ?
+
+// We don't need to specify the type for constructor
+// arguments that are written directly to a typed field.
+constructor .x .y:
+
+main:
+a := Coordinate 0 0
+
+// Error! The types of the fields (and therefore the
+// constructor arguments) are non-nullable, so null is not
+// a valid argument here:
+b := Coordinate null null // Error!
+
+```
+</div>
+
+If we want a nullable type, we write a question mark `?` after the
+type name.  For example in the following `Foo` class the `bar` variable can
+be a reference to an instance of the `Bar` class or interface, but
+it can also be null, which also happens to be the initial value:
+
+<!-- HIDDEN CODE class Bar: -->
+<div class="toit">
+```
+
+class Foo:
+bar/Bar? := null
+
+```
+</div>
+
+### Any
+
+The type name corresponds to the class or interface name of all accepted values.
+In addition, Toit has `any` (for every possible type) and `none` (when no value is accepted).
+For example, in the following example `rename from/any to/any -> any` , the function `rename` takes 2 arguments: `foo` of type `any` and `to` of type `any`.
+`any` is a special type meaning “any” type. It means that the code really works for any input type or that the type-info is missing.
+
+The `->` indicates the return type of the function, so `foo -> bar` means that the function `foo` returns `bar`.
+The `rename` function in the example `rename from/any to/any -> any` returns `any`.
+
+In the following example the parameter `param`, the local `my_var`, and the global `glob` are all typed in the following example:
+
+<div class="toit">
+```
+
+foo param/int: // The parameter 'param' must be of type int.
+// The variable 'my_var' is typed as 'float'. The second
+// '/' is a division.
+my_var /float := param / 3.14
+glob / string := "the global 'glob' is typed as string"
+
+```
+</div>
+
+The type of variable is enforced by the Virtual Machine.
+Every time a value is stored in the variable, the VM checks that the type is correct.
+If it isn't, a runtime exception is thrown.
+
+Types are also very helpful during development: the IDE can use the typing information to provide code completion, or warnings when types don't match.
+
+### Return types
+
+Functions can also declare their return type by writing `->` followed by the return type.
+The `-> type` can be anywhere in the signature, but it's convention to put it at the end of the line that declares the name of a function:
+
+<!-- RESET CODE -->
+<div class="toit">
+```
+
+// A function that doesn't return anything.
+foo -> none:
+print "not returning anything"
+
+// A function that takes an int and returns an int.
+bar x/int -> int:
+return x + 1
+
+gee with / string -> float // Returns a float.
+arguments / int
+on / string
+different / bool
+--lines:
+return 3.14
+
+```
+</div>
+
+### None
+
+The return type `none` is never needed, as Toit can see whether a method returns something or not. It can, however, help readability of code, and prevent developers from accidentally returning a value.
+
+### When to Write Types?
+
+In a correct program types don't have any effect. As such they are most important during the development process. Similar to comments, there isn't always a clear-cut rule on when to write code. Different teams don't always agree on the "best" amount of types.
+
+We recommend to write types for fields, and in function signatures (parameters and return type). This dramatically improves the development experience as the IDE can use those types to suggest code completions. This is especially true for functions and variables that are intended to be used by different developers. As a general guideline: more users => more types.
+
+Local variables often don't need explicit types as the IDE can often figure out the type of local variables.
+If the IDE can't infer the type it is a judgment call whether the type is warranted or not.
+```

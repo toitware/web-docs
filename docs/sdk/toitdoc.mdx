@@ -1,0 +1,240 @@
+---
+order: 2
+---
+
+# Language documentation convention
+
+This document describes Toit's documentation convention. Not everything is implemented yet, but the following rules should make it possible to write tools that take advantage of the established conventions.
+
+## General
+
+Documentation should be helpful to the users of the element. Users can either be callers of an API, or developers that subclass a given class. Both should get useful information for their task.
+
+A consistent documentation helps to parse the comments and makes it easier to find relevant information when needed. Conventions (see below) make it furthermore possible to improve IDE support (the editing experience) and the generated documentation (as an HTML file).
+
+As a general rule, don't feel obligated to add comments, when there is nothing to say.
+In the following example, the comment does not add any information:
+
+```
+/// Returns the size of this instance.
+int size
+```
+
+If preferred, or for completeness (if every other member has a comment), these comments may still be present.
+
+## Syntax
+
+Comments are recognized as Toitdocs if they are either:
+
+1. `///` - triple-slash comments, or
+
+2. `/** ... */` - Multiline comments with two stars at the beginning.
+
+We recommend to use `///` only for one, or two-line comments. Even then, single-line `/** This is a comment. */` comments are preferred, since they have an easier time evolving to bigger comments.
+
+Multiline comments are the preferred documentation for longer comments. The individual lines should _not_ have any leading `*`, and should be aligned with the first `/`.
+
+Examples:
+
+```
+/** This is a shorter comment for a class. */
+class A:
+  /**
+  This is a longer comment for a method.
+  It spans multiple lines.
+  */
+  member
+
+  /// Triple-comments are also supported.
+  member2
+```
+
+### Rationale
+
+The `/**` syntax fits on one line, and is easy to evolve to take up additional lines. It doesn't need any indentation. Copy/pasting code from and into these comments is easy, since lines don't start with `*`.
+
+Syntax highlighting makes it easy to distinguish these comment blocks from the code, making leading `*` unnecessary.
+
+## Markdown
+
+The used syntax for Toitdoc is a modified version of markdown.
+
+Contrary to markdown (and as the biggest difference), Toitdoc treats new lines as new paragraphs, unless they are indented more than the previous line. For example, the following Toitdoc is rendered as three paragraphs and not just as one (as would be the case in markdown):
+
+```
+/**
+Calls the given $block on each element of the given [collection]
+Users must not modify the collection during iteration.
+If the $block call throws an exception, then the
+  given $error value is returned.
+*/
+do collection error [block]
+  ...
+```
+
+### Code spans
+
+Text enclosed in backticks (\`) is formatted as code: `code`. Whitespace in code spans is reduced and replaced with one space. That is, multiple spaces/newlines are converted to one space. For example,
+
+```
+`foo   bar
+   gee`
+```
+
+is rendered as `foo bar gee`.
+This makes it possible to write longer code spans that break at the end of line.
+
+### Code blocks
+
+Longer code, or code that relies on indentation can be inserted using triple backticks(\`\`\`):
+
+````
+```
+a longer code
+spanning multiple lines
+```
+````
+
+The advantage of using fenced blocks (compared to indentation based blocks), is that two code blocks next to each other are easier to detect. Say, a Toitdoc wants to show two examples:
+
+````
+Examples:
+```
+foo 1
+```
+```
+bar 2
+```
+````
+
+By using separate fenced blocks, these examples will be shown as separated entities, which would not be possible with indentation-based code blocks:
+
+```
+foo 1
+```
+
+```
+bar 2
+```
+
+<!-- - Imported code blocks: ```` ``["file.toit":token]`` ````. In this case Toitdoc opens the referenced file, and extracts the code that is delimited by `/*token - start*/` and `/*token - end*/`. This is the preferred way of including longer examples. It also gives the possibility to move Toitdoc examples into test files. -->
+
+### Emphasis
+
+Text enclosed by `*`, is rendered emphasized: _important_.
+
+### Lists
+
+Either bullet lists (starting a line with `-`, `+` or `*`), or ordered lists (starting a line with a digit).
+
+### Sections
+
+Lines beginning with `#` (or multiple `#`s) are sections. The more `#`s the deeper the section. Some sections have meaning and are treated specially in the output (like `# Advanced` or `# Inheritance`). See below.
+
+### Links
+
+- `$foo` links to the element (member, class, global variable or global function) with the resolved name.
+- `$foo("foo.toit":id)` links to an element that is not in scope, but declared in the given file. Semantically, it's equivalent to searching for `id` in the scope introduced by importing "foo.toit".
+- `$foo x y` resolves to the element `foo` that takes 2 arguments.
+- URLs inside the comment are automatically linked: `http://www.example.com` or `file://foo.toit` don't need markers.
+
+<!-- * `$foo("foo.toit":id)` links to an element that is not in scope, but declared in the given file. Semantically, it's equivalent to searching for `id` in the scope introduced by importing "foo.toit".
+    * `$foo(foo x y)` resolves to the element `foo` that takes 2 arguments, but only shows `foo` in the emitted Toitdoc.
+    * `[Foo](class Foo)` links to the class name, instead of the constructor. If the class doesn't contain a default constructor (with no arguments), then this is the default. -->
+
+## Sections
+
+Toitdoc supports sections, some of which have special meaning in Toitdoc.
+
+The following sections have special meaning or should be used as conventions:
+
+- `Advanced`: This section is non-essential for most users and can safely be ignored in general. For example, this section may explain the algorithm that is used to perform the specific action. By default this section is collapsed in the generated Toitdoc.
+- `Inheritance`: This section is only useful for developers that implement or extend a given class. IDEs should ignore this section when showing contextual information on calls.
+- `Examples`: Contains examples for the given element. Individual examples that exhibit different properties can be in their own subsections. It is common to start each individual example-(sub)section with "This example demonstrates ". Since example sections can be very big, they should be the last section in a Toitdoc (except for `Categories`).
+- `Categories`: This section is used in the Toitdoc tool to assign members to specific categories. For example, a `File` class could have the categories, `Write`, `Read`, and `Query`. The Toitdoc tool can then group those members into the given categories to make it easier to find relevant methods. Categories are optional. They are not emitted in the Toitdoc-generated pages. The `Categories` section only consists of a markdown list.
+- `Errors`: This section should treat errors and exceptions, and/or discuss how to deal with common errors. Note that important prerequisites can/should be in the initial section. For example, the sentence "Users must not modify the collection while iteration over it", does not require a separate "Errors" section, but can be part of the top section. This section may also contain common mistakes in the usage of the API.
+- `Aliases`: This section contains a (markdown) list of aliases that can help finding the function. Typically, this list contains names of similar functions in other languages. For example, `List.add` should have `push`, and `push_back` as alias, since these are the names that are used in JavaScript and C++ respectively.
+
+## Conventions
+
+This section discusses conventions and best practices for writing Toitdoc. By having a common vocabulary and phrasing, comments can be understood faster, and also be written more efficiently.
+
+Furthermore, we introduce conventions that make it possible for IDEs to present the most relevant information when needed.
+
+Don't code-format true, false, or null. Write them as normal text (just like in the previous sentence).
+
+Use the following terms:
+
+- "Class".
+
+- "Global": a global variable.
+
+- "Function": a global function.
+
+- "Constructor".
+
+- "Factory".
+
+- "Field".
+
+- "Method" for member methods. One may also use "getter" and "setter" when appropriate.
+
+- "Block".
+
+- "Lambda". The term "closure" is also commonly used, but we should strive to minimize the number of terms.
+
+In general, don't feel obligated to avoid repetitions in Toitdocs. It is OK to use the same term multiple times for the same element.
+
+Start every documentation with a short description. This sentence should convey the core idea of what the element does (or is for). It is OK to duplicate the element name for this purpose:
+
+```
+/**
+Runs the given $task.
+
+# Advanced
+This is the reason for this Toitdoc.
+*/
+run task
+  ...
+```
+
+Start functions and methods Toitdocs with 3rd person verbs. Readers implicitly add "this element" in front of such a sentence. For example: "Runs the given $block".
+
+Start classes, globals and fields as if the comment started with "This is/contains". For example, a class comment could start with "A container for xyz.", and a global with "The number of emitted things.". As an exception, use "Whether ..." for boolean globals and fields.
+
+Getters can either be documented as if they were fields, or as a method. If a pair of getter/setter exists, the setter can just have the documentation "/// Setter for $x.".
+
+Usually, this style of documentation does not require to refer to the commented element from within the Toitdoc. Whenever that's necessary, use the prefix "this". For example "Whenever this class is instantiated, ... ".
+
+In instance members and constructors, use "this instance" when referring to `this`. For example, "Calls the given $block on each element of this instance". This convention has the advantage that the comment is still valid for subclasses (compared to the alternative of referring to the classname).
+
+Arguments should be referred to as "the given $arg-name". When it is clear that the text talks about a given argument, one may drop "given". When providing more information for arguments, start the paragraph with "The argument $arg-name ...". For substantial discussions of parameters consider a (additional) section "# Argument $arg-name".
+
+IDEs should eventually be able to provide contextual help. Specifically, when filling in an argument, editors can show the documentation for the current argument. It should do that by searching for references to `$arg-name`. If the documentation has a section with the argument, that's the documentation it should show. If not a sentence starting with "The argument $arg-name" would be shown. Finally, if neither exists, paragraphs linking to the argument are highlighted.
+
+The documentation for return values should be by starting a sentence with "Returns ...". Multiple of these sentences are permitted. For example "Returns 0 if x. Returns 1 if y. Returns 2 otherwise.".
+
+Use the word "whether" liberally when talking about boolean values.
+
+Overridden methods don't need any Toitdoc. Documentation is inherited. Users may, however, just write "See $super." to explicitly inherit the documentation. If additional information is provided then the comment could start with "See $super.", followed by the additional documentation.
+
+Overloaded methods can either duplicate the documentation (if it's sufficiently different), or use one of the two following methods:
+
+1. Document one method (usually the most general one), and then use "Variant of $foo(foo a b c).", followed by a specific documentation.
+2. Document one method (usually the most general one) with an "# Overloaded" section. For all other methods, use the following pattern: "Variant of $foo(foo a b c).", and then add an "# Overloaded" section in the same comment. The Toitdoc generator takes the original comments and replaces the "Overloaded" section for each generated comment. (Or, more likely, generates an overloaded documentation as can be seen here: <https://en.cppreference.com/w/cpp/container/vector/push_back>).
+
+Don't add implementation comments in Toitdocs. For example `TODO...` should be in a non-Toitdoc comment. Generally, the Toitdoc should come first, followed by implementation comments:
+
+```
+/**
+Toitdoc goes here.
+*/
+/*
+Implementation doc.
+*/
+The member.
+```
+
+Errors should either be in their `# Errors` section, or (if they only take a sentence) be written as follows: "It's an error ...", or using "must" (as in "This instance must have at least two elements").
+
+When a class can contain multiple elements use the term "elements" (and not "entries"). Use "slot" to refer to a specific place in an indexed object: "Replaces the element in slot $index with the given $replacement".
