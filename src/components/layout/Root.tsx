@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
   contentBody: {
     width: "46rem",
+    maxWidth: "100%",
     padding: theme.spacing(6),
 
     // Setting the color so things like list bullets are colored properly
