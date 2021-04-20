@@ -54,6 +54,8 @@ Here's a short summary of what you need to do:
 
 ## Available Scripts
 
+**⚠️ Make sure to run `yarn install` before any of these commands!**
+
 In the project directory, you can run:
 
 ### `yarn develop`
