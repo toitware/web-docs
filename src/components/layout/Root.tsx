@@ -82,6 +82,9 @@ const useStyles = makeStyles((theme) => ({
     "& h1:hover .table-of-contents-icon, & h2:hover .table-of-contents-icon": {
       opacity: 1,
     },
+    "& img": {
+      maxWidth: "100%",
+    },
   },
 }));
 
