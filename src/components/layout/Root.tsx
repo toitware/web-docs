@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core";
+import { Hidden, makeStyles } from "@material-ui/core";
 import { TableOfContents } from "./Layout";
 import * as React from "react";
 import { ReactNode } from "react";
@@ -110,7 +110,11 @@ export function Root({ children, tableOfContents }: Props): JSX.Element {
         <div className={classes.contentContainer}>
           <div className={classes.content}>
             <div className={classes.contentBody}>{children}</div>
-            {tableOfContents?.items && <TableOfContentsNav table={tableOfContents} />}
+            {tableOfContents?.items && (
+              <Hidden mdDown>
+                <TableOfContentsNav table={tableOfContents} />
+              </Hidden>
+            )}
           </div>
         </div>
       </main>
