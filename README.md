@@ -21,8 +21,6 @@ Note! You don't need to setup your `PATH` env.var. as described in the guide.
 
 If you haven't installed `node` yet, install `node` from [nodejs.org](https://nodejs.org/en/). Add the node bin directory to your `PATH` in `$HOME/.profile`
 
-The version of `node` must be >= v12.16.1, i.e. the version of node that comes with yarn is not the latest.
-
 **⚠️ In order to be able to install packages from this repository on your machine,
 you need to [authenticate with the GitHub
 registry](https://docs.github.com/en/packages/guides/configuring-npm-for-use-with-github-packages#authenticating-to-github-packages).**
@@ -112,16 +110,16 @@ The type can be `info` or `warning` for now.
 
 ```html
 <Tabs>
-<div title="Tab 1">
+<Tab label="Tab 1">
 
 Content of tab 1
 
-</div>
-<div title="Tab 2">
+</Tab>
+<Tab label="Tab 2">
 
 Content of tab 2
 
-</div>
+</Tab>
 </Tabs>
 ```
 
