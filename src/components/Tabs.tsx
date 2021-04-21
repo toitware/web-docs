@@ -7,25 +7,34 @@ import { ReactElement, ReactNode, useState } from "react";
 // This style is just added for reference.
 const useStyles = makeStyles((theme) => ({
   root: {
-    border: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
     borderRadius: "3px",
+    margin: "3rem 0",
   },
   tabs: {
     display: "flex",
-    borderBottom: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
   },
   tab: {
-    padding: "0.75rem 0",
-    margin: "0 1rem",
+    position: "relative",
+    top: "1px",
+    padding: "0.75rem 1.5rem",
     display: "block",
-    borderBottom: `3px solid transparent`,
+    color: theme.palette.text.primary,
+    border: "1px solid transparent",
+    borderTopLeftRadius: "5px",
+    borderTopRightRadius: "5px",
+    fontSize: "0.875rem",
+    height: "100%",
   },
   tabActive: {
-    fontWeight: "bold",
-    borderColor: theme.palette.primary.main,
+    borderColor: Color(theme.palette.text.primary).alpha(0.2).string(),
+    borderBottomColor: theme.palette.background.default,
+    color: theme.palette.primary.main,
   },
   content: {
-    padding: "1rem",
+    padding: "1.5rem 2.5rem",
+    border: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
+    borderRadius: "5px",
+    borderTopLeftRadius: 0,
   },
 }));
 
