@@ -4,150 +4,153 @@ order: 2
 
 # Toit versus other programming languages
 
-=== "Toit versus Python"
+## Toit versus Python
 
-    |                                                                              | Toit                                   | Python                                                              |
-    |------------------------------------------------------------------------------|----------------------------------------|---------------------------------------------------------------------|
-    | Current object                                                               | `this`                                 | `self`                                                              |
-    | Single line comments                                                         | `//`                                   | `#`                                                                 |
-    | Logical 'and', 'or' and 'not' operators                                      | `and or not`                           | `and or not`                                                        |
-    | Shift left, right, unsigned right                                            | `<<  >>  >>>`                          | `<< >>` (no unsigned shift)                                         |
-    | Integer division                                                             | `/` (on integer types)                 | `//`                                                                |
-    | Integer sizes                                                                | `64`                                   | (arbitrary)                                                         |
-    | Statement grouping                                                           | (indent)                               | (indent)                                                            |
-    | Define a class Foo that inherits from Bar                                    | `class Foo extends Bar:`               | `class Foo(Bar):`                                                   |
-    | Define constructor for class Foo                                             | `constructor x:`                       | `def __init__(self, x):`                                            |
-    | Define constructor for class Foo<br>that calls constructor of superclass Bar | <pre>constructor x:&#10;  super x</pre>| <pre>def __init__(self, x):&#10;  super(Bar, self).__init__(x)</pre>|
-    | Constructor that assigns to fields                                           | `constructor .x:`                      | <pre>def __init__(self, x):&#10;  self.x = x</pre>                  |
-    | Check object has type                                                        | `bar is Foo`                           | `isinstance(bar, Foo)`                                              |
-    | Check object does not have type                                              | `bar is not Foo`                       | `not isinstance(bar, Foo)`                                          |
-    | Call a method foo with two arguments                                         | `foo x y`                              | `foo(x, y)`                                                         |
-    | Declare a member variable in a class                                         | <pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre>| `self.x = null`                               |
-    | Declare a local variable in a method                                         | <pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre>| `x = null`                                    |
-    | Define a constant                                                            | `X ::= 0`                              |                                                                     |
-    | Define a constant in a class                                                 | `static X ::= 0`                       |                                                                     |
-    | Define a top-level function                                                  | `foo x y:`                             | `def foo(x, y):`                                                    |
-    | Define an instance method in a class                                         | `foo x y:`                             | `def foo(self, x, y):`                                              |
-    | Define a static method in a class                                            | `static foo x y`                       |                                                                     |
-    | If statement                                                                 | `if condition:`                        | `if condition:`                                                     |
-    | Fixed loop                                                                   | `end.repeat: | i |`                    | `for i in range(end):`                                              |
-    | Three-part for loop                                                          | `for i := 0; i < end; i++:`            |                                                                     |
-    | Iterate over collection                                                      | `collection.do: | x |`                 | `for x in collection:`                                              |
-    | While loop                                                                   | `while condition:`                     | `while condition:`                                                  |
-    | Import local from library                                                    | `import .library`                      |                                                                     |
-    | Import from library                                                          | `import library`                       | `import library`                                                    |
-    | Import into current namespace                                                | `import library show *`                | `from library import *`                                             |
-    | Print/log                                                                    | `print "Hello"`                        | `print("Hello")`                                                    |
-    | Print with interpolation                                                     | `print "Hello $name"`                  | `print("Hello %s" %(name))`                                         |
-    | Interpolate with padding                                                     | `print "Hello $(%9s name)"`            | `print("Hello %9s", %(name))`                                       |
+<table> <tr> <td></td> <td>Toit</td> <td>Python</td> </tr>
+<tr><td>Current object</td><td><pre>this</pre></td><td><pre>self</pre></td></tr>
+<tr><td>Single line comments</td><td><pre>//</pre></td><td><pre>#</pre></td></tr>
+<tr><td>Logical 'and', 'or' and 'not' operators</td><td><pre>and or not</pre></td><td><pre>and or not</pre></td></tr>
+<tr><td>Shift left, right, unsigned right</td><td><pre>&lt;&lt;  >>  >>></pre></td><td><pre>&lt;&lt; >> (no unsigned shift)</pre></td></tr>
+<tr><td>Integer division</td><td><pre>/ (on integer types)</pre></td><td><pre>//</pre></td></tr>
+<tr><td>Integer sizes</td><td><pre>64</pre></td><td><pre>(arbitrary)</pre></td></tr>
+<tr><td>Statement grouping</td><td><pre>(indent)</pre></td><td><pre>(indent)</pre></td></tr>
+<tr><td>Define a class Foo that inherits from Bar</td><td><pre>class Foo extends Bar:</pre></td><td><pre>class Foo(Bar):</pre></td></tr>
+<tr><td>Define constructor for class Foo</td><td><pre>constructor x:</pre></td><td><pre>def __init__(self, x):</pre></td></tr>
+<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><pre>constructor x:&#10;  super x</pre></td><td><pre>def __init__(self, x):&#10;  super(Bar, self).__init__(x)</pre></td></tr>
+<tr><td>Constructor that assigns to fields</td><td><pre>constructor .x:</pre></td><td><pre>def __init__(self, x):&#10;  self.x = x</pre></td></tr>
+<tr><td>Check object has type</td><td><pre>bar is Foo</pre></td><td><pre>isinstance(bar, Foo)</pre></td></tr>
+<tr><td>Check object does not have type</td><td><pre>bar is not Foo</pre></td><td><pre>not isinstance(bar, Foo)</pre></td></tr>
+<tr><td>Call a method foo with two arguments</td><td><pre>foo x y</pre></td><td><pre>foo(x, y)</pre></td></tr>
+<tr><td>Declare a member variable in a class</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>self.x = null</pre></td></tr>
+<tr><td>Declare a local variable in a method</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>x = null</pre></td></tr>
+<tr><td>Define a constant</td><td><pre>X ::= 0</pre></td><td><pre></pre></td></tr>
+<tr><td>Define a constant in a class</td><td><pre>static X ::= 0</pre></td><td><pre></pre></td></tr>
+<tr><td>Define a top-level function</td><td><pre>foo x y:</pre></td><td><pre>def foo(x, y):</pre></td></tr>
+<tr><td>Define an instance method in a class</td><td><pre>foo x y:</pre></td><td><pre>def foo(self, x, y):</pre></td></tr>
+<tr><td>Define a static method in a class</td><td><pre>static foo x y</pre></td><td><pre></pre></td></tr>
+<tr><td>If statement</td><td><pre>if condition:</pre></td><td><pre>if condition:</pre></td></tr>
+<tr><td>Fixed loop</td><td><pre>end.repeat: | i |</pre></td><td><pre>for i in range(end):</pre></td></tr>
+<tr><td>Three-part for loop</td><td><pre>for i := 0; i &lt; end; i++:</pre></td><td><pre></pre></td></tr>
+<tr><td>Iterate over collection</td><td><pre>collection.do: | x |</pre></td><td><pre>for x in collection:</pre></td></tr>
+<tr><td>While loop</td><td><pre>while condition:</pre></td><td><pre>while condition:</pre></td></tr>
+<tr><td>Import local from library</td><td><pre>import .library</pre></td><td><pre></pre></td></tr>
+<tr><td>Import from library</td><td><pre>import library</pre></td><td><pre>import library</pre></td></tr>
+<tr><td>Import into current namespace</td><td><pre>import library show *</pre></td><td><pre>from library import *</pre></td></tr>
+<tr><td>Print/log</td><td><pre>print "Hello"</pre></td><td><pre>print("Hello")</pre></td></tr>
+<tr><td>Print with interpolation</td><td><pre>print "Hello $name"</pre></td><td><pre>print("Hello %s" %(name))</pre></td></tr>
+<tr><td>Interpolate with padding</td><td><pre>print "Hello $(%9s name)"</pre></td><td><pre>print("Hello %9s", %(name))</pre></td></tr>
+</table>
 
-=== "Toit versus C++"
+## Toit versus C++
 
-    |                                                                              | Toit                                   | C++                                     |
-    |------------------------------------------------------------------------------|----------------------------------------|-----------------------------------------|
-    | Current object                                                               | `this`                                 | `this`                                  |
-    | Single line comments                                                         | `//`                                   | `//`                                    |
-    | Logical 'and', 'or' and 'not' operators                                      | `and or not`                           | `&& || !` (or `and or not`)             |
-    | Shift left, right, unsigned right                                            | `<<  >>  >>>`                          | `<< >> >>`  (on unsigned type)          |
-    | Integer division                                                             | `/` (on integer types)                 | `/` (on integer type)                   |
-    | Integer sizes                                                                | `64`                                   | `8/16/32/64...`                         |
-    | Statement grouping                                                           | (indent)                               | `{}`                                    |
-    | Define a class Foo that inherits from Bar                                    | `class Foo extends Bar:`               | `class Foo : public Bar {`              |
-    | Define constructor for class Foo                                             | `constructor x:`                       | `Foo(int x) {`                          |
-    | Define constructor for class Foo<br>that calls constructor of superclass Bar | <pre>constructor x:&#10;  super x</pre>| `Foo(int x) : Bar(x) {`                 |
-    | Constructor that assigns to fields                                           | `constructor .x:`                      | `Foo(int x) : x(x) {`                   |
-    | Check object has type                                                        | `bar is Foo`                           | `(dynamic_cast<Foo*>(bar) != null)`     |
-    | Check object does not have type                                              | `bar is not Foo`                       | `(dynamic_cast<Foo*>(bar) == null)`     |
-    | Call a method foo with two arguments                                         | `foo x y`                              | `foo(x, y);`                            |
-    | Declare a member variable in a class                                         | <pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre>| <pre>int x;&#10;int x = 0;</pre> |
-    | Declare a local variable in a method                                         | <pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre>| <pre>int x;&#10;int x = 0;</pre> |
-    | Define a constant                                                            | `X ::= 0`                              | `const int X = 0;`                      |
-    | Define a constant in a class                                                 | `static X ::= 0`                       | `static const int X = 0;`               |
-    | Define a top-level function                                                  | `foo x y:`                             | `int foo(int x, int y) {`               |
-    | Define an instance method in a class                                         | `foo x y:`                             | `int foo(int x, int y) {`               |
-    | Define a static method in a class                                            | `static foo x y`                       | `static int foo(int x, int y) {`        |
-    | If statement                                                                 | `if condition:`                        | `if (condition) {`                      |
-    | Fixed loop                                                                   | `end.repeat: | i |`                    | `for (int i = 0; i < end; i++) {`       |
-    | Three-part expression loop                                                   | `for i := 0; i < end; i++:`            | `for (int i = 0; i < end; i++) {`       |
-    | Iterate over collection                                                      | `collection.do: | x |`                 | `for (auto x : collection) {`           |
-    | While loop                                                                   | `while condition:`                     | `while (condition) {`                   |
-    | Import local from library                                                    | `import .library`                      | `#include "file"`                       |
-    | Import from library                                                          | `import library`                       | `#include <file>`                       |
-    | Import into current namespace                                                | `import library show *`                | `#include <file> using namespace file;` |
-    | Print/log                                                                    | `print "Hello"`                        | `cout << "Hello\n"`                     |
-    | Print with interpolation                                                     | `print "Hello $name"`                  | `cout << "Hello " << name << "\n";`     |
-    | Interpolate with padding                                                     | `print "Hello $(%9s name)"`            | `printf("Hello %9s\n", name);`          |
+<table>
+<tr><td></td><td><pre>Toit</pre></td><td><pre>C++</pre></td></tr>
+<tr><td>Current object</td><td><pre>this</pre></td><td><pre>this</pre></td></tr>
+<tr><td>Single line comments</td><td><pre>//</pre></td><td><pre>//</pre></td></tr>
+<tr><td>Logical 'and', 'or' and 'not' operators</td><td><pre>and or not</pre></td><td><pre>&& || ! (or and or not)</pre></td></tr>
+<tr><td>Shift left, right, unsigned right</td><td><pre>&lt;&lt;  >>  >>></pre></td><td><pre>&lt;&lt; >> >>  (on unsigned type)</pre></td></tr>
+<tr><td>Integer division</td><td><pre>/ (on integer types)</pre></td><td><pre>/ (on integer type)</pre></td></tr>
+<tr><td>Integer sizes</td><td><pre>64</pre></td><td><pre>8/16/32/64...</pre></td></tr>
+<tr><td>Statement grouping</td><td><pre>(indent)</pre></td><td><pre>{}</pre></td></tr>
+<tr><td>Define a class Foo that inherits from Bar</td><td><pre>class Foo extends Bar:</pre></td><td><pre>class Foo : public Bar &#123;</pre></td></tr>
+<tr><td>Define constructor for class Foo</td><td><pre>constructor x:</pre></td><td><pre>Foo(int x) &#123;</pre></td></tr>
+<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><pre>constructor x:&#10;  super x</pre></td><td><pre>Foo(int x) : Bar(x) &#123;</pre></td></tr>
+<tr><td>Constructor that assigns to fields</td><td><pre>constructor .x:</pre></td><td><pre>Foo(int x) : x(x) &#123;</pre></td></tr>
+<tr><td>Check object has type</td><td><pre>bar is Foo</pre></td><td><pre>(dynamic_cast&lt;Foo*>(bar) != null)</pre></td></tr>
+<tr><td>Check object does not have type</td><td><pre>bar is not Foo</pre></td><td><pre>(dynamic_cast&lt;Foo*>(bar) == null)</pre></td></tr>
+<tr><td>Call a method foo with two arguments</td><td><pre>foo x y</pre></td><td><pre>foo(x, y);</pre></td></tr>
+<tr><td>Declare a member variable in a class</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>int x;&#10;int x = 0;</pre></td></tr>
+<tr><td>Declare a local variable in a method</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>int x;&#10;int x = 0;</pre></td></tr>
+<tr><td>Define a constant</td><td><pre>X ::= 0</pre></td><td><pre>const int X = 0;</pre></td></tr>
+<tr><td>Define a constant in a class</td><td><pre>static X ::= 0</pre></td><td><pre>static const int X = 0;</pre></td></tr>
+<tr><td>Define a top-level function</td><td><pre>foo x y:</pre></td><td><pre>int foo(int x, int y) &#123;</pre></td></tr>
+<tr><td>Define an instance method in a class</td><td><pre>foo x y:</pre></td><td><pre>int foo(int x, int y) &#123;</pre></td></tr>
+<tr><td>Define a static method in a class</td><td><pre>static foo x y</pre></td><td><pre>static int foo(int x, int y) &#123;</pre></td></tr>
+<tr><td>If statement</td><td><pre>if condition:</pre></td><td><pre>if (condition) &#123;</pre></td></tr>
+<tr><td>Fixed loop</td><td><pre>end.repeat:</pre></td><td><pre>i |                    | for (int i = 0; i &lt; end; i++) &#123;</pre></td></tr>
+<tr><td>Three-part expression loop</td><td><pre>for i := 0; i &lt; end; i++:</pre></td><td><pre>for (int i = 0; i &lt; end; i++) &#123;</pre></td></tr>
+<tr><td>Iterate over collection</td><td><pre>collection.do:</pre></td><td><pre>x |                 | for (auto x : collection) &#123;</pre></td></tr>
+<tr><td>While loop</td><td><pre>while condition:</pre></td><td><pre>while (condition) &#123;</pre></td></tr>
+<tr><td>Import local from library</td><td><pre>import .library</pre></td><td><pre>#include "file"</pre></td></tr>
+<tr><td>Import from library</td><td><pre>import library</pre></td><td><pre>#include &lt;file></pre></td></tr>
+<tr><td>Import into current namespace</td><td><pre>import library show *</pre></td><td><pre>#include &lt;file> using namespace file;</pre></td></tr>
+<tr><td>Print/log</td><td><pre>print "Hello"</pre></td><td><pre>cout &lt;&lt; "Hello\n"</pre></td></tr>
+<tr><td>Print with interpolation</td><td><pre>print "Hello $name"</pre></td><td><pre>cout &lt;&lt; "Hello " &lt;&lt; name &lt;&lt; "\n";</pre></td></tr>
+<tr><td>Interpolate with padding</td><td><pre>print "Hello $(%9s name)"</pre></td><td><pre>printf("Hello %9s\n", name);</pre></td></tr>
+</table>
 
-=== "Toit versus Java"
+## Toit versus Java
 
-    |                                                                              | Toit                                   | Java                                              |
-    |------------------------------------------------------------------------------|----------------------------------------|---------------------------------------------------|
-    | Current object                                                               | `this`                                 | `this`                                            |
-    | Single line comments                                                         | `//`                                   | `//`                                              |
-    | Logical 'and', 'or' and 'not' operators                                      | `and or not`                           | `&& || !`                                         |
-    | Shift left, right, unsigned right                                            | `<<  >>  >>>`                          | `<< >> >>>`                                       |
-    | Integer division                                                             | `/` (on integer types)                 | `/` (on integer type)                             |
-    | Integer sizes                                                                | `64`                                   | `8/16/32/64`                                      |
-    | Statement grouping                                                           | (indent)                               | `{}`                                              |
-    | Define a class Foo that inherits from Bar                                    | `class Foo extends Bar:`               | `public class Foo extends Bar {`                  |
-    | Define constructor for class Foo                                             | `constructor x:`                       | `public Foo(int x) {`                             |
-    | Define constructor for class Foo<br>that calls constructor of superclass Bar | <pre>constructor x:&#10;  super x</pre>| <pre>public Foo(int x) {&#10;  super(x);</pre>    |
-    | Constructor that assigns to fields                                           | `constructor .x:`                      | <pre>Foo(int x) {&#10;  field_x = x;</pre>        |
-    | Check object has type                                                        | `bar is Foo`                           | `bar instanceof Foo`                              |
-    | Check object does not have type                                              | `bar is not Foo`                       | `!(bar instanceof Foo)`                           |
-    | Call a method foo with two arguments                                         | `foo x y`                              | `foo(x, y);`                                      |
-    | Declare a member variable in a class                                         | <pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre>| <pre>int x;&#10;int x = 0;</pre> |
-    | Declare a local variable in a method                                         | <pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre>| <pre>int x;&#10;int x = 0;</pre> |
-    | Define a constant                                                            | `X ::= 0`                              |                                                   |
-    | Define a constant in a class                                                 | `static X ::= 0`                       | `public static final int X = 0;`                  |
-    | Define a top-level function                                                  | `foo x y:`                             |                                                   |
-    | Define an instance method in a class                                         | `foo x y:`                             | `public int foo(int x, int y) {`                  |
-    | Define a static method in a class                                            | `static foo x y`                       | `public static int foo(int x, int y) {`           |
-    | If statement                                                                 | `if condition:`                        | `if (condition) {`                                |
-    | Fixed loop                                                                   | `end.repeat: | i |`                    | `for (int i = 0; i < end; i++) {`                 |
-    | Three-part expression loop                                                   | `for i := 0; i < end; i++:`            | `for (int i = 0; i < end; i++) {`                 |
-    | Iterate over collection                                                      | `collection.do: | x |`                 | `for (Foo x : collection) {`                      |
-    | While loop                                                                   | `while condition:`                     | `while (condition) {`                             |
-    | Import local from library                                                    | `import .library`                      |                                                   |
-    | Import from library                                                          | `import library`                       |                                                   |
-    | Import into current namespace                                                | `import library show *`                | `import com.example.Class;`                       |
-    | Print/log                                                                    | `print "Hello"`                        | `System.out.println("Hello");`                    |
-    | Print with interpolation                                                     | `print "Hello $name"`                  | `System.out.printf("Hello %s\n, name);`           |
-    | Interpolate with padding                                                     | `print "Hello $(%9s name)"`            | `System.out.printf("Hello %9s\n, name);`          |
+<table>
+<tr><td></td><td><pre>Toit</pre></td><td><pre>Java</pre></td></tr>
+<tr><td>Current object</td><td><pre>this</pre></td><td><pre>this</pre></td></tr>
+<tr><td>Single line comments</td><td><pre>//</pre></td><td><pre>//</pre></td></tr>
+<tr><td>Logical 'and', 'or' and 'not' operators</td><td><pre>and or not</pre></td><td><pre>&& || !</pre></td></tr>
+<tr><td>Shift left, right, unsigned right</td><td><pre>&lt;&lt;  >>  >>></pre></td><td><pre>&lt;&lt; >> >>></pre></td></tr>
+<tr><td>Integer division</td><td><pre>/ (on integer types)</pre></td><td><pre>/ (on integer type)</pre></td></tr>
+<tr><td>Integer sizes</td><td><pre>64</pre></td><td><pre>8/16/32/64</pre></td></tr>
+<tr><td>Statement grouping</td><td><pre>(indent)</pre></td><td><pre>{}</pre></td></tr>
+<tr><td>Define a class Foo that inherits from Bar</td><td><pre>class Foo extends Bar:</pre></td><td><pre>public class Foo extends Bar &#123;</pre></td></tr>
+<tr><td>Define constructor for class Foo</td><td><pre>constructor x:</pre></td><td><pre>public Foo(int x) &#123;</pre></td></tr>
+<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><pre>constructor x:&#10;  super x</pre></td><td><pre>public Foo(int x) &#123;&#10;  super(x);</pre></td></tr>
+<tr><td>Constructor that assigns to fields</td><td><pre>constructor .x:</pre></td><td><pre>Foo(int x) &#123;&#10;  field_x = x;</pre></td></tr>
+<tr><td>Check object has type</td><td><pre>bar is Foo</pre></td><td><pre>bar instanceof Foo</pre></td></tr>
+<tr><td>Check object does not have type</td><td><pre>bar is not Foo</pre></td><td><pre>!(bar instanceof Foo)</pre></td></tr>
+<tr><td>Call a method foo with two arguments</td><td><pre>foo x y</pre></td><td><pre>foo(x, y);</pre></td></tr>
+<tr><td>Declare a member variable in a class</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>int x;&#10;int x = 0;</pre></td></tr>
+<tr><td>Declare a local variable in a method</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>int x;&#10;int x = 0;</pre></td></tr>
+<tr><td>Define a constant</td><td><pre>X ::= 0</pre></td><td><pre></pre></td></tr>
+<tr><td>Define a constant in a class</td><td><pre>static X ::= 0</pre></td><td><pre>public static final int X = 0;</pre></td></tr>
+<tr><td>Define a top-level function</td><td><pre>foo x y:</pre></td><td><pre></pre></td></tr>
+<tr><td>Define an instance method in a class</td><td><pre>foo x y:</pre></td><td><pre>public int foo(int x, int y) &#123;</pre></td></tr>
+<tr><td>Define a static method in a class</td><td><pre>static foo x y</pre></td><td><pre>public static int foo(int x, int y) &#123;</pre></td></tr>
+<tr><td>If statement</td><td><pre>if condition:</pre></td><td><pre>if (condition) &#123;</pre></td></tr>
+<tr><td>Fixed loop</td><td><pre>end.repeat: | i |</pre></td><td><pre>for (int i = 0; i &lt; end; i++) &#123;</pre></td></tr>
+<tr><td>Three-part expression loop</td><td><pre>for i := 0; i &lt; end; i++:</pre></td><td><pre>for (int i = 0; i &lt; end; i++) &#123;</pre></td></tr>
+<tr><td>Iterate over collection</td><td><pre>collection.do: | x |</pre></td><td><pre>for (Foo x : collection) &#123;</pre></td></tr>
+<tr><td>While loop</td><td><pre>while condition:</pre></td><td><pre>while (condition) &#123;</pre></td></tr>
+<tr><td>Import local from library</td><td><pre>import .library</pre></td><td><pre></pre></td></tr>
+<tr><td>Import from library</td><td><pre>import library</pre></td><td><pre></pre></td></tr>
+<tr><td>Import into current namespace</td><td><pre>import library show *</pre></td><td><pre>import com.example.Class;</pre></td></tr>
+<tr><td>Print/log</td><td><pre>print "Hello"</pre></td><td><pre>System.out.println("Hello");</pre></td></tr>
+<tr><td>Print with interpolation</td><td><pre>print "Hello $name"</pre></td><td><pre>System.out.printf("Hello %s\n, name);</pre></td></tr>
+<tr><td>Interpolate with padding</td><td><pre>print "Hello $(%9s name)"</pre></td><td><pre>System.out.printf("Hello %9s\n, name);</pre></td></tr>
+</table>
 
-=== "Toit versus Javascript"
+## Toit versus Javascript
 
-    |                                                                              | Toit                                   | JavaScript                                     |
-    |------------------------------------------------------------------------------|----------------------------------------|------------------------------------------------|
-    | Current object                                                               | `this`                                 | `this`                                         |
-    | Single line comments                                                         | `//`                                   | `//`                                           |
-    | Logical 'and', 'or' and 'not' operators                                      | `and or not`                           | `&& || !`                                      |
-    | Shift left, right, unsigned right                                            | `<<  >>  >>>`                          | `<< >> >>>`                                    |
-    | Integer division                                                             | `/` (on integer types)                 | `Math.trunc(x / y)`                            |
-    | Integer sizes                                                                | `64`                                   | `32, 53`                                       |
-    | Statement grouping                                                           | (indent)                               | `{}`                                           |
-    | Define a class Foo that inherits from Bar                                    | `class Foo extends Bar:`               | `class Foo extends Bar {`                      |
-    | Define constructor for class Foo                                             | `constructor x:`                       | `constructor(x) {`                             |
-    | Define constructor for class Foo<br>that calls constructor of superclass Bar | <pre>constructor x:&#10;  super x</pre>| <pre>constructor(x) {&#10;  super(x);</pre>    |
-    | Constructor that assigns to fields                                           | `constructor .x:`                      | <pre>constructor(x) {&#10;  this.x = x</pre>   |
-    | Check object has type                                                        | `bar is Foo`                           | `bar instanceof Foo`                           |
-    | Check object does not have type                                              | `bar is not Foo`                       | `!(bar instanceof Foo)`                        |
-    | Call a method foo with two arguments                                         | `foo x y`                              | `foo(x, y)`                                    |
-    | Declare a member variable in a class                                         | <pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre>| `this.x = null`          |
-    | Declare a local variable in a method                                         | <pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre>| `var x = null`           |
-    | Define a constant                                                            | `X ::= 0`                              | `const X = 0`                                  |
-    | Define a constant in a class                                                 | `static X ::= 0`                       |                                                |
-    | Define a top-level function                                                  | `foo x y:`                             | `function foo(x, y) {`                         |
-    | Define an instance method in a class                                         | `foo x y:`                             | `foo(x, y) {`                                  |
-    | Define a static method in a class                                            | `static foo x y`                       |                                                |
-    | If statement                                                                 | `if condition:`                        | `if (condition) {`                             |
-    | Fixed loop                                                                   | `end.repeat: | i |`                    | `for (var i = 0; i < end; i++) {`              |
-    | Three-part expression loop                                                   | `for i := 0; i < end; i++:`            | `for (var i = 0; i < end; i++) {`              |
-    | Iterate over collection                                                      | `collection.do: | x |`                 | `for (var x in collection) {`                  |
-    | While loop                                                                   | `while condition:`                     | `while (condition) {`                          |
-    | Import local from library                                                    | `import .library`                      |                                                |
-    | Import from library                                                          | `import library`                       | `var library = require('library');`            |
-    | Import into current namespace                                                | `import library show *`                |                                                |
-    | Print/log                                                                    | `print "Hello"`                        | `console.log("Hello")`                         |
-    | Print with interpolation                                                     | `print "Hello $name"`                  | `console.log("Hello " + name + "\n")`          |
-    | Interpolate with padding                                                     | `print "Hello $(%9s name)"`            |                                                |
+<table>
+<tr><td></td><td><pre>Toit</pre></td><td><pre>JavaScript</pre></td></tr>
+<tr><td>Current object</td><td><pre>this</pre></td><td><pre>this</pre></td></tr>
+<tr><td>Single line comments</td><td><pre>//</pre></td><td><pre>//</pre></td></tr>
+<tr><td>Logical 'and', 'or' and 'not' operators</td><td><pre>and or not</pre></td><td><pre>&& || !</pre></td></tr>
+<tr><td>Shift left, right, unsigned right</td><td><pre>&lt;&lt;  >>  >>></pre></td><td><pre>&lt;&lt; >> >>></pre></td></tr>
+<tr><td>Integer division</td><td><pre>/ (on integer types)</pre></td><td><pre>Math.trunc(x / y)</pre></td></tr>
+<tr><td>Integer sizes</td><td><pre>64</pre></td><td><pre>32, 53</pre></td></tr>
+<tr><td>Statement grouping</td><td><pre>(indent)</pre></td><td><pre>{}</pre></td></tr>
+<tr><td>Define a class Foo that inherits from Bar</td><td><pre>class Foo extends Bar:</pre></td><td><pre>class Foo extends Bar &#123;</pre></td></tr>
+<tr><td>Define constructor for class Foo</td><td><pre>constructor x:</pre></td><td><pre>constructor(x) &#123;</pre></td></tr>
+<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><pre>constructor x:&#10;  super x</pre></td><td><pre>constructor(x) &#123;&#10;  super(x);</pre></td></tr>
+<tr><td>Constructor that assigns to fields</td><td><pre>constructor .x:</pre></td><td><pre>constructor(x) &#123;&#10;  this.x = x</pre></td></tr>
+<tr><td>Check object has type</td><td><pre>bar is Foo</pre></td><td><pre>bar instanceof Foo</pre></td></tr>
+<tr><td>Check object does not have type</td><td><pre>bar is not Foo</pre></td><td><pre>!(bar instanceof Foo)</pre></td></tr>
+<tr><td>Call a method foo with two arguments</td><td><pre>foo x y</pre></td><td><pre>foo(x, y)</pre></td></tr>
+<tr><td>Declare a member variable in a class</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>this.x = null</pre></td></tr>
+<tr><td>Declare a local variable in a method</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>var x = null</pre></td></tr>
+<tr><td>Define a constant</td><td><pre>X ::= 0</pre></td><td><pre>const X = 0</pre></td></tr>
+<tr><td>Define a constant in a class</td><td><pre>static X ::= 0</pre></td><td><pre></pre></td></tr>
+<tr><td>Define a top-level function</td><td><pre>foo x y:</pre></td><td><pre>function foo(x, y) &#123;</pre></td></tr>
+<tr><td>Define an instance method in a class</td><td><pre>foo x y:</pre></td><td><pre>foo(x, y) &#123;</pre></td></tr>
+<tr><td>Define a static method in a class</td><td><pre>static foo x y</pre></td><td><pre></pre></td></tr>
+<tr><td>If statement</td><td><pre>if condition:</pre></td><td><pre>if (condition) &#123;</pre></td></tr>
+<tr><td>Fixed loop</td><td><pre>end.repeat: | i |</pre></td><td><pre>for (var i = 0; i &lt; end; i++) &#123;</pre></td></tr>
+<tr><td>Three-part expression loop</td><td><pre>for i := 0; i &lt; end; i++:</pre></td><td><pre>for (var i = 0; i &lt; end; i++) &#123;</pre></td></tr>
+<tr><td>Iterate over collection</td><td><pre>collection.do: | x |</pre></td><td><pre>for (var x in collection) &#123;</pre></td></tr>
+<tr><td>While loop</td><td><pre>while condition:</pre></td><td><pre>while (condition) &#123;</pre></td></tr>
+<tr><td>Import local from library</td><td><pre>import .library</pre></td><td><pre></pre></td></tr>
+<tr><td>Import from library</td><td><pre>import library</pre></td><td><pre>var library = require('library');</pre></td></tr>
+<tr><td>Import into current namespace</td><td><pre>import library show *</pre></td><td><pre></pre></td></tr>
+<tr><td>Print/log</td><td><pre>print "Hello"</pre></td><td><pre>console.log("Hello")</pre></td></tr>
+<tr><td>Print with interpolation</td><td><pre>print "Hello $name"</pre></td><td><pre>console.log("Hello " + name + "\n")</pre></td></tr>
+<tr><td>Interpolate with padding</td><td><pre>print "Hello $(%9s name)"</pre></td><td><pre></pre></td></tr>
+</table>
