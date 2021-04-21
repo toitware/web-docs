@@ -1,4 +1,6 @@
 import { makeStyles } from "@material-ui/core";
+import clsx from "clsx";
+import Color from "color";
 import { Link } from "gatsby";
 import * as React from "react";
 import { TableOfContents, TableOfContentsItem } from "./Layout";
@@ -6,12 +8,15 @@ import { TableOfContents, TableOfContentsItem } from "./Layout";
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "sticky",
-    marginTop: theme.spacing(6),
+    top: theme.spacing(6),
+    alignSelf: "flex-start",
     width: "15rem",
     "& ul": {
       listStyle: "none",
-      padding: 0,
       margin: 0,
+      background: Color(theme.palette.primary.main).alpha(0.06).desaturate(0.6).string(),
+      padding: "0.75rem 1.5rem",
+      borderRadius: "5px",
     },
   },
   link: {
@@ -19,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "0.875rem",
     fontFamily: theme.typography.fontFamily,
     opacity: 0.8,
-    marginBottom: "0.75rem",
+    margin: "0.75rem 0",
     display: "block",
     "&:hover": {
       color: theme.palette.primary.main,
@@ -29,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
+  className?: string;
   table: TableOfContents;
 };
 
@@ -41,7 +47,7 @@ type ContentsEntry = {
  * The actual content of the layout, separated into its own component so it has
  * access to the theme.
  */
-export function TableOfContentsNav({ table }: Props): JSX.Element {
+export function TableOfContentsNav({ table, className }: Props): JSX.Element {
   const classes = useStyles();
 
   function flatten(table: TableOfContentsItem | TableOfContents, list: ContentsEntry[] = []): ContentsEntry[] {
@@ -57,7 +63,7 @@ export function TableOfContentsNav({ table }: Props): JSX.Element {
   const flatTable = flatten(table);
 
   return (
-    <nav className={classes.root}>
+    <nav className={clsx(classes.root, className)}>
       <ul>
         {flatTable.map((item) => (
           <li key={item.url}>

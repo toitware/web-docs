@@ -1,4 +1,5 @@
 import { InputAdornment, makeStyles, OutlinedInput } from "@material-ui/core";
+import clsx from "clsx";
 import { graphql, Link, useStaticQuery } from "gatsby";
 import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
@@ -83,7 +84,11 @@ type GraphType = {
   };
 };
 
-function SearchBar(): JSX.Element {
+type Props = {
+  className?: string;
+};
+
+function SearchBar({ className }: Props): JSX.Element {
   const [query, setQuery] = useState("");
 
   const data: GraphType = useStaticQuery(graphql`
@@ -99,7 +104,7 @@ function SearchBar(): JSX.Element {
   const classes = useStyles();
 
   return (
-    <div className={classes.container}>
+    <div className={clsx(classes.container, className)}>
       <form autoComplete="off">
         <OutlinedInput
           className={classes.searchField}
