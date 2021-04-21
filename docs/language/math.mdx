@@ -102,27 +102,3 @@ main:
 
 The block takes two arguments, which are here called `a` and `b` and should return (implicitly) a value that can be negative, zero, or positive.
 Note that `| b -a | sorts in descending order.
-
-## Sums
-
-The Toit language has some features normally used in functional languages. One of those is the reduce function, which combines all the elements using a custom combiner.
-
-To add all the number in a list
-
-```
-  sum := my_list.reduce: | a b | a + b
-```
-
-To get the largest
-
-```
-  largest := my_list.reduce: | a b | max a b
-```
-
-Note that it is still possible to code in a more traditional way such as
-
-```
-  largest2 := my_list[0]
-  for i := 1; i < my_list.size; i++:
-    largest2 = max largest2 my_list[i]
-```

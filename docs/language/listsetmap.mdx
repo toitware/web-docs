@@ -8,7 +8,7 @@ The following classes are included in the core SDK as part of the [collections.t
 
 `List` provides an ordered and indexed collection which may contain duplicates. This is roughly analogous to extendable arrays in other languages.
 
-`Set` provides a collection of unique objects. When iterating over a `Set`, the objects are processed in insertion ordered.
+`Set` provides a collection of unique objects. When iterating over a `Set`, the objects are processed in insertion order.
 
 `Map` provides a data structure mapping keys to values. Like `Set`, iteration is in insertion order. Overwriting the value associated with a key does not change the order of the key-value pair.
 
@@ -176,6 +176,9 @@ when it has found a object in the collection which fulfills the predicate:
 introduces the block argument to `any` does not get mistaken for the colon of the
 if-statement. The `any` method is often called `some` in functional languages.)
 
+Both of these examples made use of the
+[automatic block argument, `it`](/language/blocks/#block_arguments).
+
 Similarly, Toit collections have the [`every`](<https://libs.toit.io/core/collections/class-Collection#every(block)>)
 method known from functional languages:
 
@@ -187,7 +190,8 @@ method known from functional languages:
 The reduce method:
 
 (The example shows the use of a
-[block](blocks.md) with two named arguments).
+[block](blocks.md) with [two named
+arguments](/language/blocks/#block_arguments)).
 
 ```
   sum := collection.reduce: | a b | a + b
@@ -242,7 +246,7 @@ That example also illustrates that the value of the block (returned to the
 `map` method) is the result of the last statement. In this case one of the
 branches of the `if` will be the last statement, producing the return value.
 An alternative way to do this would be to use
-[continue.map](http://localhost:8000/language/blocks/#local_return)
+[continue.map](/language/blocks/#local_return)
 
 We could also reduce it to an almost unreadable one-liner by putting an
 arbitrary expression in a string interpolation, surrounding it with `$(` and
