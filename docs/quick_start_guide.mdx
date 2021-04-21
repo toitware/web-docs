@@ -75,22 +75,45 @@ The claimed ESP32 can be seen in the list of devices with the CLI command:
 toit devices
 ```
 
-## 5. Get examples
+## 5. Deploy Toit app
 
-Download Toit sample code and save it in a folder named `toit-examples` with the CLI command:
+You can either run a Toit program once on your device or deploy the program as a long-lived app.
 
-```
-toit sdk examples toit-examples --version v1.0.2
-```
-
-## 6. Deploy Toit app
-
-Deploying a Toit app on your device means that the Toit code will be executed repeatedly according to the scheduling defined in `hello.yaml`.
-
-Deploy a Toit app on your device with the command:
+First, save the following Toit code in a file named `hello.toit`
 
 ```
-toit deploy -d MyToitDevice toit-examples/examples_v1.0.2/hello/hello.yaml
+// Save as hello.toit
+main:
+  print "Hello, World!"
+```
+
+<Note title="Run program on a device">
+  Run the Toit program once on your device with the CLI command
+
+  ```
+  toit run -d MyToitDevice hello.toit
+  ```
+
+</Note>
+
+Next, save the following yaml content in a file named `hello.yaml` and place it next to the `hello.toit` from the previous step
+
+```yaml
+# Save as hello.yaml
+name: "HelloApp"
+entrypoint: hello.toit
+triggers:
+  on_boot: true
+  on_install: true
+```
+
+Deploying a Toit app on your device means that the Toit code in the `toit` file will be executed repeatedly according to the scheduling defined in `hello.yaml`.
+In this case, when the app is installed on the device and if the device reboots.
+
+Deploy the Toit app named `HelloApp` on your device with the command:
+
+```
+toit deploy -d MyToitDevice hello.yaml
 ```
 
 When deploying an app, the device is not required to be online. The app will be installed on the device when it comes online.
@@ -103,10 +126,20 @@ toit device -d MyToitDevice ps
 
 or go to the <a href="https://console.toit.io/" target="_blank">Apps tab</a> of your device to view the list of apps deployed.
 
-See the logs from the device with 
+See the logs from the device with
 
 ```
 toit device -d MyToitDevice logs -f 10m
 ```
 
-or go to the <a href="https://console.toit.io/" target="_blank">Logs tab</a> of your device to view the logs from the application deployed or the device itself.
+or go to the <a href="https://console.toit.io/" target="_blank">Logs tab</a> of your device to view the logs from the application deployed.
+
+## 6. Uninstall app
+
+As the last step, uninstall the Toit app from the device with the command
+
+```
+toit device -d MyToitDevice uninstall HelloApp
+```
+
+or go to the <a href="https://console.toit.io/" target="_blank">Apps tab</a> of your device to uninstall the app.
