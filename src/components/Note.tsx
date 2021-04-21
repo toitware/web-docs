@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import Color from "color";
 import * as React from "react";
 import clsx from "clsx";
+import { IoInformationCircle, IoWarning } from "react-icons/io5";
 
 const useStyles = makeStyles((theme) => ({
   note: {
@@ -20,6 +21,19 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     fontWeight: "bold",
+    display: "flex",
+    alignItems: "center",
+  },
+  icon: {
+    width: "1.5rem",
+    height: "1.5rem",
+    marginRight: "0.5rem",
+  },
+  infoIcon: {
+    color: theme.palette.primary.main,
+  },
+  warningIcon: {
+    color: theme.palette.warning.main,
   },
 }));
 
@@ -31,18 +45,15 @@ type Props = {
 
 export function Note({ children, title, type = "info" }: Props): JSX.Element {
   const classes = useStyles();
-  // Placeholder emoji for now.
-  const emojis = {
-    info: "ℹ️",
-    warning: "⚠️",
-  };
   return (
     <Typography
       className={clsx(classes.note, { [classes.noteWarning]: type == "warning", [classes.noteInfo]: type == "info" })}
       component="div"
     >
       <div className={classes.title}>
-        {emojis[type]} {title}
+        {type == "info" && <IoInformationCircle className={clsx(classes.icon, classes.infoIcon)} />}
+        {type == "warning" && <IoWarning className={clsx(classes.icon, classes.warningIcon)} />}
+        {title}
       </div>
       {children}
     </Typography>
