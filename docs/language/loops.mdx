@@ -12,28 +12,23 @@ is either a one-liner on the same line, or delimited by indentation:
 
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   i := 42 -->
-<div class="toit">
 ```
   if i == 42: print "Found the answer!"
   if i < 100:
     print "Found a smallish number!"
 ```
-</div>
 
 Else-clauses work in the same way:
 
-<div class="toit">
 ```
   if i % 3 == 0:
     print "fizz"
   else:
     print i
 ```
-</div>
 
 Cascaded `if`s can be written with `else if`:
 
-<div class="toit">
 ```
   if i % 3 == 0:
     if i % 5 == 0:
@@ -45,11 +40,9 @@ Cascaded `if`s can be written with `else if`:
   else:
     print i
 ```
-</div>
 
 Sometimes you may prefer the ternary `?:` operator instead of small `if`s:
 
-<div class="toit">
 ```
   buzz := i % 5 == 0
   if i % 3 == 0:
@@ -59,7 +52,6 @@ Sometimes you may prefer the ternary `?:` operator instead of small `if`s:
   else:
     print i
 ```
-</div>
 
 ## Loops
 
@@ -72,7 +64,6 @@ for looping from last to first.
 
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   list := List 30: it -->
-<div class="toit">
 ```
   // Loop over all elements in a list:
   list.do: | element |
@@ -87,7 +78,6 @@ for looping from last to first.
   list[1..].do:
     print it
 ```
-</div>
 
 At an even higher level, the built-in collections have some
 [functional-style methods](../listsetmap/#functional_methods),
@@ -106,23 +96,18 @@ Example of a loop that runs a fixed number of times, given by the `end` integer 
 <!-- HIDDEN CODE   start := 5 -->
 <!-- HIDDEN CODE   end := 10 -->
 <!-- HIDDEN CODE   step := 2 -->
-<div class="toit">
 ```
   end.repeat: | i | print i
 ```
-</div>
 
 To use steps, use a `for` loop as in:
 
-<div class="toit">
 ```
   for i := start; i < end; i += step: print i
 ```
-</div>
 
 Use a `while` loop to execute a code block as long as a condition is true, as in the following example:
 
-<div class="toit">
 ```
 main:
   max := 5
@@ -132,7 +117,6 @@ main:
     print counter
     counter += 1
 ```
-</div>
 
 ## Breaking loops
 
@@ -140,7 +124,6 @@ Sometimes, it is necessary to terminate a `for` loop or a `while` loop
 prematurely regardless of the results of the conditional tests. In these cases,
 you can use the break statement:
 
-<div class="toit">
 ```
 main:
   max := 50
@@ -151,11 +134,9 @@ main:
     counter += 1
     if counter > 20: break
 ```
-</div>
 
 Similarly you can use the `continue` statement to skip the rest of a loop and go straight to the next iteration:
 
-<div class="toit">
 ```
 main:
   sum := 0
@@ -165,11 +146,9 @@ main:
     // This line is skipped if sum is already >= 10.
     sum += i
 ```
-</div>
 
 The `for` and `while` loops are control structures built into the language, which support `break` and `continue`. On the other hand, `repeat` and `do` are methods that take blocks. Here you have to add the method name (do or repeat) to the continue statement, to indicate which loop you wish to continue.
 
-<div class="toit">
 ```
 main:
   sum := 0
@@ -179,13 +158,11 @@ main:
       continue.repeat  // Skip the rest of the block.
     sum += it
 ```
-</div>
 
 The equivalent `break.do` and `break.repeat` are not yet implemented.
 
 Sometimes you can instead use a return statement that exits the method completely:
 
-<div class="toit">
 ```
 my_function collection:
   collection.do:
@@ -195,6 +172,5 @@ my_function collection:
       return it
   return null
 ```
-</div>
 
 If this is not possible, and you need an actual `break` statement, the `do` or `repeat` can be rewritten with a `for` loop.

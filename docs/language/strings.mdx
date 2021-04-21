@@ -17,13 +17,11 @@ are reserved for
 If a string literal contains double quotes (`"`), or backslashes (`\`),
 then these must be escaped with backslashes:
 
-<div class="toit">
 ```
 main:
   print "String with \"quotes\"."  // >> String with "quotes".
   print "Zig zag string /\\/\\."   // >> Zig zag string /\/\.
 ```
-</div>
 
 ## Escaped characters
 
@@ -59,7 +57,6 @@ for the list of names):
 
 The following shows some examples of the numeric escapes:
 
-<div class="toit">
 ```
   // For two-digit code points (runes).
   // using \x, the curly braces are optional.
@@ -86,7 +83,6 @@ The following shows some examples of the numeric escapes:
   c2/int := '\''
   print c2 // Prints "39", the ASCII code for a single quote.
 ```
-</div>
 
 See [below](#multi-line_strings) for more advanced
 string literals.
@@ -98,28 +94,23 @@ Strings are represented internally as
 byte sequences.  This is visible when requesting the length,
 which is given in bytes with the `size` getter:
 
-<div class="toit">
 ```
   print "Hello!".size  // Prints "6", the number of bytes.
   print "Hellö!".size  // Prints "7", the number of bytes.
 ```
-</div>
 
 It is also visible when using `[]` to index into a string:
 
-<div class="toit">
 ```
   print "Hello!"[0]  // Prints "72", the ASCII code for 'H'.
   print "Hellö!"[4]  // Prints "246", the Unicode code point for 'ö'.
 ```
-</div>
 
 Since some UTF-8 sequences consist of multiple bytes, there
 are some index points that do not correspond to a character.
 At these points, the `[]` indexing operation returns null.
 For example, the Euro sign is coded as three bytes:
 
-<div class="toit">
 ```
   print "€2".size  // Prints "4", the number of bytes in the string.
   print "€2"[0]    // Prints "8364", the Unicode code for '€'.
@@ -127,14 +118,12 @@ For example, the Euro sign is coded as three bytes:
   print "€2"[2]    // Prints "null", no character starts at byte index 2.
   print "€2"[3]    // Prints "50", the ASCII code for '2'.
 ```
-</div>
 
 Since null is [falsy](/language/booleans/) we can index
 only the valid code points quite simply.  The following
 program iterates over the 5-character, 6-byte string,
 printing 163, 50, 46, 50, 52:
 
-<div class="toit">
 ```
   STR ::= "£2.24"
   for i := 0; i < STR.size; i++:
@@ -142,7 +131,6 @@ printing 163, 50, 46, 50, 52:
     if ch:  // Only handle non-null.
       print ch
 ```
-</div>
 
 In this case it would be simpler to use the
 [do
@@ -151,19 +139,16 @@ method:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE main: -->
-<div class="toit">
 ```
   STR ::= "£2.24"
   STR.do --runes:
     print it
 ```
-</div>
 
 Toit does not allow the construction of illegal UTF-8
 sequences. For example when converting byte arrays to
 strings:
 
-<div class="toit">
 ```
   // The following examples use the #[...] syntax for
   // byte array literals.
@@ -178,7 +163,6 @@ strings:
   s4/string := #[128].to_string // Error: Not legal UTF-8!
   s5/string := #[0xc0, 0xbb].to_string // Error: Overlong encoding!
 ```
-</div>
 
 [Surrogates](https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Surrogates)
 are also not legal in Toit strings.
@@ -186,7 +170,6 @@ are also not legal in Toit strings.
 The raw UTF-8 bytes in a Toit string can be accessed with
 `at --raw`.
 
-<div class="toit">
 ```
   // Print all 10 UTF-8 bytes in the 8-character string.
   s6 := "RöckDöts"
@@ -195,7 +178,6 @@ The raw UTF-8 bytes in a Toit string can be accessed with
     list.add (s6.at --raw index)
   print list  // >> [82, 195, 182, 99, 107, 68, 195, 182, 116, 115]
 ```
-</div>
 
 Alternatively, the string's UTF-8 bytes can be written to a
 byte array with the
@@ -209,7 +191,6 @@ Toit supports the `[x..y]` notation for slices of strings.
 This creates a new string consisting of bytes x to y, where
 x is inclusive and y is exclusive:
 
-<div class="toit">
 ```
   hello ::= "Hello"
   print hello[2..4] // Prints "ll", characters 2 to 4 of "Hello".
@@ -217,20 +198,17 @@ x is inclusive and y is exclusive:
   print two_euro[0..2] // Error, this 2-byte slice cuts the '€' character!
   print two_euro[0..3] // Prints "€", these 3 bytes make up the '€' character.
 ```
-</div>
 
 The first index can be omitted, in which case the slice
 starts at the beginning  of the source string.  If the
 second index is omitted, the slice ends at the end of the
 source string.
 
-<div class="toit">
 ```
   hello_world := "Hello, World!"
   print hello_world[..5] // >> Hello
   print hello_world[7..] // >> World!
 ```
-</div>
 
 ## Multi-line strings
 
@@ -238,7 +216,6 @@ For strings that span multiple lines, newlines can be inserted
 with `\n`, but it is often clearer to use the triple-quotes
 syntax, `"""..."""`.
 
-<div class="toit">
 ```
 help_message := """
   Toit CLI command
@@ -249,7 +226,6 @@ help_message := """
 main:
   print help_message
 ```
-</div>
 
 The multi-line strings trim indentation-based white-space
 (see below).  Therefore
@@ -276,7 +252,6 @@ Toit removes the indentation of a multiline string.
 It looks for the line with the smallest indentation and removes that amount of indentation for each line.
 
 If a space (or several spaces) are needed in front of each line, use `\s` to indicate to the compiler that this space shouldn't be seen as indentation.
-<div class="toit">
 ```
 main:
   str1 := """
@@ -286,10 +261,8 @@ main:
   print "[" + str1 + "]"  // >> [foo]
   print "[" + str2 + "]"  // >> [ foo]
 ```
-</div>
 
 Note that multiline strings frequently end with a newline anyway, in which case the last line can be used to indicate how much the indentation is:
-<div class="toit">
 ```
 main:
   print """
@@ -318,7 +291,6 @@ bar
 Using the dollar sign ('$') we can interpolate variables and
 other expressions into strings:
 
-<div class="toit">
 ```
 // Print:
 //   Little pig 1
@@ -328,14 +300,12 @@ main:
   for i := 1; i <= 3; i++:
     print "  Little pig $i"
 ```
-</div>
 
 The variable after the dollar sign is turned into a string
 by calling its `stringify` method. The variable stops at
 the first non-alpha-numeric character, but the expression
 can be extended using dot or `[]` notation:
 
-<div class="toit">
 ```
 main:
   i := 42
@@ -345,14 +315,12 @@ main:
   list := [0, 42, 103]
   print "Level $list[1], the band."  // >> Level 42, the band.
 ```
-</div>
 
 If the variable is followed immediately by alphanumeric
 characters or we want a more complicated interpolation
 expression we can put parentheses, `()`, around an arbitrary
 expression:
 
-<div class="toit">
 ```
 main:
   print "Level $(6 * 7), the band." // >> Level 42, the band.
@@ -361,7 +329,6 @@ main:
   i := 42
   print "Almost $(i)mm."            // >> Almost 42mm.
 ```
-</div>
 
 The string interpolation feature also has support for some
 printf-style formatting options. Unlike `printf` the
@@ -370,7 +337,6 @@ they are formatting, so there is no need to count function
 arguments:
 
 <!-- RESET CODE -->
-<div class="toit">
 ```
 import math show PI
 
@@ -398,7 +364,6 @@ main:
   // %o writes in octal:
   print "The VAX answer: $(%03o 42)." // >> The VAX answer: 052.
 ```
-</div>
 
 For other bases than 8, 10, and 16, see
 [stringify](https://libs.toit.io/core/numbers/class-int#stringify(any))

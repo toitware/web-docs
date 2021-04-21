@@ -23,7 +23,6 @@ languages). Tasks have independent control flow but do not run simultaneously.
 An example:
 
 <!-- ANALYZE CODE -->
-<div class="toit">
 ```
 import gpio
 
@@ -53,7 +52,6 @@ my_task_2:
     sleep --ms=123
     LED2.set 0
 ```
-</div>
 
 In this program, there are two tasks started with `task::`. Each of them has an
 infinite loop (`while true`), but because they have independent control flow,
@@ -81,7 +79,6 @@ there are other ways, for example waiting for a GPIO pin to change with
 programmer. On the negative side, a task can block all other tasks, by never
 waiting (also called _yielding_). For example:
 
-<div class="toit">
 ```
 main:
   task:: my_uncooperative_task
@@ -106,7 +103,6 @@ my_starved_task:
     sleep --ms=100
     print "If you see this, the task is running."
 ```
-</div>
 
 In this example, the first task is attempting to find a counterexample to
 Fermat's Last Theorem. This will take a long time, since no such counterexample
@@ -121,7 +117,6 @@ take an oversimplified example:
 
 <!-- RESET CODE -->
 <!-- ANALYZE CODE -->
-<div class="toit">
 ```
 import gpio
 import gpio.adc
@@ -164,7 +159,6 @@ my_task_2:
     print "We are $(status.missing_mv)mV from our target"
 
 ```
-</div>
 
 This code looks rather simple and would work OK in Toit, but if we had threads
 instead of tasks it would contain a race condition. The two fields of the
@@ -192,8 +186,7 @@ this there are some useful classes in the `import monitor` library.
 One of the simplest of the classes in `import monitor` is `Latch` that allows
 one task to wait until a value (object) has been provided by another task.
 
-<div class="toit">
-``` toit
+```
 import monitor
 
 // Create a Latch object.
@@ -221,7 +214,6 @@ consumer_task_code:
   other_result := latch.get
   print "Result was $(my_result + other_result)"
 ```
-</div>
 
 Note that in this example we use the Latch class, but we don't inherit from it.
 In general, inheriting from classes from `import monitor` will cause unexpected
