@@ -2,6 +2,8 @@
 order: 0
 ---
 
+import { Link } from "gatsby";
+
 # Provision an ESP32
 
 If you don't have an ESP32 yet, you can buy one <a href="https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990" target="_blank">here</a>.
@@ -9,7 +11,7 @@ If you don't have an ESP32 yet, you can buy one <a href="https://www.digikey.com
 Before an ESP32 can be claimed into your organization in the Toit console, it needs to be initially provisioned.
 This means that the ESP32 is being granted a hardware ID used for the remaining of its lifecycle, and the latest released Toit firmware will be installed on the ESP32 device.
 
-If you haven't installed Toit on your computer, follow the steps described [here](../installation/toitcli.md).
+If you haven't installed Toit on your computer, follow the steps described <Link to="/installation/toitcli">here</Link>.
 
 ## Provision your device
 
@@ -17,9 +19,10 @@ Follow the steps to initially provision your device:
 
 - Connect the ESP32 with a USB cable to your computer where the Toit CLI is installed.
 
-!!! warning "Drivers for macOS"
+<Note type="warning" "Drivers for macOS">
 If you are using **macOS**, you might need to update the drivers from <a href="https://ftdichip.com/drivers/vcp-drivers/" target="_blank">here</a>
 and <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">here</a>. Install both drivers, reboot your computer and try to run the Toit CLI serial commands again.
+</Note>
 
 - Use the Toit CLI command to provision your device with initial settings and the latest released Toit firmware. Replace `SSID` and `WiFi-password` with your own WiFi credentials in the command:
 
@@ -31,7 +34,7 @@ and <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" t
 
 - The provision process might take up to 5 minutes. When finished the output of the `provision` command will look like this:
 
-```
+```shell
 looking for available hardware identities on disk
 no hardware identities found on disk, claiming new hardware identity
 Flashing device on port /dev/ttyUSB0
@@ -65,11 +68,12 @@ successfully read hardware chip information
 device was successfully flashed
 ```
 
-- The device is now provisioned and ready to be [claimed](claim.md) in the Toit console.
+- The device is now provisioned and ready to be <Link to="/claim">claimed</Link> in the Toit console.
 
-!!! note "Troubleshooting"
-If you have trouble connecting your ESP32 via a serial port to your computer, have a look in the section about [serial port troubleshooting](serialport.md) for help.
+<Note "Troubleshooting">
+If you have trouble connecting your ESP32 via a serial port to your computer, have a look in the section about <Link to="/serialport">serial port troubleshooting</Link> for help.
 Some hardware models need physical interaction with the device during flashing (like pushing a button). If flashing doesn't work, consult the documentation for your device.
+</Note>
 
 ## Device model
 
@@ -81,7 +85,7 @@ If you want to use another device model, you can provide it with `-m` in the pro
 
 Look for available device models for each firmware version available in the <a href="https://console.toit.io/organization/firmware" target="_blank">Toit console</a>.
 
-!!! note "Problems with provision"
+<Note "Problems with provision">
 If the initial device provision fails during the provisioning steps, the hardware ID (if any) is written to the local disk if possible and will be reused the next time the command is executed on the same computer.
 
     Also, if the provision command failed, consider trying with a lower baud rate (here half the default baud rate):
@@ -89,3 +93,4 @@ If the initial device provision fails during the provisioning steps, the hardwar
     ```
     toit serial provision --baud 460800 -p wifi.ssid=<SSID> -p wifi.password=<WiFi-password>
     ```
+</Note>
