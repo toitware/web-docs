@@ -34,11 +34,10 @@ main:
   if list:
     print "This branch is reached"
 
-// Boolification only occurs in `if`, `for`, and `while`
-// conditions.
-b1/bool := null // Error: null is not a bool!
-b2/bool := s // Error: A string is not a bool!
-b3/bool := z // Error: A number is not a bool!
-b4/bool := l // Error: A list is not a bool!
-
+  // Boolification only occurs in `if`, `for`, and `while`
+  // conditions.
+  b1/bool := null  // Error: null is not a bool!
+  b2/bool := s     // Error: A string is not a bool!
+  b3/bool := z     // Error: A number is not a bool!
+  b4/bool := l     // Error: A list is not a bool!
 ```

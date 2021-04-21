@@ -23,7 +23,6 @@ languages). Tasks have independent control flow but do not run simultaneously.
 An example:
 
 <!-- ANALYZE CODE -->
-
 <div class="toit">
 ```
 import gpio
@@ -34,26 +33,25 @@ LED1 ::= gpio.Pin.out 17
 LED2 ::= gpio.Pin.out 18
 
 main:
-// Note the double `::` on the next two lines.
-// Start a task that runs the my_task_1 function.
-task:: my_task_1
-// Start a second task that runs my_task_2.
-task:: my_task_2
+  // Note the double `::` on the next two lines.
+  // Start a task that runs the my_task_1 function.
+  task:: my_task_1
+  // Start a second task that runs my_task_2.
+  task:: my_task_2
 
 my_task_1:
-while true:
-sleep --ms=500
-LED1.set 1
-sleep --ms=500
-LED2.set 0
+  while true:
+    sleep --ms=500
+    LED1.set 1
+    sleep --ms=500
+    LED2.set 0
 
 my_task_2:
-while true:
-sleep --ms=123
-LED2.set 1
-sleep --ms=123
-LED2.set 0
-
+  while true:
+    sleep --ms=123
+    LED2.set 1
+    sleep --ms=123
+    LED2.set 0
 ```
 </div>
 
@@ -85,30 +83,28 @@ waiting (also called _yielding_). For example:
 
 <div class="toit">
 ```
-
 main:
-task:: my_uncooperative_task
-task:: my_starved_task
+  task:: my_uncooperative_task
+  task:: my_starved_task
 
 my_uncooperative_task:
-M ::= 1_000_000
-M.repeat:
-x := it + 1
-M.repeat:
-y := it + 1
-M.repeat:
-z := it + 1
-if x*x*x + y*y*y == z*z*z:
-print """
-Fermat's last theorem disproved! \
- $x^3 + $y^3 = $z^3"""
-return
+  M ::= 1_000_000
+  M.repeat:
+    x := it + 1
+    M.repeat:
+      y := it + 1
+      M.repeat:
+        z := it + 1
+        if x*x*x + y*y*y == z*z*z:
+          print """
+            Fermat's last theorem disproved!  \
+            $x^3 + $y^3 = $z^3"""
+          return
 
 my_starved_task:
-while true:
-sleep --ms=100
-print "If you see this, the task is running."
-
+  while true:
+    sleep --ms=100
+    print "If you see this, the task is running."
 ```
 </div>
 
@@ -127,7 +123,6 @@ take an oversimplified example:
 <!-- ANALYZE CODE -->
 <div class="toit">
 ```
-
 import gpio
 import gpio.adc
 
@@ -135,40 +130,40 @@ import gpio.adc
 ADC1 ::= gpio.Adc (gpio.Pin.in 17)
 
 class VoltageStatus:
-mv/int := 0
-missing_mv/int := 0
-goal/int := ?
+  mv/int := 0
+  missing_mv/int := 0
+  goal/int := ?
 
-constructor .goal:
+  constructor .goal:
 
-update new_mv/int -> none:
-mv = new_mv
-missing_mv = goal - mv
+  update new_mv/int -> none:
+    mv = new_mv
+    missing_mv = goal - mv
 
-status := VoltageStatus 554 // Aim for 554millivolts.
+status := VoltageStatus 554  // Aim for 554millivolts.
 
 main:
-task:: my_task_1
-task:: my_task_2
+  task:: my_task_1
+  task:: my_task_2
 
-/\*_
+/**
 Updates the status object with the measured voltage
-every 100ms.
-_/
+  every 100ms.
+*/
 my_task_1:
-while true:
-sleep --ms=100
-mv := ADC1.get
-status.update mv
+  while true:
+    sleep --ms=100
+    mv := ADC1.get
+    status.update mv
 
 /// Prints the current status every 123ms.
 my_task_2:
-while true:
-sleep --ms=123
-print "Voltage is $(status.mv)mV"
-print "We are $(status.missing_mv)mV from our target"
+  while true:
+    sleep --ms=123
+    print "Voltage is $(status.mv)mV"
+    print "We are $(status.missing_mv)mV from our target"
 
-````
+```
 </div>
 
 This code looks rather simple and would work OK in Toit, but if we had threads
@@ -225,8 +220,7 @@ consumer_task_code:
   // result.
   other_result := latch.get
   print "Result was $(my_result + other_result)"
-````
-
+```
 </div>
 
 Note that in this example we use the Latch class, but we don't inherit from it.

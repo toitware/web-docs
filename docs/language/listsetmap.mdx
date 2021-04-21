@@ -54,15 +54,20 @@ map := {:}
 These are the preferred short cuts for:
 
 <!-- RESET CODE -->
-
-<div class="toit">``` list := List set := Set map := Map ```</div>
+<div class="toit">
+```
+list := List
+set := Set
+map := Map
+```
+</div>
 
 Literals may also contain values:
 
 <div class="toit">
 ```
 list_with_values := [1, 2, 3]
-set_with_values := {1, 2}  
+set_with_values := {1, 2}
 map_with_values := {
   "key": 499,
   "key2": 42,
@@ -87,18 +92,30 @@ Lookup in a map is done with the indexing operator, `[]`:
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   scores := {"":null} -->
 <!-- HIDDEN CODE   team := "" -->
-
-<div class="toit">``` score := scores[team] print "The score for $team is $score" ```</div>
+<div class="toit">
+```
+  score := scores[team]
+  print "The score for $team is $score"
+```
+</div>
 
 The index operator syntax is understood by the string interpolation syntax, so you can simply write:
 
-<div class="toit">``` print "The score for $team is $scores[team]" ```</div>
+<div class="toit">
+```
+  print "The score for $team is $scores[team]"
+```
+</div>
 
 Updating or adding to a map is done with the `[]=` operator:
 
 <!-- HIDDEN CODE title_map := {:} -->
-
-<div class="toit">``` graduate name/string: title_map[name] = "PhD" ```</div>
+<div class="toit">
+```
+graduate name/string:
+  title_map[name] = "PhD"
+```
+</div>
 
 The index operator, `[]` requires the key to be present in the map, otherwise
 it throws an exception. As an alternative, you can use the `get` method which
@@ -110,7 +127,7 @@ class Scoring:
   // scorers is a map where the key is a team and the value
   // is a set of those that have scored goals for the team.
   scorers / Map ::= {:}
-  
+
   register_goal team/string new_scorer/string -> none:
     goal_scorers/Set? := scorers.get team
     if goal_scorers == null:
@@ -129,11 +146,14 @@ Often there are more succinct ways to achieve the same with variations of the
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class Scoring: -->
 <!-- HIDDEN CODE   scorers / Map ::= {:} -->
-
 <div class="toit">
-  ``` register_goal team/string new_scorer/string -> none: // Get the set of goal-scorers for this team, // initializing
-  with the empty set if necessary. goal_scorers/Set := scorers.get team --init=: {}
-  goal_scorers.add new_scorer ```
+```
+  register_goal team/string new_scorer/string -> none:
+    // Get the set of goal-scorers for this team,
+    // initializing with the empty set if necessary.
+    goal_scorers/Set := scorers.get team --init=: {}
+    goal_scorers.add new_scorer
+```
 </div>
 
 The full set of map methods is available in the [class
@@ -150,8 +170,15 @@ iterating over the collection.
 Instead of:
 
 <div class="toit">
-  ``` report_odd collection/List: found := false collection.do: if it % 2 == 1: found = true if found: print "The
-  collection contains at least one odd number" ```
+```
+report_odd collection/List:
+  found := false
+  collection.do:
+    if it % 2 == 1:
+      found = true
+  if found:
+    print "The collection contains at least one odd number"
+```
 </div>
 
 You can use the [any](<https://libs.toit.io/core/collections/class-Collection#any(block)>)
@@ -159,7 +186,10 @@ method, which also has the advantage that it stops
 when it has found a object in the collection which fulfills the predicate:
 
 <div class="toit">
-  ``` if (collection.any: it % 2 == 1): print "The collection contains at least one odd number" ```
+```
+  if (collection.any: it % 2 == 1):
+    print "The collection contains at least one odd number"
+```
 </div>
 
 (In this case we added parentheses around the `if`-condition so the colon that
@@ -169,14 +199,23 @@ if-statement. The `any` method is often called `some` in functional languages.)
 Similarly, Toit collections have the [`every`](<https://libs.toit.io/core/collections/class-Collection#every(block)>)
 method known from functional languages:
 
-<div class="toit">``` if (collection.every: it % 2 == 1): print "The collection contains only odd numbers" ```</div>
+<div class="toit">
+```
+  if (collection.every: it % 2 == 1):
+    print "The collection contains only odd numbers"
+```
+</div>
 
 The reduce method:
 
 (The example shows the use of a
 [block](blocks.md) with two named arguments).
 
-<div class="toit">``` sum := collection.reduce: | a b | a + b ```</div>
+<div class="toit">
+```
+  sum := collection.reduce: | a b | a + b
+```
+</div>
 
 This only works if the collection has at least one element and that element is
 a good starting point for the reduction operation. Otherwise you need to add
@@ -185,8 +224,11 @@ elements of the collection are integers, but the result of the `reduce`
 operation has a different type, `float`.
 
 <div class="toit">
-  ``` sum_of_roots collection/Collection -> float: return collection.reduce --initial=0.0: | sum_so_far integer |
-  sum_so_far + integer.sqrt ```
+```
+sum_of_roots collection/Collection -> float:
+  return collection.reduce --initial=0.0: | sum_so_far integer |
+    sum_so_far + integer.sqrt
+```
 </div>
 
 The version of `reduce` with an initial value is called `fold` in functional
@@ -195,19 +237,35 @@ languages.
 Similarly the `List` and `Set` classes have `map`:
 
 <div class="toit">
-  ``` // Creates a comma-separated list of quoted strings. csv list/List -> string: Q ::= "\"" // A double quote. if
-  (list.any: it.contains Q): throw "Can't handle strings containing quotes" quoted_list := list.map: "$Q$it$Q" return
-  quoted_list.join "," ```
+```
+// Creates a comma-separated list of quoted strings.
+csv list/List -> string:
+  Q ::= "\""  // A double quote.
+  if (list.any: it.contains Q):
+    throw "Can't handle strings containing quotes"
+  quoted_list := list.map: "$Q$it$Q"
+  return quoted_list.join ","
+```
 </div>
 
 A more advanced version would handle strings containing quotes:
-
 <!-- RESET CODE -->
-
 <div class="toit">
-  ``` // Creates a comma-separated list of quoted strings, // escaping quotes. csv list/List -> string: Q ::= "\"" // A
-  double quote. escaped_list := list.map: str := "$it" if str.contains Q: // In CSV quotes are escaped as two quotes.
-  str.replace --all Q "$Q$Q" else: str quoted_list := escaped_list.map: "$Q$it$Q" return quoted_list.join "," ```
+```
+// Creates a comma-separated list of quoted strings,
+// escaping quotes.
+csv list/List -> string:
+  Q ::= "\""  // A double quote.
+  escaped_list := list.map:
+    str := "$it"
+    if str.contains Q:
+      // In CSV quotes are escaped as two quotes.
+      str.replace --all Q "$Q$Q"
+    else:
+      str
+  quoted_list := escaped_list.map: "$Q$it$Q"
+  return quoted_list.join ","
+```
 </div>
 
 That example also illustrates that the value of the block (returned to the
@@ -221,8 +279,11 @@ arbitrary expression in a string interpolation, surrounding it with `$(` and
 `)`:
 
 <!-- RESET CODE -->
-
 <div class="toit">
-  ``` // Creates a comma-separated list of quoted strings, // escaping quotes. csv list/List -> string: return
-  (list.map: "\"$("$it".replace --all "\"" "\"\"")\"").join "," ```
+```
+// Creates a comma-separated list of quoted strings,
+// escaping quotes.
+csv list/List -> string:
+  return (list.map: "\"$("$it".replace --all "\"" "\"\"")\"").join ","
+```
 </div>
