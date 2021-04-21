@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import clsx from "clsx";
 import Color from "color";
 import { Link } from "gatsby";
 import * as React from "react";
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
+  className?: string;
   table: TableOfContents;
 };
 
@@ -45,7 +47,7 @@ type ContentsEntry = {
  * The actual content of the layout, separated into its own component so it has
  * access to the theme.
  */
-export function TableOfContentsNav({ table }: Props): JSX.Element {
+export function TableOfContentsNav({ table, className }: Props): JSX.Element {
   const classes = useStyles();
 
   function flatten(table: TableOfContentsItem | TableOfContents, list: ContentsEntry[] = []): ContentsEntry[] {
@@ -61,7 +63,7 @@ export function TableOfContentsNav({ table }: Props): JSX.Element {
   const flatTable = flatten(table);
 
   return (
-    <nav className={classes.root}>
+    <nav className={clsx(classes.root, className)}>
       <ul>
         {flatTable.map((item) => (
           <li key={item.url}>

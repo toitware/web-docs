@@ -1,9 +1,9 @@
-import { Hidden, makeStyles } from "@material-ui/core";
-import { TableOfContents } from "./Layout";
+import { makeStyles } from "@material-ui/core";
 import * as React from "react";
 import { ReactNode } from "react";
 import Navigation from "../navigation/Navigation";
 import Header from "./Header";
+import { TableOfContents } from "./Layout";
 import { TableOfContentsNav } from "./TableOfContents";
 
 const useStyles = makeStyles((theme) => ({
@@ -89,6 +89,11 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: "100%",
     },
   },
+  tableOfContents: {
+    [theme.breakpoints.down("md")]: {
+      display: "none",
+    },
+  },
 }));
 
 type Props = {
@@ -114,9 +119,7 @@ export function Root({ children, tableOfContents }: Props): JSX.Element {
           <div className={classes.content}>
             <div className={classes.contentBody}>{children}</div>
             {tableOfContents?.items && (
-              <Hidden mdDown>
-                <TableOfContentsNav table={tableOfContents} />
-              </Hidden>
+              <TableOfContentsNav className={classes.tableOfContents} table={tableOfContents} />
             )}
           </div>
         </div>
