@@ -60,8 +60,10 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "100%",
     padding: theme.spacing(6),
 
-    // Setting the color so things like list bullets are colored properly
+    // Setting the basic typography so things like list bullets are colored properly
     color: theme.palette.text.primary,
+    fontSize: theme.typography.body1.fontSize,
+    fontFamily: theme.typography.body1.fontFamily,
 
     "& p": {
       marginTop: "0.75rem",
