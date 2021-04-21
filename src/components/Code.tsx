@@ -87,5 +87,3 @@ export function Code({ className, children }: Props): JSX.Element {
 }
 
 export default Code;
-
-// FiClipboard
