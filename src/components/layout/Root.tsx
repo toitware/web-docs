@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import Color from "color";
 import * as React from "react";
 import { ReactNode } from "react";
 import Navigation from "../navigation/Navigation";
@@ -9,9 +10,11 @@ import { TableOfContentsNav } from "./TableOfContents";
 const useStyles = makeStyles((theme) => ({
   "@global": {
     html: {
-      // Make sure the scrollbar is never visible, since the content div is
-      // scrollable by itself.
-      overflowY: "hidden",
+      [theme.breakpoints.up("sm")]: {
+        // Make sure the scrollbar is never visible, since the content div is
+        // scrollable by itself.
+        overflowY: "hidden",
+      },
     },
     body: {
       margin: 0,
@@ -26,30 +29,50 @@ const useStyles = makeStyles((theme) => ({
   },
   root: {
     backgroundColor: theme.palette.background.default,
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
+    [theme.breakpoints.up("sm")]: {
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column",
+    },
   },
   nav: {
     width: "15rem",
     flexShrink: 0,
     overflowY: "auto",
     overflowX: "hidden",
-    padding: theme.spacing(4),
+    margin: theme.spacing(4),
+    marginRight: 0,
     paddingRight: 0,
+    [theme.breakpoints.down("xs")]: {
+      display: "none",
+    },
+    "&::-webkit-scrollbar": {
+      width: "0.5rem",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      background: Color(theme.palette.text.primary).alpha(0.2).string(),
+      borderRadius: "1.5rem",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "transparent",
+    },
   },
   main: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "row",
     padding: 0,
-    overflowY: "hidden",
+    [theme.breakpoints.up("sm")]: {
+      display: "flex",
+      flexDirection: "row",
+      height: "100%",
+      overflowY: "hidden",
+    },
   },
   contentContainer: {
     flex: 1,
     padding: 0,
-    overflowY: "auto",
-    overflowX: "hidden",
+    [theme.breakpoints.up("sm")]: {
+      overflowY: "auto",
+      overflowX: "hidden",
+    },
   },
   content: {
     display: "flex",
@@ -58,7 +81,11 @@ const useStyles = makeStyles((theme) => ({
   contentBody: {
     width: "46rem",
     maxWidth: "100%",
-    padding: theme.spacing(6),
+    padding: theme.spacing(4),
+
+    [theme.breakpoints.up("sm")]: {
+      padding: theme.spacing(6),
+    },
 
     // Setting the basic typography so things like list bullets are colored properly
     color: theme.palette.text.primary,

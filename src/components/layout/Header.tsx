@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core";
 import Color from "color";
 import * as React from "react";
 import ToitLogo from "../../assets/images/toit-logo.inline.svg";
+import HamburgerMenu from "../navigation/HamburgerMenu";
 import SearchBar from "../search/SearchBar";
 
 const useStyles = makeStyles((theme) => ({
@@ -16,6 +17,16 @@ const useStyles = makeStyles((theme) => ({
     height: "4.5rem",
     padding: "0 2rem",
   },
+  searchBar: {
+    [theme.breakpoints.down("xs")]: {
+      display: "none",
+    },
+  },
+  hamburgerMenu: {
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
+    },
+  },
 }));
 
 export function Header(): JSX.Element {
@@ -23,7 +34,8 @@ export function Header(): JSX.Element {
   return (
     <header className={classes.container}>
       <ToitLogo />
-      <SearchBar />
+      <SearchBar className={classes.searchBar} />
+      <HamburgerMenu className={classes.hamburgerMenu} />
     </header>
   );
 }

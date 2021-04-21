@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     borderTopLeftRadius: "5px",
     borderTopRightRadius: "5px",
     fontSize: "0.875rem",
+    height: "100%",
   },
   tabActive: {
     borderColor: Color(theme.palette.text.primary).alpha(0.2).string(),
