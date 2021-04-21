@@ -10,7 +10,6 @@ This document describes the basics of the Toit language. To learn about Toit's d
 
 Toit uses whitespace and indentation to construct the code structure:
 comment. For example:
-<div class="toit">
 ```
 // Defines globals first, and then uses main function to
 // print out something.
@@ -23,22 +22,18 @@ main:
     i = i + 1
 
 ```
-</div>
 
 ## Comments
 
 In Toit, a single line comment begins with a double slash `//` followed by the comment. For example:
-<div class="toit">
 ```
 
 // This is a single line comment in Toit.
 
 ```
-</div>
 
 For multiline comments, use `*/`.
 
-<div class="toit">
 ```
 
 /*
@@ -47,7 +42,6 @@ comment
 */
 
 ```
-</div>
 
 
 
@@ -87,7 +81,6 @@ rune.
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE main: -->
-<div class="toit">
 ```
   print 'A' // Prints "65", the ASCII code of 'A'.
   print '*' // Prints "42", the ASCII code of '*'.
@@ -95,10 +88,8 @@ rune.
   print '€' // Prints "8364", the Unicode code point of the Euro symbol.
   a /int := 'a'  // a now contains the integer 97.
 ```
-</div>
 
 Toit uses only double quotes `"` to denote a string literal:
-<div class="toit">
 ```
   print "Hello, World!"
   str := "a string"  // str has type string.
@@ -110,7 +101,6 @@ you must use the backslash `\` to
 can also be used for characters that are [difficult to
 type](/language/strings/#escaped_characters)
 For example:
-<div class="toit">
 ```
 message := "This is a \"valid\" string"
 ```
@@ -126,30 +116,22 @@ See also the [guide to Toit strings](/language/strings/).
 
 The `:=` operator introduces a new global variable with the name of the given identifier (here "global_name").
 
-<div class="toit">
 ```
 global_name := 103
 ```
-</div>
 
 If the global is final (that is, can't be assigned to), then you can use `::=` as in:
-<div class="toit">
 ```
 global_number ::= 42
 ```
-</div>
 Note that this in this case, `global_number` is actually a constant, and should thus be written in capital characters:
-<div class="toit">
 ```
 GLOBAL_NUMBER ::= 42
 ```
-</div>
 A final global that isn't a constant could be something that is mutable itself, such as
-<div class="toit">
 ```
 some_global ::= []
 ```
-</div>
 In this case the global is initialized with an empty list. The content of the list can change, but it will always be the same list.
 
 When you name a global, you should adhere to rules defined earlier about [identifiers](syntax.md#identifiers_and_keywords).
@@ -159,7 +141,6 @@ variables](/language/definitions/)) are initialized when
 they are first used.  This is noticeable if their value is
 determined by some function call, for example `Time.now`
 
-<div class="toit">
 ```
 TIME ::= Time.now  // Time.now is called on first use of TIME.
 
@@ -170,7 +151,6 @@ main:
   sleep  --ms=100
   print "TIME: $TIME"      // The global constant remains unchanged.
 ```
-</div>
 
 This program will print two different times, the second one twice.
 
@@ -185,7 +165,6 @@ and you can access can access its elements using square
 brackets [] and indexes.
 
 <!-- RESET CODE -->
-<div class="toit">
 ```
 str := "Toit String"
 byte_array := #[1, 42, 103]
@@ -201,7 +180,6 @@ main:
   print list[3]        // Prints "1000", the integer at position 3.
   print map["foo"]     // Prints "42", the value with the key "foo".
 ```
-</div>
 
 Indexing into strings is done by [UTF-8 byte
 offset](/language/strings/#string_representation), so the
@@ -210,13 +188,11 @@ story is a little more complex for non-ASCII strings.
 Toit also has support for slices.  These are views into part
 of a list, byte array, or string:
 
-<div class="toit">
 ```
   print str[0..4] // Prints "Toit", the first 4 bytes of "Toit String".
   print str[..4]  // Prints "Toit", the first 4 bytes of "Toit String".
   print str[5..]  // Prints "String", the last part of "Toit String".
 ```
-</div>
 
 See also the [description of slice
 syntax](/language/strings/#slices_of_strings) in the string
@@ -227,7 +203,6 @@ garbage collection.  To avoid that you can use `copy` to
 create a new object containing only the elements in the
 slice:
 
-<div class="toit">
 ```
 long_lived_global/ByteArray := #[]
 
@@ -238,7 +213,6 @@ my_function:
   // Makes a copy, so huge can be garbage collected:
   long_lived_global = long_lived_global.copy
 ```
-</div>
 
 ## Continuation of statements
 
@@ -251,7 +225,6 @@ A long statement can also span multiple lines by using the backslash (\) charact
 The following example illustrates how to use per-argument
 newlines, or the backslash (\) character to continue a
 statement in the second line:
-<div class="toit">
 ```
 // A method with many parameters.
 foo a b c d e f g h i j: ...
@@ -286,4 +259,3 @@ main:
       some_long_local7 some_long_local8 some_long_local9 \
       some_long_local10
 ```
-</div>
