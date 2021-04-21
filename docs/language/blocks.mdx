@@ -11,10 +11,14 @@ main:
   // Print the numbers from 1 to 10, one per line.
   10.repeat:
     print it + 1
+
   // Print the elements in the list, one per line.
   ["what", "a", "list"].do:
     print it
 ```
+
+Here we used the automatic block argument, `it`, [see
+below](#block_arguments)
 
 Syntactically `repeat` and `do` look like they are built-in to the language like `for` and `if` are, but they are actually normal methods that use the block feature.
 
@@ -44,6 +48,8 @@ Just like for `if` and `for`, you can choose to put single line blocks on the sa
 main:
   4.repeat: print "again"
 ```
+
+## Block arguments
 
 Blocks often receive arguments when they are called as callbacks. For instance, `List.do` iterates over a list and calls the block with every element. When the block receives one argument you can refer to the argument with the keyword `it`. For example
 

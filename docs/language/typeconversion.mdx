@@ -140,3 +140,9 @@ main:
 To write literal strings or literal character constants with
 special characters, see also the
 [escape syntax](/language/strings/#escaped_characters).
+
+Null is [converted to boolean](/language/booleans/)
+false, but only in `if`,
+`while`, `for`, and the ternary `?:` operator.  Other
+values, including zero, the empty string, and the empty
+list, are all truthy in this context.

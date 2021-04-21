@@ -6,7 +6,8 @@ order: 0
 
 This quickstart guide is inspired by [Ruby in Twenty Minutes](https://www.ruby-lang.org/en/documentation/quickstart/). It makes the assumption that you already have [Toit installed](../installation/toitcli.md) on your machine.
 
-Toit is an object-oriented programming language for the internet of things. The Toit language has the following desirable properties:
+Toit is an [object-oriented](/language/objects-constructors-inheritance-interfaces/)
+programming language for the internet of things. The Toit language has the following desirable properties:
 
 - Modern, simple, and approachable
 - High-level and object-oriented
@@ -49,9 +50,9 @@ Hello World!
 Hello World!
 ```
 
-## Defining a method
+## Defining a function
 
-What if you want to say "Hello" a lot without getting your fingers all tired? You should define another method:
+What if you want to say "Hello" a lot without getting your fingers all tired? You should define another function:
 
 ```
 hi:
@@ -66,7 +67,7 @@ main:
   hi
 ```
 
-Calling a method in Toit is as simple as mentioning its name. If the method doesn’t take arguments that’s all you need.
+Calling a function in Toit is as simple as mentioning its name. If the function doesn’t take arguments that’s all you need.
 
 What if we want to say hello to one person, and not the whole world? Just redefine hi to take a name as an argument.
 
@@ -75,7 +76,7 @@ hi name:
   print "Hello $name!"
 ```
 
-This way, `hi` is a method that takes a single argument. We can use that from `main`:
+This way, `hi` is a function that takes a single argument. We can use that from `main`:
 
 ```
 main:
@@ -93,14 +94,19 @@ Hello Kasper!
 
 ## Inserting strings in strings
 
-What’s the `$name` bit? That’s Toit's way of inserting something into a string. It is called _string interpolation_. The bit after the `$` is turned into a string (if it isn’t one already) and then substituted into the outer string at that point. You can also use this to make sure that someone’s name is properly trimmed so leading and trailing whitespace is ignored:
+What’s the `$name` bit? That’s Toit's way of inserting something into a string.
+It is called [_string interpolation_](/language/strings/#string_interpolation).
+The bit after the `$` is turned into a string (if it isn’t one already) and
+then substituted into the outer string at that point. You can also use this to
+make sure that someone’s name is properly trimmed so leading and trailing
+whitespace is ignored:
 
 ```
 hi name = "World":
   print "Hello, $name.trim!"
 ```
 
-This way, we call the `trim` method on the `name` string before we insert it into the outer string. If we call `hi "   Lars  "` we still get the familiar greeting `Hello Lars!` and not `Hello   Lars  !`. You can add parentheses around the `name.trim` expression in the string to make it clearer which parts belong to the outer string:
+This way, we call the `trim` function on the `name` string before we insert it into the outer string. If we call `hi "   Lars  "` we still get the familiar greeting `Hello Lars!` and not `Hello   Lars  !`. You can add parentheses around the `name.trim` expression in the string to make it clearer which parts belong to the outer string:
 
 ```
   print "Hello, $(name.trim)!"
@@ -137,14 +143,24 @@ class Greeter:
   say_bye: print "Bye $name.trim, come back soon."
 ```
 
-The new keyword here is `class`. This defines a new class called `Greeter` and a bunch of methods for that class. Pay special attention to the method `constructor`. There is nothing after the `:` and the `constructor` method isn’t followed by any indented lines, so the constructor has no statements in it:
+The new keyword here is `class`. This defines a new class called `Greeter` and
+a bunch of methods for that class. Methods are just functions that are attached
+to an object.  Pay special attention to the method `constructor`. There is
+nothing after the `:` and the `constructor` method isn’t followed by any
+indented lines, so the constructor has no statements in it:
 
 <!-- SKIP CODE -->
 ```
   constructor .name = "World":
 ```
 
-This is a constructor and it defines how you can construct objects from the class. It says the class `Greeter` takes a single argument (`name`), but the `.` prefix to the `.name` parameter actually tells us that the name is immediately stored as a field on `Greeter` objects. The field is defined just above the constructor with the `:=` syntax.
+This is a
+[constructor](/language/objects-constructors-inheritance-interfaces/#constructors)
+and it defines how you can construct objects from the class. It says the class
+`Greeter` takes a single argument (`name`), but the `.` prefix to the `.name`
+parameter actually tells us that the name is immediately stored as a field on
+`Greeter` objects. The field is defined just above the constructor with the
+`:=` syntax.
 
 The field parameter `.name` still has a default value, so if we don’t pass a name, the `Greeter` will greet the world.
 
@@ -186,7 +202,7 @@ As you have just seen, a field on an object introduces a method with the same na
 <!-- RESET CODE -->
 ```
 class Greeter:
-  name_:= null
+  name_ := null
   constructor .name_ = "World":
 ```
 
@@ -233,9 +249,9 @@ main:
   print "How are you $(greeter.name)?"
 ```
 
-and you should see `How are you Erik?`. Inside `main`, we store the greeter in a local variable (`greeter`) so we can keep referring to the same object. You can think of it as a way to give a specific object a name that is only valid and useful inside the `main` method.
-
-Just like introducing a member variable, we can use the `:=` syntax in methods and functions like `main` to introduce local variables.
+and you should see `How are you Erik?`. `greeter` is a local variable, only visible in the
+`main` method.  We declared it with the `:=` syntax, just like we used `:=` to declare
+member variables in classes.
 
 ## Greetings everyone!
 
@@ -252,11 +268,9 @@ class MegaGreeter:
 So MegaGreeter objects have a list of `names`. The `names` field is initialized to the empty list (`[]`). The body of the `MegaGreeter` constructor adds the given `name` argument to the end of the list of names. Notice that this is different than using a `.name` parameter that automatically assigns to the field called `name`. Mega greeters don't have a single name and no `name` field, so here the `name` is just an ordinary parameter that we can use in the body of the constructor. All in all, this code:
 
 ```
-
 main:
   greeter := MegaGreeter
   print "The names are $greeter.names"
-
 ```
 
 will lead to this output:
@@ -295,7 +309,6 @@ main:
   greeter.say_hi
   greeter.say_bye
 ```
-
 
 If you run this, you’ll get this output:
 
@@ -385,7 +398,12 @@ Let’s return to the `MegaGreeter` example and take a look at another place whe
     names.do: print "Hello $it!"
 ```
 
-Here the statement is on a single line, so there is no need to use indentation. When using `names.do`, a method available on all lists, the special variable `it` contains the individual elements from the list in turn. If there are 5 elements in the `names` list, we will call `print` 5 times producing 5 separate lines of output.
+Here the statement is on a single line, so there is no need to use indentation.
+When using `names.do`, a method available on all
+[collections](/language/listsetmap/), the [special variable
+`it`](/language/blocks/#block_arguments) contains the individual elements from the list in
+turn. If there are 5 elements in the `names` list, we will call `print` 5 times
+producing 5 separate lines of output.
 
 You can play with the methods on list by modifying and running the sample below:
 
@@ -514,7 +532,7 @@ fib2 n:
   return s1
 ```
 
-Here we are using the `repeat` method on numbers, which runs a block a given number of times.  Like for the `do` method, there's a _magic_ variable, `it` that gives the iteration number:
+Here we are using the `repeat` method on numbers, which runs a block a given number of times.  Like for the `do` method, there's an automatic variable, `it` that gives the iteration number:
 
 ```
 // Prints the numbers from 0 to n (exclusive).
@@ -565,7 +583,7 @@ main:
   greeter.say_hi
 ```
 
-Here we use a hashmap to store the appropriate title for each name.  The empty map is given by `{:}` and we use `[]` to access the values for each key.  The empty set is `{}` and we already met the empty list, `[]`.  The lookup syntax `[]` also works on lists, so instead of the 'do' method we could have used:
+Here we use a [hash map](/language/listsetmap/) to store the appropriate title for each name.  The empty map is given by `{:}` and we use `[]` to access the values for each key.  The empty set is `{}` and we already met the empty list, `[]`.  The lookup syntax `[]` also works on lists, so instead of the 'do' method we could have used:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
@@ -607,7 +625,7 @@ class Integer:
       block.call i
 ```
 
-They are making use of a feature called blocks.  These are snippets of code that can be passed down the stack as arguments to methods and functions.  At the call site we precede the block with a colon, '`:`', and at the function definition we surround the parameter name with square brackets, '`[]`'.  Often, there is one block parameter, it is in the final position and it is called `block`.
+They are making use of a feature called [blocks](/language/blocks/).  These are snippets of code that can be passed down the stack as arguments to methods and functions.  At the call site we precede the block with a colon, '`:`', and at the function definition we surround the parameter name with square brackets, '`[]`'.  Often, there is one block parameter, it is in the final position and it is called `block`.
 
 ## Blocks that return a value
 
