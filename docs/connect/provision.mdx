@@ -19,7 +19,7 @@ Follow the steps to initially provision your device:
 
 - Connect the ESP32 with a USB cable to your computer where the Toit CLI is installed.
 
-<Note type="warning" "Drivers for macOS">
+<Note type="warning" title="Drivers for macOS">
 If you are using **macOS**, you might need to update the drivers from <a href="https://ftdichip.com/drivers/vcp-drivers/" target="_blank">here</a>
 and <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">here</a>. Install both drivers, reboot your computer and try to run the Toit CLI serial commands again.
 </Note>
@@ -34,7 +34,7 @@ and <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" t
 
 - The provision process might take up to 5 minutes. When finished the output of the `provision` command will look like this:
 
-```shell
+```txt
 looking for available hardware identities on disk
 no hardware identities found on disk, claiming new hardware identity
 Flashing device on port /dev/ttyUSB0
@@ -70,7 +70,7 @@ device was successfully flashed
 
 - The device is now provisioned and ready to be <Link to="/claim">claimed</Link> in the Toit console.
 
-<Note "Troubleshooting">
+<Note title="Troubleshooting">
 If you have trouble connecting your ESP32 via a serial port to your computer, have a look in the section about <Link to="/serialport">serial port troubleshooting</Link> for help.
 Some hardware models need physical interaction with the device during flashing (like pushing a button). If flashing doesn't work, consult the documentation for your device.
 </Note>
@@ -85,7 +85,7 @@ If you want to use another device model, you can provide it with `-m` in the pro
 
 Look for available device models for each firmware version available in the <a href="https://console.toit.io/organization/firmware" target="_blank">Toit console</a>.
 
-<Note "Problems with provision">
+<Note title="Problems with provision">
 If the initial device provision fails during the provisioning steps, the hardware ID (if any) is written to the local disk if possible and will be reused the next time the command is executed on the same computer.
 
     Also, if the provision command failed, consider trying with a lower baud rate (here half the default baud rate):
