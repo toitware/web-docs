@@ -4,15 +4,16 @@ order: 2
 
 # Add sensors
 
-We are using the [BOSCH BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/) as an example of how to add a sensor to your ESP32.
+We are using the <a href="https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/" target="_blank">BOSCH BME280</a> as an example of how to add a sensor to your ESP32.
 The BOSCH BME280 chip is an environment sensor measuring temperature, humidity and pressure.
 
 ## Setup
 
 The sensor supports both I2C and SPI connection mode. This guide will focus on the Sparkfun BME280 breakout board connected using a qwiic cable.
 
-!!! note
+<Note>
 If you connect a different BME280 sensor breakout board, you may have to place additional pull-up resistors on the I2C wires.
+</Note>
 
 Connect the qwiic cable to the BME280 breakout board and connect the `red` wire to 3.3V (`3V3`) and the `black` wire ground.
 
@@ -50,7 +51,7 @@ device := bus.device 0x77
 The device returned is of type `serial.Device`.
 
 With the device configured we can take a look at the driver.
-The driver is available at `drivers.bme280` and as all other [drivers](https://libs.toit.io/drivers), takes a `serial.Device` as argument - perfect!
+The driver is available at `drivers.bme280` and as all other <a href="https://libs.toit.io/drivers" target="_blank">drivers</a>, takes a `serial.Device` as argument - perfect!
 
 <div class="toit">
 ```
@@ -64,8 +65,9 @@ bme := drivers.Bme280 device
 ```
 </div>
 
-!!! note
-    Configuring and SPI Bus and Device will also provide a `serial.Device`. The driver thus works seamlessly between I2C and SPI setups.
+<Note>
+Configuring and SPI Bus and Device will also provide a `serial.Device`. The driver thus works seamlessly between I2C and SPI setups.
+</Note>
 
 The driver will take care of all the communication with the BME280 sensor and provides a high-level API for reading out the relevant data:
 
