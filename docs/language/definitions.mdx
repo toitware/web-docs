@@ -148,8 +148,8 @@ class Coordinate:
   // constructors.
   // By writing `:= ?` we indicate that all constructors
   // must initialize the field.
-  x/int := ?
-  y/int := ?
+  x /int := ?
+  y /int := ?
 
   // We don't need to specify the type for constructor
   // arguments that are written directly to a typed field.
@@ -172,7 +172,7 @@ it can also be null, which also happens to be the initial value:
 <!-- HIDDEN CODE class Bar: -->
 ```
 class Foo:
-  bar/Bar? := null
+  bar /Bar? := null
 ```
 
 ### Any
@@ -192,7 +192,7 @@ foo param/int:  // The parameter 'param' must be of type int.
   // The variable 'my_var' is typed as 'float'. The second
   // '/' is a division.
   my_var /float := param / 3.14
-glob / string := "the global 'glob' is typed as string"
+glob /string := "the global 'glob' is typed as string"
 ```
 
 The type of variable is enforced by the Virtual Machine.
@@ -216,7 +216,7 @@ foo -> none:
 bar x/int -> int:
   return x + 1
 
-gee with / string  -> float  // Returns a float.
+gee with/string  -> float  // Returns a float.
     arguments / int
     on / string
     different / bool

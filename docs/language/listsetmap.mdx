@@ -113,10 +113,10 @@ by default returns null for a missing key:
 class Scoring:
   // scorers is a map where the key is a team and the value
   // is a set of those that have scored goals for the team.
-  scorers / Map ::= {:}
+  scorers /Map ::= {:}
 
   register_goal team/string new_scorer/string -> none:
-    goal_scorers/Set? := scorers.get team
+    goal_scorers /Set? := scorers.get team
     if goal_scorers == null:
       // First time the team scores, there is no set of
       // goal scorers in the map.  We insert an empty set
@@ -136,7 +136,7 @@ Often there are more succinct ways to achieve the same with variations of the
   register_goal team/string new_scorer/string -> none:
     // Get the set of goal-scorers for this team,
     // initializing with the empty set if necessary.
-    goal_scorers/Set := scorers.get team --init=: {}
+    goal_scorers /Set := scorers.get team --init=: {}
     goal_scorers.add new_scorer
 ```
 
