@@ -2,6 +2,8 @@
 order: 0
 ---
 
+import LedZeroOne from "../_images/led_01.png";
+
 # Work with GPIO Pins
 
 The ESP32 has 34 General Purpose Input/Output (GPIO) pins that can be easily configured and manipulated at runtime.
@@ -12,39 +14,33 @@ In Toit, the GPIO pins are exposed in the [gpio.toit module](https://libs.toit.i
 
 In output-mode, the GPIO pin can be used to turn an LED on/off for example. The following schematic shows how a simple LED could be connected.
 
-![led](../img/schem/led_01.png){ width=40% }
+<img src={LedZeroOne} alt="Schematic" width="40%" />
 
- To create a GPIO Pin on `pin 21` in output mode, use `Pin`:
+To create a GPIO Pin on `pin 21` in output mode, use `Pin`:
 
-<div class="toit">
 ```
 import gpio
 
 main:
   pin := gpio.Pin 21
-
 ```
-</div>
 
 The pin is `low (0)` by default, so to set it `high (1)` use `Pin.set`.
 
-<div class="toit">
 ```
-
 import gpio
 
 main:
   pin := gpio.Pin 21
   pin.set 1
   sleep --ms=1000
-
 ```
-</div>
 
 This will keep the light turned on for 1000ms.
 
-!!! warning ""
-    When the program terminates, the pin will automatically be reset thus turning off the LED.
+<Note type="warning">
+When the program terminates, the pin will automatically be reset thus turning off the LED.
+</Note>
 
 ## Adding sensors
 

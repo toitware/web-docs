@@ -39,10 +39,10 @@ main:
   // Boolification only occurs in `if`, `for`, and `while`
   // conditions, and the first operand of the ternary `?:`
   // operator:
-  b1/bool := null  // Error: null is not a bool!
-  b2/bool := s     // Error: A string is not a bool!
-  b3/bool := z     // Error: A number is not a bool!
-  b4/bool := list  // Error: A list is not a bool!
+  b1 /bool := null // Error: null is not a bool!
+  b2 /bool := s    // Error: A string is not a bool!
+  b3 /bool := z    // Error: A number is not a bool!
+  b4 /bool := list // Error: A list is not a bool!
   print (list ? "foo" : "bar")  // Prints "foo", because lists are truthy.
   print (null ? "foo" : "bar")  // Prints "bar", because null is falsy.
   print (0 ? "foo" : "bar")     // Prints "foo", because zero is truthy.

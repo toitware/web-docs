@@ -162,3 +162,7 @@ you can use `order: 1.5`.
 
 If no `order` is provided, the page will always come *after* other pages that
 have the order specified.
+
+## Hiding pages from the menu
+
+Use `hide: true` in the frontmatter.

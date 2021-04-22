@@ -27,7 +27,10 @@ interface GraphType {
 export function Navigation(): JSX.Element {
   const data: GraphType = useStaticQuery(graphql`
     query MyQuery {
-      allMdx(sort: { fields: slug }, filter: { fileAbsolutePath: { regex: "//docs//" } }) {
+      allMdx(
+        sort: { fields: slug }
+        filter: { fileAbsolutePath: { regex: "//docs//" }, frontmatter: { hide: { ne: true } } }
+      ) {
         nodes {
           frontmatter {
             order

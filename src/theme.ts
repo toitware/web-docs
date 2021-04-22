@@ -145,6 +145,18 @@ export function createTheme({
           color: increaseContrast(text).string(),
         },
         h3: {
+          fontSize: 18,
+          fontFamily: titleFontFamily,
+          fontWeight: "bold",
+          color: increaseContrast(text).string(),
+        },
+        h4: {
+          fontSize: 17,
+          fontFamily: titleFontFamily,
+          fontWeight: "bold",
+          color: increaseContrast(text).string(),
+        },
+        h5: {
           fontSize: 16,
           fontFamily: titleFontFamily,
           fontWeight: "bold",

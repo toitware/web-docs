@@ -2,15 +2,22 @@
 order: 1
 ---
 
+import ConsoleDevSim from "../_images/consoledevsim.png";
+import ConsoleDevBox from "../_images/consoledevbox.png";
+import HealthDevice from "../_images/healthdevice.png";
+import BatteryFullness from "../_images/batteryfullness.png";
+import SignalStrength from "../_images/signalstrength.png";
+import DeviceJobs from "../_images/devicejobs.png";
+
 # Devices management
 
 When a particular device has been selected, the icons to the right of the device name can be used to **Rename** or **Reboot** the device. Simulators can be deleted with an additional bin icon. Close the device page to get back to the initial list of all devices belonging to your organization.
 
-![consoledevsim](../img/consoledevsim.png)
+<img src={ConsoleDevSim} alt="Toit console screenshot, for a simulated device" />
 
 Several icons and messages near the device name summarize the device's activities, past or scheduled.
 
-![consoledevbox](../img/consoledevbox.png)
+<img src={ConsoleDevBox} alt="Toit console screenshot for a real device" />
 
 * A warning sign next to the name of the device means that the firmware installed on the device is no longer available in the console and needs to be updated.
   
@@ -22,7 +29,7 @@ Several icons and messages near the device name summarize the device's activitie
 
 This tab allows you to see the device information. A device is identified by 3 different identifiers: a hardware ID created during initial provisioning of the device, a device ID assigned when the hardware is claimed by an organization, and an optional given name. This section also lists the model of the hardware, and the firmware version currently installed on the device.
 
-![healthdevice](../img/healthdevice.png)
+<img src={HealthDevice} alt="Toit console screenshot showing device health" />
 
 **Current issues** lists the unresolved issues encountered by the device, in red for issues and lime for pending events.
 
@@ -30,7 +37,7 @@ This tab allows you to see the device information. A device is identified by 3 d
 
 The two graphs below can be used to check battery and used storage levels.
 
-![batteryfullness](../img/batteryfullness.png)
+<img src={BatteryFullness} alt="Toit console screenshot showing battery fullness" />
 
 * The **Battery level graph** is built using measurements taken when the device wakes from deep sleep, or with 10 minutes intervals for long running apps.
 Battery level measurements are saved on the device until they are sent to the console when the device comes online.
@@ -44,7 +51,7 @@ If the Used storage graph shows that your device often reaches high levels of st
 
 * The **Signal strength** graph depicts WiFi (and Cellular when relevant) signal strength during the successive check-ins of the device.
 
-![signal strength](../img/signalstrength.png)
+<img src={SignalStrength} alt="Toit console screenshot showing signal strength" />
 
 ## Logs
 
@@ -76,7 +83,7 @@ Finally, visit your organization's [Humio repository](https://humio.toit.io). In
 
 This tab lists only active apps (filled icon) or all apps (clear icon).
 
-![devicejobs](../img/devicejobs.png)
+<img src={DeviceJobs} alt="Toit console screenshot showing installed jobs" />
 
 Apps installation status is color-coded to the left hand side of the table. The color is green if the app installed or uninstalled properly, amber if it is in the process of installing or uninstalling, and red if the app needs your attention. For example, when upgrading your device's firmware version, some installed apps' status may become red because of incompatibility between SDK and firmware versions. In this case, a small warning icon will be added next to the firmware version in the table. These apps must be re-deployed to fix the issue.
 
