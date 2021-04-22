@@ -4,7 +4,7 @@ order: 2
 
 # Add sensors
 
-We are using the <a href="https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/" target="_blank">BOSCH BME280</a> as an example of how to add a sensor to your ESP32.
+We are using the [BOSCH BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/) as an example of how to add a sensor to your ESP32.
 The BOSCH BME280 chip is an environment sensor measuring temperature, humidity and pressure.
 
 ## Setup
@@ -51,7 +51,7 @@ device := bus.device 0x77
 The device returned is of type `serial.Device`.
 
 With the device configured we can take a look at the driver.
-The driver is available at `drivers.bme280` and as all other <a href="https://libs.toit.io/drivers" target="_blank">drivers</a>, takes a `serial.Device` as argument - perfect!
+The driver is available at `drivers.bme280` and as all other [drivers](https://libs.toit.io/drivers), takes a `serial.Device` as argument - perfect!
 
 <div class="toit">
 ```
