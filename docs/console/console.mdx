@@ -2,6 +2,11 @@
 order: 0
 ---
 
+import SdkExAndLib from "../_images/examplelib.png";
+import ConsoleDevice from "../_images/consoledevice.png";
+import FleetHealth from "../_images/fleethealth-new.png";
+import System from "../_images/system.png";
+
 # Console
 
 The Toit console is the name of the dashboard for the Toit cloud.
@@ -14,7 +19,7 @@ In the upper banner, a three dots icon to the right leads to the documentation, 
 
 This page lists all devices claimed by your organization. Click on the upper right corner buttons to **Claim or replace device** or **Start a simulator** with the firmware version of your choice.
 
-![consoledevice](../img/consoledevice.png)
+<img src={ConsoleDevice} alt="Screenshot of the devices in your organization" />
 
 In full screen, the page lists
 
@@ -44,7 +49,7 @@ Select a device to open additional functionalities. These are described in detai
 
 The fleet health page collects devices' statuses for all devices of an organization.
 
-![fleethealth](../img/fleethealth-new.png)
+<img src={FleetHealth} alt="Screenshot the Fleet Health page in the Toit console" />
 
 At the top, devices are represented by boxes of different colors based on their current health: green for a device that behaves as expected, and red otherwise.
 A tooltip indicates the name of the device and the list of pending actions or issues for that device.
@@ -79,7 +84,7 @@ The playground is a terminal window where you can write a Toit program. Click **
 
 The System page displays various graphs showing information about metrics, data, logs and PubSub ingestion in the system.
 
-![system](../img/system.png)
+<img src={System} alt="Screenshot System page in the Toit console" />
 
 ## Data
 
@@ -95,4 +100,4 @@ Use this page to create custom subscriptions and access subscription-specific da
 
 Use this tab to download the Toit CLI, as well as SDK examples and the Toit library.
 
-![sdkexandlib](../img/examplelib.png)
+<img src={SdkExAndLib} alt="The Toit SDK Download page" />
