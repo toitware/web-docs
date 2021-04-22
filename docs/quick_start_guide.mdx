@@ -2,6 +2,8 @@
 order: 0
 ---
 
+import { Link } from "gatsby";
+
 # Quick Start Guide
 
 This quick start guide takes you from signing up for a Toit account, get an <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank">ESP32</a> microcontroller, and finally deploy a Toit app on your device.
@@ -30,7 +32,7 @@ Download the version that matches your current operating system:
     Linux
   </a>
 
-On **macOS** and **Linux**, put the [Toit CLI](installation/toitcli.md) manually to PATH. On **Windows**, this is done automatically with the installer.
+On **macOS** and **Linux**, add the <Link to="../installation/toitcli">Toit CLI</Link> manually to PATH. On **Windows**, this is done automatically with the installer.
 
 ## 3. Get an ESP32
 
@@ -50,7 +52,7 @@ Next, jump to step 5 to continue.
 
 ## 4. Provision and claim
 
-With your ESP32 ready for use, the first step is to [initially provision](getstarted/provision.md) your ESP32.
+With your ESP32 ready for use, the first step is to <Link to="../connect/provision">initially provision</Link> your ESP32.
 
 Connect the ESP32 with a USB cable to your computer where the Toit CLI is installed.
 
@@ -62,7 +64,7 @@ toit serial provision -p wifi.ssid=<SSID> -p wifi.password=<WiFi-password>
 
 Note the hardware ID printed when the command terminates.
 
-Next, [claim](getstarted/claim.md) the ESP32 into your organization in the Toit console. Replace `<hardware-ID>` with the hardware ID from the provision command above,
+Next, <Link to="../connect/claim">claim</Link> the ESP32 into your organization in the Toit console. Replace `<hardware-ID>` with the hardware ID from the provision command above,
 and run:
 
 ```

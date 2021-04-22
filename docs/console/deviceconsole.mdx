@@ -6,11 +6,7 @@ order: 1
 
 When a particular device has been selected, the icons to the right of the device name can be used to **Rename** or **Reboot** the device. Simulators can be deleted with an additional bin icon. Close the device page to get back to the initial list of all devices belonging to your organization.
 
-![consoledevsim](../img/consoledevsim.png)
-
 Several icons and messages near the device name summarize the device's activities, past or scheduled.
-
-![consoledevbox](../img/consoledevbox.png)
 
 * A warning sign next to the name of the device means that the firmware installed on the device is no longer available in the console and needs to be updated.
   
@@ -22,20 +18,11 @@ Several icons and messages near the device name summarize the device's activitie
 
 This tab allows you to see the device information. A device is identified by 3 different identifiers: a hardware ID created during initial provisioning of the device, a device ID assigned when the hardware is claimed by an organization, and an optional given name. This section also lists the model of the hardware, and the firmware version currently installed on the device.
 
-![healthdevice](../img/healthdevice.png)
-
 **Current issues** lists the unresolved issues encountered by the device, in red for issues and lime for pending events.
 
 **Most recent check-ins** visualizes as green rectangles successful recent connections of the device with the console. A missed check-in is represented by a red rectangle.
 
-The two graphs below can be used to check battery and used storage levels.
-
-![batteryfullness](../img/batteryfullness.png)
-
-* The **Battery level graph** is built using measurements taken when the device wakes from deep sleep, or with 10 minutes intervals for long running apps.
-Battery level measurements are saved on the device until they are sent to the console when the device comes online.
-If battery levels are depleting too fast, we recommend increasing the amount of time spent by the device in deep sleep.
-This can be done by increasing the Max Offline parameter, or by increasing the `interval` set for apps running on the device so that programs run less frequently.
+The graph below can be used to check used storage levels.
 
 * The **Used storage graph** shows how much data (such as logs, metrics, app data and PubSub messages) is saved on the device while in deep sleep.
 Data is flushed to the console every time the device comes online. This happens as often as it is configured by the max offline parameter, but can also happen sooner if the flash drive capacity reaches a user-defined threshold of stored events.
@@ -43,8 +30,6 @@ The latter situation is needed to prevent a loss of data due to a full flash dri
 If the Used storage graph shows that your device often reaches high levels of storage, thereby requiring the device to come online too frequently, it is recommended to reduce the amount of data stored by the apps running on the device, or to filter more restrictively the logs and metrics saved on the device (see the Configuration | Advanced section below).
 
 * The **Signal strength** graph depicts WiFi (and Cellular when relevant) signal strength during the successive check-ins of the device.
-
-![signal strength](../img/signalstrength.png)
 
 ## Logs
 
@@ -66,17 +51,16 @@ For each log, you can access the following information:
 
 Humio is a log management tool that offers cloud based storage for persistent data storage as well as streaming observability. The log data is similar to the one summarized on the Logs tab, but more extensive, and it is searchable by queries at the device level, or for the whole fleet of devices within an organization.
 
-It is possible to use the Humio tab in the console for queries related to a particular device, as the `device_id` is already present in the query field. Search for selected events on your device using the [Humio query language syntax](https://docs.humio.com/language-syntax/).
+It is possible to use the Humio tab in the console for queries related to a particular device, as the `device_id` is already present in the query field. Search for selected events on your device using the
+<a href="https://docs.humio.com/language-syntax/" target="_blank">Humio query language syntax</a>.
 
 You can then delete the `device_id` from the query field to perform organization-wide queries. For example, try `log_type ="BOOT" | groupby(device_id)` to see how many times each device of your organization rebooted in the chosen time frame.
 
-Finally, visit your organization's [Humio repository](https://humio.toit.io). Interactive tutorials help you to take full advantage of what Humio has to offer. In particular, you can learn how to build dashboards and create alerts to monitor your organization's device fleet.
+Finally, visit your organization's <a href="https://humio.toit.io" target="_blank">Humio site</a>. Interactive tutorials help you to take full advantage of what Humio has to offer. In particular, you can learn how to build dashboards and create alerts to monitor your organization's device fleet.
 
 ## Apps
 
 This tab lists only active apps (filled icon) or all apps (clear icon).
-
-![devicejobs](../img/devicejobs.png)
 
 Apps installation status is color-coded to the left hand side of the table. The color is green if the app installed or uninstalled properly, amber if it is in the process of installing or uninstalling, and red if the app needs your attention. For example, when upgrading your device's firmware version, some installed apps' status may become red because of incompatibility between SDK and firmware versions. In this case, a small warning icon will be added next to the firmware version in the table. These apps must be re-deployed to fix the issue.
 
@@ -98,7 +82,7 @@ The code tab includes a terminal window where you can write a Toit program. Clic
 
 ## Configuration
 
-This tab allows you to [edit the configuration](../getstarted/deviceconfig.md) of your device. The changes in configuration will be applied to the device the next time it comes online and starts communicating with the console.
+This tab allows you to edit the configuration of your device. The changes in configuration will be applied to the device the next time it comes online and starts communicating with the console.
 
 * **Firmware** The current version of the device firmware is shown here. To upgrade (or downgrade) the firmware on the device, click the Edit icon and choose a firmware version from the drop-down menu. Click Save.
 The list of firmware versions in the drop-down menu contains only those firmware versions available for the given device model.

@@ -2,17 +2,19 @@
 order: 1
 ---
 
+import { Link } from "gatsby";
+
 # Temperature, Humidity and Pressure
 
-In this tutorial we are using an ESP32 with the Bosh [BME280 sensor](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf); an environmental sensor measuring temperature, the relative humidity, and the atmospheric pressure.
+In this tutorial we are using an ESP32 with the Bosh <a href="https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf" target="_blank">BME280 sensor</a>; an environmental sensor measuring temperature, the relative humidity, and the atmospheric pressure.
 
 This example illustrates the difference between running a Toit program once on an ESP32 and deploying the same code as an app together with a specification file.
 
 ## Run on an ESP32
 
-To get data from the sensors, we make use of the [sensor driver](../getstarted/examples/bme280.md) by importing it in the program with `import drivers.bme280`.
+To get data from the sensors, we make use of the <Link to="../sensors/bme280">sensor driver</Link> by importing it with `import drivers.bme280`.
 
-We also need to specify the [GPIO pins](../getstarted/gpio.md) and the relevant [connection bus](../getstarted/protocols.md).
+We also need to specify the <Link to="../sensors/gpio">GPIO pins</Link> and the relevant <Link to="../sensors/protocols">connection bus</Link>.
 
 <div class="toit">
 ```
@@ -79,7 +81,7 @@ triggers:
     on_interval: 1h
 ```
 
-Save the content of the above yaml specification into a file named `thp.yaml` located in the same directory as the `thp.toit` file from the [previous step](#run-on-an-esp32).
+Save the content of the above yaml specification into a file named `thp.yaml` located in the same directory as the `thp.toit` file from the previous step.
 
 Deploy the "Hourly THP" app on your ESP32 with the CLI command
 
@@ -92,8 +94,6 @@ The device log will show the three measurements every hour after the program has
 Note that the device is not required to be online when the app is deployed. When the device comes online, the app will be installed on the device and start it's scheduled execution.
 
 View all apps installed (or waiting to be installed) on your ESP32 from the Apps tab
-
-![deployedapp](../img/apps.png)
 
 ## Uninstall an app
 

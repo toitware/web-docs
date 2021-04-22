@@ -2,19 +2,20 @@
 order: 0
 ---
 
+import { Link } from "gatsby";
+
 # Console
 
 The Toit console is the name of the dashboard for the Toit cloud.
 
 ## User menu
 
-In the upper banner, a three dots icon to the right leads to the documentation, as well as three different online platforms where it is possible to communicate with the Toit team and community: ask a question about the Toit platform or the Toit language in [Stack Overflow](https://stackoverflow.com/questions/tagged/toit), chat with us on the [Toit Slack workspace](https://chat.toit.io) and report bugs using the `toitware/public` [GitHub repository](https://github.com/toitware/public/issues).
+In the upper banner, a three dots icon to the right leads to the documentation, as well as three different online platforms where it is possible to communicate with the Toit team and community: ask a question about the Toit platform or the Toit language in 
+<a href="https://stackoverflow.com/questions/tagged/toit" target="_blank">StackOverflow</a>, chat with us on the <a href="https://chat.toit.io" target="_blank">Toit Slack workspace</a> and report bugs using the `toitware/public` <a href="https://github.com/toitware/public/issues" target="_blank">GitHub repository</a>.
 
 ## Devices
 
 This page lists all devices claimed by your organization. Click on the upper right corner buttons to **Claim or replace device** or **Start a simulator** with the firmware version of your choice.
-
-![consoledevice](../img/consoledevice.png)
 
 In full screen, the page lists
 
@@ -24,9 +25,9 @@ In full screen, the page lists
 
 * The **firmware** version currently running on the device.
   
-!!! note ""
-
-    A warning sign next to the firmware version number means that the firmware installed on the device does no longer have a corresponding version available in the console. The currently installed programs will keep on running as they were previously, but to install new apps, the device firmware needs to be updated to an available SDK version.
+<Note>
+A warning sign next to the firmware version number means that the firmware installed on the device does no longer have a corresponding version available in the console. The currently installed programs will keep on running as they were previously, but to install new apps, the device firmware needs to be updated to an available SDK version.
+</Note>
 
 * **Last seen** gives the relative time to when the device was last seen, that is the last time it was online. **Now** indicates that the device is currently online. **Unknown** describes a new device which is part of your organization but has never connected to the console yet.
 
@@ -38,13 +39,11 @@ You can sort devices according to each of these information by clicking on the c
 
 The **Search** field allows the search for devices by name, ID, or firmware versions.
 
-Select a device to open additional functionalities. These are described in detail [here](deviceconsole.md). Click on the **Devices** page to the right to return to the initial list of devices.
+Select a device to open additional functionalities. These are described in detail <Link to="/deviceconsole">here</Link>. Click on the **Devices** page to the right to return to the initial list of devices.
 
 ## Fleet health
 
 The fleet health page collects devices' statuses for all devices of an organization.
-
-![fleethealth](../img/fleethealth-new.png)
 
 At the top, devices are represented by boxes of different colors based on their current health: green for a device that behaves as expected, and red otherwise.
 A tooltip indicates the name of the device and the list of pending actions or issues for that device.
@@ -70,29 +69,25 @@ The playground is a terminal window where you can write a Toit program. Click **
 
 * **API keys** lists the keys that can be used to connect a server application to the API.
 
-!!! note "Payment"
-  
-    If your devices generate more data than the limit on 100MB of free data per month, submit your payment information <a href="https://console.toit.io/organization/details" target="_blank">here</a> to get access to the full version of the Toit platform.
-
+<Note title="Payment">
+If your devices generate more data than the limit on 100MB of free data per month, submit your payment information <a href="https://console.toit.io/organization/details" target="_blank">here</a> to get access to the full version of the Toit platform.
+</Note>
 
 ## System
 
 The System page displays various graphs showing information about metrics, data, logs and PubSub ingestion in the system.
 
-![system](../img/system.png)
-
 ## Data
 
-The Data page allows to create **metrics** and **logs** subscriptions with the **Create subscription** button. Existing subscription are listed on the page and can be deleted with the bin icon. Selected an existing subscription from the drop down menu in one of the graph to visualize Unacknowledged message count and Oldest unacknowledged message age data for the chosen time interval. Check the [API](../infrastructure/api.md) documentation to learn how to acknowledge messages using the CLI.
+The Data page allows to create **metrics** and **logs** subscriptions with the **Create subscription** button. Existing subscription are listed on the page and can be deleted with the bin icon. Selected an existing subscription from the drop down menu in one of the graph to visualize Unacknowledged message count and Oldest unacknowledged message age data for the chosen time interval. 
+Check the <Link to="/api">API</Link> documentation to learn how to acknowledge messages using the CLI.
 
 Note that while it is also possible to create **app data** subscriptions on the Data page, it is recommended to use the PubSub page for these instead. Subscriptions allow for bi-directional support, as opposed to app data subscriptions on the Data page that only compile messages coming from the device.
 
 ## PubSub
 
-Use this page to create custom subscriptions and access subscription-specific data on Unacknowledged message count and Oldest unacknowledged message age. See the [PubSub](../infrastructure/pubsub.md) section for more information.
+Use this page to create custom subscriptions and access subscription-specific data on Unacknowledged message count and Oldest unacknowledged message age. See the <Link to="../apis/pubsub">PubSub</Link> section for more information.
 
 ## Download
 
-Use this tab to download the Toit CLI, as well as SDK examples and the Toit library.
-
-![sdkexandlib](../img/examplelib.png)
+Use this tab to download the Toit CLI, as well as SDK examples and the SDK library.
