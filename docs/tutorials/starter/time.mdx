@@ -22,7 +22,9 @@ main:
   print "Date: $(%04d time.year)-$(%02d time.month)-$(%02d time.day)"
 ```
 
-### Console
+<Tabs>
+<Tab label="Console">
+
 Copy and paste the Toit program above into the Code tab of an online device,
 press the **Run on device** button and go to the Logs tab (or the Humio tab) of
 the device to see the logged date and time that is sent from the device to the
@@ -39,8 +41,8 @@ href="https://www.humio.com/" target="_blank">Humio's</a> log management
 framework. Get familiar with Humio search queries
 [here](https://docs.humio.com/reference/language-syntax/).
 
-
-### CLI
+</Tab>
+<Tab label="CLI">
 
 Save the above Toit program in a file named `time.toit`, and run the command
 
@@ -85,3 +87,6 @@ Waiting to receive device logs...
 2021-04-15T08:48:41.305468Z: Date: 2021-04-15
 2021-04-15T08:48:41.316585Z: <process terminated - exit code: 0>
 ```
+
+</Tab>
+</Tabs>
