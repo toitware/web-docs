@@ -34,7 +34,7 @@ On **macOS** and **Linux**, put the [Toit CLI](installation/toitcli.md) manually
 
 ## 3. Get an ESP32
 
-You can buy an ESP32 <a href="https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990" target="_blank">here</a>. If you already have one available, jump to [step 4](#4_provision_and_claim) to continue.
+You can buy an ESP32 <a href="https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990" target="_blank">here</a>. If you already have one available, jump to step 4 to continue.
 
 <Note title="Don't have an ESP32 yet?">
 
@@ -44,7 +44,7 @@ In the meantime, use the <a href="https://console.toit.io/playground" target="_b
 toit simulator start --alias MyToitDevice
 ```
 
-Next, jump to [step 5](#5-get-examples) to continue.
+Next, jump to step 5 to continue.
 
 </Note>
 
@@ -102,3 +102,11 @@ toit device -d MyToitDevice ps
 ```
 
 or go to the <a href="https://console.toit.io/" target="_blank">Apps tab</a> of your device to view the list of apps deployed.
+
+See the logs from the device with 
+
+```
+toit device -d MyToitDevice logs -f 10m
+```
+
+or go to the <a href="https://console.toit.io/" target="_blank">Logs tab</a> of your device to view the logs from the application deployed or the device itself.
