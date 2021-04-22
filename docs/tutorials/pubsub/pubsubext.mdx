@@ -8,43 +8,67 @@ PubSub is a service for bi-directional communication. In this tutorial, we show 
 
 ## The subscriber
 
-This time, we build the subscriber as an app. The specification file subscribes to the cloud topic. A new message in this topic is used as trigger for starting the Toit program that then consumes the message, meaning that the message has been acknowledged and removed from the topic. This process ensures that a message cannot trigger the app more than once.
+This time, we build the subscriber as an app. The specification file subscribes
+to the cloud topic. A new message in this topic is used as trigger for starting
+the Toit program that then consumes the message, meaning that the message has
+been acknowledged and removed from the topic. This process ensures that a
+message cannot trigger the app more than once.
 
-<div class="toit">
 ```
-// filename: pubsub/subscribe_cloud.toit
-{include-file 3- third_party/toit/examples/PubSub/subscribe_cloud.toit}
+/// Subscribes to a cloud topic.
+
+import pubsub
+topic ::= "cloud:hello-world"
+
+main:
+  print "wakeup - checking messages"
+  pubsub.subscribe topic --blocking=false: | msg/pubsub.Message |
+    sender := msg.sender.is_device ? "Device($msg.sender.hardware_id)" : "ExternalSystem($msg.sender.external_name)"
+    print "Received message '$msg.payload.to_string' from $sender"
+  print "done processing all messages"
 ```
-</div>
 
 ```yaml
-# filename: pubsub/subscribe_cloud.yaml
-{include-file 3- third_party/toit/examples/PubSub/subscribe_cloud.yaml}
+# Runs the subscribe_cloud program every time a message is received in the
+# relevant cloud topic.
+
+name: Subscribe
+entrypoint: subscribe_cloud.toit
+
+triggers:
+  on_pubsub_topic:
+   - "cloud:hello-world"
 ```
 
 Deploy the subscriber app using the CLI with
 
-```bash
+```shell
 toit deploy subscribe_cloud.yaml
 ```
 
 ## The publisher
 
-Then run the publisher program - either from the same device, or from another device/simulator - by pasting the following program in the Code tab of the chosen device:
+Then run the publisher program - either from the same device, or from another
+device/simulator - by pasting the following program in the Code tab of the
+chosen device:
 
-<div class="toit">
 ```
-// filename: pubsub/publish_cloud.toit
-{include-file 3- third_party/toit/examples/PubSub/publish_cloud.toit}
+/// Publishes a message in the appropriate cloud topic.
+
+import pubsub
+topic ::= "cloud:hello-world"
+
+main:
+  pubsub.publish topic "Hello from another device"
 ```
-</div>
 
 You can also send a message directly from the CLI with
 
-```bash
+```shell
 toit pubsub write cloud:hello-world "Mr. CLI" -- Hello from the CLI
 ```
 
-You can now go the Toit console, and choose the device on which the subscriber app was installed to check on the LOGS tab that the message has been received.
+You can now go the Toit console, and choose the device on which the subscriber
+app was installed to check on the LOGS tab that the message has been received.
 
 ![hellofromcli](../img/hellofromcli.png)

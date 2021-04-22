@@ -10,41 +10,53 @@ PubSub is a service for bi-directional communication. In this tutorial, we show 
 
 The subscriber sets up a subscription on a topic.
 
-<div class="toit">
 ```
-// filename: pubsub/subscribe_device.toit
-{include-file 3- third_party/toit/examples/PubSub/subscribe_device.toit}
+/// Subscribes to a device topic.
+
+import pubsub
+topic ::= "device:hello-world"
+
+main:
+  pubsub.subscribe topic: | msg/pubsub.Message |
+    sender := msg.sender.is_device ? "Device($msg.sender.hardware_id)" : "ExternalSystem($msg.sender.external_name)"
+
+    print "Received message '$msg.payload.to_string' from $sender"
+    return
 ```
-</div>
 
 ## The publisher
 
 The publisher publishes the message `"Hello, World!"` on the topic and then terminates.
 
-<div class="toit">
 ```
-// filename: pubsub/publish_device.toit
-{include-file 3- third_party/toit/examples/PubSub/publish_device.toit}
+/// Publishes a message in the appropriate device topic.
+
+import pubsub
+topic ::= "device:hello-world"
+
+main:
+  pubsub.publish topic "Hello, World!"
 ```
-</div>
 
 ## Running the example
 
-To run the example, run `subscribe.toit` on your default device in a terminal window. Once the program is started, open a second terminal window and run `publish.toit`.
+To run the example, run `subscribe.toit` on your default device in a terminal
+window. Once the program is started, open a second terminal window and run
+`publish.toit`.
 
 Both windows are depicted here:
 
- <div class="termynal" data-termynal>
-    <span data-ty="input"  data-ty-prompt="(MyToitBox@local) $">toit run subscribe.toit</span>
-    <span data-ty>2020-06-12T09:11:49.689210Z: &lt;process initiated&gt;</span>
-    <span data-ty>Received message 'Hello, World!' from Device(82df15db-4c03-4516-b846-df714577960c)</span>
-    <span data-ty>2020-08-04T10:45:46.397975Z: &lt;process terminated - exit code: 0&gt;</span>
-</div>
+```txt
+$ toit run subscribe.toit
+2020-06-12T09:11:49.689210Z: <process initiated>
+Received message 'Hello, World!' from Device(82df15db-4c03-4516-b846-df714577960c)
+2020-08-04T10:45:46.397975Z: <process terminated - exit code: 0>
+```
 
- <div class="termynal" data-termynal>
-    <span data-ty="input"  data-ty-prompt="(MyToitBox@local) $">toit run publish.toit</span>
-    <span data-ty>2020-08-04T10:45:46.120857Z: &lt;process initiated&gt;</span>
-    <span data-ty>Hello, World!</span>
-    <span data-ty>2020-08-04T10:45:46.267676Z: &lt;process terminated - exit code: 0&gt;</span>
-    <span data-ty>[1]+  Done                    toit run subscribe.toit</span>
-</div>
+```txt
+$ toit run publish.toit
+2020-08-04T10:45:46.120857Z: <process initiated>
+Hello, World!
+2020-08-04T10:45:46.267676Z: <process terminated - exit code: 0>
+[1]+  Done                    toit run subscribe.toit
+```
