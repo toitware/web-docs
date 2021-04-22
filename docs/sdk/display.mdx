@@ -11,7 +11,6 @@ We highlight in this section the basic functions of display use. You can also le
 
 <!-- RESET CODE -->
 <!-- ANALYZE CODE -->
-
 ```
 import font show *
 import texture show *
@@ -22,12 +21,12 @@ sans ::= font_get "sans10"
 display ::= TwoColorPixelDisplay "eink"
 
 main:
-context := display.context --landscape --color=BLACK --font=sans
-display.text context 60 50 "Hello from Toitbox!"
-// While display.draw is enough to render on the E-ink display,
-// we recommend repeating at least twice to increase contrast and remove
-// shadows from previous content on the display.
-2.repeat: display.draw --speed=10
+  context := display.context --landscape --color=BLACK --font=sans
+  display.text context 60 50 "Hello from Toitbox!"
+  // While display.draw is enough to render on the E-ink display,
+  // we recommend repeating at least twice to increase contrast and remove
+  // shadows from previous content on the display.
+  2.repeat: display.draw --speed=10
 ```
 
 ## Import additional font
@@ -36,7 +35,6 @@ Import specific fonts from `font.x11_100dpi` with:
 
 <!-- RESET CODE -->
 <!-- ANALYZE CODE -->
-
 ```
 import font show *
 import font.x11_100dpi.sans.sans_10_bold as sans_10_bold
@@ -46,26 +44,26 @@ import two_color show WHITE BLACK
 import pixel_display show TwoColorPixelDisplay
 
 main:
-sans_10_bold ::= Font [sans_10_bold.ASCII, sans_10_bold.LATIN_1_SUPPLEMENT]
-sans_24_font ::= Font.from_pages [sans_24_bold.ASCII, sans_24_bold.LATIN_1_SUPPLEMENT]
-display ::= TwoColorPixelDisplay "eink"
+  sans_10_bold ::= Font [sans_10_bold.ASCII, sans_10_bold.LATIN_1_SUPPLEMENT]
+  sans_24_font ::= Font.from_pages [sans_24_bold.ASCII, sans_24_bold.LATIN_1_SUPPLEMENT]
+  display ::= TwoColorPixelDisplay "eink"
 
-sans_10 := display.context
---landscape
---font = sans_10_bold
---color = BLACK
---alignment = TEXT_TEXTURE_ALIGN_RIGHT
+  sans_10 := display.context
+    --landscape
+    --font = sans_10_bold
+    --color = BLACK
+    --alignment = TEXT_TEXTURE_ALIGN_RIGHT
 
-sans_24 := display.context
---landscape
---font = sans_24_font
---color = BLACK
---alignment = TEXT_TEXTURE_ALIGN_CENTER
+  sans_24 := display.context
+    --landscape
+    --font = sans_24_font
+    --color = BLACK
+    --alignment = TEXT_TEXTURE_ALIGN_CENTER
 
-context := display.context --landscape --color=BLACK
-display.text sans_10 140 40 "Hello from"
-display.text sans_24 118 85 "TOITWARE"
-2.repeat: display.draw --speed=10
+  context := display.context --landscape --color=BLACK
+  display.text sans_10 140 40 "Hello from"
+  display.text sans_24 118 85 "TOITWARE"
+  2.repeat: display.draw --speed=10
 ```
 
 Learn more about all available fonts [here](fonts.md).
@@ -76,17 +74,16 @@ All [Material Design](https://materialdesignicons.com/) icons are available for 
 
 <!-- RESET CODE -->
 <!-- ANALYZE CODE -->
-
 ```
 import device
 import pixel_display show TwoColorPixelDisplay
 import font.templarian.material_design_icons.icons_96 as icons
 
 main:
-display := TwoColorPixelDisplay "eink"
-context := display.context --landscape
-icon := display.icon context 63 85 icons.HUMAN_SCOOTER
-2.repeat: display.draw --speed=10
+  display := TwoColorPixelDisplay "eink"
+  context := display.context --landscape
+  icon := display.icon context 63 85 icons.HUMAN_SCOOTER
+  2.repeat: display.draw --speed=10
 ```
 
 ## Clear the display
@@ -96,12 +93,11 @@ shadow from previous content, repeat 3 times as in:
 
 <!-- RESET CODE -->
 <!-- ANALYZE CODE -->
-
 ```
 import pixel_display show *
 
 display := TwoColorPixelDisplay "eink"
 
 main:
-3.repeat: display.draw --speed=10
+  3.repeat: display.draw --speed=10
 ```
