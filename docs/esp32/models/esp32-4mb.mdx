@@ -26,12 +26,12 @@ Cellular can be enabled using the follow model parameters. When enabled, the Cel
 
 Name | Description | Notes
 --- | --- | ---
-model.cellular.enabled | If set to `1`, it will load the Cellular subsystem. | **Required**
-model.cellular.sara_r4 | If set to `1`, the Cellular system will activate a driver for the UBlox Sara R4 chip.
-model.cellular.sara_r5 | If set to `1`, the Cellular system will activate a driver for the UBlox Sara R5 chip.
-model.cellular.pwr | Pin number for the power-on line. It will periodically be driven active to request the Cellular module to turn on. | **Required**
+model.cellular.enabled | If set to `1`, loads the Cellular subsystem. | **Required**
+model.cellular.sara_r4 | If set to `1`, activates the UBlox Sara R4 chip in the Cellular system.
+model.cellular.sara_r5 | If set to `1`, activates the UBlox Sara R5 chip in the Cellular system.
+model.cellular.pwr | Pin number for the power-on line. This pin is periodically driven active to request the Cellular module to turn on. | **Required**
 model.cellular.pwr.mode | The mode of the `pwr` pin.
-model.cellular.reset | Pin number for the power-on line. It will occasionally be driven active if the Cellular module fails to turn on.
+model.cellular.reset | Pin number for the power-on line. This pin is occasionally driven active if the Cellular module fails to turn on.
 model.cellular.reset.mode | The mode of the `reset` pin.
 model.cellular.tx | Pin number for the UART TX line. | **Required**
 model.cellular.rx | Pin number for the UART RX line. | **Required**
