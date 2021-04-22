@@ -3,3 +3,102 @@ order: 1
 ---
 
 # GPIO
+
+General Purpose Input/Output (GPIO) pins are the fonudation of working with any peripherals.
+
+In Toit, the GPIO Pin class is exposed by the [`gpio` module](https://libs.toit.io/gpio/library-summary).
+
+GPIO pins are managed across the device. That means that only one instantiation of a given GPIO pin can
+exist at any given point in time. This ensure that two applications are not trying to configure or use across
+single GPIO pin at the same time. That also means that a GPIO pin should be `close`d after usage:
+
+```
+import gpio
+
+main:
+  pin := gpio.Pin 21  // Acquired system-wide.
+  // ...
+  pin.close           // Released, can be used by other applications now.
+```
+
+<Note type="info">
+
+When the application terminates, the pin will automatically be closed and released.
+
+</Note>
+
+## Output mode
+
+If a GPIO pin is configured for `output` mode, `Pin.set` can be used to either drive the pin voltage high or low as describe below.
+
+
+
+  *Set value* | *Effect*
+  --- | ---
+  `0` | Low voltage
+  `1` | High voltage
+
+To configure a GPIO pin in output mode, either do it initially:
+```
+  pin := gpio.Pin 21 --output // Initialized into output mode.
+```
+or later (independent of previous mode):
+```
+  pin.config --output         // Reconfigure into output mode.
+```
+
+### Open-drain
+
+GPIO pins has an additional output mode, called open-drain. To configure the GPIO Pin in open-drain do the following:
+
+```
+  pin.config --output --open_drain
+```
+
+When configured as such, when pulling the pin high the pin will go into open-drain, resulting in the pin not being pulled in any direction.
+
+
+  *Set value* | *Effect*
+  --- | ---
+  `0` | Low voltage
+  `1` | Open drain
+
+This can be useful when an external pull-up connected to the pin.
+
+## Input mode
+
+The GPIO input mode can be used to read the state of a pin. This can be done by calling `Pin.get`, retuning either 0 or 1 depending on the voltage measured at the pin.
+
+To configure a GPIO pin in input mode, either do it initially:
+```
+  pin := gpio.Pin 21 --input // Initialized into input mode.
+```
+or later (independent of previous mode):
+```
+  pin.config --input         // Reconfigure into input mode.
+```
+
+### Waiting for state change
+
+While `Pin.get` can be used to get the current Pin state, sometimes it's useful to block and wait until the pin changes state.
+That can be done using the `Pin.wait_for` method.
+
+```
+  pin := gpio.Pin --input
+  pin.wait_for 1  // Wait for pin to be high.
+```
+
+### Pull-up and pull-down resistors
+
+Some chips supports internal pull-up and/or pull-down resistors. While the size of the resister depends on the chip
+used, it can be enabled like so:
+
+```
+  pin := gpio.Pin --input --pull_up
+```
+
+<Note type="info">
+
+If a Pin with pull-up/pull-down configured, it will automatically be disabled if it is reconfigured to output mode - and enabled again if reconfigured back to input.
+
+</Note>
