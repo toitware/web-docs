@@ -3,6 +3,11 @@ order: 1
 ---
 
 import ToitCli from "../_images/toitcli.png";
+import ZshrcBashProfile from "../_images/zshrcbashprofile.png";
+import MacWarning from "../_images/macwarning1.png";
+import DownloadsFolder from "../_images/downloadsfolder.png";
+import Extract from "../_images/extract.png";
+
 
 # Install Toit
 
@@ -44,7 +49,7 @@ export PATH=/Applications/toit:$PATH
 
 where `Applications/toit` is an example of where the `toit` executable is located. Save the file before closing it.
 
-![zshrcbashprofile](../img/zshrcbashprofile.png)
+<img src={ZshrcBashProfile} alt="Toit screenshot" />
 
 ## Configure VSCODE
 
@@ -57,7 +62,8 @@ To verify that you successfully configured the PATH with the toit executable, ty
 <Note>
 
 Note that Mac users may get the following warning when starting Toit for the first time. Click on the **?** and follow the instructions to **Allow anyway** the toit executable
-![macwarning1](../img/macwarning1.png)
+
+<img src={MacWarning} alt="MacOS screenshot" />
 
 </Note>
 
@@ -70,7 +76,7 @@ Download the <a href="https://archive.toit.io/cli/latest/linux" target="_blank">
 
 When the download of the Toit CLI has completed, open the _Downloads_ folder on your computer and copy the downloaded file to your preferred installation directory.
 
-![Downloadsfolder](../img/downloadsfolder.png)
+<img src={DownloadsFolder} alt="Linux screenshot" />
 
 Next, uncompress the downloaded Toit CLI, which is packed as a `tgz` file.
 
@@ -84,7 +90,7 @@ tar x -vzf toit_linux.tgz
 
 The result of unpacking the Toit CLI is an executable file, named `toit`, and the result should look like this:
 
-![Extract](../img/extract.png)
+<img src={Extract} alt="Linux screenshot" />
 
 ## Add Toit to your PATH
 

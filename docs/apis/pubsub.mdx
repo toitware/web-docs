@@ -2,6 +2,8 @@
 order: 1
 ---
 
+import PubSubSub from "../_images/pubsubsub.png";
+
 # PubSub
 
 Applications communicate with each other through pub/sub (publish/subscribe), an asynchronous messaging service that decouples services that produces messages from the services processing them.
@@ -26,53 +28,14 @@ See some examples of PubSub communication between apps in [Tutorials](../tutoria
 
 ## Cloud based PubSub subscriptions
 
-=== "Console"
+### Console
 
-    Go to the **PubSub** page and click on **Create Subscription**. The topic is the one defined in the Publisher program **cloud:topic-name**. You can chose the name of the subscription.
+Go to the **PubSub** page and click on **Create Subscription**. The topic is the one defined in the Publisher program **cloud:topic-name**. You can chose the name of the subscription.
 
-    ![pubsubsub](../img/pubsubsub.png)
+<img src={PubSubSub} alt="Screenshot of PubSub page on the Toit console" />
 
-    Once you created a subscription, two graphs visualize the number of unacknowledged messages for that subscription, as well as the age of the oldest unacknowledged message for a specific time interval.
-    
-    Delete a subscription with a bin icon.
-    Use the CLI commands to acknowledge messages for a subscription.
+Once you created a subscription, two graphs visualize the number of unacknowledged messages for that subscription, as well as the age of the oldest unacknowledged message for a specific time interval.
 
-=== "CLI"
+Delete a subscription with a bin icon.
+Use the CLI commands to acknowledge messages for a subscription.
 
-    Create a subscription with 
-    ```
-    toit pubsub subscription create <cloud:topic-name> <subscription-name> 
-    ```
-    
-    To list existing subscriptions, 
-    ```
-    toit pubsub subscription list cloud:
-    ```
-
-    To read a subscription and acknowledge messages as they are read, use 
-    ```
-    toit data read <cloud:topic-name> <subscription-name> 
-    ```
-
-    To automatically acknowledge messages, add the `--auto-ack` flag.
-
-## Additional PubSub features
-
-PubSub messages can be sent from the cloud to one specific device only with
-
-```
-toit pubsub write cloud:<topic-name>?device-id=<id> <choose a name for the sender> -- <write a message>
-```
-
-For example, it can be
-
-```
-toit pubsub write cloud:<topic-name>?device-id=<id> <From my home computer> -- <Sending a message to the cloud!>
-```
-
-It is also possible to create server-side pubsub subscriptions across multiple topics as long as they share a common prefix.
-For example, create a subscription for the topics `cloud:foo/bar` and `cloud:foo/baz` with
-
-```
-toit pubsub subscription create "cloud:foo/*" <subscription-name>
-```

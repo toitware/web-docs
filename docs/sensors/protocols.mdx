@@ -12,7 +12,6 @@ The ESP32 supports a wide range of protocols, many of them supported directly by
 
 Toit exposes the peripheral through the `serial.protocols.i2c` library.
 
-<div class="toit">
 ```
 import gpio
 import serial.protocols.i2c as i2c
@@ -23,15 +22,12 @@ bus := i2c.Bus
 --scl=gpio.Pin 22
 
 ```
-</div>
 
 Each device must have a unique address. The address can be found in the datasheet for the selected peripheral - it's an 7-bit integer.
 
-In case of the Bosh [BME280 sensor](https://cdn.sparkfun.com/assets/e/7/3/b/1/BME280_Datasheet.pdf), the address is `0x76`:
+In case of the Bosch [BME280 sensor](https://cdn.sparkfun.com/assets/e/7/3/b/1/BME280_Datasheet.pdf), the address is `0x76`:
 
-<div class="toit">
 ```
-
 import gpio
 import serial.protocols.i2c as i2c
 
@@ -41,17 +37,14 @@ bus := i2c.Bus
 --scl=gpio.Pin 22
 
 device := bus.device 0x76
-
 ```
-</div>
 
 ### Frequency
 
 The default frequency of the I2C bus is 400kHz in Toit. This can be changed as an argument to the `i2c.Bus` at construction time with
+
 ```
-
 i2c.Bus --frequency=100000
-
 ```
 
 Remember that when changing the frequency, the associated pull-up resistors may have to be changed as well.
@@ -62,9 +55,7 @@ Remember that when changing the frequency, the associated pull-up resistors may 
 
 Toit exposes the peripheral through the `serial.protocols.spi` library.
 
-<div class="toit">
 ```
-
 import gpio
 import serial.protocols.spi as spi
 
@@ -73,17 +64,13 @@ bus := spi.Bus
 --miso=gpio.Pin 12
 --mosi=gpio.Pin 13
 --clock=gpio.Pin 14
-
 ```
-</div>
 
 When communicating with a device, a unique chip-select Pin is used to signal when the chip in question is addressed. In addition, it's important to not select a device frequency that exceeds the capabilities of device. The maximum frequency can be found in the datasheet for the selected peripheral.
 
-In case of the Bosh BME280 sensor, the maximum frequency is 10Mhz:
+In case of the Bosch BME280 sensor, the maximum frequency is 10Mhz:
 
-<div class="toit">
 ```
-
 import gpio
 import serial.protocols.spi as spi
 
@@ -96,9 +83,7 @@ bus := spi.Bus
 device := bus.device
 --cs=gpio.Pin 15
 --frequency=10_000_000
-
 ```
-</div>
 
 ## Selecting the right protocol
 
@@ -106,11 +91,10 @@ Many chips support both SPI and I2C. While Toit makes it easy to develop drivers
 
 **I2C**
 
- * Supports longer distances
- * Only requires two wires
+- Supports longer distances
+- Only requires two wires
 
 **SPI**
 
- * Is significantly faster
- * Frequency configurable per device, not the bus
-```
+- Is significantly faster
+- Frequency configurable per device, not the bus

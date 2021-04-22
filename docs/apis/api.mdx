@@ -2,6 +2,8 @@
 order: 0
 ---
 
+import DataSub from "../_images/datasub.png";
+
 # APIs
 
 ## GRPC API
@@ -47,7 +49,7 @@ When doing so, the concurrent reads will receive different batches of the same d
 
 Go to the **Data** page and click on **Create Subscription**. Select **Logs**, **Metrics** or **App data** and type in the name of the subscription.
 
-![datasub](../img/datasub.png)
+<img src={DataSub} alt="Screenshot of Data page on the Toit console" />
 
 Once you created a subscription, you can choose to visualize in two graphs at the top of the page the number of unacknowledged messages for that subscription, as well as the age of the oldest unacknowledged message for the selected time interval.
 
