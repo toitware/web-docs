@@ -40,7 +40,7 @@ You can buy an ESP32 <a href="https://www.digikey.com/en/products/detail/espress
 
 In the meantime, use the <a href="https://console.toit.io/playground" target="_blank">playground</a> or a simulated device to continue learning about the Toit platform. Start a new Toit simulator from the <a href="https://console.toit.io/" target="_blank">Toit console</a> by clicking the "Start simulator" button, or run the following command in the Toit CLI:
 
-```
+```shell
 toit simulator start --alias MyToitDevice
 ```
 
@@ -56,7 +56,7 @@ Connect the ESP32 with a USB cable to your computer where the Toit CLI is instal
 
 Replace `SSID` and `WiFi-password` with your own WiFi credentials, and run the Toit CLI command:
 
-```
+```shell
 toit serial provision -p wifi.ssid=<SSID> -p wifi.password=<WiFi-password>
 ```
 
@@ -65,19 +65,19 @@ Note the hardware ID printed when the command terminates.
 Next, [claim](getstarted/claim.md) the ESP32 into your organization in the Toit console. Replace `<hardware-ID>` with the hardware ID from the provision command above,
 and run:
 
-```
+```shell
 toit device claim <hardware-ID> --name MyToitDevice
 ```
 
 The claimed ESP32 can be seen in the list of devices with the CLI command:
 
-```
+```shell
 toit devices
 ```
 
 ## 5. Deploy Toit app
 
-You can either run a Toit program once on your device or deploy the program as a long-lived app.
+You can either run a Toit program once on your device or 
 
 First, save the following Toit code in a file named `hello.toit`
 
@@ -90,13 +90,13 @@ main:
 <Note title="Run program on a device">
   Run the Toit program once on your device with the CLI command
 
-  ```
+  ```shell
   toit run -d MyToitDevice hello.toit
   ```
 
 </Note>
 
-Next, save the following yaml content in a file named `hello.yaml` and place it next to the `hello.toit` from the previous step
+To deploy the program as a long-lived app, save the following yaml content in a file named `hello.yaml` and place it next to the `hello.toit` from the previous step
 
 ```yaml
 # Save as hello.yaml
@@ -112,7 +112,7 @@ In this case, when the app is installed on the device and if the device reboots.
 
 Deploy the Toit app named `HelloApp` on your device with the command:
 
-```
+```shell
 toit deploy -d MyToitDevice hello.yaml
 ```
 
@@ -120,7 +120,7 @@ When deploying an app, the device is not required to be online. The app will be 
 
 Verify that the app has been deployed with the command:
 
-```
+```shell
 toit device -d MyToitDevice ps
 ```
 
@@ -128,7 +128,7 @@ or go to the <a href="https://console.toit.io/" target="_blank">Apps tab</a> of 
 
 See the logs from the device with
 
-```
+```shell
 toit device -d MyToitDevice logs -f 10m
 ```
 
@@ -138,7 +138,7 @@ or go to the <a href="https://console.toit.io/" target="_blank">Logs tab</a> of 
 
 As the last step, uninstall the Toit app from the device with the command
 
-```
+```shell
 toit device -d MyToitDevice uninstall HelloApp
 ```
 
