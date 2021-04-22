@@ -2,6 +2,10 @@
 order: 3
 ---
 
+import ConfigSdkDevice from "../_images/configsdkdevice.png";
+import MaxOfflineConfig from "../_images/maxofflineconfig.png";
+import WifiNbiotConnections from "../_images/wifinbiotconnections.png";
+
 # Configure a device
 
 When you have installed the Toit firmware on your device, the following two default configurations are present:
@@ -12,61 +16,62 @@ When you have installed the Toit firmware on your device, the following two defa
 
 How to change each device configuration available is explained below. Changes are applied once the device comes online.
 
-=== "Console"
+### Console
 To change the device configurations, navigate to the **Configuration** tab for a given device and edit the sections as described below.
 
-=== "CLI"
+### CLI
 To change the device configurations, use the Toit CLI:
 
-    ```shell
-    toit device config <command>
-    ```
+```shell
+toit device config <command>
+```
 
-    You can set your current device as the default device in all `toit device` commands with
+You can set your current device as the default device in all `toit device` commands with
 
-    ```shell
-    toit device use <name>
-    ```
+```shell
+toit device use <name>
+```
 
 ## Device firmware configuration
 
-=== "Console"
+### Console
+
 The current firmware version installed on the device is displayed in the **Firmware** section. Click on the **Edit** icon to change it to another version from the drop down menu, then click **Save**. The proposed change is displayed both in the **Firmware** section and with an icon near the name of the device until it is actually installed the next time the device comes online.
 
-    ![configsdkdevice](../img/configsdkdevice.png)
+<img src={ConfigSdkDevice} alt="Screenshot of device configuration in the Toit console" />
 
-=== "CLI"
+### CLI
 To show the firmware version of your device, run
 
-     ```
-     toit device info
-     ```
+```shell
+toit device info
+```
 
-    Update the firmware on your device to the latest version with
+Update the firmware on your device to the latest version with
 
-    ```
-    toit device update
-    ```
+```shell
+toit device update
+```
 
-    You can also downgrade the device with another firmware version with `toit device update [<older-firmware-version>]`, with the firmware version being formatted as `vx.x.x`.
+You can also downgrade the device with another firmware version with `toit device update [<older-firmware-version>]`, with the firmware version being formatted as `vx.x.x`.
 
 ## Device activation schedule
 
 By default, the device is configured to be continuously online (Max offline = 0s). If your device operates on battery, it is recommended to change this configuration so that the device is online only when necessary to extend battery life.
 
-=== "Console"
+### Console
 
-    In the **Configuration** tab for a given device, go to the section **Max offline** and edit the parameter with the new value (using hours, minutes and seconds) before clicking **Save**. The parameter will be changed next time the device comes online.
+In the **Configuration** tab for a given device, go to the section **Max offline** and edit the parameter with the new value (using hours, minutes and seconds) before clicking **Save**. The parameter will be changed next time the device comes online.
 
-    ![maxofflineconfig](../img/maxofflineconfig.png)
+<img src={MaxOfflineConfig} alt="Screenshot of changing the Max offline time in the Toit console" />
 
-=== "CLI"
+### CLI
 
-    Set the duration of how often you want your device to come online (once a day in this example) with
+Set the duration of how often you want your device to come online (once a day in this example) with
 
-    ```
-    toit device config max-offline 24h
-    ```
+```shell
+toit device config max-offline 24h
+```
 
 This means that if you install an application measuring the temperature every hour while the `max-offline` is set to 24 hours, the application will run the program every hour, even as the device is offline. Only once a day the device will connect and offload all the data to the Toit console.
 
@@ -76,41 +81,43 @@ Note that a device can come online outside of the Max offline schedule when its 
 
 You can change or add new connections on the device.
 
-!!! Warning ""
+<Note type="warning">
 
-    The ESP32 cannot connect to 5GHz WiFi network.
+The ESP32 cannot connect to 5GHz WiFi network.
 
-=== "Console"
+</Note>
+
+### Console
 Navigate to the **Configuration** tab, **Connections** section for a given device. Click on the **Edit** button to open the pop-up window in which you can add or delete a connection.
 
-    ![wifinbiotconnections](../img/wifinbiotconnections.png)
+<img src={WifiNbiotConnections} alt="Screenshot of changing the Wifi connection in the Toit console" />
 
-    When two or more connections are present, choose the order in which they should be used by moving the connections to use in priority above the others.
+When two or more connections are present, choose the order in which they should be used by moving the connections to use in priority above the others.
 
-=== "CLI"
+### CLI
 Beware that when using the CLI to configure the connection settings, you **need to type in all connections you want to use, in the order you want them to be used**.
 
-    ```
-    toit device config connection -c wifi:<SSID>:<MyWiFiPassword> -c cellular:<apn>
-    ```
+```shell
+toit device config connection -c wifi:<SSID>:<MyWiFiPassword> -c cellular:<apn>
+```
 
-    Use
+Use
 
-     `-c wifi:<SSID>:<MyWiFiPassword>`
+`-c wifi:<SSID>:<MyWiFiPassword>`
 
-    for setting a new WiFi connection, and use
+for setting a new WiFi connection, and use
 
-    `-c cellular:<apn>`
+`-c cellular:<apn>`
 
-    for setting up a cellular connection on your ESP32.
+for setting up a cellular connection on your ESP32.
 
-    Note that this command will **automatically delete all previously configured connections**.
+Note that this command will **automatically delete all previously configured connections**.
 
 ### Unreachable device
 
 If your ESP32 is misconfigured in any way, for example if it does not have valid WiFi connection settings, flash the ESP32 via a serial connection by connecting it with a USB cable to your computer, and run the `toit serial flash` command with the appropriate WiFi connection properties provided.
 
-```
+```shell
 toit serial flash -p wifi.ssid=<SSID> -p wifi.password=<password>
 ```
 
