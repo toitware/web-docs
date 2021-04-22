@@ -2,9 +2,9 @@
 order: 1
 ---
 
-# Claim an ESP32
+# Claim your hardware
 
-When the ESP32 has been initially provisioned, you must claim the device into your organization in the Toit console in order to see the device and communicate with it using either WiFi or cellular connection.
+When the device has been initially provisioned, you must claim it into your organization in the Toit console in order to see the device and communicate with it using either WiFi or cellular connection.
 
 After the device is claimed into your organization, only users that belong to the same organization can monitor the device, deploy apps on it, see logs, and change device configurations.
 
@@ -14,13 +14,13 @@ Connect the ESP32 to a computer with a serial connection. It requires 3.3V volta
 
 To get the hardware ID of your device, run the following command with the Toit CLI
 
-```
+```shell
 toit serial info
 ```
 
 The output confirms that the ESP32 is provisioned by printing its hardware ID:
 
-```
+```txt
 {
 	"name": "7555c528-9eb9-48d1-a93d-42b4f246f442.359.2020-11-10.device.toitware.com",
 	"model": "esp32-4mb",
