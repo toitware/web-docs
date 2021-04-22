@@ -2,6 +2,8 @@
 order: 1
 ---
 
+import HelloFromCli from "../../_images/hellofromcli.png";
+
 # Apps, communicate through the cloud
 
 [PubSub](../infrastructure/pubsub.md) is a service for bi-directional communication. In this tutorial, we show how two apps can communicate with each other through the cloud. Communicating through the cloud allows apps installed on different devices to communicate with each other. Note that in this scenario, the process is contingent on the Max Offline set for the device(s) involved.
@@ -71,4 +73,4 @@ toit pubsub write cloud:hello-world "Mr. CLI" -- Hello from the CLI
 You can now go the Toit console, and choose the device on which the subscriber
 app was installed to check on the LOGS tab that the message has been received.
 
-![hellofromcli](../img/hellofromcli.png)
+<img src="{HelloFromCli}" alt="Screenshot of CLI running hello world" />
