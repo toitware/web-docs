@@ -123,7 +123,6 @@ By using separate fenced blocks, these examples will be shown as separated entit
 ```
 ````
 
-
 ### Emphasis
 
 Text enclosed by `*`, is rendered emphasized: _important_.
@@ -138,14 +137,10 @@ Lines beginning with `#` (or multiple `#`s) are sections. The more `#`s the deep
 
 ### Links
 
-* `$foo` links to the element (member, class, global variable or global function) with the resolved name.
-* `$foo("foo.toit":id)` links to an element that is not in scope, but declared in the given file. Semantically, it's equivalent to searching for `id` in the scope introduced by importing "foo.toit".
-* `$foo x y` resolves to the element `foo` that takes 2 arguments.
-* URLs inside the comment are automatically linked: `http://www.example.com` or `file://foo.toit` don't need markers.
-
-<!-- * `$foo("foo.toit":id)` links to an element that is not in scope, but declared in the given file. Semantically, it's equivalent to searching for `id` in the scope introduced by importing "foo.toit".
-    * `$foo(foo x y)` resolves to the element `foo` that takes 2 arguments, but only shows `foo` in the emitted Toitdoc.
-    * `[Foo](class Foo)` links to the class name, instead of the constructor. If the class doesn't contain a default constructor (with no arguments), then this is the default. -->
+- `$foo` links to the element (member, class, global variable or global function) with the resolved name.
+- `$foo("foo.toit":id)` links to an element that is not in scope, but declared in the given file. Semantically, it's equivalent to searching for `id` in the scope introduced by importing "foo.toit".
+- `$foo x y` resolves to the element `foo` that takes 2 arguments.
+- URLs inside the comment are automatically linked: `http://www.example.com` or `file://foo.toit` don't need markers.
 
 ## Sections
 
@@ -153,12 +148,12 @@ Toitdoc supports sections, some of which have special meaning in Toitdoc.
 
 The following sections have special meaning or should be used as conventions:
 
-* `Advanced`: This section is non-essential for most users and can safely be ignored in general. For example, this section may explain the algorithm that is used to perform the specific action. By default this section is collapsed in the generated Toitdoc.
-* `Inheritance`: This section is only useful for developers that implement or extend a given class. IDEs should ignore this section when showing contextual information on calls.
-* `Examples`: Contains examples for the given element. Individual examples that exhibit different properties can be in their own subsections. It is common to start each individual example-(sub)section with "This example demonstrates ". Since example sections can be very big, they should be the last section in a Toitdoc (except for `Categories`).
-* `Categories`: This section is used in the Toitdoc tool to assign members to specific categories. For example, a `File` class could have the categories, `Write`, `Read`, and `Query`. The Toitdoc tool can then group those members into the given categories to make it easier to find relevant methods. Categories are optional. They are not emitted in the Toitdoc-generated pages. The `Categories` section only consists of a markdown list.
-* `Errors`: This section should treat errors and exceptions, and/or discuss how to deal with common errors. Note that important prerequisites can/should be in the initial section. For example, the sentence "Users must not modify the collection while iteration over it", does not require a separate "Errors" section, but can be part of the top section. This section may also contain common mistakes in the usage of the API.
-* `Aliases`: This section contains a (markdown) list of aliases that can help finding the function. Typically, this list contains names of similar functions in other languages. For example, `List.add` should have `push`, and `push_back` as alias, since these are the names that are used in JavaScript and C++ respectively.
+- `Advanced`: This section is non-essential for most users and can safely be ignored in general. For example, this section may explain the algorithm that is used to perform the specific action. By default this section is collapsed in the generated Toitdoc.
+- `Inheritance`: This section is only useful for developers that implement or extend a given class. IDEs should ignore this section when showing contextual information on calls.
+- `Examples`: Contains examples for the given element. Individual examples that exhibit different properties can be in their own subsections. It is common to start each individual example-(sub)section with "This example demonstrates ". Since example sections can be very big, they should be the last section in a Toitdoc (except for `Categories`).
+- `Categories`: This section is used in the Toitdoc tool to assign members to specific categories. For example, a `File` class could have the categories, `Write`, `Read`, and `Query`. The Toitdoc tool can then group those members into the given categories to make it easier to find relevant methods. Categories are optional. They are not emitted in the Toitdoc-generated pages. The `Categories` section only consists of a markdown list.
+- `Errors`: This section should treat errors and exceptions, and/or discuss how to deal with common errors. Note that important prerequisites can/should be in the initial section. For example, the sentence "Users must not modify the collection while iteration over it", does not require a separate "Errors" section, but can be part of the top section. This section may also contain common mistakes in the usage of the API.
+- `Aliases`: This section contains a (markdown) list of aliases that can help finding the function. Typically, this list contains names of similar functions in other languages. For example, `List.add` should have `push`, and `push_back` as alias, since these are the names that are used in JavaScript and C++ respectively.
 
 ## Conventions
 
@@ -170,23 +165,23 @@ Don't code-format true, false, or null. Write them as normal text (just like in 
 
 Use the following terms:
 
-* "Class".
+- "Class".
 
-* "Global": a global variable.
+- "Global": a global variable.
 
-* "Function": a global function.
+- "Function": a global function.
 
-* "Constructor".
+- "Constructor".
 
-* "Factory".
+- "Factory".
 
-* "Field".
+- "Field".
 
-* "Method" for member methods. One may also use "getter" and "setter" when appropriate.
+- "Method" for member methods. One may also use "getter" and "setter" when appropriate.
 
-* "Block".
+- "Block".
 
-* "Lambda". The term "closure" is also commonly used, but we should strive to minimize the number of terms.
+- "Lambda". The term "closure" is also commonly used, but we should strive to minimize the number of terms.
 
 In general, don't feel obligated to avoid repetitions in Toitdocs. It is OK to use the same term multiple times for the same element.
 
