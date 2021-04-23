@@ -8,6 +8,7 @@ export type NavPage = {
   title: string;
   subPages?: NavPage[];
   order?: number;
+  showInMenu: boolean;
 };
 
 interface GraphType {
@@ -47,13 +48,14 @@ export function Navigation(): JSX.Element {
     }
   `);
 
-  const pagesTree: NavPage[] = [{ slug: "", title: "Home", order: -100 }];
+  const pagesTree: NavPage[] = [{ slug: "", title: "Home", order: -100, showInMenu: true }];
 
   for (const node of data.allMdx.nodes) {
     const page = {
       slug: node.slug,
       title: node.frontmatter.title == "" ? node.headings[0].value : node.frontmatter.title,
       order: node.frontmatter.order ?? undefined,
+      showInMenu: node.headings.length > 0,
     };
 
     const slugParts = node.slug.replace(/\/$/, "").split("/");

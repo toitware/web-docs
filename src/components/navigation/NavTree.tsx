@@ -79,6 +79,10 @@ function NavTree({ pages, level = 0 }: Props): JSX.Element {
             </li>
           );
         } else {
+          const subPages = [...page.subPages];
+          if (page.showInMenu) {
+            subPages.unshift({ ...page, title: "Overview", subPages: undefined });
+          }
           return (
             <li key={page.slug}>
               <span
@@ -90,12 +94,7 @@ function NavTree({ pages, level = 0 }: Props): JSX.Element {
               >
                 {page.title}
               </span>
-              {page.subPages !== undefined && (
-                <NavTree
-                  pages={[{ ...page, title: "Overview", subPages: undefined }, ...page.subPages]}
-                  level={level + 1}
-                />
-              )}
+              {subPages !== undefined && <NavTree pages={subPages} level={level + 1} />}
             </li>
           );
         }
