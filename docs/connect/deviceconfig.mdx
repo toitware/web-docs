@@ -2,6 +2,10 @@
 order: 3
 ---
 
+import ConfigSdkDevice from "../_images/configsdkdevice.png";
+import MaxOfflineConfig from "../_images/maxofflineconfig.png";
+import WifiNbiotConnections from "../_images/wifinbiotconnections.png";
+
 # Configure your hardware
 
 When you have installed the Toit firmware on your device, the following two default configurations are present:
@@ -43,6 +47,8 @@ toit device use <name>
 The current firmware version installed on the device is displayed in the Firmware section. Click on the Edit icon to change it to another version from the drop down menu, then click Save. 
 The proposed change is displayed both in the Firmware section and with an icon near the name of the device until it is actually installed the next time the device comes online.
 
+<img src={ConfigSdkDevice} alt="Screenshot of device configuration in the Toit console" />
+
 </Tab>
 <Tab label="CLI">
 
@@ -72,6 +78,8 @@ By default, the device is configured to be continuously online (with 'Max offlin
 
 In the Configuration tab for a given device, go to the section Max offline and edit the parameter with the new value (using hours, minutes and seconds) before clicking Save. The parameter will be changed next time the device comes online.
 
+<img src={MaxOfflineConfig} alt="Screenshot of changing the Max offline time in the Toit console" />
+
 </Tab>
 <Tab label="CLI">
 
@@ -96,6 +104,8 @@ You can change or add new connections on the device.
 <Tab label="Console">
 
 Navigate to the Configuration tab, Connections section for a given device. Click on the Edit button to open the pop-up window in which you can add or delete a connection.
+
+<img src={WifiNbiotConnections} alt="Screenshot of changing the Wifi connection in the Toit console" />
 
 When two or more connections are present, choose the order in which they should be used by moving the connections to use in priority above the others.
 

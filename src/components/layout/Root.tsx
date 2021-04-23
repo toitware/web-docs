@@ -92,6 +92,13 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.typography.body1.fontSize,
     fontFamily: theme.typography.body1.fontFamily,
 
+    "& a": {
+      color: theme.palette.text.primary,
+      "&:hover": {
+        textDecoration: "underline",
+      },
+    },
+
     "& p": {
       marginTop: "0.75rem",
     },

@@ -8,7 +8,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const result = await graphql(
     `
       query {
-        allMdx {
+        allMdx(filter: { fileAbsolutePath: { regex: "//docs//" } }) {
           nodes {
             id
             slug

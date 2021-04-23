@@ -15,9 +15,9 @@ A consistent documentation helps to parse the comments and makes it easier to fi
 As a general rule, don't feel obligated to add comments, when there is nothing to say.
 In the following example, the comment does not add any information:
 
-```
-/// Returns the size of this instance.
-int size
+```toit
+  /// Returns the size of this instance.
+  size -> int:
 ```
 
 If preferred, or for completeness (if every other member has a comment), these comments may still be present.
@@ -43,10 +43,10 @@ class A:
   This is a longer comment for a method.
   It spans multiple lines.
   */
-  member
+  member := 0
 
   /// Triple-comments are also supported.
-  member2
+  member2 := 0
 ```
 
 ### Rationale
@@ -62,21 +62,21 @@ The used syntax for Toitdoc is a modified version of markdown.
 Contrary to markdown (and as the biggest difference), Toitdoc treats new lines as new paragraphs, unless they are indented more than the previous line. For example, the following Toitdoc is rendered as three paragraphs and not just as one (as would be the case in markdown):
 
 ```
-/**
-Calls the given $block on each element of the given [collection]
-Users must not modify the collection during iteration.
-If the $block call throws an exception, then the
-  given $error value is returned.
-*/
-do collection error [block]
-  ...
+  /**
+  Calls the given $block on each element of the given [collection]
+  Users must not modify the collection during iteration.
+  If the $block call throws an exception, then the
+    given $error value is returned.
+  */
+  do collection error [block]:
+    // ...
 ```
 
 ### Code spans
 
 Text enclosed in backticks (\`) is formatted as code: `code`. Whitespace in code spans is reduced and replaced with one space. That is, multiple spaces/newlines are converted to one space. For example,
 
-```
+```txt
 `foo   bar
    gee`
 ```
@@ -89,15 +89,18 @@ This makes it possible to write longer code spans that break at the end of line.
 Longer code, or code that relies on indentation can be inserted using triple backticks(\`\`\`):
 
 ````
+/**
 ```
 a longer code
 spanning multiple lines
 ```
+*/
 ````
 
 The advantage of using fenced blocks (compared to indentation based blocks), is that two code blocks next to each other are easier to detect. Say, a Toitdoc wants to show two examples:
 
 ````
+/**
 Examples:
 ```
 foo 1
@@ -105,19 +108,20 @@ foo 1
 ```
 bar 2
 ```
+*/
 ````
 
 By using separate fenced blocks, these examples will be shown as separated entities, which would not be possible with indentation-based code blocks:
 
+````txt
 ```
-foo 1
-```
-
-```
-bar 2
+  foo 1
 ```
 
-<!-- - Imported code blocks: ```` ``["file.toit":token]`` ````. In this case Toitdoc opens the referenced file, and extracts the code that is delimited by `/*token - start*/` and `/*token - end*/`. This is the preferred way of including longer examples. It also gives the possibility to move Toitdoc examples into test files. -->
+```
+  bar 2
+```
+````
 
 ### Emphasis
 
@@ -137,10 +141,6 @@ Lines beginning with `#` (or multiple `#`s) are sections. The more `#`s the deep
 - `$foo("foo.toit":id)` links to an element that is not in scope, but declared in the given file. Semantically, it's equivalent to searching for `id` in the scope introduced by importing "foo.toit".
 - `$foo x y` resolves to the element `foo` that takes 2 arguments.
 - URLs inside the comment are automatically linked: `http://www.example.com` or `file://foo.toit` don't need markers.
-
-<!-- * `$foo("foo.toit":id)` links to an element that is not in scope, but declared in the given file. Semantically, it's equivalent to searching for `id` in the scope introduced by importing "foo.toit".
-    * `$foo(foo x y)` resolves to the element `foo` that takes 2 arguments, but only shows `foo` in the emitted Toitdoc.
-    * `[Foo](class Foo)` links to the class name, instead of the constructor. If the class doesn't contain a default constructor (with no arguments), then this is the default. -->
 
 ## Sections
 
@@ -194,8 +194,8 @@ Runs the given $task.
 # Advanced
 This is the reason for this Toitdoc.
 */
-run task
-  ...
+run task:
+  // ...
 ```
 
 Start functions and methods Toitdocs with 3rd person verbs. Readers implicitly add "this element" in front of such a sentence. For example: "Runs the given $block".
@@ -232,7 +232,7 @@ Toitdoc goes here.
 /*
 Implementation doc.
 */
-The member.
+the_member:
 ```
 
 Errors should either be in their `# Errors` section, or (if they only take a sentence) be written as follows: "It's an error ...", or using "must" (as in "This instance must have at least two elements").

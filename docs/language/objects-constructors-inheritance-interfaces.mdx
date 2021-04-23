@@ -18,8 +18,8 @@ To create custom objects, we must first define a class:
 
 ```
 class Point:
-  x/int := 42
-  y/int := 103
+  x /int := 42
+  y /int := 103
 ```
 
 Here we have given our new class two fields, with integer types, and they are
@@ -40,22 +40,22 @@ class Foo:
   // u is untyped and initialized to zero.
   u := 0
   // v is an integer.
-  v/int := 0
+  v /int := 0
   // w is a nullable integer (either null or an integer).
-  w/int? := null
+  w /int? := null
   // x is an integer, and it must be set by the constructor.
-  x/int := ?
+  x /int := ?
   // y is an integer, the field is immutable, the
   // constructor must set it.
-  y/int
+  y /int
   // z has the same properties as y, but the short form is
   // better style.
-  z/int ::= ?
+  z /int ::= ?
   // LTUAE is a constant.  When possible, prefer static
   // constants.
-  LTUAE/int ::= 42
+  LTUAE /int ::= 42
   // PASSWORD is a static constant.
-  static PASSWORD/string ::= "hunter2"
+  static PASSWORD /string ::= "hunter2"
 
   constructor:
     x = y = z = 0   // Set the fields that must be set.
@@ -70,14 +70,14 @@ system.
 <!-- RESET CODE -->
 ```
 class Point:
-  x/int := 0
-  y/int := 0
+  x /int := 0
+  y /int := 0
 
 class Point3D extends Point:
-  z/int := 0
+  z /int := 0
 
 main:
-  p/Point? := null   // Local variable p has type Point (nullable).
+  p /Point? := null  // Local variable p has type Point (nullable).
   p = Point          // Create point.
   // Since a Point3D is a type of point we can
   // assign p to refer to a Point3D.
@@ -122,7 +122,7 @@ class Square implements Drawable:
 main:
   // Variables can have interface types.  Here `d` has the
   // type `Drawable`.
-  d/Drawable := Square
+  d /Drawable := Square
 ```
 
 An abstract class has some similarities to a class and to an
@@ -181,9 +181,9 @@ than having the same name as the class:
 import math
 
 class Vector:
-  x/float
-  y/float
-  length/float
+  x /float
+  y /float
+  length /float
 
   constructor x_arg/float y_arg/float:
     x = x_arg
@@ -201,9 +201,9 @@ name:
 import math
 
 class Vector:
-  x/float
-  y/float
-  length/float
+  x /float
+  y /float
+  length /float
 
   // The dots initialize fields x and y.  No need to restate
   // the types of x and y here.
@@ -237,9 +237,9 @@ names.  For example, the `Vector` class might have a polar constructor:
 import math
 
 class Vector:
-  x/float
-  y/float
-  length/float
+  x /float
+  y /float
+  length /float
 
   constructor .x .y:
     length = math.sqrt x * x + y * y
@@ -263,14 +263,14 @@ for the class you are extending.  This is done with the `super` keyword:
 
 ```
 class Color:
-  r/int
-  g/int
-  b/int
+  r /int
+  g /int
+  b /int
 
   constructor .r .g .b:
 
 class ColoredVector extends Vector:
-  color/Color
+  color /Color
 
   constructor x/float y/float .color:
     super x y  // Calls the constructor of `Vector`.
@@ -324,7 +324,7 @@ you can call the `super` constructor with no arguments:
 
 ```
 class Foo:
-  x/int
+  x /int
   constructor:
     x = 12
     // Explicit 'super' calls are possible but rare.
@@ -348,7 +348,7 @@ import math
 class Vector:
   x/float  // These must be initialized in the intializer...
   y/float  // ...part of the constructor, not later.
-  length/float
+  length /float
 
   // A method on the Point class
   stringify -> string:

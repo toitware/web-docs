@@ -2,39 +2,41 @@
 order: 3
 ---
 
+import SdkExAndLib from "../_images/examplelib.png";
+
 # Examples, library and tools
 
 ## Toit code examples and library
 
 You can download Toit sample code and the Toit SDK library for any SDK available in the Toit console to help you get started with writing your first apps in the Toit language.
 
-=== "Console"
-    Go to the Download page and choose the SDK version from which you want to get the examples or the library. Unpack the folder(s) in your preferred location.
+### Console
+Go to the Download page and choose the SDK version from which you want to get the examples or the library. Unpack the folder(s) in your preferred location.
 
-    ![sdkexandlib](../img/examplelib.png)
+<img src={SdkExAndLib} alt="The Toit SDK Download page" />
 
-=== "CLI"
+### CLI
 
-    Download example programs and the Toit library for the latest released SDK to a specified directory with the commands
-    
-    ```
-    toit sdk examples <dir>
-    ```
-    and 
+Download example programs and the Toit library for the latest released SDK to a specified directory with the commands
 
-    ```    
-    toit sdk lib <dir>
-    ```
+```shell
+toit sdk examples <dir>
+```
+and
 
-    For example, download them in a `toit-examples` folder on your Desktop with 
-    ```
-    toit sdk examples ~/Desktop/toit-examples
-    ```
+```shell
+toit sdk lib <dir>
+```
 
-    You can also download both examples and Toit libraries from older SDK versions with the suffix ` --version vx.x.x` as in 
-    ```
-    toit sdk examples --version v0.12.0 ~/Desktop/toit-examples
-    ```
+For example, download them in a `toit-examples` folder on your Desktop with
+```shell
+toit sdk examples ~/Desktop/toit-examples
+```
+
+You can also download both examples and Toit libraries from older SDK versions with the suffix ` --version vx.x.x` as in
+```shell
+toit sdk examples --version v0.12.0 ~/Desktop/toit-examples
+```
 
 In Visual Studio Code, open the folder with the downloaded SDK examples with **File | Open**. For the SDK library folder, go to **File | Add Folder to Workspace...** and choose the downloaded library folder to access the Toit SDK library easily from the workspace where you write your Toit programs.
 

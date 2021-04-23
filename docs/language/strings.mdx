@@ -60,27 +60,27 @@ The following shows some examples of the numeric escapes:
 ```
   // For two-digit code points (runes).
   // using \x, the curly braces are optional.
-  s1/string := "S\xf8en s\x{e5} s\u{00e6}r ud."
+  s1 /string := "S\xf8en s\x{e5} s\u{00e6}r ud."
   print s1  // >> Søen så sær ud.
 
   // For four-digit values you can either use \x with curly
   // braces or \u.
-  s2/string := "\u{20ac} \u20ac \x{20ac}"
+  s2 /string := "\u{20ac} \u20ac \x{20ac}"
   print s2  // Prints "€ € €", which is Unicode 0x20ac.
 
   // The \u version can also be used with curly braces.
   // It is in fact necessary for 5-digit Unicode runes.
-  s3/string := "\u{1f648}"
+  s3 /string := "\u{1f648}"
   print s3  // Prints the see-no-evil-monkey emoji.
 
   // \x{} is recommended for one or two digits, and \u{} is
   // recommended for three to five digits.
 
   // The same escapes work in character literals.
-  c/int := '\x2a'
+  c /int := '\x2a'
   print c  // Prints "42", which is the decimal from of 0x2a.
 
-  c2/int := '\''
+  c2 /int := '\''
   print c2 // Prints "39", the ASCII code for a single quote.
 ```
 
