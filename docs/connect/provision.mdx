@@ -4,73 +4,45 @@ order: 0
 
 # Provision your hardware
 
-If you don't have an ESP32 yet, you can buy one <a href="https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990" target="_blank">here</a>.
+You need the Toit CLI to complete the provisioning steps below, so if you haven't installed Toit on your computer yet, follow the steps described [here](../../installation/toitcli).
 
-You need the Toit CLI to complete the provisioning steps below, so if you haven't installed Toit on your computer, follow the steps described [here](../installation/toitcli).
-
-## Provision
+## Provision with CLI
 
 Follow the steps to initially provision your device:
 
-- Connect the ESP32 with a USB cable to your computer where the Toit CLI is installed.
+1. Connect the ESP32 with a USB cable to your computer where the Toit CLI is installed.
 
 <Note type="warning" title="Drivers for macOS">
-If you are using macOS, you might need to update the drivers from <a href="https://ftdichip.com/drivers/vcp-drivers/" target="_blank">here</a>
-and <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">here</a>. Install both drivers, reboot your computer and try to run the Toit CLI serial commands again.
+
+If you are using macOS, you might need to update the drivers from
+[here](https://ftdichip.com/drivers/vcp-drivers/) and 
+[here](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers). 
+Install both drivers, reboot your computer and try to run the Toit CLI serial commands again.
+
 </Note>
 
-- Use the Toit CLI command to provision your device with initial settings and the latest released Toit firmware. Replace `SSID` and `WiFi-password` with your own WiFi credentials in the command:
+2. Use the Toit CLI to provision your ESP32 with initial device settings and the latest released Toit firmware.
+Replace `SSID` and `WiFi-password` with your own WiFi credentials in the following command (without quotes):
 
-  ```shell
+  ```txt
   toit serial provision -p wifi.ssid=<SSID> -p wifi.password=<WiFi-password>
   ```
 
-- The WiFi settings can be changed later on.
+  The WiFi settings for your ESP32 can be changed later on.
 
-- The provision process might take up to 5 minutes. When finished the output of the `provision` command will look like this:
+3. The provision process might take up to 5 minutes. When finished, it will output: `device was successfully flashed`.
 
-```txt
-looking for available hardware identities on disk
-no hardware identities found on disk, claiming new hardware identity
-Flashing device on port /dev/ttyUSB0
-+--------------------------+--------------------------------------+
-|         SETTING          |                VALUE                 |
-+--------------------------+--------------------------------------+
-| Firmware                 | v1.0.0                               |
-| Device Model             | esp32-4mb                            |
-| Hardware ID              | feddd5e3-fe15-4c91-a580-c1ff5b15b582 |
-| Hardware Batch & Seq. No | 2020-11-10#377                       |
-| context                  | remote                               |
-| wifi.password            | mypassword                           |
-| broker.host              | device.toit.io                       |
-| broker.cn                | device.toit.io                       |
-| broker.port              | 9426                                 |
-| wifi.ssid                | myssid                               |
-+--------------------------+--------------------------------------+
-erasing device flash
-successfully erased device flash
-writing device partitions
-successfully written device partitions
-reading hardware chip information
-successfully read hardware chip information
-+--------------------------+--------------------------------------+
-|         SETTING          |                VALUE                 |
-+--------------------------+--------------------------------------+
-| factory device model     | esp32-4mb                            |
-| factory firmware version | v1.0.0                               |
-| chip ID                  |                                      |
-+--------------------------+--------------------------------------+
-device was successfully flashed
-```
-
-- The device is now provisioned and ready to be [claimed](/claim) in the Toit console.
+4. The ESP32 is now ready to be [claimed](../claim) in the Toit console.
 
 <Note title="Troubleshooting">
-If you have trouble connecting your ESP32 via a serial port to your computer, have a look in the section about [serial port troubleshooting](/serialport) for help.
+
+If you have trouble connecting your ESP32 via a serial port to your computer, please visit the section about 
+[serial port troubleshooting](../serialport) for help.
 Some hardware models need physical interaction with the device during flashing (like pushing a button). If flashing doesn't work, consult the documentation for your device.
+
 </Note>
 
-## Device model
+## Device models
 
 The `provision` command sets the model on the device. The default model is `esp32-4mb`.
 
