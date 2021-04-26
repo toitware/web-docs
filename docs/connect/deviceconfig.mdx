@@ -3,7 +3,7 @@ order: 3
 ---
 
 import ConfigSdkDevice from "../_images/configsdkdevice.png";
-import MaxOfflineConfig from "../_images/maxofflineconfig.png";
+import MaxOfflineConfig from "../_images/maxoffline.png";
 import WifiNbiotConnections from "../_images/wifinbiotconnections.png";
 
 # Configure your hardware
@@ -76,7 +76,7 @@ By default, the device is configured to be continuously online (with 'Max offlin
 <Tabs>
 <Tab label="Console">
 
-In the Configuration tab for a given device, go to the section Max offline and edit the parameter with the new value (using hours, minutes and seconds) before clicking Save. The parameter will be changed next time the device comes online.
+In the Configuration tab for a given device, go to the 'Max offline' section and change the value (using hours, minutes and seconds) before clicking Save. The parameter will be changed next time the device comes online.
 
 <img src={MaxOfflineConfig} alt="Screenshot of changing the Max offline time in the Toit console" />
 
@@ -129,9 +129,6 @@ for setting a new WiFi connection, and use
 for setting up a cellular connection on your ESP32.
 
 Note that this command will automatically delete all previously configured connections.
-
-</Tab>
-</Tabs>
 
 </Tab>
 </Tabs>
