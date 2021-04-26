@@ -1,5 +1,5 @@
 ---
-order: 1
+order: 2
 ---
 
 import ToitCli from "../_images/toitcli.png";
@@ -11,7 +11,15 @@ import Extract from "../_images/extract.png";
 
 # Install Toit
 
-The Toit command-line interface (CLI) is used for interacting with the Toit console and your devices.
+There are two prerequisites you need to install, before you can start writing Toit apps and deploy them on your hardware. 
+
+1. The Toit CLI
+
+2. Visual Studio Code
+
+The Toit command-line interface (CLI) is used for interacting with the Toit console and your hardware. 
+
+The Toit Language Extension for Visual Studio Code helps you in writing Toit programs.
 
 ## Install the Toit CLI
 
@@ -119,7 +127,7 @@ Next, install the **latest released Toit SDK** on your computer by running the C
 toit doctor fix
 ```
 
-If you have installed Visual Studio Code as mentioned in [here](vscode.md), the command also installs the **Toit language extension for VSCode**.
+If you have installed Visual Studio Code, the command also installs the **Toit language extension for VSCode**.
 
 The command
 
@@ -135,3 +143,10 @@ Toit health:
   [OK] Visual Studio Code
   [OK] Toit CLI
 ```
+
+<Note title="Toit Language Extension"> 
+The Toit Language Extension is not yet available on VSCode Marketplace.
+
+While you can use another editor to write `*.toit` files, the Toit Language Extension is currently only supported for Visual Studio Code. 
+However we do have a Language Server which works with all IDEs that support the LSP protocol. The language server includes syntax highlighting for VIM users.
+</Note>
