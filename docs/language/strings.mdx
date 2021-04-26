@@ -12,7 +12,7 @@ UTF-8, although most of the time you can ignore this.
 
 String literals use double quotes, `"`. (Single quotes
 are reserved for
-[character literals](/language/syntax/#string_and_character_literals).)
+[character literals](../syntax#string-and-character-literals).)
 
 If a string literal contains double quotes (`"`), or backslashes (`\`),
 then these must be escaped with backslashes:
@@ -36,24 +36,24 @@ Toit supports the following escape sequences (see the ASCII
 [control code chart](https://en.wikipedia.org/wiki/ASCII)
 for the list of names):
 
-|                                       | Control code chart names                                              | Unicode character | Unicode code point (rune) |
-| ------------------------------------- | --------------------------------------------------------------------- | ----------------- | ------------------------- |
-| `\0`                                  | Null                                                                  | NUL               | 0                         |
-| `\a`                                  | Alert (Beep, Bell)                                                    | BEL               | 7                         |
-| `\b`                                  | Backspace                                                             | BS                | 8                         |
-| `\f`                                  | Form feed                                                             | FF                | 12                        |
-| `\n`                                  | Line Feed or Newline                                                  | LF                | 10                        |
-| `\r`                                  | Carriage Return                                                       | CR                | 13                        |
-| `\t`                                  | Horizontal Tab                                                        | HT                | 9                         |
-| `\v`                                  | Vertical Tab                                                          | VT                | 11                        |
-| `\$`                                  | $ (See below for the use of $ for string interpolation)               |                   | 36                        |
-| `\"`                                  | "                                                                     |                   | 34                        |
-| `\'`                                  | '                                                                     |                   | 39                        |
-| `\\`                                  | \                                                                     |                   | 92                        |
-| `\uXXXX` (where X is a hex char)      | [Unicode rune](<https://en.wikipedia.org/wiki/Runic_(Unicode_block)>) |                   |                           |
-| `\u{X...}` (where X... are hex chars) | [Unicode rune](<https://en.wikipedia.org/wiki/Runic_(Unicode_block)>) |                   |                           |
-| `\xXX` (where X is a hex char)        | [Unicode rune](<https://en.wikipedia.org/wiki/Runic_(Unicode_block)>) |                   |                           |
-| `\x{X...}` (where X... are hex chars) | [Unicode rune](<https://en.wikipedia.org/wiki/Runic_(Unicode_block)>) |                   |                           |
+|                                       | Control code chart names                                   | Unicode character | Unicode code point (rune) |
+| ------------------------------------- | ---------------------------------------------------------- | ----------------- | ------------------------- |
+| `\0`                                  | Null                                                       | NUL               | 0                         |
+| `\a`                                  | Alert (Beep, Bell)                                         | BEL               | 7                         |
+| `\b`                                  | Backspace                                                  | BS                | 8                         |
+| `\f`                                  | Form feed                                                  | FF                | 12                        |
+| `\n`                                  | Line Feed or Newline                                       | LF                | 10                        |
+| `\r`                                  | Carriage Return                                            | CR                | 13                        |
+| `\t`                                  | Horizontal Tab                                             | HT                | 9                         |
+| `\v`                                  | Vertical Tab                                               | VT                | 11                        |
+| `\$`                                  | $ (See below for the use of $ for string interpolation)    |                   | 36                        |
+| `\"`                                  | "                                                          |                   | 34                        |
+| `\'`                                  | '                                                          |                   | 39                        |
+| `\\`                                  | \                                                          |                   | 92                        |
+| `\uXXXX` (where X is a hex char)      | [Unicode rune](<https://en.wikipedia.org/wiki/Code_point>) |                   |                           |
+| `\u{X...}` (where X... are hex chars) | [Unicode rune](<https://en.wikipedia.org/wiki/Code_point>) |                   |                           |
+| `\xXX` (where X is a hex char)        | [Unicode rune](<https://en.wikipedia.org/wiki/Code_point>) |                   |                           |
+| `\x{X...}` (where X... are hex chars) | [Unicode rune](<https://en.wikipedia.org/wiki/Code_point>) |                   |                           |
 
 The following shows some examples of the numeric escapes:
 
@@ -84,7 +84,7 @@ The following shows some examples of the numeric escapes:
   print c2 // Prints "39", the ASCII code for a single quote.
 ```
 
-See [below](#multi-line_strings) for more advanced
+See [below](#multi-line-strings) for more advanced
 string literals.
 
 ## String representation
@@ -119,7 +119,7 @@ For example, the Euro sign is coded as three bytes:
   print "€2"[3]    // Prints "50", the ASCII code for '2'.
 ```
 
-Since null is [falsy](/language/booleans/) we can index
+Since null is [falsy](../booleans) we can index
 only the valid code points quite simply.  The following
 program iterates over the 5-character, 6-byte string,
 printing 163, 50, 46, 50, 52:
@@ -133,8 +133,7 @@ printing 163, 50, 46, 50, 52:
 ```
 
 In this case it would be simpler to use the
-[do
---runes](https://libs.toit.io/core/class-string#do(block%2Cbool))
+[do --runes](https://libs.toit.io/core/string/class-string#do(2%2C1%2C0%2Crunes))
 method:
 
 <!-- RESET CODE -->
@@ -181,8 +180,8 @@ The raw UTF-8 bytes in a Toit string can be accessed with
 
 Alternatively, the string's UTF-8 bytes can be written to a
 byte array with the
-[to_byte_array](https://libs.toit.io/core/class-string#to_byte_array())
-or [write_to_byte_array](https://libs.toit.io/core/class-string#write_to_byte_array(any))
+[to_byte_array](https://libs.toit.io/core/class-string#to_byte_array(0%2C0%2C0%2C))
+or [write_to_byte_array](https://libs.toit.io/core/class-string#write_to_byte_array(1%2C0%2C0%2C))
 methods.
 
 ## Slices of strings
@@ -366,8 +365,8 @@ main:
 ```
 
 For other bases than 8, 10, and 16, see
-[stringify](https://libs.toit.io/core/numbers/class-int#stringify(any))
+[stringify](https://libs.toit.io/core/numbers/class-int#stringify(1%2C0%2C0%2C)).
 
 The full set of formatting options includes left-padding,
 and center-padding.  See the documentation on the
-static string method, [format](https://libs.toit.io/core/class-string#format(string%2Cany))
+static string method, [format](https://libs.toit.io/core/class-string#format(2%2C0%2C0%2C)).

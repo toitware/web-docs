@@ -94,20 +94,20 @@ Toit uses only double quotes `"` to denote a string literal:
 
 If a string contains a double quote, a backslash, or a dollar sign,
 you must use the backslash `\` to
-[escape](/language/strings/#escaped_characters) it. The backslash
+[escape](../strings#escaped-characters) it. The backslash
 can also be used for characters that are [difficult to
-type](/language/strings/#escaped_characters)
+type](../strings#escaped-characters)
 For example:
 ```
 message := "This is a \"valid\" string"
 ```
 
 The unescaped operator `$` is used for [string
-interpolation](/language/strings/#string_interpolation).
+interpolation](../strings#string-interpolation).
 
 The methods available on string objects are documented in
 the [string class](https://libs.toit.io/core/class-string).
-See also the [guide to Toit strings](/language/strings/).
+See also the [guide to Toit strings](../strings).
 
 ## Toit globals and constants
 
@@ -131,10 +131,10 @@ some_global ::= []
 ```
 In this case the global is initialized with an empty list. The content of the list can change, but it will always be the same list.
 
-When you name a global, you should adhere to rules defined earlier about [identifiers](syntax.md#identifiers_and_keywords).
+When you name a global, you should adhere to rules defined earlier about [identifiers](../syntax#identifiers-and-keywords).
 
 Global variables (and [static class
-variables](/language/definitions/)) are initialized when
+variables](../definitions)) are initialized when
 they are first used.  This is noticeable if their value is
 determined by some function call, for example `Time.now`
 
@@ -179,7 +179,7 @@ main:
 ```
 
 Indexing into strings is done by [UTF-8 byte
-offset](/language/strings/#string_representation), so the
+offset](../strings#string-representation), so the
 story is a little more complex for non-ASCII strings.
 
 Toit also has support for slices.  These are views into part
@@ -192,7 +192,7 @@ of a list, byte array, or string:
 ```
 
 See also the [description of slice
-syntax](/language/strings/#slices_of_strings) in the string
+syntax](../strings#slices-of-strings) in the string
 guide.
 
 A slice may keep the underlying object alive, preventing a

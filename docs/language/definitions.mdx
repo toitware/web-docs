@@ -14,7 +14,11 @@ Modules can be imported with the `import` clause.
 
 The SDK comes with libraries documented in the [Toit standard libraries](https://libs.toit.io/) browser.
 
-The `core` module (<https://libs.toit.io/lib.core/core.toit>) is automatically imported into every file. It contains common classes, like `int`, `string`, or `List`.
+The [`core` module](https://libs.toit.io/core/library-summary) is automatically
+imported into every file. It contains common classes, like
+[`int`](https://libs.toit.io/core/numbers/class-int),
+[`string`](https://libs.toit.io/core/string/class-string), or
+[`List`](https://libs.toit.io/core/collections/class-List).
 
 ## Terms
 
@@ -22,14 +26,14 @@ The `core` module (<https://libs.toit.io/lib.core/core.toit>) is automatically i
 
 - **Globals**: a variable declared outside the scope of a function or class. Globals are initialized at first access, and remain alive until the end of the program.
 
-- **Constants** are a special case of globals, defined with a `::=` assignment. By convention they have an ALL_CAPS_NAME (see [Toit globals and constants](https://docs.toit.io/language/syntax/#toit_globals_and_constants)).
+- **Constants** are a special case of globals, defined with a `::=` assignment. By convention they have an ALL_CAPS_NAME (see [Toit globals and constants](../syntax#toit-globals-and-constants)).
 
 Within a class, the following items are available: constructors, statics, factories, fields, methods.
 
 - **Constructor**: a way to construct an object of the given type, always defined by the `constructor` keyword.
-  See [more details here](/language/objects-constructors-inheritance-interfaces/#constructors).
+  See [more details here](../objects-constructors-inheritance-interfaces#constructors).
 - **Named constructors** allow more than one constructor with the same signature, and often make code more readable.
-  See [more details here](/language/objects-constructors-inheritance-interfaces/#named_constructors]).
+  See [more details here](../objects-constructors-inheritance-interfaces#named-constructors).
   For example, in the [string class](https://libs.toit.io/core/string/class-string) we have a constructor called `constructor.from_rune rune/int`. Thus, when reading the instantiation point `x := string.from_rune 'X'` it is clear that we construct a string with the character 'X'.
 - A **Factory** is a constructor or named constructor with a return. See below.
 - **Static functions and fields**: Static functions and fields are tied to the class rather than individual objects.
