@@ -4,8 +4,6 @@ order: 0
 
 # Provision your hardware
 
-If you don't have an ESP32 yet, you can buy one <a href="https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990" target="_blank">here</a>.
-
 You need the Toit CLI to complete the provisioning steps below, so if you haven't installed Toit on your computer, follow the steps described [here](../installation/toitcli).
 
 ## Provision
@@ -19,21 +17,21 @@ If you are using macOS, you might need to update the drivers from <a href="https
 and <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">here</a>. Install both drivers, reboot your computer and try to run the Toit CLI serial commands again.
 </Note>
 
-2. Use the Toit CLI to provision your device with initial device settings and the latest released Toit firmware. 
+2. Use the Toit CLI to provision your ESP32 with initial device settings and the latest released Toit firmware.
 Replace `SSID` and `WiFi-password` with your own WiFi credentials in the following command (without quotes):
 
   ```txt
   toit serial provision -p wifi.ssid=<SSID> -p wifi.password=<WiFi-password>
   ```
 
-  The WiFi settings for your device can be changed later on.
+  The WiFi settings for your ESP32 can be changed later on.
 
 3. The provision process might take up to 5 minutes. When finished, it will output: `device was successfully flashed`.
 
-4. The device is now ready to be [claimed](/claim) in the Toit console.
+4. The ESP32 is now ready to be [claimed](../claim) in the Toit console.
 
 <Note title="Troubleshooting">
-If you have trouble connecting your ESP32 via a serial port to your computer, please visit the section about [serial port troubleshooting](serialport) for help.
+If you have trouble connecting your ESP32 via a serial port to your computer, please visit the section about serial port troubleshooting for help.
 Some hardware models need physical interaction with the device during flashing (like pushing a button). If flashing doesn't work, consult the documentation for your device.
 </Note>
 
