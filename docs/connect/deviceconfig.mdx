@@ -4,7 +4,7 @@ order: 3
 
 import ConfigSdkDevice from "../_images/configsdkdevice.png";
 import MaxOfflineConfig from "../_images/maxoffline.png";
-import WifiNbiotConnections from "../_images/wifinbiotconnections.png";
+import SetWifiConnections from "../_images/wificonnections.png";
 
 # Configure your hardware
 
@@ -19,7 +19,7 @@ How to change each device configuration available is explained below. Changes ar
 <Tabs>
 <Tab label="Console">
 
-To change the device configurations, navigate to the Configuration tab for a given device and edit the sections as described below.
+To change the device configurations, navigate to the Configuration tab for the given device and edit the configuration as described below.
 
 </Tab>
 
@@ -50,8 +50,8 @@ toit device use <name>
 <Tabs>
 <Tab label="Console">
 
-The current firmware version installed on the device is displayed in the Firmware section. Click on the Edit icon to change it to another version from the drop down menu, then click Save. 
-The proposed change is displayed both in the Firmware section and with an icon near the name of the device until it is actually installed the next time the device comes online.
+The current firmware version installed on the device is displayed in the Firmware section. Click on the Edit icon and choose a new version from the drop down menu, then click Save. 
+The proposed change is displayed both in the Firmware section and with an icon near the name of the device until the new version is actually installed the next time the device comes online.
 
 <img src={ConfigSdkDevice} alt="Screenshot of device configuration in the Toit console" />
 
@@ -98,9 +98,10 @@ toit device config max-offline 24h
 </Tab>
 </Tabs>
 
-This means that if you install an application measuring the temperature every hour while the `max-offline` is set to 24 hours, the application will run the program every hour, even as the device is offline. Only once a day the device will connect and offload all the data to the Toit console.
+If you install an application measuring the temperature every hour and the `max-offline` parameter is set to 24 hours, the application will run the program every hour. 
+Once a day the device will go online and connect to the Toit console and offload all the data to the console.
 
-Note that a device can come online outside of the Max offline schedule when its storage capacity level reaches a predefined threshold, as explained in the Advanced configuration section below.
+Note that a device can come online due to other triggers than `max-offline`, for example when its storage capacity level reaches a predefined threshold, as explained in the section below.
 
 ## Connections on device
 
@@ -109,9 +110,9 @@ You can change or add new connections on the device.
 <Tabs>
 <Tab label="Console">
 
-Navigate to the Configuration tab, Connections section for a given device. Click on the Edit button to open the pop-up window in which you can add or delete a connection.
+Navigate to the Configuration tab, Connections section for the given device. Click on the Edit button to open the pop-up window in which you can add or delete a connection.
 
-<img src={WifiNbiotConnections} alt="Screenshot of changing the Wifi connection in the Toit console" />
+<img src={SetWifiConnections} alt="Screenshot of changing the Wifi connection in the Toit console" />
 
 When two or more connections are present, choose the order in which they should be used by moving the connections to use in priority above the others.
 
@@ -126,11 +127,16 @@ toit device config connection -c wifi:<SSID>:<MyWiFiPassword> -c cellular:<apn>
 
 Use
 
-    `-c wifi:<SSID>:<MyWiFiPassword>`
+```txt
+-c wifi:<SSID>:<MyWiFiPassword>
+```
 
 for setting a new WiFi connection, and use
 
-`-c cellular:<apn>`
+
+```txt
+-c cellular:<apn>
+```
 
 for setting up a cellular connection on your ESP32.
 
