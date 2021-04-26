@@ -57,7 +57,7 @@ toit serial provision -p wifi.ssid=<SSID> -p wifi.password=<WiFi-password>
 
 **Note the hardware ID** printed when the command terminates. The hardware ID is a UUID represented as 32 hexadecimal digits, as in `123e4567-e89b-12d3-a456-426614174000`.
 
-Next, [claim](./connect/claim) the ESP32 into your organization in the Toit console. Replace `<hardware-ID>` with the hardware ID from the provision command above,
+Next, [claim](../connect/claim) the ESP32 into your organization in the Toit console. Replace `<hardware-ID>` with the hardware ID from the provision command above,
 and run:
 
 ```shell
@@ -129,7 +129,7 @@ toit device -d MyToitDevice logs -f 10m
 
 or go to the [Logs tab](https://console.toit.io/) of your device to view the logs from the application deployed.
 
-## 6. Uninstall Toitt app
+## 6. Uninstall Toit app
 
 As the last step, uninstall the Toit app from the device with the command
 
