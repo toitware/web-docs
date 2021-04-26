@@ -4,17 +4,21 @@ order: 0
 
 # Provision your hardware
 
-You need the Toit CLI to complete the provisioning steps below, so if you haven't installed Toit on your computer, follow the steps described [here](../installation/toitcli).
+You need the Toit CLI to complete the provisioning steps below, so if you haven't installed Toit on your computer yet, follow the steps described [here](../../installation/toitcli).
 
-## Provision
+## Provision with CLI
 
 Follow the steps to initially provision your device:
 
 1. Connect the ESP32 with a USB cable to your computer where the Toit CLI is installed.
 
 <Note type="warning" title="Drivers for macOS">
-If you are using macOS, you might need to update the drivers from <a href="https://ftdichip.com/drivers/vcp-drivers/" target="_blank">here </a> 
-and <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">here</a>. Install both drivers, reboot your computer and try to run the Toit CLI serial commands again.
+
+If you are using macOS, you might need to update the drivers from
+[here](https://ftdichip.com/drivers/vcp-drivers/) and 
+[here](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers). 
+Install both drivers, reboot your computer and try to run the Toit CLI serial commands again.
+
 </Note>
 
 2. Use the Toit CLI to provision your ESP32 with initial device settings and the latest released Toit firmware.
@@ -31,11 +35,14 @@ Replace `SSID` and `WiFi-password` with your own WiFi credentials in the followi
 4. The ESP32 is now ready to be [claimed](../claim) in the Toit console.
 
 <Note title="Troubleshooting">
-If you have trouble connecting your ESP32 via a serial port to your computer, please visit the section about serial port troubleshooting for help.
+
+If you have trouble connecting your ESP32 via a serial port to your computer, please visit the section about 
+[serial port troubleshooting](../serialport) for help.
 Some hardware models need physical interaction with the device during flashing (like pushing a button). If flashing doesn't work, consult the documentation for your device.
+
 </Note>
 
-## Device model
+## Device models
 
 The `provision` command sets the model on the device. The default model is `esp32-4mb`.
 
