@@ -166,3 +166,9 @@ have the order specified.
 ## Hiding pages from the menu
 
 Use `hide: true` in the frontmatter.
+
+## Adding or removing an Overview page of a folder
+
+By default, the `index.mdx` in a folder is automatically the Overview page. If
+you don't want an overview page, make sure there is no other content than the
+frontmatter in the this file.
