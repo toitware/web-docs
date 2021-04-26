@@ -8,6 +8,7 @@ describe("Navigation", () => {
       title: title,
       order: order,
       subPages: subPages,
+      showInMenu: true,
     });
     it("sorts pages according to order field", () => {
       const pages: NavPage[] = [p(3), p(2), p(1, [p(2), p(3), p(1)])];
