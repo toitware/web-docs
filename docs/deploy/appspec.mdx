@@ -63,14 +63,14 @@ pubsub:
 
     * **`cron`**:
 
-         Is a list of <a href="https://en.wikipedia.org/wiki/Cron" target="_blank">crons</a>, each defining a schedule on when the application should start.
+         Is a list of [crons](https://en.wikipedia.org/wiki/Cron), each defining a schedule on when the application should start.
          In the example above, the application will be triggered every 5 minutes of the 7th hour, as well as every 2 hours on minute 00. Note that the time on devices is in UTC. Timezones are not supported.
 
          If the application is already running when the trigger fires, the event is ignored.
 
     * **`on_pubsub_topic`**:
 
-         Runs the application when a message from the defined pubsub topic `<type>:<name>` is received on the device. The on_pubsub_topic can only trigger on topics that the device is subscribed to (see below for subscribing to a topic). Also read [PubSub](../infrastructure/pubsub.md) and [tutorials](../tutorials/pubsubext.md)) for additional information and an example of app specification file with a PubSub subscription.
+         Runs the application when a message from the defined pubsub topic `<type>:<name>` is received on the device. The on_pubsub_topic can only trigger on topics that the device is subscribed to (see below for subscribing to a topic). Also, read [PubSub](../../apis/pubsub) and [Tutorials](../../tutorials/pubsub/pubsubext) for additional information and an example of an app specification file with a PubSub subscription.
 
 * **`pubsub`**:
   
@@ -78,5 +78,6 @@ pubsub:
 
     * **`subscriptions`**:
 
-         Subscribes to the topic. A topic is a `<type>:<name>`, with `type` being either `cloud` or `device`. The `name` is defined by the user. See [PubSub](../infrastructure/pubsub.md) and [tutorials](../tutorials/pubsubext.md) for additional information and an example of app specification file with a PubSub subscription.
+         Subscribes to the topic. A topic is a `<type>:<name>`, with `type` being either `cloud` or `device`. The `name` is defined by the user. 
+         See [PubSub](../../apis/pubsub) and [Tutorials](../../tutorials/pubsub/pubsubext) for additional information and an example of an app specification file with a PubSub subscription.
   

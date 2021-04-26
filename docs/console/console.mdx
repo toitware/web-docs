@@ -17,7 +17,7 @@ In the upper banner, a three dots icon to the right leads to the documentation, 
 
 ## Devices
 
-This page lists all devices claimed by your organization. Click on the upper right corner buttons to **Claim or replace device** or **Start a simulator** with the firmware version of your choice.
+This page lists all devices claimed by your organization. Click on the upper right corner buttons to **Claim or replace device** or **Start a simulator**.
 
 <img src={ConsoleDevice} alt="Screenshot of the devices in your organization" />
 
@@ -25,12 +25,10 @@ In full screen, the page lists
 
 * The devices' **name**. An icon reflects the health of each device: red indicates that the device has missed its last check-in or that the device firmware is no longer available in the console; the circle means that the device is expecting an update next time it comes online, or that the update is currently taking place; green means that the device is behaving as expected. Hover over the device icon to see a tooltip explaining the reason(s) why your device is not classified as green.
 
-* The **power** icon indicates if the device is plugged in a power source, or shows for battery-powered device how much power was left last time the device was connected to the console.
-
 * The **firmware** version currently running on the device.
   
 <Note>
-A warning sign next to the firmware version number means that the firmware installed on the device does no longer have a corresponding version available in the console. The currently installed programs will keep on running as they were previously, but to install new apps, the device firmware needs to be updated to an available SDK version.
+A warning sign next to the firmware version number means that the firmware installed on the device does no longer have a corresponding version available in the console. The currently installed programs will keep on running as they were previously, but to install new apps, the device firmware needs to be updated to an available firmware version.
 </Note>
 
 * **Last seen** gives the relative time to when the device was last seen, that is the last time it was online. **Now** indicates that the device is currently online. **Unknown** describes a new device which is part of your organization but has never connected to the console yet.
@@ -43,23 +41,23 @@ You can sort devices according to each of these information by clicking on the c
 
 The **Search** field allows the search for devices by name, ID, or firmware versions.
 
-Select a device to open additional functionalities. These are described in detail [here](deviceconsole.md). Click on the **Devices** page to the right to return to the initial list of devices.
+Select a device to open additional functionalities. These are described in detail [here](../deviceconsole). Click on the **Devices** page to the right to return to the initial list of devices.
 
 ## Fleet health
 
-The fleet health page collects devices' statuses for all devices of an organization.
+The fleet health page collects device status for all devices in an organization.
 
 <img src={FleetHealth} alt="Screenshot the Fleet Health page in the Toit console" />
 
 At the top, devices are represented by boxes of different colors based on their current health: green for a device that behaves as expected, and red otherwise.
 A tooltip indicates the name of the device and the list of pending actions or issues for that device.
 
-The overall status section compiles devices based on their health issues - or lack thereof. Note that a device can be counted in more than one category, except for devices in the "No issues category" that is exclusive of all others.
+The overall status section accumulates devices based on their health issues - or lack thereof. Note that a device can be counted in more than one category, except for devices in the "No issues category" that is exclusive of all others.
 Click on the "Go to devices" link to see the list of devices filtered according to their status or issue.
 
 ## Playground
 
-The playground is a terminal window where you can write a Toit program. Click **Run online** to execute the code in the console (as opposed to running it on a specific device which can be done in the Code tab). The playground uses the latest firmware version.
+The playground is a text editor where you can write a Toit program. Click **Run online** to execute the code in the console (as opposed to running it on a specific device, which can be done in the Code tab). The playground uses the latest firmware version available in the console.
   
 ## Organization
 
@@ -75,9 +73,10 @@ The playground is a terminal window where you can write a Toit program. Click **
 
 * **API keys** lists the keys that can be used to connect a server application to the API.
 
-<Note title"Payment">
+<Note title="Payment">
   
-If your devices generate more data than the limit on 100MB of free data per month, submit your payment information 
+If your devices generate more data than the limit on 100MB of free data per month, submit your payment information
+
 [here](https://console.toit.io/organization/details) to get access to the full version of the Toit platform.
 
 </Note>
@@ -91,16 +90,18 @@ The System page displays various graphs showing information about metrics, data,
 
 ## Data
 
-The Data page allows to create **metrics** and **logs** subscriptions with the **Create subscription** button. Existing subscription are listed on the page and can be deleted with the bin icon. Selected an existing subscription from the drop down menu in one of the graph to visualize Unacknowledged message count and Oldest unacknowledged message age data for the chosen time interval. Check the [API](../infrastructure/api.md) documentation to learn how to acknowledge messages using the CLI.
+The Data page allows to create **metrics** and **logs** subscriptions with the **Create subscription** button. Existing subscription are listed on the page and can be deleted with the bin icon. Selected an existing subscription from the drop down menu in one of the graph to visualize Unacknowledged message count and Oldest unacknowledged message age data for the chosen time interval. 
+Check the [API](../../apis/api) documentation to learn how to acknowledge messages using the CLI.
 
 Note that while it is also possible to create **app data** subscriptions on the Data page, it is recommended to use the PubSub page for these instead. Subscriptions allow for bi-directional support, as opposed to app data subscriptions on the Data page that only compile messages coming from the device.
 
 ## PubSub
 
-Use this page to create custom subscriptions and access subscription-specific data on Unacknowledged message count and Oldest unacknowledged message age. See the [PubSub](../infrastructure/pubsub.md) section for more information.
+Use this page to create custom subscriptions and access subscription-specific data on unacknowledged message count and oldest unacknowledged message age. 
+See the [PubSub](../../apis/pubsub) section for more information.
 
 ## Download
 
-Use this tab to download the Toit CLI, as well as SDK examples and the Toit library.
+Use this tab to download the Toit CLI, as well as Toit code examples and the Toit SDK library.
 
 <img src={SdkExAndLib} alt="The Toit SDK Download page" />
