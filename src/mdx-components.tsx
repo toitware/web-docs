@@ -6,6 +6,7 @@ import { Typography } from "@material-ui/core";
 import { MDXProviderComponentsProp } from "@mdx-js/react";
 import { CodeBlock } from "@toitware/code-block";
 import React from "react";
+import { Box, Boxes } from "./components/Boxes";
 import Code from "./components/Code";
 import { DocsLink } from "./components/DocsLink";
 import Note from "./components/Note";
@@ -43,4 +44,6 @@ export const shorthands = {
   CodeBlock,
   Note,
   Tabs,
+  Boxes,
+  Box,
 };
