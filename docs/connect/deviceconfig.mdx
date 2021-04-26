@@ -3,12 +3,12 @@ order: 3
 ---
 
 import ConfigSdkDevice from "../_images/configsdkdevice.png";
-import MaxOfflineConfig from "../_images/maxofflineconfig.png";
-import WifiNbiotConnections from "../_images/wifinbiotconnections.png";
+import MaxOfflineConfig from "../_images/maxoffline.png";
+import SetWifiConnections from "../_images/wificonnections.png";
 
-# Configure a device
+# Configure your hardware
 
-When you have installed the Toit firmware on your device, the following two default configurations are present:
+When you have installed the Toit firmware on your hardware, the following two default configurations are present:
 
 - The value of 'Max offline' for the device is 0 seconds, which means that the device is continuously awake.
 
@@ -19,15 +19,21 @@ How to change each device configuration available is explained below. Changes ar
 <Tabs>
 <Tab label="Console">
 
-To change the device configurations, navigate to the **Configuration** tab for a given device and edit the sections as described below.
+To change the device configurations, navigate to the Configuration tab for the given device and edit the configuration as described below.
 
 </Tab>
-<Tab label="CLI">
 
+<Tab label="CLI">
 To change the device configurations, use the Toit CLI:
 
 ```shell
 toit device config <command>
+```
+
+See the list of available commands with
+
+```shell
+toit device config -h
 ```
 
 You can set your current device as the default device in all `toit device` commands with
@@ -44,7 +50,8 @@ toit device use <name>
 <Tabs>
 <Tab label="Console">
 
-The current firmware version installed on the device is displayed in the **Firmware** section. Click on the **Edit** icon to change it to another version from the drop down menu, then click **Save**. The proposed change is displayed both in the **Firmware** section and with an icon near the name of the device until it is actually installed the next time the device comes online.
+The current firmware version installed on the device is displayed in the Firmware section. Click on the Edit icon and choose a new version from the drop down menu, then click Save. 
+The proposed change is displayed both in the Firmware section and with an icon near the name of the device until the new version is actually installed the next time the device comes online.
 
 <img src={ConfigSdkDevice} alt="Screenshot of device configuration in the Toit console" />
 
@@ -68,15 +75,14 @@ You can also downgrade the device with another firmware version with `toit devic
 </Tab>
 </Tabs>
 
-## Device activation schedule
+## Max offline
 
-By default, the device is configured to be continuously online (Max offline = 0s). If your device operates on battery, it is recommended to change this configuration so that the device is online only when necessary to extend battery life.
-
+By default, the device is configured to be continuously online (with 'Max offline' set to zero seconds). If your device operates on battery, it is recommended to change this configuration so that the device is online only when necessary to extend battery life.
 
 <Tabs>
 <Tab label="Console">
 
-In the **Configuration** tab for a given device, go to the section **Max offline** and edit the parameter with the new value (using hours, minutes and seconds) before clicking **Save**. The parameter will be changed next time the device comes online.
+In the Configuration tab for a given device, go to the 'Max offline' section and change the value (using hours, minutes and seconds) before clicking Save. The parameter will be changed next time the device comes online.
 
 <img src={MaxOfflineConfig} alt="Screenshot of changing the Max offline time in the Toit console" />
 
@@ -92,33 +98,28 @@ toit device config max-offline 24h
 </Tab>
 </Tabs>
 
-This means that if you install an application measuring the temperature every hour while the `max-offline` is set to 24 hours, the application will run the program every hour, even as the device is offline. Only once a day the device will connect and offload all the data to the Toit console.
+If you install an application measuring the temperature every hour and the `max-offline` parameter is set to 24 hours, the application will run the program every hour. 
+Once a day the device will go online and connect to the Toit console and offload all the data to the console.
 
-Note that a device can come online outside of the Max offline schedule when its storage capacity level reaches a predefined threshold, as explained in the Advanced configuration section below.
+Note that a device can come online due to other triggers than `max-offline`, for example when its storage capacity level reaches a predefined threshold, as explained in the section below.
 
 ## Connections on device
 
 You can change or add new connections on the device.
 
-<Note type="warning">
-
-The ESP32 cannot connect to 5GHz WiFi network.
-
-</Note>
-
 <Tabs>
 <Tab label="Console">
 
-Navigate to the **Configuration** tab, **Connections** section for a given device. Click on the **Edit** button to open the pop-up window in which you can add or delete a connection.
+Navigate to the Configuration tab, Connections section for the given device. Click on the Edit button to open the pop-up window in which you can add or delete a connection.
 
-<img src={WifiNbiotConnections} alt="Screenshot of changing the Wifi connection in the Toit console" />
+<img src={SetWifiConnections} alt="Screenshot of changing the Wifi connection in the Toit console" />
 
 When two or more connections are present, choose the order in which they should be used by moving the connections to use in priority above the others.
 
 </Tab>
 <Tab label="CLI">
 
-Beware that when using the CLI to configure the connection settings, you **need to type in all connections you want to use, in the order you want them to be used**.
+Beware that when using the CLI to configure the connection settings, you need to type in all connections you want to use, in the order you want them to be used.
 
 ```shell
 toit device config connection -c wifi:<SSID>:<MyWiFiPassword> -c cellular:<apn>
@@ -126,15 +127,20 @@ toit device config connection -c wifi:<SSID>:<MyWiFiPassword> -c cellular:<apn>
 
 Use
 
-`-c wifi:<SSID>:<MyWiFiPassword>`
+```txt
+-c wifi:<SSID>:<MyWiFiPassword>
+```
 
 for setting a new WiFi connection, and use
 
-`-c cellular:<apn>`
+
+```txt
+-c cellular:<apn>
+```
 
 for setting up a cellular connection on your ESP32.
 
-Note that this command will **automatically delete all previously configured connections**.
+Note that this command will automatically delete all previously configured connections.
 
 </Tab>
 </Tabs>
@@ -149,13 +155,13 @@ toit serial flash -p wifi.ssid=<SSID> -p wifi.password=<password>
 
 The `flash` command flashes the ESP32 back to factory settings via the serial port without changing its device certificate or hardware ID.
 
-## Advanced configuration
+## Data storage on the device
 
-A device will attempt to come online based on the 'Max offline' parameter.
+Your device will attempt to come online based on the 'Max offline' parameter.
 When the device is offline, the data (such as logs, metrics, and data generated by the apps running on the device) is stored on the device.
 Reaching the full capacity of storage defined for this type of data means that the latest data will not be stored correctly.
 
-To avoid this situation, it is possible to filter which type of logs and metrics are saved in the device.
+To avoid this situation, it is possible to filter which type of logs and metrics are saved on the device.
 
 In addition, a threshold of storage is set to trigger an online connection where data can be flushed from the device to the console.
 

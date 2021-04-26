@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.typography.body1.fontFamily,
 
     "& a": {
-      color: theme.palette.text.primary,
+      color: theme.palette.primary.main,
       "&:hover": {
         textDecoration: "underline",
       },

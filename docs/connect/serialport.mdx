@@ -12,37 +12,48 @@ If you have problems connecting your ESP32 to your computer, the Toit CLI offers
 
 Connect your ESP32 with a USB cable to your computer. List the serial ports currently in use on your computer by running the following command with the Toit CLI
 
-    toit serial ports
+```shell
+toit serial ports
+```
 
 For example, if exactly one serial port, called `/dev/ttyUSB0`, is currently in use, the output of the command will look like this
 
-```
+```txt
 $ toit serial ports
 /dev/ttyUSB0
 ```
 
 In order to set the default serial port to use in the Toit CLI serial commands that talk to your device, run the following command
 
-    toit serial port use <port>
+```shell
+toit serial port use <port>
+```
 
 Using the example above, run the command `toit serial port use /dev/ttyUSB0` to set the default port in all `toit serial` commands available in the Toit CLI.
 
-!!! note "Pro-tip for provisioning"
-If you have **not set a default serial port** to use, and there are multiple serial connections active on your computer, the `toit serial provision` command will prompt you to choose one of the serial ports in order to continue the provision command using the correct port.
+<Note title="Pro-tip for provisioning">
+If you have not set a default serial port to use, and there are multiple serial connections active on your computer, the `toit serial provision` command will prompt you to choose one of the serial ports in order to continue the provision command using the correct port.
+</Note>
 
 To get the default serial port in use, run the command
 
-    toit serial port get
+```shell
+toit serial port get
+```
 
 You can monitor the serial output of the ESP32 with the command
 
-    toit serial monitor
+```shell
+toit serial monitor
+```
 
 The `monitor` command can be stopped by `Ctrl+]`
 
 If you have initially provisioned your ESP32, run the following Toit CLI command to read the hardware information of your device
 
-    toit serial info
+```shell
+toit serial info
+```
 
 ## Troubleshooting serial port connections
 
@@ -58,5 +69,6 @@ If you still have trouble connecting your ESP32 device with your computer via a 
 
 - always set the default serial port to be used in the serial CLI commands with `toit serial port use <port>` in order to avoid mistakes when talking with your device on a serial connection.
 
-!!! note ""
+<Note>
 When the ESP32 has been initially provisioned with WiFi or cellular credentials, the ESP32 device is connecting to the network via WiFi (or cellular connection), and the serial connection is purely for debugging the device. In other words, you can plug the ESP32 into another power source and communicate with the device via WiFi.
+</Note>
