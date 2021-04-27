@@ -70,5 +70,6 @@ If you still have trouble connecting your ESP32 device with your computer via a 
 - always set the default serial port to be used in the serial CLI commands with `toit serial port use <port>` in order to avoid mistakes when talking with your device on a serial connection.
 
 <Note>
-When the ESP32 has been initially provisioned with WiFi or cellular credentials, the ESP32 device is connecting to the network via WiFi (or cellular connection), and the serial connection is purely for debugging the device. In other words, you can plug the ESP32 into another power source and communicate with the device via WiFi.
+When the ESP32 has been initially provisioned with WiFi credentials, the ESP32 device is connecting to the network via WiFi, and the serial connection is purely for debugging the device if WiFi connection is lost. 
+In other words, you can plug the ESP32 into another power source and communicate with the ESP32 over WiFi from now on.
 </Note>

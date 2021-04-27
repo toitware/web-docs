@@ -8,13 +8,13 @@ import SetWifiConnections from "../_images/wificonnections.png";
 
 # Configure your hardware
 
-When you have installed the Toit firmware on your hardware, the following two default configurations are present:
+When you have installed the Toit firmware on your hardware, the following two default configurations have been set:
 
 - The value of 'Max offline' for the device is 0 seconds, which means that the device is continuously awake.
 
 - The firmware version on the device is the one installed during initial [device provisioning](../provision).
 
-How to change each device configuration available is explained below. Changes are applied once the device comes online.
+How to change the device configurations is explained below. Changes are applied once the device comes online.
 
 <Tabs>
 <Tab label="Console">
@@ -45,7 +45,7 @@ toit device use <name>
 </Tab>
 </Tabs>
 
-## Device firmware configuration
+## Firmware configuration
 
 <Tabs>
 <Tab label="Console">
@@ -89,7 +89,13 @@ In the Configuration tab for a given device, go to the 'Max offline' section and
 </Tab>
 <Tab label="CLI">
 
-Set the duration of how often you want your device to come online (once a day in this example) with
+Set the duration of how often you want your device to come online with
+
+```shell
+toit device config max-offline <duration>
+```
+
+For example, set 'Max offline' to 24 hours, which means that the device will wake up once a day:
 
 ```shell
 toit device config max-offline 24h
@@ -103,7 +109,7 @@ Once a day the device will go online and connect to the Toit console and offload
 
 Note that a device can come online due to other triggers than `max-offline`, for example when its storage capacity level reaches a predefined threshold, as explained in the section below.
 
-## Connections on device
+## Connections
 
 You can change or add new connections on the device.
 
@@ -145,7 +151,7 @@ Note that this command will automatically delete all previously configured conne
 </Tab>
 </Tabs>
 
-### Unreachable device
+### Troubleshooting: Unreachable device
 
 If your ESP32 is misconfigured in any way, for example if it does not have valid WiFi connection settings, flash the ESP32 via a serial connection by connecting it with a USB cable to your computer, and run the `toit serial flash` command with the appropriate WiFi connection properties provided.
 
