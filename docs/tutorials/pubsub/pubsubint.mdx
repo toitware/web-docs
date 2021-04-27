@@ -4,7 +4,7 @@ order: 0
 
 # Apps, communicate within a device
 
-[PubSub](../infrastructure/pubsub.md) is a service for bi-directional
+[PubSub](../../apis/pubsub) is a service for bi-directional
 communication. In this tutorials, we show how PubSub can be used so that two
 apps can communicate with each other within a device. In this scenario, the
 data does not need to be sent out to the cloud to be received by the other app.
@@ -44,11 +44,21 @@ main:
 
 ## Running the example
 
-To run the example, run `subscribe.toit` on your default device in a terminal
-window. Once the program is started, open a second terminal window and run
-`publish.toit`.
+Run the example with the CLI command
 
-Both windows are depicted here:
+```shell
+toit run subscribe.toit
+```
+
+on your default device. 
+
+Once the program has started, open another terminal window and run
+
+```shell
+toit run publish.toit
+```
+
+The output of both commands are listed below:
 
 ```txt
 $ toit run subscribe.toit
