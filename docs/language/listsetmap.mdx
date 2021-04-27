@@ -17,7 +17,7 @@ The `Set` and `Map` implementations use hashing to do their operations in consta
 There are two concrete implementations of `Set` and `Map`:
 `Set`/`Map` use the overwritable `==` operator to determine whether two keys are equal, whereas `IdentitySet`/`IdentityMap` use `identical`.
 
-See some examples of use of `List` and `Map` in the section [Toit blocks](blocks.md).
+See some examples of use of `List` and `Map` in the section [Toit blocks](../blocks).
 
 See also the documentation for the [List](https://libs.toit.io/core/collections/class-List), [Set](https://libs.toit.io/core/collections/class-Set), and [Map](https://libs.toit.io/core/collections/class-Map) classes.
 
@@ -144,7 +144,7 @@ Often there are more succinct ways to achieve the same with variations of the
 The full set of map methods is available in the [class
 documentation](https://libs.toit.io/core/collections/class-Map). See also the
 guide to [using named block
-parameters](../blocks/#calling_functions_with_named_block_parameters)
+parameters](../blocks#calling-functions-with-named-block-parameters)
 
 ## Functional methods
 
@@ -164,7 +164,7 @@ report_odd collection/List:
     print "The collection contains at least one odd number"
 ```
 
-You can use the [any](<https://libs.toit.io/core/collections/class-Collection#any(block)>)
+You can use the [any](<https://libs.toit.io/core/collections/class-Collection#any(1%2C1%2C0%2C)>)
 method, which also has the advantage that it stops
 when it has found a object in the collection which fulfills the predicate:
 
@@ -178,9 +178,9 @@ introduces the block argument to `any` does not get mistaken for the colon of th
 if-statement. The `any` method is often called `some` in functional languages.)
 
 Both of these examples made use of the
-[automatic block argument, `it`](/language/blocks/#block_arguments).
+[automatic block argument, `it`](../blocks#block-arguments).
 
-Similarly, Toit collections have the [`every`](<https://libs.toit.io/core/collections/class-Collection#every(block)>)
+Similarly, Toit collections have the [`every`](<https://libs.toit.io/core/collections/class-Collection#every(1%2C1%2C0%2C)>)
 method known from functional languages:
 
 ```
@@ -191,8 +191,8 @@ method known from functional languages:
 The reduce method:
 
 (The example shows the use of a
-[block](blocks.md) with [two named
-arguments](/language/blocks/#block_arguments)).
+[block](../blocks) with [two named
+arguments](../blocks#block-arguments)).
 
 ```
   sum := collection.reduce: | a b | a + b
@@ -247,7 +247,7 @@ That example also illustrates that the value of the block (returned to the
 `map` method) is the result of the last statement. In this case one of the
 branches of the `if` will be the last statement, producing the return value.
 An alternative way to do this would be to use
-[continue.map](/language/blocks/#local_return)
+[continue.map](../blocks#local-return)
 
 We could also reduce it to an almost unreadable one-liner by putting an
 arbitrary expression in a string interpolation, surrounding it with `$(` and

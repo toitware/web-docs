@@ -18,23 +18,23 @@ import serial.protocols.i2c as i2c
 
 main:
 bus := i2c.Bus
---sda=gpio.Pin 21
---scl=gpio.Pin 22
-
+  --sda=gpio.Pin 21
+  --scl=gpio.Pin 22
 ```
 
 Each device must have a unique address. The address can be found in the datasheet for the selected peripheral - it's an 7-bit integer.
 
 In case of the Bosch [BME280 sensor](https://cdn.sparkfun.com/assets/e/7/3/b/1/BME280_Datasheet.pdf), the address is `0x76`:
 
+<!-- RESET CODE -->
 ```
 import gpio
 import serial.protocols.i2c as i2c
 
 main:
 bus := i2c.Bus
---sda=gpio.Pin 21
---scl=gpio.Pin 22
+  --sda=gpio.Pin 21
+  --scl=gpio.Pin 22
 
 device := bus.device 0x76
 ```
@@ -44,7 +44,10 @@ device := bus.device 0x76
 The default frequency of the I2C bus is 400kHz in Toit. This can be changed as an argument to the `i2c.Bus` at construction time with
 
 ```
-i2c.Bus --frequency=100000
+  i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
+    --frequency=100000
 ```
 
 Remember that when changing the frequency, the associated pull-up resistors may have to be changed as well.
@@ -55,34 +58,38 @@ Remember that when changing the frequency, the associated pull-up resistors may 
 
 Toit exposes the peripheral through the `serial.protocols.spi` library.
 
+<!-- RESET CODE -->
+<!-- ANALYZE CODE -->
 ```
 import gpio
 import serial.protocols.spi as spi
 
 main:
-bus := spi.Bus
---miso=gpio.Pin 12
---mosi=gpio.Pin 13
---clock=gpio.Pin 14
+  bus := spi.Bus
+    --miso=gpio.Pin 12
+    --mosi=gpio.Pin 13
+    --clock=gpio.Pin 14
 ```
 
 When communicating with a device, a unique chip-select Pin is used to signal when the chip in question is addressed. In addition, it's important to not select a device frequency that exceeds the capabilities of device. The maximum frequency can be found in the datasheet for the selected peripheral.
 
 In case of the Bosch BME280 sensor, the maximum frequency is 10Mhz:
 
+<!-- RESET CODE -->
+<!-- ANALYZE CODE -->
 ```
 import gpio
 import serial.protocols.spi as spi
 
 main:
-bus := spi.Bus
---miso=gpio.Pin 12
---mosi=gpio.Pin 13
---clock=gpio.Pin 14
+  bus := spi.Bus
+    --miso=gpio.Pin 12
+    --mosi=gpio.Pin 13
+    --clock=gpio.Pin 14
 
-device := bus.device
---cs=gpio.Pin 15
---frequency=10_000_000
+  device := bus.device
+    --cs=gpio.Pin 15
+    --frequency=10_000_000
 ```
 
 ## Selecting the right protocol

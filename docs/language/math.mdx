@@ -4,16 +4,16 @@ order: 9
 
 # Mathematics in Toit
 
-Find mathematical algorithms in the [math module](https://libs.toit.io/#/lib/math.toit), and the numbers available in the [numbers module](https://libs.toit.io/#/lib.core/numbers.toit) of the core library.
+Find mathematical algorithms in the [math module](https://libs.toit.io/math/library-summary), and the numbers available in the [numbers module](https://libs.toit.io/core/numbers/library-summary) of the core library.
 
 ## Numbers
 
-Toit [numbers](https://libs.toit.io/#/lib.core/numbers.toit) support integers and floats.
+Toit [numbers](https://libs.toit.io/core/numbers/library-summary) support integers and floats.
 
 ### Integers and floats
 
-[Integers](https://libs.toit.io/#/lib.core/numbers.toit/int) are whole numbers such as -1, 0, 1, 2, 3, .. and they have type `int`.
-[Floats](https://libs.toit.io/#/lib.core/numbers.toit/float) are numbers with a decimal point. Floats are contagious, meaning that any binary operation involving a float forces the other operand to be converted to a float before doing the operation (thus yielding a float as result).
+[Integers](https://libs.toit.io/core/numbers/class-int) are whole numbers such as -1, 0, 1, 2, 3, .. and they have type `int`.
+[Floats](https://libs.toit.io/core/numbers/class-float) are numbers with a decimal point. Floats are contagious, meaning that any binary operation involving a float forces the other operand to be converted to a float before doing the operation (thus yielding a float as result).
 
 Integers are 64-bit signed integers.
 Floats are of size 64-bit, following the [IEEE 754-1985 double format](https://en.wikipedia.org/wiki/Double-precision_floating-point_format).
@@ -21,12 +21,12 @@ Floats are of size 64-bit, following the [IEEE 754-1985 double format](https://e
 To make large numbers more readable, digits are often grouped using underscores.
 When storing these values and when displaying them on screen, Toit just ignores the underscores.
 
-Underscores work for both [integers](https://libs.toit.io/#/lib.core/numbers.toit/LargeInteger) and floats.
+Underscores work for both [integers](https://libs.toit.io/core/numbers/class-LargeInteger) and floats.
 
-You can use the [mathematics operators](https://libs.toit.io/#/lib.core/numbers.toit/num) such as `+`, `-`, `*`, and `/` to form expressions that include numbers.
-The [int class](https://libs.toit.io/#/lib.core/numbers.toit/int) has additional operations (like bit-shifting) that are not supported by the floating point numbers.
+You can use the [mathematics operators](https://libs.toit.io/core/numbers/class-num) such as `+`, `-`, `*`, and `/` to form expressions that include numbers.
+The [int class](https://libs.toit.io/core/numbers/class-int) has additional operations (like bit-shifting) that are not supported by the floating point numbers.
 
-Additional mathematical constants and functions are available in the [math module](https://libs.toit.io/#/lib/math.toit).
+Additional mathematical constants and functions are available in the [math module](https://libs.toit.io/math/library-summary).
 
 ```
 import math
@@ -65,7 +65,7 @@ main:
 
 ## Sorting
 
-`sort` is a method of the class [List](https://libs.toit.io/#/lib.core/collections.toit/List).
+`sort` is a method of the class [List](https://libs.toit.io/core/collections/class-List).
 
 To sort a list of numbers from biggest to smallest number and extract the smallest number
 

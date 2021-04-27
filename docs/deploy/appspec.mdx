@@ -7,7 +7,7 @@ order: 1
 A Toit application is made of:
 
 * a **Toit file** containing the code that will be executed.
-  
+
 * a **YAML file** containing the app specification that describes when and how often the application must run.
 
 <Note>
@@ -25,7 +25,7 @@ triggers:
   on_boot: <bool>
   on_install: <bool>
   on_interval: "<duration>"
-  cron: 
+  cron:
     - "*/5 7 * * *"
     - "0 */2 * * *"
   on_pubsub_topic:
@@ -73,11 +73,11 @@ pubsub:
          Runs the application when a message from the defined pubsub topic `<type>:<name>` is received on the device. The on_pubsub_topic can only trigger on topics that the device is subscribed to (see below for subscribing to a topic). Also, read [PubSub](../../apis/pubsub) and [Tutorials](../../tutorials/pubsub/pubsubext) for additional information and an example of an app specification file with a PubSub subscription.
 
 * **`pubsub`**:
-  
+
     The PubSub subscriptions.
 
     * **`subscriptions`**:
 
          Subscribes to the topic. A topic is a `<type>:<name>`, with `type` being either `cloud` or `device`. The `name` is defined by the user. 
          See [PubSub](../../apis/pubsub) and [Tutorials](../../tutorials/pubsub/pubsubext) for additional information and an example of an app specification file with a PubSub subscription.
-  
+
