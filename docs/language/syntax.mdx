@@ -263,6 +263,7 @@ languages.  From highest to lowest:
 ```
 [Math operators](#math-operators):
 ```txt
+  -    ~    (unary operators)
   *    /    %
   +    -
   <<    >>>    >>
@@ -298,8 +299,8 @@ The postfix operators, `++` and `--` have the highest precedence.  Thus
 the following two lines are equivalent:
 
 ```
-  a1 := x + y++
-  a2 := x + (y++)
+  z1 := x + y++
+  z2 := x + (y++)
 ```
 
 Toit does not have the prefix forms of `++` and `--`:
@@ -314,6 +315,7 @@ Toit does not have the prefix forms of `++` and `--`:
 The [math](../math) operators have the next highest precedence.  In order of
 descending precedence the order is:
 
+* Unary operators, `-` `~`
 * Multiplicative operators, `*` `/` `%`
 * Additive operators, `+` `-`
 * Bitshift operators, `<<` `>>>` `>>`
@@ -324,6 +326,9 @@ descending precedence the order is:
 Thus the following pairs of lines are equivalent:
 
 ```
+  a1 := ~x * 3
+  a2 := (~x) * 3
+
   a3 := 4 + 2 * 3
   a4 := 4 + (2 * 3)
 
@@ -359,6 +364,10 @@ unlike C and Java.  Thus the following are equivalent in Toit, but not in C:
   c1 := x & 1 == 0
   c2 := (x & 1) == 0
 ```
+
+See the full documentation of operators on
+[`int`](https://libs.toit.io/core/numbers/class-int) and
+[`float`](https://libs.toit.io/core/numbers/class-float).
 
 ### Type operators
 
