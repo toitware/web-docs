@@ -4,16 +4,11 @@ order: 1
 
 import ConsoleDevSim from "../_images/consoledevsim.png";
 import ConsoleDevBox from "../_images/consoledevbox.png";
-import HealthDevice from "../_images/healthdevice.png";
-import BatteryFullness from "../_images/batteryfullness.png";
+import DeviceOverview from "../_images/deviceoverview.png";
 import SignalStrength from "../_images/signalstrength.png";
 import DeviceJobs from "../_images/devicejobs.png";
 
 # Devices management
-
-When a particular device has been selected, the icons to the right of the device name can be used to **Rename** or **Reboot** the device. Simulators can be deleted with an additional bin icon. Close the device page to get back to the initial list of all devices belonging to your organization.
-
-<img src={ConsoleDevSim} alt="Toit console screenshot, for a simulated device" />
 
 Several icons and messages near the device name summarize the device's activities, past or scheduled.
 
@@ -27,22 +22,13 @@ Several icons and messages near the device name summarize the device's activitie
 
 ## Overview
 
-This tab allows you to see the device information. A device is identified by 3 different identifiers: a hardware ID created during initial provisioning of the device, a device ID assigned when the hardware is claimed by an organization, and an optional given name. This section also lists the model of the hardware, and the firmware version currently installed on the device.
+This tab allows you to see the device information. A device is identified by 3 different identifiers: a hardware ID created during initial provisioning of the device, a device ID assigned when the hardware is claimed by an organization, and the device name. This section also lists the model of the hardware, and the firmware version currently installed on the device.
 
-<img src={HealthDevice} alt="Toit console screenshot showing device health" />
+<img src={DeviceOverview} alt="Toit console screenshot showing device overview" />
 
-**Current issues** lists the unresolved issues encountered by the device, in red for issues and lime for pending events.
+**Current issues** lists the unresolved issues encountered by the device.
 
 **Most recent check-ins** visualizes as green rectangles successful recent connections of the device with the console. A missed check-in is represented by a red rectangle.
-
-The two graphs below can be used to check battery and used storage levels.
-
-<img src={BatteryFullness} alt="Toit console screenshot showing battery fullness" />
-
-* The **Battery level graph** is built using measurements taken when the device wakes from deep sleep, or with 10 minutes intervals for long running apps.
-Battery level measurements are saved on the device until they are sent to the console when the device comes online.
-If battery levels are depleting too fast, we recommend increasing the amount of time spent by the device in deep sleep.
-This can be done by increasing the Max Offline parameter, or by increasing the `interval` set for apps running on the device so that programs run less frequently.
 
 * The **Used storage graph** shows how much data (such as logs, metrics, app data and PubSub messages) is saved on the device while in deep sleep.
 Data is flushed to the console every time the device comes online. This happens as often as it is configured by the max offline parameter, but can also happen sooner if the flash drive capacity reaches a user-defined threshold of stored events.
@@ -105,7 +91,7 @@ The code tab includes a terminal window where you can write a Toit program. Clic
 
 ## Configuration
 
-This tab allows you to [edit the configuration](../getstarted/deviceconfig.md) of your device. The changes in configuration will be applied to the device the next time it comes online and starts communicating with the console.
+This tab allows you to [edit the configuration](../../connect/deviceconfig) of your device. The changes in configuration will be applied to the device the next time it comes online and starts communicating with the console.
 
 * **Firmware** The current version of the device firmware is shown here. To upgrade (or downgrade) the firmware on the device, click the Edit icon and choose a firmware version from the drop-down menu. Click Save.
 The list of firmware versions in the drop-down menu contains only those firmware versions available for the given device model.

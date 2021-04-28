@@ -57,9 +57,9 @@ Sometimes you may prefer the ternary `?:` operator instead of small `if`s:
 
 Often, loops are used to iterate over a collection. In this case you should
 usually use the built-in
-[do method of the Collection class](<https://libs.toit.io/core/collections/class-Collection#do(block)>).
+[do method of the Collection class](<https://libs.toit.io/core/collections/class-Collection#do(1%2C1%2C0%2C)>).
 Some collections also have
-[do --reversed](<https://libs.toit.io/core/collections/class-List#do(block%2Cbool)>)
+[do --reversed](<https://libs.toit.io/core/collections/class-List#do(2%2C1%2C0%2Creversed)>)
 for looping from last to first.
 
 <!-- HIDDEN CODE main: -->
@@ -80,16 +80,16 @@ for looping from last to first.
 ```
 
 At an even higher level, the built-in collections have some
-[functional-style methods](../listsetmap/#functional_methods),
+[functional-style methods](../listsetmap#functional-methods),
 like `any`, `every`, `reduce` and `map` that iterate over collections for you
 
 However, sometimes you have to write your own loops.  The rest of this section
 will explain how that works in Toit.
 
 If you simply want to execute a block of code multiple times you can use
-[`repeat`](https://libs.toit.io/core/numbers/class-int#repeat(block))
+[`repeat`](<https://libs.toit.io/core/numbers/class-int#repeat(1%2C1%2C0%2C)>)
 which is a method on the [int class](https://libs.toit.io/core/numbers/class-int)
-that takes a [Toit block](blocks.md).
+that takes a [Toit block](../blocks).
 
 Example of a loop that runs a fixed number of times, given by the `end` integer variable.
 

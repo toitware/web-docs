@@ -4,9 +4,9 @@ order: 0
 
 # Toit language basics
 
-This quickstart guide is inspired by [Ruby in Twenty Minutes](https://www.ruby-lang.org/en/documentation/quickstart/). It makes the assumption that you already have [Toit installed](../installation/toitcli.md) on your machine.
+This quickstart guide is inspired by [Ruby in Twenty Minutes](https://www.ruby-lang.org/en/documentation/quickstart/). It makes the assumption that you already have [Toit installed](../../installation/toitcli) on your machine.
 
-Toit is an [object-oriented](/language/objects-constructors-inheritance-interfaces/)
+Toit is an [object-oriented](../objects-constructors-inheritance-interfaces)
 programming language for the internet of things. The Toit language has the following desirable properties:
 
 - Modern, simple, and approachable
@@ -95,7 +95,7 @@ Hello Kasper!
 ## Inserting strings in strings
 
 What’s the `$name` bit? That’s Toit's way of inserting something into a string.
-It is called [_string interpolation_](/language/strings/#string_interpolation).
+It is called [_string interpolation_](../strings#string-interpolation).
 The bit after the `$` is turned into a string (if it isn’t one already) and
 then substituted into the outer string at that point. You can also use this to
 make sure that someone’s name is properly trimmed so leading and trailing
@@ -155,7 +155,7 @@ indented lines, so the constructor has no statements in it:
 ```
 
 This is a
-[constructor](/language/objects-constructors-inheritance-interfaces/#constructors)
+[constructor](../objects-constructors-inheritance-interfaces#constructors)
 and it defines how you can construct objects from the class. It says the class
 `Greeter` takes a single argument (`name`), but the `.` prefix to the `.name`
 parameter actually tells us that the name is immediately stored as a field on
@@ -400,8 +400,8 @@ Let’s return to the `MegaGreeter` example and take a look at another place whe
 
 Here the statement is on a single line, so there is no need to use indentation.
 When using `names.do`, a method available on all
-[collections](/language/listsetmap/), the [special variable
-`it`](/language/blocks/#block_arguments) contains the individual elements from the list in
+[collections](../listsetmap), the [special variable
+`it`](../blocks#block-arguments) contains the individual elements from the list in
 turn. If there are 5 elements in the `names` list, we will call `print` 5 times
 producing 5 separate lines of output.
 
@@ -583,7 +583,7 @@ main:
   greeter.say_hi
 ```
 
-Here we use a [hash map](/language/listsetmap/) to store the appropriate title for each name.  The empty map is given by `{:}` and we use `[]` to access the values for each key.  The empty set is `{}` and we already met the empty list, `[]`.  The lookup syntax `[]` also works on lists, so instead of the 'do' method we could have used:
+Here we use a [hash map](../listsetmap) to store the appropriate title for each name.  The empty map is given by `{:}` and we use `[]` to access the values for each key.  The empty set is `{}` and we already met the empty list, `[]`.  The lookup syntax `[]` also works on lists, so instead of the 'do' method we could have used:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
@@ -625,7 +625,7 @@ class Integer:
       block.call i
 ```
 
-They are making use of a feature called [blocks](/language/blocks/).  These are snippets of code that can be passed down the stack as arguments to methods and functions.  At the call site we precede the block with a colon, '`:`', and at the function definition we surround the parameter name with square brackets, '`[]`'.  Often, there is one block parameter, it is in the final position and it is called `block`.
+They are making use of a feature called [blocks](../blocks).  These are snippets of code that can be passed down the stack as arguments to methods and functions.  At the call site we precede the block with a colon, '`:`', and at the function definition we surround the parameter name with square brackets, '`[]`'.  Often, there is one block parameter, it is in the final position and it is called `block`.
 
 ## Blocks that return a value
 

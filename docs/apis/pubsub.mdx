@@ -6,11 +6,11 @@ import PubSubSub from "../_images/pubsubsub.png";
 
 # PubSub
 
-Applications communicate with each other through pub/sub (publish/subscribe), an asynchronous messaging service that decouples services that produces messages from the services processing them.
+Applications communicate with each other through publish/subscribe (PubSub), an asynchronous messaging service that decouples services that produces messages from the services processing them.
 
 An application can publish serializable data on a topic which is then sent to all subscribers. Applications can also subscribe to a topic to receive all the publications on this topic.
 
-PubSub can be used both on devices through the [PubSub library](https://docs.toit.io/toitdocs/latest/lib_pubsub.html) and external systems using the [PubSub GRPC API](https://github.com/toitware/api/tree/master/proto/toit/api/pubsub).
+PubSub can be used internally on devices through the [PubSub library](https://libs.toit.io/pubsub/library-summary) and externally using the [PubSub GRPC API](https://github.com/toitware/api/tree/master/proto/toit/api/pubsub).
 
 ## Concepts
 
@@ -24,20 +24,22 @@ PubSub can be used both on devices through the [PubSub library](https://docs.toi
 
 * message: the combination of the data from the publisher and an identification of the sender.
 
-See some examples of PubSub communication between apps in [Tutorials](../tutorials/pubsubint.md).
+See some examples of PubSub communication between apps in the [Tutorials](../../tutorials/pubsub/pubsubint) section.
 
 ## Cloud based PubSub subscriptions
 
 <Tabs>
 <Tab label="Console">
 
-Go to the **PubSub** page and click on **Create Subscription**. The topic is the one defined in the Publisher program **cloud:topic-name**. You can chose the name of the subscription.
+Go to the **PubSub** page and click on **Create Subscription**. The topic `cloud:topic-name` is the one defined in the Publisher Toit program. 
+You can provide a name of the subscription, in order to give a description of the topic or in which scenarios it is used.
 
 <img src={PubSubSub} alt="Screenshot of PubSub page on the Toit console" />
 
-Once you created a subscription, two graphs visualize the number of unacknowledged messages for that subscription, as well as the age of the oldest unacknowledged message for a specific time interval.
+Once you have created a subscription, two graphs visualize the number of unacknowledged messages for that subscription, as well as the age of the oldest unacknowledged message for a specific time interval.
 
-Delete a subscription with a bin icon.
+Delete a subscription with the bin icon.
+
 Use the CLI commands to acknowledge messages for a subscription.
 
 </Tab>
@@ -65,19 +67,14 @@ To automatically acknowledge messages, add the `--auto-ack` flag.
 
 ## Additional PubSub features
 
-PubSub messages can be sent from the cloud to one specific device only with
+PubSub messages can be sent from the cloud to one specific device only by providing the `device-id` in the command:
 
 ```txt
 toit pubsub write cloud:<topic-name>?device-id=<id> <choose a name for the sender> -- <write a message>
 ```
 
-For example, it can be
+It is also possible to create server-side PubSub subscriptions across multiple topics as long as they share a common prefix.
 
-```txt
-toit pubsub write cloud:<topic-name>?device-id=<id> <From my home computer> -- <Sending a message to the cloud!>
-```
-
-It is also possible to create server-side pubsub subscriptions across multiple topics as long as they share a common prefix.
 For example, create a subscription for the topics `cloud:foo/bar` and `cloud:foo/baz` with
 
 ```txt

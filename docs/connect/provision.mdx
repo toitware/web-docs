@@ -4,7 +4,12 @@ order: 0
 
 # Provision your hardware
 
-You need the Toit CLI to complete the provisioning steps below, so if you haven't installed Toit on your computer yet, follow the steps described [here](../../installation/toitcli).
+The provision command will create a new hardware identity. Use the provision command only once per hardware device. 
+
+For a start, you can provision up to 10 new hardware IDs with the free version of Toit, and later, if you have many hardware devices, 
+you can request more hardware IDs in the [Toit console](https://console.toit.io/organization/details).
+
+You need the Toit CLI to complete the provisioning steps below. If you haven't installed Toit on your computer yet, follow the steps described [here](../../installation/toitcli).
 
 ## Provision with CLI
 
@@ -52,7 +57,8 @@ If you want to use another device model, you can provide it with `-m` in the pro
 toit serial provision -m <model> -p wifi.ssid=<SSID> -p wifi.password=<WiFi-password>
 ```
 
-Look for available device models for each firmware version available in the <a href="https://console.toit.io/organization/firmware" target="_blank">Toit console</a>.
+Look for available device models for each firmware version available in the
+[Toit console](https://console.toit.io/organization/firmware).
 
 <Note title="Problems with provision">
     

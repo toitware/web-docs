@@ -18,7 +18,7 @@ main:
 ```
 
 Here we used the automatic block argument, `it`, [see
-below](#block_arguments)
+below](#block-arguments)
 
 Syntactically `repeat` and `do` look like they are built-in to the language like `for` and `if` are, but they are actually normal methods that use the block feature.
 
@@ -110,9 +110,7 @@ If a block accepts multiple arguments, but you only need to refer to the first, 
 
 Blocks look like they are built-in which makes it important that they also act like they are built-in. This means that returning from a block with `return`, or accessing local variables must just work.
 
-### Returning from a block
-
-#### Non-local return
+### Non-local return
 
 The non-local return is the most common return from blocks. It is best explained based on an example:
 
@@ -140,7 +138,7 @@ which would print
 
 The `return it` in `first_negative` is a non-local return which means that it doesn't just return from the block or `do`, it returns from `first_negative`. This means that we can short circuit the search when we find the first negative number.
 
-#### Local return
+### Local return
 
 In some situations, it is useful to do a local return. That is, to just return from the block. To do this, you use the `continue` keyword followed by a dot `.` and the label of the function you want to continue in. For example
 
@@ -169,7 +167,7 @@ which prints
 
 Here the block given to `map` uses `continue` to do a local return of an odd value when it sees an even value. The snippet `continue.map` can be read as "continue in the `map` function".
 
-#### Default return
+### Default return
 
 The default return of a block is a local return. The block returns the value of the last statement in the block. For example
 
