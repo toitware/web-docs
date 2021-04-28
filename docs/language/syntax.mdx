@@ -27,23 +27,18 @@ main:
 
 In Toit, a single line comment begins with a double slash `//` followed by the comment. For example:
 ```
-
 // This is a single line comment in Toit.
-
 ```
 
 For multiline comments, use `*/`.
 
 ```
-
 /*
 some multiline
 comment
 */
 
 ```
-
-
 
 ## Identifiers and keywords
 
@@ -256,3 +251,267 @@ main:
       some_long_local7 some_long_local8 some_long_local9 \
       some_long_local10
 ```
+
+## Precedence
+
+Operators and other syntactic elements have precedence, like in other
+languages.  From highest to lowest:
+
+[Postfix operators](#postfix-operators):
+```txt
+  ++    --
+```
+[Math operators](#math-operators):
+```txt
+  *    /    %
+  +    -
+  <<    >>>    >>
+  &
+  ^
+  |
+```
+[Type operators](#type-operators)
+```txt
+  is    is not    as
+```
+[Comparison operators](#comparison-operators)
+```txt
+  ==    !=    <    <=    >    >=
+```
+[Assignment operators](#assignment-operators)
+```txt
+  =  :=  ::=  +=  -=  *=  /=  %=  |=  ^=  &=  <<=  >>=  >>>=
+```
+[Calls and arguments](#calls-and-arguments)
+
+[Logical operators](#logical-operators)
+```txt
+  not
+  and
+  or
+  ?:
+```
+
+### Postfix operators
+
+The postfix operators, `++` and `--` have the highest precedence.  Thus
+the following two lines are equivalent:
+
+```
+  a1 := x + y++
+  a2 := x + (y++)
+```
+
+Toit does not have the prefix forms of `++` and `--`:
+
+```
+  for i :=0; i < 10; ++i:  // Error!  There is no prefix ++.
+    // ...
+```
+
+### Math operators
+
+The [math](../math) operators have the next highest precedence.  In order of
+descending precedence the order is:
+
+* Multiplicative operators, `*` `/` `%`
+* Additive operators, `+` `-`
+* Bitshift operators, `<<` `>>>` `>>`
+* Bit-and operator, `&`
+* Bit-xor operator, `^`
+* Bit-or operator, `|`
+
+Thus the following pairs of lines are equivalent:
+
+```
+  a3 := 4 + 2 * 3
+  a4 := 4 + (2 * 3)
+
+  a5 := x >> y + 1
+  a6 := x >> (y + 1)
+
+  a7 := x & mask << distance
+  a8 := x & (mask << distance)
+
+  b1 := x ^ y & z
+  b2 := x ^ (y & z)
+
+  b3 := x | y ^ z
+  b4 := x | (y ^ z)
+```
+
+The math operators group from left to right.  Thus the following pairs of lines
+are equivalent
+
+```
+  b5 := x / y / z
+  b6 := (x / y) / z
+
+  b7 := x * y / z
+  b8 := (x * y) / z
+```
+
+Note that the [bitwise operators](../math#bit-operations) have higher
+precedence than the comparison operators in Toit.  This is like Dart, but
+unlike C and Java.  Thus the following are equivalent in Toit, but not in C:
+
+```
+  c1 := x & 1 == 0
+  c2 := (x & 1) == 0
+```
+
+### Type operators
+
+The next operators in the precedence order are the type operators, `is`, `is not`, and `as`.
+
+`is` and `is not` return a boolean depending on whether the runtime type
+of the left hand side has the type on the right.
+
+`as` is a cast, which dynamically checks the type and returns a value with the
+correct static type:
+
+```
+  if x is int:
+    // Code that can use x as an integer
+  if y is not string:
+    // y must be something other than string
+  // The programmer knows somehow that y is a number.  This checks
+  // that the programmer is right allows the program to pass the
+  // compiler's type checker:
+  return (y as num) + 1
+```
+
+### Comparison operators
+
+The next operators in the precedence order are the comparison operators,
+`==` `!=` `<` `<=` `>` `>=`.
+
+Thus the following pairs of lines are equivalent:
+
+```
+  c3 := x + 1 <= y * 2
+  c4 := (x + 1) >= (y * 2)
+
+  c5 := x + 1 <= y & -2
+  c6 := (x + 1) >= (y & -2)  // Equivalent in Toit, not in C.
+```
+
+The comparison operators form a group with ternary and other
+n-ary forms so that they can be used in the mathematical way.  Thus the
+following pairs are equivalent:
+
+```
+  if 0 <= x < y:
+    // ...
+  if 0 <= x and x < y:
+    // ...
+
+  if 0 <= from <= to <= size:
+    // ...
+  if 0 <= from and from <= to and to <= size:
+    // ...
+
+  if 0 == base <= level < top:
+    // ...
+  if 0 == base and base <= level and level < top:
+    // ...
+```
+
+### Calls and arguments
+
+Calls and arguments are done with spaces in Toit, not with
+parentheses and commas.  Thus we write:
+
+```
+  foo x y z          // In C: foo(x, y, z)
+  c7 := 2 * (sin x)  // In C: 2 * sin(x)
+```
+
+The mathematical operators all have higher precendece than calls,
+so the following are equivalent:
+
+```
+  foo x + 1 y + 2 z + 3
+  foo (x + 1) (y + 2) (z + 3)
+
+  cos x + PI / 4    // In C: cos(x + PI / 4)
+  cos (x + PI / 4)  // In C: cos(x + PI / 4)
+  cos(x + PI / 4)   // Looks like C call syntax.
+```
+
+The third form, with the redundant parentheses and no space, looks like
+a C-style call syntax.  However this is an illusion:
+
+```
+  acos(x) + 100   // Not what it looks like!
+  acos (x + 100)  // Equivalent!
+
+  atan2 x y       // Correct.
+  atan2(x, y)     // Syntax error!
+```
+
+### Logical operators
+
+In descending precedence order:
+
+* `not`
+* `and`
+* `or`
+* `?:`  (the ternary operator)
+
+The first three match the names used in Python and C++.  In
+C++ these alphabetical forms are rarely used, and
+it is more common to see the symbolic forms, `&&`, `||`, and `!`.
+The symbolic forms are not available in Toit.
+
+The following pairs are equivalent:
+
+```
+  if not a and b == 0:
+    // ...
+  if (not a) and (b == 0):
+    // ...
+
+  if a == 0 or b == 0 and c == 0:
+    // ...
+  if (a == 0) or ((b == 0) and (c == 0)):
+    // ...
+```
+
+Since the logical operators are lower than the calls and arguments
+we have to group them:
+
+```
+  my_function x/bool -> bool:
+    // ...
+
+  is_odd x/int -> bool
+    return x % 2 == 1
+
+  my_function (condition_a and condition_b)  // Parentheses needed.
+
+  // The following two forms are equivalent.
+  if is_odd x and is_odd y:
+    // ...
+  if (is_odd x) and (is_odd y):
+    // ...
+```
+
+### Assignment operators
+
+The lowest operators in the precedence order are the assignment operators,
+`=` `:=` `::=` `+=` `-=` `*=` `/=` `%=` `|=` `^=` `&=` `<<=` `>>=` `>>>=`.
+
+Since they are below the logical operators and calls, we can write
+equivalently:
+
+```
+  angle := atan2 x y
+  angle := (atan2 x y)
+
+  condition := cond1 and cond2
+  condition := (cond1 and cond2)
+```
+
+Assignment operators are only allowed at the start of statements and
+in the first clause of a `for`, `if`, or `while` statement.
