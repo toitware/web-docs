@@ -42,11 +42,14 @@ interface LayoutProps {
 const dark = false;
 
 export function Layout(props: LayoutProps): JSX.Element {
-  const { data, children, pageContext } = props;
+  const { data, children } = props;
 
-  const pageTitle = pageContext?.frontmatter.title;
+  // TODO: https://github.com/toitware/web-docs/issues/50#issuecomment-827398248
+  // const { data, children, pageContext } = props;
+  // const pageTitle = pageContext?.frontmatter.title;
+  // const title = `${pageTitle ? `${pageTitle} - ` : ""}${data?.site.siteMetadata?.title}`;
 
-  const title = `${pageTitle ? `${pageTitle} - ` : ""}${data?.site.siteMetadata?.title}`;
+  const title = "Toit Documentation";
 
   const mdxBody = data?.mdx?.body;
 

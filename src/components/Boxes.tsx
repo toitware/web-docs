@@ -6,20 +6,16 @@ import { ReactNode } from "react";
 const useStyles = makeStyles((theme) => ({
   boxes: {
     position: "relative",
-    display: "flex",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    gap: "1.5rem",
     margin: "3rem 0",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(14rem, 1fr))",
+    gridGap: "1.5rem",
   },
   box: {
     backgroundColor: Color(theme.palette.primary.main).alpha(0.05).string(),
     border: `1px solid ${Color(theme.palette.text.primary).alpha(0.05).string()}`,
     borderRadius: "5px",
     padding: "1.5rem",
-    flexBasis: "calc(50% - 1.5rem)",
-    minWidth: "12rem",
-    flex: 1,
     "& p:last-child": {
       marginBottom: 0,
     },
