@@ -50,7 +50,7 @@ Otherwise, TPM looks at the Git URL. If the last segment of the URL is a valid i
 `license`: The license of the package. Whenever possible, packages should use the same license keywords as [github uses](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository).
 Packages that are not intended to be reused should use the keyword `proprietary`. This is generally only useful for private packages.
 If no `license` entry is present, but a `LICENSE` file exists, then TPM tries to infer the license by matching the license file.
-`dependencies`: The dependencies of this package, together with the prefixes by which they are used inside the code. The dependencies entry is a map from prefix to `URL`, `version`. For example:
+`dependencies`: The dependencies of this package, together with the prefixes by which they are used inside the code. The dependencies entry is a map from prefix to `url`, `version`. For example:
 ```
 dependencies:
   prefix1:
