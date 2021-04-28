@@ -37,7 +37,7 @@ main:
 
 ## Randomization
 
-`random` is a function included in the core library.
+`random` is a function included in the [core library](https://libs.toit.io/core/utils/library-summary#random(0%2C0%2C0%2C))
 
 `random 10` gives you a random number between 0 and 10 (10 exclusive).
 
@@ -63,42 +63,30 @@ main:
     print it  // Logs 10, 12, 14, 16, 18.
 ```
 
-## Sorting
+## Bit operations
 
-`sort` is a method of the class [List](https://libs.toit.io/core/collections/class-List).
-
-To sort a list of numbers from biggest to smallest number and extract the smallest number
-
-```
-main:
-  list := [3, 2, 5, 1]
-  sorted := list.sort
-  print sorted[0]
-```
-
-If the list should be sorted in place, avoiding the allocation of a fresh list
+The bit operations on integers work on 64 bit signed twos-complement
+numbers.  Thus the shift operators can take shift distances of up to 63:
 
 ```
-main:
-  list := [3, 2, 5, 1]
-  list.sort --in_place
-  print list.first
+  print 0x8000_0000_0000_0000 >>> 63  // >> 1
 ```
 
-To get the highest number of the sorted list
+The shift-right operator, `>>` preserves the sign of its input, while
+the unsigned shift-right operator `>>>` shifts in zeros, which can
+give a positive result for a negative input.
+
 
 ```
-  print list.last
+  print -20 >> 2  // >> -5
+  print -20 >>> 2 // >> 4611686018427387899
 ```
 
-It is also possible to sort with a custom comparison by passing a block to the `sort` function
+Shifting further than 63 will shift all bits out, rather than being
+undefined behavior (in C and C++) or taking the modulus of the
+shift distance (in Java):
 
 ```
-main:
-  my_list := [1, 2, 5, 9]
-  my_list.sort --in_place: | a b | b - a
-  print my_list[0]
+  print -20 >> 64  // >> -1
+  print -20 >>> 64 // >> 0
 ```
-
-The block takes two arguments, which are here called `a` and `b` and should return (implicitly) a value that can be negative, zero, or positive.
-Note that `| b -a | sorts in descending order.

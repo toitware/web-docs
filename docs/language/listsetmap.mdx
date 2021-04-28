@@ -260,3 +260,43 @@ arbitrary expression in a string interpolation, surrounding it with `$(` and
 csv list/List -> string:
   return (list.map: "\"$("$it".replace --all "\"" "\"\"")\"").join ","
 ```
+
+## Sorting
+
+`sort` is a method of the class [List](https://libs.toit.io/core/collections/class-List).
+
+To sort a list of numbers from biggest to smallest number and extract the smallest number
+
+```
+main:
+  list := [3, 2, 5, 1]
+  sorted := list.sort
+  print sorted[0]
+```
+
+If the list should be sorted in place, avoiding the allocation of a fresh list
+
+```
+main:
+  list := [3, 2, 5, 1]
+  list.sort --in_place
+  print list.first
+```
+
+To get the highest number of the sorted list
+
+```
+  print list.last
+```
+
+It is also possible to sort with a custom comparison by passing a block to the `sort` function
+
+```
+main:
+  my_list := [1, 2, 5, 9]
+  my_list.sort --in_place: | a b | b - a
+  print my_list[0]
+```
+
+The block takes two arguments, which are here called `a` and `b` and should return (implicitly) a value that can be negative, zero, or positive.
+Note that `| b -a | sorts in descending order.
