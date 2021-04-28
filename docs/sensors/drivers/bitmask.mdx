@@ -192,8 +192,8 @@ class MyDevice extends OneRegisterDevice:
     reg := read_register
     // Remove the old brightness with the mask.
     reg &= ~CONTRAST_MASK_
-    // Insert the new constrast with the "or" operation.
-    reg |= constrast
+    // Insert the new contrast with the "or" operation.
+    reg |= contrast
     // Write back the new contrast and the old brightness.
     write_register reg
 

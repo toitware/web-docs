@@ -5,7 +5,7 @@ order: 4
 # Objects in Toit
 
 In Toit, everything is an object, including things that may be non-Object
-"primitive types" in other languges. For example, an [integer](../math)
+"primitive types" in other languages. For example, an [integer](../math)
 is an object, and has methods like `abs`:
 
 ```
@@ -346,7 +346,7 @@ to the newly constructed object before the `super` call.
 import math
 
 class Vector:
-  x/float  // These must be initialized in the intializer...
+  x/float  // These must be initialized in the initializer...
   y/float  // ...part of the constructor, not later.
   length /float
 
@@ -357,7 +357,7 @@ class Vector:
   constructor.unit:
     x = 1.0
     y = 1.0
-    // It is ok to access fields in the initializer part of
+    // It is OK to access fields in the initializer part of
     // the constructor.
     length = math.sqrt x * x + y * y
     super

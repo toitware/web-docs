@@ -238,16 +238,16 @@ Toit CLI command
 
 Note that Toit removes the first newline if it is immediately after the `"""`.
 
-In multiline strings there are some extra escapes that can
+In multi-line strings there are some extra escapes that can
 be used.
 
 |                                              |                                                                                                |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `\` followed by a newline (ASCII 10)         | Removes a newline in a multiline string.                                                        |
-| `\` followed by a carriage return (ASCII 13) | Removes a newline in a multiline string. If followed by a newline, that one is removed as well. |
+| `\` followed by a newline (ASCII 10)         | Removes a newline in a multi-line string.                                                        |
+| `\` followed by a carriage return (ASCII 13) | Removes a newline in a multi-line string. If followed by a newline, that one is removed as well. |
 | `\s`                                         | Space (see below for a detailed explanation).                                                   |
 
-Toit removes the indentation of a multiline string.
+Toit removes the indentation of a multi-line string.
 It looks for the line with the smallest indentation and removes that amount of indentation for each line.
 
 If a space (or several spaces) are needed in front of each line, use `\s` to indicate to the compiler that this space shouldn't be seen as indentation.
@@ -261,7 +261,7 @@ main:
   print "[" + str2 + "]"  // >> [ foo]
 ```
 
-Note that multiline strings frequently end with a newline anyway, in which case the last line can be used to indicate how much the indentation is:
+Note that multi-line strings frequently end with a newline anyway, in which case the last line can be used to indicate how much the indentation is:
 ```
 main:
   print """

@@ -45,12 +45,12 @@ Note that only programs and local packages are allowed to depend on other local 
 The specification file, `package.yaml`, provides information about the package. A `package.yaml` file can contain the following entries:
 `name`: The name of the package. If not given, the package name is inferred from the `README.md` or the Git repository URL.
 If a `README.md` exists, and the title (`# title`) is a valid identifier, then that identifier is used as the package name.
-Otherwise, TPM looks at the Git url. If the last segment of the url is a valid identifier, optionally prefixed with `toit-`, then that identifier is used as the package name.
+Otherwise, TPM looks at the Git URL. If the last segment of the URL is a valid identifier, optionally prefixed with `toit-`, then that identifier is used as the package name.
 `description`: A short description of the package. If none is provided, and a `README.md` exists, then the first paragraph of the `README.md` is used.
 `license`: The license of the package. Whenever possible, packages should use the same license keywords as [github uses](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository).
 Packages that are not intended to be reused should use the keyword `proprietary`. This is generally only useful for private packages.
 If no `license` entry is present, but a `LICENSE` file exists, then TPM tries to infer the license by matching the license file.
-`dependencies`: The dependencies of this package, together with the prefixes by which they are used inside the code. The dependencies entry is a map from prefix to `url`, `version`. For example:
+`dependencies`: The dependencies of this package, together with the prefixes by which they are used inside the code. The dependencies entry is a map from prefix to `URL`, `version`. For example:
 ```
 dependencies:
   prefix1:
@@ -61,7 +61,7 @@ dependencies:
     version: ^3.1.4
 ```
 
-As can be seen, almost all entries of the specification file can be inferred by looking at the repository in which the package is located. If a package doesn't have any dependency it is thus completely ok to have an empty specification file.
+As can be seen, almost all entries of the specification file can be inferred by looking at the repository in which the package is located. If a package doesn't have any dependency it is thus completely OK to have an empty specification file.
 
 ## Multiple Packages with Different Versions
 
