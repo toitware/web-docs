@@ -11,7 +11,7 @@ The BOSCH BME280 chip is an environment sensor measuring temperature, humidity a
 
 ## Setup
 
-The sensor supports both I2C and SPI connection mode. This guide will focus on the Sparkfun BME280 breakout board connected using a qwiic cable.
+The sensor supports both I2C and SPI connection mode. This guide will focus on the SparkFun BME280 breakout board connected using a qwiic cable.
 
 <Note>
 If you connect a different BME280 sensor breakout board, you may have to place additional pull-up resistors on the I2C wires.
@@ -38,7 +38,7 @@ main:
     --scl=gpio.Pin 22
 ```
 
-With the bus configured, we can specify how to address the BME280 device on the bus. From the Sparkfun BME280 breakout documentation we can see that the default configured address is `0x77`:
+With the bus configured, we can specify how to address the BME280 device on the bus. From the SparkFun BME280 breakout documentation we can see that the default configured address is `0x77`:
 
 ```
   device := bus.device 0x77

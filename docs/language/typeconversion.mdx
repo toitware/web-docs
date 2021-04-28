@@ -42,7 +42,7 @@ main:
   s4 /string := "$(%x i2)"
   print s4 + " fish"  // => "a0 fish".
 
-  // Gets a rune (unicode code point) from a string.  This
+  // Gets a rune (Unicode code point) from a string.  This
   // gets the integer representing the character at the
   // position 0.
   u/int := "x"[0]
@@ -53,11 +53,11 @@ main:
   u2/int := "24€"[2]
   print u2  // => 8364 because the Euro sign is Unicode 8364.
 
-  // Convert a unicode value to a string.
+  // Convert a Unicode value to a string.
   print (string.from_rune '\u20ac') // => the Euro sign, €.
   print (string.from_rune 0x20ac) // => the Euro sign, €.
 
-  // Also convert a unicode value to a string. Here we are
+  // Also convert a Unicode value to a string. Here we are
   // also using a format specifier inspired by printf. In
   // Toit the %c format works for all Unicode values.
   s5 /string := "a string with $(%c u2) in the middle"

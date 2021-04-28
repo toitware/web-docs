@@ -10,7 +10,7 @@ In Toit, the GPIO Pin class is exposed by the [`gpio` module](https://libs.toit.
 
 GPIO pins are managed across the device. That means that only one instance of a given GPIO pin can
 exist at any given point in time. This ensures that two applications can't configure or use a
-specific GPIO pin at the same time. To pin can be released againby calling `close` after usage:
+specific GPIO pin at the same time. The pin can be released again by calling `close` after usage:
 
 ```
 import gpio

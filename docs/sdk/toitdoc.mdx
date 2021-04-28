@@ -28,11 +28,11 @@ Comments are recognized as Toitdocs if they are either:
 
 1. `///` - triple-slash comments, or
 
-2. `/** ... */` - Multiline comments with two stars at the beginning.
+2. `/** ... */` - Multi-line comments with two stars at the beginning.
 
 We recommend to use `///` only for one, or two-line comments. Even then, single-line `/** This is a comment. */` comments are preferred, since they have an easier time evolving to bigger comments.
 
-Multiline comments are the preferred documentation for longer comments. The individual lines should _not_ have any leading `*`, and should be aligned with the first `/`.
+Multi-line comments are the preferred documentation for longer comments. The individual lines should _not_ have any leading `*`, and should be aligned with the first `/`.
 
 Examples:
 
@@ -206,7 +206,7 @@ Getters can either be documented as if they were fields, or as a method. If a pa
 
 Usually, this style of documentation does not require to refer to the commented element from within the Toitdoc. Whenever that's necessary, use the prefix "this". For example "Whenever this class is instantiated, ... ".
 
-In instance members and constructors, use "this instance" when referring to `this`. For example, "Calls the given $block on each element of this instance". This convention has the advantage that the comment is still valid for subclasses (compared to the alternative of referring to the classname).
+In instance members and constructors, use "this instance" when referring to `this`. For example, "Calls the given $block on each element of this instance". This convention has the advantage that the comment is still valid for subclasses (compared to the alternative of referring to the class name).
 
 Arguments should be referred to as "the given $arg-name". When it is clear that the text talks about a given argument, one may drop "given". When providing more information for arguments, start the paragraph with "The argument $arg-name ...". For substantial discussions of parameters consider a (additional) section "# Argument $arg-name".
 
