@@ -406,9 +406,9 @@ following pairs are equivalent:
   if 0 <= x and x < y:
     // ...
 
-  if 0 <= from <= to <= size:
+  if 0 <= from <= to < size:
     // ...
-  if 0 <= from and from <= to and to <= size:
+  if 0 <= from and from <= to and to < size:
     // ...
 
   if 0 == base <= level < top:
@@ -515,3 +515,11 @@ equivalently:
 
 Assignment operators are only allowed at the start of statements and
 in the first clause of a `for`, `if`, or `while` statement.
+
+```
+  while data := reader.read:
+    // data was not null.
+
+  if parsed := (int.parse str --on_error=: null):
+    // parsed is not null and thus a valid number.
+```
