@@ -23,7 +23,7 @@ topic ::= "device:hello-world"
 main:
   pubsub.subscribe topic: | msg/pubsub.Message |
     print "Received message '$msg.payload.to_string'"
-    return
+    return  // Exit 'main' (only printing one message).
 ```
 
 ## The publisher
