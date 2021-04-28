@@ -22,10 +22,8 @@ topic ::= "device:hello-world"
 
 main:
   pubsub.subscribe topic: | msg/pubsub.Message |
-    sender := msg.sender.is_device ? "Device($msg.sender.hardware_id)" : "ExternalSystem($msg.sender.external_name)"
-
-    print "Received message '$msg.payload.to_string' from $sender"
-    return
+    print "Received message '$msg.payload.to_string'"
+    return  // Exit 'main' (only printing one message).
 ```
 
 ## The publisher
@@ -63,7 +61,7 @@ The output of both commands are listed below:
 ```txt
 $ toit run subscribe.toit
 2020-06-12T09:11:49.689210Z: <process initiated>
-Received message 'Hello, World!' from Device(82df15db-4c03-4516-b846-df714577960c)
+Received message 'Hello, World!'
 2020-08-04T10:45:46.397975Z: <process terminated - exit code: 0>
 ```
 
