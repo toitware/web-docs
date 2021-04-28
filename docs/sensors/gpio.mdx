@@ -23,7 +23,7 @@ To create a GPIO Pin on `pin 21` in output mode, use `Pin`:
 import gpio
 
 main:
-  pin := gpio.Pin 21
+  pin := gpio.Pin --output 21
 ```
 
 The pin is `low (0)` by default, so to set it `high (1)` use `Pin.set`.
@@ -34,7 +34,7 @@ The pin is `low (0)` by default, so to set it `high (1)` use `Pin.set`.
 import gpio
 
 main:
-  pin := gpio.Pin 21
+  pin := gpio.Pin --output 21
   pin.set 1
   sleep --ms=1000
 ```
