@@ -102,7 +102,7 @@ make sure that someone’s name is properly trimmed so leading and trailing
 whitespace is ignored:
 
 ```
-hi name = "World":
+hi name="World":
   print "Hello, $name.trim!"
 ```
 
@@ -136,7 +136,7 @@ What if we want a real greeter around, one that remembers your name and welcomes
 class Greeter:
   name := null
 
-  constructor .name = "World":
+  constructor .name="World":
 
   say_hi: print "Hi $name.trim!"
 
@@ -151,7 +151,7 @@ indented lines, so the constructor has no statements in it:
 
 <!-- SKIP CODE -->
 ```
-  constructor .name = "World":
+  constructor .name="World":
 ```
 
 This is a
@@ -203,7 +203,7 @@ As you have just seen, a field on an object introduces a method with the same na
 ```
 class Greeter:
   name_ := null
-  constructor .name_ = "World":
+  constructor .name_="World":
 ```
 
 This removes the `name` method from greeters, but if we really want to allow accessing the name from the outside, we could reintroduce a getter with the same meaning as before.
@@ -213,7 +213,7 @@ This removes the `name` method from greeters, but if we really want to allow acc
 class Greeter:
   name_ := null
 
-  constructor .name_ = "World":
+  constructor .name_="World":
 
   name: return name_
   say_hi: print "Hi $name_.trim!"
@@ -234,7 +234,7 @@ In this way, access to the name from the outside also gets the trimming and we c
 class Greeter:
   name_ := null
 
-  constructor .name_ = "World":
+  constructor .name_="World":
 
   name: return name_.trim
   say_hi: print "Hi $name!"
@@ -261,7 +261,7 @@ This greeter isn’t all that interesting though, it can only deal with one pers
 class MegaGreeter:
   names := []
 
-  constructor name = "World":
+  constructor name="World":
     names.add name
 ```
 
@@ -288,7 +288,7 @@ We can now go ahead and add greeter methods that show all the names:
 class MegaGreeter:
   names := []
 
-  constructor name = "World":
+  constructor name="World":
     names.add name
 
   say_hi:
@@ -437,7 +437,7 @@ One of the methods on lists that is very useful when constructing strings is `jo
 Perhaps you don’t always want to say "Hello", so you add an argument with a default value to the `say_hi` method:
 
 ```
-  say_hi greeting = "Hello,":
+  say_hi greeting="Hello,":
     // Greet everyone individually!
     names.do: print "$greeting $it!"
 ```
