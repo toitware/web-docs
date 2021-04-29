@@ -1867,13 +1867,21 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
 
-"@toitware/code-block@^0.1.0":
-  version "0.1.0"
-  resolved "https://npm.pkg.github.com/download/@toitware/code-block/0.1.0/9cd0145305314f70898353b73159f8d8320387602efbe83fc12e83de9ae915cb#9f430e70ad10b1c54049245babb737505ae7222a"
-  integrity sha512-7/66jHT0W4AEzu9nGnZDSPQ0hB+8bhGjguVbx5kUpVBCDFpSTVT7ljih7y2HBLmasGb3O/IVrdQi0kX80mFoYQ==
+"@toitware/code-block@^0.1.2":
+  version "0.1.2"
+  resolved "https://npm.pkg.github.com/download/@toitware/code-block/0.1.2/229af53721b7f0485afb05bfe95de7efa7ba1b421a779a65abed2713aaaaeb20#ba828f2818be2fa76644c01a3f44640103c3e42b"
+  integrity sha512-UYgQ8e6EeqJrJolfCRc+Yz4Yc+2OzPmaZq9NgriEWfGlOfJ9L1mcL6SZGbRT0w5T7i+kOfjyhLd0cB4bb1PXsQ==
   dependencies:
     clsx "^1.1.1"
     use-codemirror "^0.2.0"
+
+"@toitware/cookie-consent@^0.1.1":
+  version "0.1.1"
+  resolved "https://npm.pkg.github.com/download/@toitware/cookie-consent/0.1.1/d72b6fa75181c9c32b2e9b490010e4b8cb1d69ff27f9ae94cd651e001ad02064#539342100c34e961129f9495a003fabfff3e90b6"
+  integrity sha512-ciRHuz93Qa8AMKH4QROgBAv4rENgxZz0FJ+zMpBsWI9SULjuDzzndawKtNwY3GuZKpkO8sBMWBNlJte4CSPQ/g==
+  dependencies:
+    js-cookie "^2.2.1"
+    react-icons "^4.1.0"
 
 "@toitware/testing-utils@^0.0.7":
   version "0.0.7"
@@ -2254,6 +2262,11 @@
   version "0.16.1"
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.1.tgz#18845205e86ff0038517aab7a18a62a6b9f71275"
   integrity sha512-EaCxbanVeyxDRTQBkdLb3Bvl/HK7PBK6UJjsSixB0iHKoWxE5uu2Q/DgtpOhPIojN0Zl1whvOd7PoHs2P0s5eA==
+
+"@types/segment-analytics@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@types/segment-analytics/-/segment-analytics-0.0.33.tgz#7580723d3978993126636e2f293d5831c8e9585b"
+  integrity sha512-8OB3OhKGuIkItHeQxgQpzldyaL1dVKzJQF9ujfVLmO0MJyIhXZTiOIZtkSHF6jhptEQZqm8EyTuceIAR36OS3A==
 
 "@types/stack-utils@^2.0.0":
   version "2.0.0"
@@ -6254,6 +6267,11 @@ gatsby-plugin-react-helmet@^4.1.0:
   dependencies:
     "@babel/runtime" "^7.12.5"
 
+gatsby-plugin-segment-js@^3.6.1:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-segment-js/-/gatsby-plugin-segment-js-3.6.1.tgz#6a10fc8273f20942f7da2973e93364371d253575"
+  integrity sha512-HpaTw/yAip+b+VLGEq8T8XoxggQA7ibEH5YsF8v3L5AvaXABukSfgAH0Vw9adUGw9x6VJQS/2l/ceIqoIUsbug==
+
 gatsby-plugin-sitemap@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-sitemap/-/gatsby-plugin-sitemap-3.1.0.tgz#490d126f6bd74a384b49469913a25a1ddf3c6239"
@@ -8567,6 +8585,11 @@ joi@^17.2.1, joi@^17.4.0:
     "@sideway/address" "^4.1.0"
     "@sideway/formula" "^3.0.0"
     "@sideway/pinpoint" "^2.0.0"
+
+js-cookie@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.1.tgz#69e106dc5d5806894562902aa5baec3744e9b2b8"
+  integrity sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
@@ -11227,7 +11250,7 @@ react-helmet@^6.1.0:
     react-fast-compare "^3.1.1"
     react-side-effect "^2.1.0"
 
-react-icons@^4.2.0:
+react-icons@^4.1.0, react-icons@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.2.0.tgz#6dda80c8a8f338ff96a1851424d63083282630d0"
   integrity sha512-rmzEDFt+AVXRzD7zDE21gcxyBizD/3NqjbX6cmViAgdqfJ2UiLer8927/QhhrXQV7dEj/1EGuOTPp7JnLYVJKQ==

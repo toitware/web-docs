@@ -158,5 +158,15 @@ module.exports = {
           }),
       },
     },
+    {
+      resolve: "gatsby-plugin-segment-js",
+      options: {
+        // The keys must be defined otherwise the plugin will no load analytics.js
+        prodKey: "XXXXXXXXXXXXXXXXX",
+        devKey: "XXXXXXXXXXXXXXXXX",
+        manualLoad: true,
+        trackPage: true,
+      },
+    },
   ],
 };
