@@ -1,7 +1,3 @@
-# ⚠️ WORK IN PROGRESS ⚠️
-
-Please don't fork an create any PRs for now. I'll update everybody, once it's time to do so.
-
 # General Documentation
 
 This repository contains the general documentation of toit served at
