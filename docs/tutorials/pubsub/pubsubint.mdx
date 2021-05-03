@@ -23,7 +23,6 @@ topic ::= "device:hello-world"
 main:
   pubsub.subscribe topic: | msg/pubsub.Message |
     print "Received message '$msg.payload.to_string'"
-    msg.acknowledge
     // Stop listening for other messages and exit 'main'.
     return
 ```

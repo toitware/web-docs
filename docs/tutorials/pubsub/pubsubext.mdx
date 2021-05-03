@@ -31,7 +31,6 @@ main:
     else:
       sender = "ExternalSystem($msg.sender.external_name)"
     print "Received message '$msg.payload.to_string' from $sender"
-    msg.acknowledge
   print "done processing all messages"
 ```
 
