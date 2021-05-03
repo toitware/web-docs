@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import CookieConsent from "@toitware/cookie-consent";
 import Color from "color";
 import * as React from "react";
 import ToitLogo from "../../assets/images/toit-logo.inline.svg";
@@ -31,9 +32,20 @@ const useStyles = makeStyles((theme) => ({
 
 export function Header(): JSX.Element {
   const classes = useStyles();
+
+  let segmentAPIKey = process.env.GATSBY_SEGMENT_WRITE_KEY;
+
+  if (typeof document !== `undefined`) {
+    // Check if the meta segment-key is set.
+    const segmentKeyDOM = document.querySelector('meta[name="segment-key"]');
+    if (segmentKeyDOM) {
+      segmentAPIKey = segmentKeyDOM.getAttribute("content") || segmentAPIKey;
+    }
+  }
   return (
     <header className={classes.container}>
       <ToitLogo />
+      <CookieConsent show={false} segmentKey={segmentAPIKey || "no-key"} changeConsent={false} />
       <SearchBar className={classes.searchBar} />
       <HamburgerMenu className={classes.hamburgerMenu} />
     </header>
