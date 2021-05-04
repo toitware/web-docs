@@ -26,6 +26,18 @@ Install both drivers, reboot your computer and try to run the Toit CLI serial co
 
 </Note>
 
+List the serial ports currently in use on your computer by running the following command with the Toit CLI
+
+```shell
+toit serial ports
+```
+
+To avoid mistakes when talking with your device on a serial connection, set the default serial port to be used in the CLI with
+
+```shell
+toit serial port use <port>
+```
+
 2. Use the Toit CLI to provision your ESP32 with initial device settings and the latest released Toit firmware.
 Replace `<SSID>` and `<password>` with your own WiFi credentials in the following command:
 
