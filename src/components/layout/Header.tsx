@@ -45,7 +45,7 @@ export function Header(): JSX.Element {
   return (
     <header className={classes.container}>
       <ToitLogo />
-      <CookieConsent show={false} segmentKey={segmentAPIKey || "no-key"} changeConsent={false} />
+      <CookieConsent show={true} segmentKey={segmentAPIKey || "no-key"} changeConsent={false} />
       <SearchBar className={classes.searchBar} />
       <HamburgerMenu className={classes.hamburgerMenu} />
     </header>
