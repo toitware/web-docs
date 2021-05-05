@@ -26,7 +26,6 @@ Each device must have a unique address. The address can be found in the datashee
 
 In case of the Bosch [BME280 sensor](https://cdn.sparkfun.com/assets/e/7/3/b/1/BME280_Datasheet.pdf), the address is `0x76`:
 
-<!-- RESET CODE -->
 ```
 import gpio
 import serial.protocols.i2c as i2c
@@ -58,8 +57,6 @@ Remember that when changing the frequency, the associated pull-up resistors may 
 
 Toit exposes the peripheral through the `serial.protocols.spi` library.
 
-<!-- RESET CODE -->
-<!-- ANALYZE CODE -->
 ```
 import gpio
 import serial.protocols.spi as spi
@@ -75,8 +72,6 @@ When communicating with a device, a unique chip-select Pin is used to signal whe
 
 In case of the Bosch BME280 sensor, the maximum frequency is 10MHz:
 
-<!-- RESET CODE -->
-<!-- ANALYZE CODE -->
 ```
 import gpio
 import serial.protocols.spi as spi

@@ -176,7 +176,6 @@ are more complex ways to initialize an object we make use of special functions
 called constructors.  In Toit the constructor has the name `constructor` rather
 than having the same name as the class:
 
-<!-- RESET CODE -->
 ```
 import math
 
@@ -196,7 +195,6 @@ fields of the new object, so there is a shorthand.  By putting a dot (`.`) in
 front of the parameter name, it is copied directly to the field of the same
 name:
 
-<!-- RESET CODE -->
 ```
 import math
 
@@ -232,7 +230,6 @@ overloading and argument-name overloading.
 However, sometimes it is more helpful to have constructors with different
 names.  For example, the `Vector` class might have a polar constructor:
 
-<!-- RESET CODE -->
 ```
 import math
 
@@ -341,7 +338,6 @@ This still means the fields are immutable all other places than in the
 constructor, since no other parts of the program can obtain a reference
 to the newly constructed object before the `super` call.
 
-<!-- RESET CODE -->
 ```
 import math
 

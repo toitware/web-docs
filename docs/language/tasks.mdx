@@ -22,7 +22,6 @@ Toit has a third option instead: Tasks (sometimes called fibers in other
 languages). Tasks have independent control flow but do not run simultaneously.
 An example:
 
-<!-- ANALYZE CODE -->
 ```
 import gpio
 
@@ -115,8 +114,6 @@ task will stop appearing.
 The advantage of tasks in comparison with threads is that they take turns. To
 take an oversimplified example:
 
-<!-- RESET CODE -->
-<!-- ANALYZE CODE -->
 ```
 import gpio
 import gpio.adc
@@ -197,8 +194,7 @@ main:
   task:: consumer_task_code
 
 producer_task_code:
-  // Call some do_other_processing function (defined
-  // elsewhere) to compute some value.
+  // Call some do_other_processing function to compute some value.
   result := do_other_processing
 
   // This unblocks the other task, if it is already waiting
@@ -206,13 +202,20 @@ producer_task_code:
   latch.set result
 
 consumer_task_code:
-  // Call some do_processing function (defined elsewhere) to
-  // compute some value.
+  // Call some do_processing function to compute some value.
   my_result := do_processing
   // Blocks until the other task is done collecting a
   // result.
   other_result := latch.get
   print "Result was $(my_result + other_result)"
+
+do_other_processing:
+  // Compute some value...
+  return 0
+
+do_processing:
+  // Compute some value...
+  return 0
 ```
 
 Note that in this example we use the Latch class, but we don't inherit from it.

@@ -198,7 +198,7 @@ slice:
 ```
 long_lived_global/ByteArray := #[]
 
-my_function:
+main:
   huge := ByteArray 1000000
   // The slice keeps huge alive:
   long_lived_global = huge[1000..1050]
@@ -298,6 +298,9 @@ languages.  From highest to lowest:
 The postfix operators, `++` and `--` have the highest precedence.  Thus
 the following two lines are equivalent:
 
+<!-- HIDDEN CODE class MyClass: -->
+<!-- HIDDEN CODE   static x/int := 0 -->
+<!-- HIDDEN CODE   static y/int := 0 -->
 ```
   z1 := x + y++
   z2 := x + (y++)
@@ -305,6 +308,7 @@ the following two lines are equivalent:
 
 Toit does not have the prefix forms of `++` and `--`:
 
+<!-- HIDDEN CODE main: -->
 ```
   for i :=0; i < 10; ++i:  // Error!  There is no prefix ++.
     // ...
@@ -325,6 +329,12 @@ descending precedence the order is:
 
 Thus the following pairs of lines are equivalent:
 
+<!-- HIDDEN CODE class MyClass3: -->
+<!-- HIDDEN CODE   static x/int := 0 -->
+<!-- HIDDEN CODE   static y/int := 0 -->
+<!-- HIDDEN CODE   static z/int := 0 -->
+<!-- HIDDEN CODE   static mask/int := 0 -->
+<!-- HIDDEN CODE   static distance/int := 0 -->
 ```
   a1 := ~x * 3
   a2 := (~x) * 3
@@ -379,7 +389,11 @@ of the left hand side has the type on the right.
 `as` is a cast, which dynamically checks the type and returns a value with the
 correct static type:
 
+<!-- HIDDEN CODE main: -->
+<!-- HIDDEN CODE   my_function 0 0 -->
+<!-- HIDDEN CODE   my_function2 0 0 0 0 0 0 0 0 0 -->
 ```
+my_function x y:
   if x is int:
     // Code that can use x as an integer
   if y is not string:
@@ -397,6 +411,9 @@ The next operators in the precedence order are the comparison operators,
 
 Thus the following pairs of lines are equivalent:
 
+<!-- HIDDEN CODE class MyClass2: -->
+<!-- HIDDEN CODE   static x/int := 0 -->
+<!-- HIDDEN CODE   static y/int := 0 -->
 ```
   c3 := x + 1 <= y * 2
   c4 := (x + 1) >= (y * 2)
@@ -409,6 +426,7 @@ The comparison operators form a group with ternary and other
 n-ary forms so that they can be used in the mathematical way.  Thus the
 following pairs are equivalent:
 
+<!-- HIDDEN CODE my_function2 x y z from to base level top size: -->
 ```
   if 0 <= x < y:
     // ...
@@ -432,6 +450,9 @@ Calls and arguments are done with spaces in Toit, not with
 parentheses and commas.  Thus we write:
 
 ```
+import math show *
+
+my_function x y z:
   foo x y z          // In C: foo(x, y, z)
   c7 := 2 * (sin x)  // In C: 2 * sin(x)
 ```
@@ -447,17 +468,27 @@ so the following are equivalent:
   cos (x + PI / 4)  // In C: cos(x + PI / 4)
   cos(x + PI / 4)   // Looks like C call syntax.
 ```
+<!-- HIDDEN CODE main: -->
+<!-- HIDDEN CODE   my_function 0 0 0 -->
+<!-- HIDDEN CODE foo x y z: -->
 
 The third form, with the redundant parentheses and no space, looks like
 a C-style call syntax.  However this is an illusion:
 
 ```
+import math show *
+
+my_function x/float y/float:
   acos(x) + 100   // Not what it looks like!
   acos (x + 100)  // Equivalent!
 
   atan2 x y       // Correct.
   atan2(x, y)     // Syntax error!
 ```
+<!-- HIDDEN CODE main: -->
+<!-- HIDDEN CODE   my_function 0.0 0.0 -->
+<!-- HIDDEN CODE   my_function 0 0 0 -->
+<!-- HIDDEN CODE   my_function true true 0 0 -->
 
 ### Logical operators
 
@@ -476,6 +507,7 @@ The symbolic forms are not available in Toit.
 The following pairs are equivalent:
 
 ```
+my_function a b c:
   if not a and b == 0:
     // ...
   if (not a) and (b == 0):
@@ -491,13 +523,14 @@ Since the logical operators are lower than the calls and arguments
 we have to group them:
 
 ```
-  my_function x/bool -> bool:
-    // ...
+my_unary_function x/bool:
+  // ...
 
-  is_odd x/int -> bool
-    return x % 2 == 1
+is_odd x/int -> bool:
+  return x % 2 == 1
 
-  my_function (condition_a and condition_b)  // Parentheses needed.
+my_function condition_a/bool condition_b/bool x/int y/int:
+  my_unary_function (condition_a and condition_b)  // Parentheses needed.
 
   // The following two forms are equivalent.
   if is_odd x and is_odd y:
@@ -515,16 +548,19 @@ Since they are below the logical operators and calls, we can write
 equivalently:
 
 ```
-  angle := atan2 x y
-  angle := (atan2 x y)
+  angle_1 := atan2 x y
+  angle_2 := (atan2 x y)
 
-  condition := cond1 and cond2
-  condition := (cond1 and cond2)
+  condition_1 := condition_a and condition_b
+  condition_2 := (condition_1 and condition_b)
 ```
 
 Assignment operators are only allowed at the start of statements and
 in the first clause of a `for`, `if`, or `while` statement.
 
+
+<!-- HIDDEN CODE import reader show Reader -->
+<!-- HIDDEN CODE my_function3 reader/Reader str/string: -->
 ```
   while data := reader.read:
     // data was not null.

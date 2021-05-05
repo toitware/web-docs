@@ -12,7 +12,7 @@ The very first time, users might need to install a registry first (see below "Ad
 
 The following commands update the local registry, search for a package, and then install it.
 
-```
+```shell
 toit pkg sync          # Synchronize the installed registries.
 toit pkg search morse  # Search for a package "morse".
 toit pkg install morse # Install package "morse".
@@ -20,7 +20,7 @@ toit pkg install morse # Install package "morse".
 
 Note that the installation of "morse" only works if the name is unambiguous. If there are multiple "morse" packages, then one has to use the URL. It is possible to omit leading segments, if that makes the package unique:
 
-```
+```shell
 toit pkg install github.com/toitware/toit-morse
 toit pkg install toitware/toit-morse  # Probably already unique.
 ```
@@ -31,19 +31,19 @@ Before being able to install any package, one must have a registry installed. Ne
 
 See which registries are installed:
 
-```
+```shell
 toit pkg registry list
 ```
 
 You should have one or more registries:
 
-```
+```txt
 toitware: github.com/toitware/registry (git)
 ```
 
 If not, add a registry; for example the Toitware registry:
 
-```
+```shell
 toit pkg registry add toitware github.com/toitware/registry
 ```
 

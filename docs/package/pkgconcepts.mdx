@@ -51,7 +51,7 @@ Otherwise, TPM looks at the Git URL. If the last segment of the URL is a valid i
 Packages that are not intended to be reused should use the keyword `proprietary`. This is generally only useful for private packages.
 If no `license` entry is present, but a `LICENSE` file exists, then TPM tries to infer the license by matching the license file.
 `dependencies`: The dependencies of this package, together with the prefixes by which they are used inside the code. The dependencies entry is a map from prefix to `url`, `version`. For example:
-```
+```yaml
 dependencies:
   prefix1:
     url: github.com/toitware/example_pkg
@@ -85,6 +85,7 @@ TPM uses [semantic versioning](http://semver.org) to determine whether packages 
 Since Toit supports multiple versions of the same package, upgrades don't need to happen uniformly in the whole ecosystem. This makes it easier to upgrade continuously, where older and newer packages co-exist. However, the same feature also requires package authors to be careful when they, themselves, update their dependencies. Specifically, it might be a breaking change to update a dependency if that package's class is exposed.
 
 Let's have a look at an example of `my_pkg`, a package with version number `1.2.3`.
+<!-- SKIP CODE -->
 ```
 // my_pkg.toit
 import other_pkg

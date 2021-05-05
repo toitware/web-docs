@@ -1,10 +1,10 @@
 // Copyright (C) 2021 Toitware ApS. All rights reserved.
 
-import file
-import pipe
+import server.file as file
+import server.pipe as pipe
 import reader
 
-// Give it a .md file on the command line, and it writes the code
+// Give it an .mdx file on the command line, and it writes the code
 // snippets to snippets.toit and tries to run them.
 //
 // Notes:
@@ -17,7 +17,8 @@ import reader
 // Methods named `main` are renamed so you can have several of them.
 // Classes and other methods are not renamed.
 // If it encounters a line that contains: <!-- RESET CODE -->, then
-//   it runs all the Toit code found so far, and starts over.
+//   it runs all the Toit code found so far, and starts over.  It also
+//   does this with lines that start with `import`.
 // If it encounters a line that consists of <!-- HIDDEN CODE something -->
 //   then it inserts that into the snippet file to run.
 // If it encounters a line that contains: <!-- SKIP CODE -->, then
@@ -27,11 +28,15 @@ import reader
 //   where the code is analyzed, but not run.
 // Ellipses in the code are replaced by /**/
 
-TOITVM ::= "./build/release/bin/toitvm"
-TOITC ::= "./build/release/bin/toitc"
-OUTPUT ::= "snippet.toit"
+TOITVM ::= "../../toit/build/release/bin/toitvm"
+TOITC ::= "../../toit/build/release/bin/toitc"
+DEFAULT_OUTPUT ::= "snippet.toit"
 
-analyze_code := false
+THINGS_THAT_WONT_RUN_ON_SERVER ::= [
+  "import gpio",
+  "import pixel_display",
+  "import pubsub",
+]
 
 main args -> none:
   mdfile := args[0]
@@ -39,34 +44,41 @@ main args -> none:
   r := reader.BufferedReader
     file.Stream.read mdfile
 
-  in_non_toit_code := false
-  in_backquotes := false
-  line_number := 0
-  program := []
-  main_count := 0
+  s := State 0
+
   skip := false
   hidden/string? := null
   HIDDEN_PRE ::= "<!-- HIDDEN CODE "
   HIDDEN_POST ::= " -->"
+  FILENAME_PRE ::= "<!-- CODE FILENAME "
+  FILENAME_POST ::= " -->"
 
   while line := r.read_line:
     if line.contains " CODE " and line.contains "--" and not line.contains "<!--":
-      throw "Malformed HTML comment at line $line_number"
-    reset := line.contains "<!-- RESET CODE"
-    if not analyze_code: analyze_code = line.contains "<!-- ANALYZE CODE -->"
+      throw "Malformed HTML comment at line $s.line_number"
+    if line.contains "<!-- RESET CODE":
+      s.run
+    if not s.check_only: s.check_only = line.contains "<!-- ANALYZE CODE -->"
     if not skip: skip = line.contains "<!-- SKIP CODE"
     if line.starts_with HIDDEN_PRE and line.ends_with HIDDEN_POST:
       hidden = line[HIDDEN_PRE.size .. line.size - HIDDEN_POST.size]
+    if line.starts_with FILENAME_PRE and line.ends_with FILENAME_POST:
+      fn := line[FILENAME_PRE.size .. line.size - FILENAME_POST.size]
+      fn.do --runes:
+        if not 'a' <= it <= 'z' and not ['.', '-', '_'].contains it:
+          throw "Illegal filename in .mdx file"
+      s.run
+      s.snippet_filename = fn
     if (line == "```" or line == "```toit") and not skip:
       line = ""
-      if in_non_toit_code:
-        in_non_toit_code = false
+      if s.in_non_toit_code:
+        s.in_non_toit_code = false
       else:
-        in_backquotes = not in_backquotes
+        s.in_toit_code = not s.in_toit_code
     else if line.starts_with "```":
-      in_non_toit_code = true
+      s.in_non_toit_code = true
       skip = false
-    if in_backquotes:
+    if s.in_toit_code:
       if line.contains "rror" and line.ends_with "!":
         line = ""
     else:
@@ -74,42 +86,67 @@ main args -> none:
     if hidden:
       line = hidden
       hidden = null
+    if line.starts_with "import ":
+      if s.has_seen_non_import:
+        s.run
+    else if line != "" and not (line.starts_with "//"):
+      s.has_seen_non_import = true
     dots_index := line.index_of "..."
     if dots_index >= 0:
       line = line[0..dots_index] + "/**/" + line[dots_index + 3..]
-    program.add line
-    line_number++
-    if program.size != line_number: "Throw $program.size != $line_number"
-    if reset:
-      run program
-      program = List line_number: ""
-  run program
+    s.add line
+    if s.program.size != s.line_number: "Throw $s.program.size != $s.line_number"
+  s.run
 
-run program/List:
-  snippet := file.Stream.write OUTPUT
-  mains := 0
-  program.do: if it.starts_with "main": mains++
-  if mains > 1:
-    i := mains
-    program.map --in_place:
-      if it.starts_with "main":
-        i--
-        "main$i$it[4..]"
-      else:
-        it
-  program.do: snippet.write "$it\n"
-  if mains != 1:
-    snippet.write "main:\n"
-  if mains > 1:
-    mains.repeat:
-      snippet.write "  main$it\n"
-  snippet.close
-  result := ?
-  if analyze_code:
-    result = pipe.system "$TOITC --analyze $OUTPUT"
-  else:
-    result = pipe.system "$TOITVM $OUTPUT"
-  analyze_code = false
-  if result != 0:
-    throw "Failure for $OUTPUT"
-  file.delete OUTPUT
+class State:
+  in_toit_code/bool := false
+  in_non_toit_code/bool := false
+  has_seen_non_import/bool := false
+  check_only/bool := false
+  line_number/int := ?
+  program/List := ?
+  snippet_filename/string? := null
+
+  add line/string -> none:
+    program.add line
+    THINGS_THAT_WONT_RUN_ON_SERVER.do:
+      if line.starts_with it: check_only = true
+    line_number++
+
+  constructor .line_number:
+    program = List line_number: ""
+
+  run:
+    filename := snippet_filename ? snippet_filename : DEFAULT_OUTPUT
+    snippet_filename = null
+    snippet := file.Stream.write filename
+    mains := 0
+    program.do: if it.starts_with "main": mains++
+    if mains > 1:
+      i := mains
+      program.map --in_place:
+        if it.starts_with "main":
+          i--
+          "main$i$it[4..]"
+        else:
+          it
+    program.do: snippet.write "$it\n"
+    if mains != 1:
+      snippet.write "main:\n"
+    if mains > 1:
+      mains.repeat:
+        snippet.write "  main$it\n"
+    snippet.close
+    result := ?
+    if check_only:
+      result = pipe.system "$TOITC --analyze $filename"
+    else:
+      result = pipe.system "$TOITVM $filename"
+    check_only = false
+    if result != 0:
+      throw "Failure for $filename"
+    if filename == DEFAULT_OUTPUT:
+      file.delete filename
+
+    program = List line_number: ""
+    has_seen_non_import = false
