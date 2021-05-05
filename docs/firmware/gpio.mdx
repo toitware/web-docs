@@ -39,7 +39,7 @@ If a GPIO pin is configured for `output` mode, `Pin.set` can be used to either d
 
 To configure a GPIO pin in output mode, either do it initially:
 ```
-  pin := gpio.Pin 21 --output // Initialized for output mode.
+  output_pin := gpio.Pin 21 --output // Initialized for output mode.
 ```
 or later (independent of previous mode):
 ```
@@ -70,7 +70,7 @@ The GPIO input mode can be used to read the state of a pin. This can be done by 
 
 To configure a GPIO pin in input mode, either do it initially:
 ```
-  pin := gpio.Pin 21 --input // Initialized for input mode.
+  input_pin := gpio.Pin 21 --input // Initialized for input mode.
 ```
 or later (independent of previous mode):
 ```
@@ -83,7 +83,10 @@ While `Pin.get` can be used to get the current Pin state, sometimes it's useful 
 That can be done using the `Pin.wait_for` method.
 
 ```
-  pin := gpio.Pin --input
+import gpio
+
+main:
+  pin := gpio.Pin 21 --input
   pin.wait_for 1  // Wait for pin to be high.
 ```
 
@@ -93,7 +96,7 @@ Some chips supports internal pull-up and/or pull-down resistors. While the size 
 used, it can be enabled like this:
 
 ```
-  pin := gpio.Pin --input --pull_up
+  pulled_up_pin := gpio.Pin 21 --input --pull_up
 ```
 
 <Note>

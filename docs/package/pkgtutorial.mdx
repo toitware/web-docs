@@ -50,7 +50,6 @@ All package code lives in the `src` directory of the repository.
 For the Morse example, we have only one file, `src/morse.toit`.
 
 In it we start with some constants:
-<div class="toit">
 
 ```
 DOT ::= 0
@@ -70,13 +69,10 @@ DASH_DURATION_FACTOR_ ::= 3
 /// The duration between characters is three times the one of a dot.
 SPACE_LETTER_FACTOR_ ::= 3
 ```
-</div>
 
 In the tutorial we only support the characters 'a', 'b', and 'c'. We are also skipping the constants necessary to encode word boundaries.
 
 A simple function converts a string from ASCII to Morse code:
-
-<div class="toit">
 
 ```
 encode_string str:
@@ -86,11 +82,8 @@ encode_string str:
     result.add SPACE_LETTER
   return result
 ```
-</div>
 
 Similarly, we want to have a function that emits the symbols with the correct timing:
-
-<div class="toit">
 
 ```
 emit symbols --dot_duration [--on] [--off]:
@@ -106,7 +99,6 @@ emit symbols --dot_duration [--on] [--off]:
       // wait a bit shorter.
       sleep dot_duration * (SPACE_LETTER_FACTOR_ - 1)
 ```
-</div>
 
 There is much more functionality we could add, but for the purpose of this tutorial we are happy now. The next step is to polish the package.
 
@@ -117,7 +109,7 @@ It's always a good idea to polish code, but for code that is published for exter
 Packages should have a license. We recommend a [permissive free software license](https://en.wikipedia.org/wiki/Permissive_software_license), such as MIT, or BSD for packages that are published publicly. This is not a requirement, but more restrictive licenses are often avoided and would lead to fewer users of a package.
 
 For our tutorial we use the MIT license. Our LICENSE file thus has the following text in it:
-```
+```txt
 MIT License
 
 Copyright (c) 2021 Toitware
@@ -167,6 +159,7 @@ that call given blocks `on` and `off` with the correct timing.
 ## Usage
 A simple usage example.
 
+<!-- SKIP CODE -->
 ```
 import morse_package_tutorial
 
@@ -188,26 +181,21 @@ Toit doesn't require any types, but we strongly recommend to add some on API bou
 
 In our example we will change the signatures of the two exposed functions:
 
-<div class="toit">
-
+<!-- SKIP CODE -->
 ```
 encode_string str/string -> List:
 ```
-</div>
 and
-<div class="toit">
-
+<!-- SKIP CODE -->
 ```
 emit symbols/List --dot_duration/Duration [--on] [--off] -> none:
 ```
-</div>
 
 ### Toitdoc
 Similar to types, it's always a good idea to have good documentation; even more so for API boundaries.
 
 We suggest the following changes:
-<div class="toit">
-
+<!-- SKIP CODE -->
 ```
 /**
 The dot symbol.
@@ -244,16 +232,13 @@ The given $symbols should be Morse symbols. See $encode_string for a function
 emit symbols/List --dot_duration/Duration [--on] [--off] -> none:
   ...
 ```
-</div>
 
 ### Examples
 Examples are a good way to introduce users to the functionality of the package, and should thus contain typical code with lots of documentation.
 
 A typical use case would be to emit morse on a GPIO pin (`examples/gpio.toit`):
 
-<div class="toit">
-
-
+<!-- SKIP CODE -->
 ```
 // Copyright (C) 2021 Toitware ApS. All rights reserved.
 // Use of this source code is governed by an MIT-style license that can be
@@ -281,11 +266,10 @@ main:
        --off=: pin.set 0
    sleep (Duration --ms=3000)
 ```
-</div>
 
 Since this example uses the morse package, we need to install the package first. Instead of relying on the uploaded package (which would be a bit circular), we use the package locally:
 
-```
+```shell
 # In the examples directory:
 toit pkg init --app
 toit pkg install --local --prefix=morse ..
@@ -300,8 +284,7 @@ Toit doesn't have a testing framework, yet. For now, developers need to write th
 
 Here is a simple test (`tests/morse_test.toit`) for ensuring that an 'a' is correctly translated:
 
-<div class="toit">
-
+<!-- SKIP CODE -->
 ```
 // Copyright (C) 2021 Toitware ApS. All rights reserved.
 // Use of this source code is governed by an MIT-style license that can be
@@ -314,18 +297,17 @@ main:
   encoded := encode_string "a"
   expect_list_equals [DOT, DASH, SPACE_LETTER] encoded
 ```
-</div>
 
 Similarly to the examples, it's necessary to install the local package to be able to use it first:
 
-```
+```shell
 # In the test directory:
 toit pkg init --app
 toit pkg install --local --prefix=morse ..
 ```
 
 The test should then execute successfully by running:
-```
+```shell
 toit exec morse_test.toit
 ```
 
@@ -333,7 +315,7 @@ toit exec morse_test.toit
 It's good practice to have a `CHANGELOG.md` file in the project root. There are many variations on how to structure this file.
 
 We recommend having the newest entries on the top. `## <Version> - <Date>`. For example:
-```
+```txt
 ## 1.0.1 - 2021-03-12
 * Add library toitdoc.
 * Add another example.
@@ -347,14 +329,14 @@ A package must have a `package.yaml` file at the root of the package. The file c
 
 Since we already added a license and a README file, we don't need to worry about the license and description entries. The name, too, could be inferred from the README, but we used "Morse Tutorial" as title, which isn't a valid identifier. In this tutorial we thus need explicitly provide a `name` entry in the package.yaml:
 
-```
+```yaml
 name: morse_package_tutorial
 ```
 
 ### Dependencies
 We don't use dependencies in this package, but for completeness sake here is an example of how we would add one:
 
-```
+```yaml
 dependencies:
   prefix1:
     url: github.com/toitware/toit-morse

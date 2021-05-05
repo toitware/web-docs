@@ -1,0 +1,13 @@
+prefixes:
+  morse: toit-morse
+  pictogrammers_icons: toit-icons-pictogrammers
+  server: server
+packages:
+  server:
+    path: ../../toit/system/lib/server
+  toit-icons-pictogrammers:
+    url: github.com/toitware/toit-icons-pictogrammers
+    version: 1.0.0
+  toit-morse:
+    url: github.com/toitware/toit-morse
+    version: 1.0.2

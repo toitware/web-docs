@@ -23,10 +23,6 @@ Each device must have a unique _I2C address_. The address can be found in the da
 In case of the Bosch [BME280 sensor](https://cdn.sparkfun.com/assets/e/7/3/b/1/BME280_Datasheet.pdf), the address is `0x76`:
 
 ```
-  bus := i2c.Bus
-    --sda=gpio.Pin 21
-    --scl=gpio.Pin 22
-
   device := bus.device 0x76
 ```
 
@@ -35,7 +31,11 @@ In case of the Bosch [BME280 sensor](https://cdn.sparkfun.com/assets/e/7/3/b/1/B
 The default frequency of the I2C bus is 400kHz. This can be changed at construction time as an argument to the `i2c.Bus`:
 
 ```
-  i2c.Bus --frequency=100_000  // Limit to 100kHz.
+main:
+  bus := i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
+    --frequency=100_000  // Limit to 100kHz.
 ```
 
 <Note>

@@ -9,8 +9,6 @@ We highlight in this section the basic functions of display use. You can also le
 
 ## Write with built-in sans font
 
-<!-- RESET CODE -->
-<!-- ANALYZE CODE -->
 ```
 import font show *
 import texture show *
@@ -33,8 +31,6 @@ main:
 
 Import specific fonts from `font.x11_100dpi` with:
 
-<!-- RESET CODE -->
-<!-- ANALYZE CODE -->
 ```
 import font show *
 import font.x11_100dpi.sans.sans_10_bold as sans_10_bold
@@ -72,12 +68,10 @@ Learn more about all available fonts [here](../fonts).
 
 All [Material Design](https://materialdesignicons.com/) icons are available for use in Toit programs.
 
-<!-- RESET CODE -->
-<!-- ANALYZE CODE -->
 ```
-import device
 import pixel_display show TwoColorPixelDisplay
-import font.templarian.material_design_icons.icons_96 as icons
+// Use "toit pkg install pictogrammers_icons" to get this package.
+import pictogrammers_icons.size_96 as icons
 
 main:
   display := TwoColorPixelDisplay "eink"
@@ -91,8 +85,6 @@ main:
 A simple `display.draw` is needed to clear a display, but to avoid any remaining
 shadow from previous content, repeat 3 times as in:
 
-<!-- RESET CODE -->
-<!-- ANALYZE CODE -->
 ```
 import pixel_display show *
 
