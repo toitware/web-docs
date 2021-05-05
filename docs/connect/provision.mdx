@@ -53,7 +53,7 @@ toit serial provision -p wifi.ssid=xyz -p wifi.password="my pw"
   The WiFi settings for your ESP32 can be changed later on.
 
   The provision commands automatically claims the device into your organization,
-  thereby linking it with your account.
+  thereby linking it with your Toit account.
 
 3. The provision process might take up to 5 minutes. When finished, it will output the following information:
 
@@ -88,14 +88,3 @@ toit serial provision -m <model> -p wifi.ssid=<SSID> -p wifi.password=<password>
 
 Look for available device models for each firmware version available in the
 [Toit console](https://console.toit.io/organization/firmware).
-
-<Note title="Problems with provision?">
-    
-If the initial provision of your hardware fails during the provisioning steps, the hardware ID (if any) is written to the local disk if possible and will be reused the next time the command is executed on the same computer.
-
-Also, if the provision command fails, consider trying with a lower baud rate (here half the default baud rate):
-
-```shell
-toit serial provision --baud 460800 -p wifi.ssid=<SSID> -p wifi.password=<password>
-```
-</Note>    
