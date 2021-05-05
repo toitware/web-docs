@@ -45,36 +45,23 @@ Next, jump to step 5 to continue.
 
 </Note>
 
-## 4. Provision and claim
+## 4. Provision your ESP32
 
 With your ESP32 ready for use, the first step is to [initially provision](../connect/provision) your ESP32.
 
 Connect the ESP32 with a USB cable to your computer where the Toit CLI is installed.
 
-Replace `SSID` and `WiFi-password` with your own WiFi credentials (without quotes), and run the Toit CLI command:
+Replace `SSID` and `password` with your own WiFi credentials and run the Toit CLI command:
 
 ```txt
-toit serial provision -p wifi.ssid=<SSID> -p wifi.password=<WiFi-password>
+toit serial provision -p wifi.ssid=<SSID> -p wifi.password=<password>
 ```
 
-**Note the hardware ID** printed when the command terminates. The hardware ID is a UUID represented as 32 hexadecimal digits, as in `123e4567-e89b-12d3-a456-426614174000`.
-
-Next, [claim](../connect/claim) the ESP32 into your organization in the Toit console. Replace `<hardware-ID>` with the hardware ID from the provision command above,
-and run:
-
-```shell
-toit device claim <hardware-ID> --name MyToitDevice
-```
-
-The claimed ESP32 can be seen in the list of devices with the CLI command:
-
-```shell
-toit devices
-```
+At the end of the provisioning process, you will receive the name of the device, and a URL to view it in the Toit console. If there were errors, please consult the [provision](../connect/provision) or [troubleshooting](../connect/serialport) pages.
 
 ## 5. Deploy Toit app
 
-You can either **run** a Toit program once on your device or **deploy** the same Toit program as a long-lived app.
+You can either **run** a Toit program once on your ESP32 or **deploy** the same Toit program as a long-lived app.
 
 First, save the following Toit code in a file named `hello.toit`
 

@@ -2,9 +2,14 @@
 order: 1
 ---
 
-# Claim your hardware
+# Manually claim hardware
 
-When your hardware has been initially provisioned, you must claim it into your organization in the Toit console in order to see the device and communicate with it using either WiFi or cellular connection.
+All Toit devices must be claimed into your organization to be visible in the Toit console, and to be able to communicate with.
+
+Normally, devices are claimed as part of the [provisioning](../provision) step, but that's not a requirement.
+
+If the device wasn't able to connect to the WiFi or the Toit cloud during provisioning, or if the `--skip-claim` flag
+was used, then the device is provisioned but still needs to be claimed manually.
 
 After the device is claimed into your organization, only users that belong to the same organization can monitor the device, deploy apps on it, see logs, and change device configurations.
 

@@ -70,6 +70,18 @@ If flashing doesn't work, consult the documentation for your ESP32.
 
 - if you have timeout problems when flashing, some hardware models require you to [hold down BOOT while flashing](https://randomnerdtutorials.com/solved-failed-to-connect-to-esp32-timed-out-waiting-for-packet-header/).
 
+- if your device wasn't able to connect via WiFi to the Toit cloud during the provisioning, it is not yet claimed. In this state the device is flashed with the Toit firmware, 
+but is not yet linked to your Toit account. Follow the instructions on the [claim page](../claim) to manually claim the device once it has managed to go
+online.
+
+ - if the provision command fails during the first part of the provisioning process, the hardware ID (if any) is written to the local disk if possible and will be reused the next time the command is executed on the same computer.
+
+ - if the provision command fails, consider trying with a lower baud rate (here half the default baud rate):
+
+```shell
+toit serial provision --baud 460800 -p wifi.ssid=<SSID> -p wifi.password=<password>
+```
+
 ## Troubleshoot serial port connections
 
 If you still have trouble connecting your ESP32 device with your computer via a serial connection
@@ -84,9 +96,10 @@ If you still have trouble connecting your ESP32 device with your computer via a 
 
 - always set the default serial port to be used in the serial CLI commands with `toit serial port use <port>` in order to avoid mistakes when talking with your device on a serial connection.
 
-<Note>
+<Note title="Device connections">
 
 When the ESP32 has been initially provisioned with WiFi credentials, the ESP32 device is connecting to the network via WiFi, and the serial connection is purely for debugging the device if WiFi connection is lost. 
 In other words, you can plug the ESP32 into another power source and communicate with the ESP32 over WiFi from now on.
+Later on you can always add other connection types, like a cellular connection.
 
 </Note>
