@@ -23,6 +23,14 @@ main:
   print "Zig zag string /\\/\\."   // >> Zig zag string /\/\.
 ```
 
+As an alternative, you can embed double quote characters using
+[triple-quote delimited](#multi-line-strings) strings:
+
+```
+main:
+  print """String with "quotes"."""  // >> String with "quotes".
+```
+
 ## Escaped characters
 
 String and character literals can also contain other escaped
@@ -237,6 +245,9 @@ Toit CLI command
 ```
 
 Note that Toit removes the first newline if it is immediately after the `"""`.
+You should almost always put a newline after `"""` if you using the
+triple quotes for multi-line strings, since it makes the indentation rules
+much easier to understand.
 
 In multi-line strings there are some extra escapes that can
 be used.
@@ -283,6 +294,33 @@ This results in the output:
   bar
 foo
 bar
+```
+
+## Long string literals
+
+Triple-quoting can also be used for very long strings that
+don't necessarily contain newlines.  In this case you end each line with
+a backslash, which will cause the parser to ignore the
+newline at the end of the line.  You should start the string
+with a non-escaped newline that will be ignored in accordance
+with the above rules for triple quoted strings.
+
+```
+main:
+  print """
+    This is a very long line that goes on \
+    and on for a very long time. It's easier \
+    to put any spaces at the end of the line, \
+    but you can put them at the start,\
+     making use of the usual\
+     indentation-removing rules \
+    for triple-quoted strings."""
+```
+
+This prints
+
+```txt
+This is a very long line that goes on and on for a very long time. It's easier to put any spaces at the end of the line, but you can put them at the start, making use of the usual indentation-removing rules for triple-quoted strings.
 ```
 
 ## String interpolation
