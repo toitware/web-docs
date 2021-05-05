@@ -238,6 +238,7 @@ Examples are a good way to introduce users to the functionality of the package, 
 
 A typical use case would be to emit morse on a GPIO pin (`examples/gpio.toit`):
 
+<!-- SKIP CODE -->
 ```
 // Copyright (C) 2021 Toitware ApS. All rights reserved.
 // Use of this source code is governed by an MIT-style license that can be
@@ -258,8 +259,8 @@ main:
  pin := gpio.Pin.out LED_PIN
 
  10.repeat:
-   morse.emit_string
-       "ababc"
+   morse.emit
+       morse.encode_string "ababc"
        --dot_duration= Duration --ms=250
        --on=:  pin.set 1
        --off=: pin.set 0
