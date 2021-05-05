@@ -45,9 +45,9 @@ Next, jump to step 5 to continue.
 
 </Note>
 
-## 4. Provision and claim
+## 4. Provision
 
-With your ESP32 ready for use, the first step is to [initially provision and claim](../connect/provision) your ESP32.
+With your ESP32 ready for use, the first step is to [initially provision](../connect/provision) your ESP32.
 
 Connect the ESP32 with a USB cable to your computer where the Toit CLI is installed.
 
@@ -57,29 +57,8 @@ Replace `SSID` and `password` with your own WiFi credentials and run the Toit CL
 toit serial provision -p wifi.ssid=<SSID> -p wifi.password=<password>
 ```
 
-<Note title="ESP32 not claimed?">
-
-If the ESP32 was offline during the provisioning, for example if the WiFi signal was not in reach of your hardware, the automatic claiming into the Toit console will fail. 
-
-You can always later claim the ESP32 with the following CLI command, when the WiFi is available and the ESP32 is online:
-
-```shell
-toit device claim <hardware-ID> --name MyToitDevice
-```
-
-You must manually provide the hardware ID in the `claim` command, which is printed in the output of the `provision` command, or if you run the command 
-
-```shell
-toit serial info
-```
-
-</Note>
-
-The provisioned ESP32, claimed into your organization in the Toit console, can be seen in the list of available devices with the CLI command:
-
-```shell
-toit devices
-```
+At the end of the provisioning process, you should receive the name of the device, and a URL to see it in the Toit console. If there were errors, see
+the troubleshooting section in the [provision](../connect/provision) page.
 
 ## 5. Deploy Toit app
 
