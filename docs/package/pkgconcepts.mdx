@@ -16,7 +16,9 @@ When a developer calls `toit pkg download` they always get the same packages. A 
 
 Lock files must be located at the root of the project. Certain commands (like `pkg install`) automatically create a lock file if one doesn't exist yet. Be careful, as the lock-file is created in the current directory, which might not be the root directory.
 
-Note that the `package.lock` file should be shared with other developers of the program, and should therefore be checked into the Version Control System.
+<Note>
+The `package.lock` file should be shared with other developers of the program, and should therefore be checked into the Version Control System.
+</Note>
 
 A program should *not* have a package.yaml file. These are reserved for packages that are intended to be imported by other programs or packages.
 
@@ -38,7 +40,9 @@ TPM supports "local" packages where the package is referenced through a path. Th
 
 This feature is useful for unpublished (versions of) packages. For example, when developing a program and a package, it can be necessary to change the package and program at the same time. Until the package can be published again, one would use a local package.
 
-Note that only programs and local packages are allowed to depend on other local packages. Once a package is published it can only depend on Git packages.
+<Note>
+Only programs and local packages are allowed to depend on other local packages. Once a package is published it can only depend on Git packages.
+</Note>
 
 ### Specification - package.yaml
 

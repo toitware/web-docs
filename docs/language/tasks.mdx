@@ -218,9 +218,11 @@ do_processing:
   return 0
 ```
 
-Note that in this example we use the Latch class, but we don't inherit from it.
+<Note type="warning">
+In this example we use the Latch class, but we don't inherit from it.
 In general, inheriting from classes from `import monitor` will cause unexpected
 deadlocks in your program and is not recommended.
+</Note>
 
 ### Channel
 

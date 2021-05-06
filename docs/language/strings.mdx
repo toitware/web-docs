@@ -244,10 +244,15 @@ Toit CLI command
     -p prefix
 ```
 
-Note that Toit removes the first newline if it is immediately after the `"""`.
+<Note>
+Toit removes the first newline if it is immediately after the `"""`.
+</Note>
+
+<Note>
 You should almost always put a newline after `"""` if you using the
 triple quotes for multi-line strings, since it makes the indentation rules
 much easier to understand.
+</Note>
 
 In multi-line strings there are some extra escapes that can
 be used.
@@ -301,9 +306,12 @@ bar
 Triple-quoting can also be used for very long strings that
 don't necessarily contain newlines.  In this case you end each line with
 a backslash, which will cause the parser to ignore the
-newline at the end of the line.  You should start the string
+newline at the end of the line.
+<Note>
+You should start the string
 with a non-escaped newline that will be ignored in accordance
 with the above rules for triple quoted strings.
+</Note>
 
 ```
 main:

@@ -69,9 +69,11 @@ map_with_values := {
 }
 ```
 
-Note that both `Set` and `Map` use hash values to place elements into the underlying data structure.
+<Note>
+Both `Set` and `Map` use hash values to place elements into the underlying data structure.
 This means that all keys must implement the `hash_code` method. The performance of sets and
 maps is best if two different keys have (with high probability) a different hash code.
+</Note>
 
 <Note type="warning">
 Sets and Maps only use the `hash_code` function if their size is big enough. Objects that
@@ -299,4 +301,4 @@ main:
 ```
 
 The block takes two arguments, which are here called `a` and `b` and should return (implicitly) a value that can be negative, zero, or positive.
-Note that `| b -a | sorts in descending order.
+Note that `b - a` sorts in descending order.
