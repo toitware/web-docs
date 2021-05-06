@@ -283,6 +283,8 @@ my_func a/int b/int c/int -> int:
     two_arg_function a b
     two_arg_function b c
     two_arg_function c a
+
+  return x + y + z
 ```
 
 ### Line breaks in operator expressions
@@ -291,7 +293,7 @@ If you need to break up a large expression, the second and subsequent
 lines should be indented more than the first:
 
 ```
-my_function long_argument_name other_argument_name:
+long_expr_function long_argument_name other_argument_name:
   return long_argument_name
     + 2 * other_argument_name
     - long_argument_name.abs
