@@ -28,7 +28,9 @@ In full screen, the page lists
 * The **firmware** version currently running on the device.
   
 <Note>
+
 A warning sign next to the firmware version number means that the firmware installed on the device does no longer have a corresponding version available in the console. The currently installed programs will keep on running as they were previously, but to install new apps, the device firmware needs to be updated to an available firmware version.
+
 </Note>
 
 * **Last seen** gives the relative time to when the device was last seen, that is the last time it was online. **Now** indicates that the device is currently online. **Unknown** describes a new device which is part of your organization but has never connected to the console yet.
@@ -75,9 +77,14 @@ The playground is a text editor where you can write a Toit program. Click **Run 
 
 <Note title="Payment">
   
-If your devices generate more data than the limit on 100MB of free data per month, submit your payment information
 
-[here](https://console.toit.io/organization/details) to get access to the full version of the Toit platform.
+If your devices generate more data than the limit on 100MB of free data per month, submit your payment information [here](https://console.toit.io/organization/details) to get access to the full version of the Toit platform.
+
+Toit accepts payment information in a PCI compliant manner. All sensitive data, like your card data, is collected and handled by [Stripe](https://stripe.com/), which is the payment infrastructure that the Toit platform integrates with.
+
+All sensitive payment data is securely transmitted to Stripe without being stored in the Toit cloud.
+
+We serve our payment pages in the Toit console securely using Transport Layer Security (TLS) so that they make use of HTTPS.
 
 </Note>
 
