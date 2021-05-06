@@ -18,12 +18,14 @@ toit pkg search morse  # Search for a package "morse".
 toit pkg install morse # Install package "morse".
 ```
 
-Note that the installation of "morse" only works if the name is unambiguous. If there are multiple "morse" packages, then one has to use the URL. It is possible to omit leading segments, if that makes the package unique:
+<Note>
+The installation of "morse" only works if the name is unambiguous. If there are multiple "morse" packages, then one has to use the URL. It is possible to omit leading segments if that makes the package unique:
 
 ```shell
 toit pkg install github.com/toitware/toit-morse
 toit pkg install toitware/toit-morse  # Probably already unique.
 ```
+</Note>
 
 ## Adding a Registry
 

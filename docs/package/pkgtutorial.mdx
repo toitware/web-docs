@@ -277,7 +277,9 @@ toit pkg install --local --prefix=morse ..
 
 This creates a `package.lock` file mapping the prefix "morse" to the package at location `..`.
 
-Note that we use `toit pkg init` to ensure that the `package.lock` file is created in the current directory. If we just used `toit pkg install` we would risk adding a new dependency to our package and not to the example.
+<Note>
+We use `toit pkg init` to ensure that the `package.lock` file is created in the current directory. If we just used `toit pkg install`, we would risk adding a new dependency to our package and not to the example.
+</Note>
 
 ### Tests
 Toit doesn't have a testing framework, yet. For now, developers need to write their tests without much help from the Toit framework. We recommend to simply write executables that use the `expect` module to test the package. Tests should live in the `tests` folder.

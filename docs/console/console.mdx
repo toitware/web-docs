@@ -54,7 +54,13 @@ The fleet health page collects device status for all devices in an organization.
 At the top, devices are represented by boxes of different colors based on their current health: green for a device that behaves as expected, and red otherwise.
 A tooltip indicates the name of the device and the list of pending actions or issues for that device.
 
-The overall status section accumulates devices based on their health issues - or lack thereof. Note that a device can be counted in more than one category, except for devices in the "No issues category" that is exclusive of all others.
+The overall status section accumulates devices based on their health issues - or lack thereof.
+
+<Note>
+A device can be counted in more than one category, except for devices in the
+"No issues category" that is exclusive of all others.
+</Note>
+
 Click on the "Go to devices" link to see the list of devices filtered according to their status or issue.
 
 ## Playground
@@ -100,7 +106,9 @@ The System page displays various graphs showing information about metrics, data,
 The Data page allows to create **metrics** and **logs** subscriptions with the **Create subscription** button. Existing subscription are listed on the page and can be deleted with the bin icon. Selected an existing subscription from the drop down menu in one of the graph to visualize Unacknowledged message count and Oldest unacknowledged message age data for the chosen time interval. 
 Check the [API](../../apis/api) documentation to learn how to acknowledge messages using the CLI.
 
-Note that while it is also possible to create **app data** subscriptions on the Data page, it is recommended to use the PubSub page for these instead. Subscriptions allow for bi-directional support, as opposed to app data subscriptions on the Data page that only compile messages coming from the device.
+<Note>
+While it is also possible to create **app data** subscriptions on the Data page, it is recommended to use the PubSub page for these instead. Subscriptions allow for bi-directional support, as opposed to app data subscriptions on the Data page that only compile messages coming from the device.
+</Note>
 
 ## PubSub
 

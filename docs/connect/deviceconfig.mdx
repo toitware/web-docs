@@ -107,7 +107,9 @@ toit device config max-offline 24h
 If you install an application measuring the temperature every hour and the `max-offline` parameter is set to 24 hours, the application will run the program every hour. 
 Once a day the device will go online and connect to the Toit console and offload all the data to the console.
 
-Note that a device can come online due to other triggers than `max-offline`, for example when its storage capacity level reaches a predefined threshold, as explained in the section below.
+<Note>
+A device can come online due to other triggers than `max-offline`, for example when its storage capacity level reaches a predefined threshold, as explained in the section below.
+</Note>
 
 ## Connections
 
@@ -146,7 +148,9 @@ for setting a new WiFi connection, and use
 
 for setting up a cellular connection on your ESP32.
 
-Note that this command will automatically delete all previously configured connections.
+<Note>
+This command will automatically delete all previously configured connections.
+</Note>
 
 </Tab>
 </Tabs>
