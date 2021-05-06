@@ -209,7 +209,11 @@ main:
 ## Continuation of statements
 
 Toit uses a newline character to separate statements. It places each statement on one line.
-However in a long list of arguments for a function call you
+However you can break very long statements into multiple lines.
+
+### Line breaks in function arguments
+
+In a long list of arguments for a function call you
 can use a new line for each argument.
 
 A long statement can also span multiple lines by using the backslash (\) character.
@@ -251,6 +255,59 @@ main:
       some_long_local7 some_long_local8 some_long_local9 \
       some_long_local10
 ```
+
+Putting a line break between function arguments also has the effect
+of grouping the arguments, which can make parentheses
+unneccessary:
+
+```
+two_arg_function a b:
+  return a + b
+
+three_arg_function a b c:
+  return a + b + c
+
+my_func a/int b/int c/int -> int:
+  // Long line with many parentheses.
+  x := three_arg_function (two_arg_function a b) (two_arg_function b c) (two_arg_function c a)
+
+  // One line per argument looks better:
+  y := three_arg_function
+    (two_arg_function a b)
+    (two_arg_function b c)
+    (two_arg_function c a)
+
+  // For a cleaner look we don't need parentheses around
+  // the arguments that have their own line.
+  z := three_arg_function
+    two_arg_function a b
+    two_arg_function b c
+    two_arg_function c a
+
+  return x + y + z
+```
+
+### Line breaks in operator expressions
+
+If you need to break up a large expression, the second and subsequent
+lines should be indented more than the first:
+
+```
+long_expr_function long_argument_name other_argument_name:
+  return long_argument_name
+    + 2 * other_argument_name
+    - long_argument_name.abs
+```
+
+As seen here, the preferred style is to put binary operators after
+the line break, not before.
+
+### Line breaks in multi-line or very long string literals
+
+See the
+[guide to strings](../strings) on how to format
+[multi-line strings](../strings#multi-line-strings) and how to line-break
+[very long string literals](../strings#long-string-literals).
 
 ## Precedence
 
