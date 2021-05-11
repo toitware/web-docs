@@ -64,33 +64,25 @@ Use the CLI commands to acknowledge messages for a subscription.
 Create a subscription with
 
 ```shell
-
 toit data subscription create <data type> <name>
-
 ```
 
 For example, to create a data subscription on the data type `metrics` with subscription name `temperature`, use
 
 ```shell
-
 toit data subscription create metrics temperature
-
 ```
 
 To read a subscription, use
 
 ```shell
-
 toit data read <data type> <name>
-
 ```
 
 For example, reading data of the data type `metrics` from a subscription named `temperature`, use
 
 ```shell
-
 toit data read metrics temperature
-
 ```
 
 To acknowledge unacked messages, add the `--auto-ack` flag.
@@ -98,9 +90,7 @@ To acknowledge unacked messages, add the `--auto-ack` flag.
  For example, to read data of the data type `metrics` from a subscription named `temperature` with acknowledging messages and start making progress on the subscription, use
 
 ```shell
-
 toit data read metrics temperature --auto-ack
-
 ```
 
 </Tab>

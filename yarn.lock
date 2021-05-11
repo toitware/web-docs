@@ -1867,10 +1867,10 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
 
-"@toitware/code-block@^0.1.2":
-  version "0.1.2"
-  resolved "https://npm.pkg.github.com/download/@toitware/code-block/0.1.2/229af53721b7f0485afb05bfe95de7efa7ba1b421a779a65abed2713aaaaeb20#ba828f2818be2fa76644c01a3f44640103c3e42b"
-  integrity sha512-UYgQ8e6EeqJrJolfCRc+Yz4Yc+2OzPmaZq9NgriEWfGlOfJ9L1mcL6SZGbRT0w5T7i+kOfjyhLd0cB4bb1PXsQ==
+"@toitware/code-block@^0.2.0":
+  version "0.2.0"
+  resolved "https://npm.pkg.github.com/download/@toitware/code-block/0.2.0/3136bcaa567c419cf4a914a016e625c3a01a3146007ee4c04c10863eccd718fa#7e826f8721c52c48c38655a28ff06eaabce8c394"
+  integrity sha512-CoRucylOGFeWZ3IBrrff5IExJcDvug7/fVNzcWKvnNQbQQq/z5iz4CUHjPHj3NLjlS2dwRwu3d5jANaC3gsduA==
   dependencies:
     clsx "^1.1.1"
     use-codemirror "^0.2.0"

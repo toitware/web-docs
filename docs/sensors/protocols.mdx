@@ -17,9 +17,9 @@ import gpio
 import serial.protocols.i2c as i2c
 
 main:
-bus := i2c.Bus
-  --sda=gpio.Pin 21
-  --scl=gpio.Pin 22
+  bus := i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
 ```
 
 Each device must have a unique address. The address can be found in the datasheet for the selected peripheral - it's an 7-bit integer.
@@ -31,9 +31,9 @@ import gpio
 import serial.protocols.i2c as i2c
 
 main:
-bus := i2c.Bus
-  --sda=gpio.Pin 21
-  --scl=gpio.Pin 22
+  bus := i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
 
 device := bus.device 0x76
 ```

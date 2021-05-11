@@ -408,7 +408,6 @@ producing 5 separate lines of output.
 You can play with the methods on list by modifying and running the sample below:
 
 ```
-
 main:
   list := [ "Horse", "Fish", "Radish", "Baboon" ]
   print "There are $(list.size) elements in the list"
@@ -418,7 +417,6 @@ main:
   print "Here they are (sorted):"
   list.sort
   list.do: print "Element = $it"
-
 ```
 
 One of the methods on lists that is very useful when constructing strings is `join`. It produces a string from a list of strings by joining the parts and adding a separator between them. We use this in the `MegaGreeter` example to produce a single comma-separated list of names for the single line output of `say_bye`:
@@ -494,14 +492,12 @@ Hej, Kasper!
 We can program a ridiculously inefficient Fibonacci sequence generator using `if` and recursion:
 
 ```
-
 fib n:
   if n <= 1: return n
   return (fib n-1) + (fib n-2)
 
 main:
   print "The 10th Fibonacci number is $(fib 10)"
-
 ```
 
 This defines a top-level function called `fib` that is not a member of any class.  (We already saw `main`, which is a top level function with a special name.)
@@ -553,7 +549,6 @@ collatz n:
   while n > 1:
     if n % 2 == 0: n = n / 2
     else: n = n * 3 + 1
-
 ```
 
 ## Maps and sets
