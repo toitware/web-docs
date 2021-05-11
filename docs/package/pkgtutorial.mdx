@@ -56,8 +56,6 @@ DOT ::= 0
 DASH ::= 1
 SPACE_LETTER ::= 2
 
-
-
 MORSE_CODE_ ::= {
   'a': [ DOT, DASH ],
   'b': [ DASH, DOT, DOT, DOT ],
@@ -149,7 +147,9 @@ These conventions (package name and good first-paragraph description) are not ju
 
 For the tutorial we add the following `README.md` (again, simplified to save space):
 
-~~~
+<!-- SKIP CODE -->
+
+~~~markdown
 # Morse Tutorial
 A tutorial version of the Morse package. Not intended for use as package.
 
@@ -159,7 +159,6 @@ that call given blocks `on` and `off` with the correct timing.
 ## Usage
 A simple usage example.
 
-<!-- SKIP CODE -->
 ```
 import morse_package_tutorial
 
@@ -256,15 +255,15 @@ import gpio
 LED_PIN ::= 23
 
 main:
- pin := gpio.Pin.out LED_PIN
+  pin := gpio.Pin.out LED_PIN
 
- 10.repeat:
-   morse.emit
-       morse.encode_string "ababc"
-       --dot_duration= Duration --ms=250
-       --on=:  pin.set 1
-       --off=: pin.set 0
-   sleep (Duration --ms=3000)
+  10.repeat:
+    morse.emit
+        morse.encode_string "ababc"
+        --dot_duration= Duration --ms=250
+        --on=:  pin.set 1
+        --off=: pin.set 0
+    sleep (Duration --ms=3000)
 ```
 
 Since this example uses the morse package, we need to install the package first. Instead of relying on the uploaded package (which would be a bit circular), we use the package locally:
