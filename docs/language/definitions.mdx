@@ -35,7 +35,7 @@ Within a class, the following items are available: constructors, statics, factor
 - **Named constructors** allow more than one constructor with the same signature, and often make code more readable.
   See [more details here](../objects-constructors-inheritance-interfaces#named-constructors).
   For example, in the [string class](https://libs.toit.io/core/string/class-string) we have a constructor called `constructor.from_rune rune/int`. Thus, when reading the instantiation point `x := string.from_rune 'X'` it is clear that we construct a string with the character 'X'.
-- A **Factory** is a constructor or named constructor with a return. See below.
+- A **Factory** is a constructor or named constructor with a return. See an example below and more [details here](../objects-constructors-inheritance-interfaces#factory-constructors).
 - **Static functions and fields**: Static functions and fields are tied to the class rather than individual objects.
   Inside a class, static fields and functions are marked with the keyword `static`. Constructors and factories are implicitly static.
 

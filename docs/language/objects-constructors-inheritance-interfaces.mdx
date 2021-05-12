@@ -93,7 +93,7 @@ main:
 A class can only extend one class, but can implement several
 interfaces.  Like classes, interfaces act as types in Toit's type
 system, but unlike classes, they do not include implementations for
-the methods they declare.  Since a method signature declared in an
+the non-static methods they declare.  Since a method signature declared in an
 interface has no implementation, the colon at the end of the first
 line is omitted:
 
@@ -125,11 +125,14 @@ main:
   d /Drawable := Square
 ```
 
+In Toit an interface can have static methods and constructors,
+but the constructors must be [factory constructors](#factory-constructors).
+
 An abstract class has some similarities to a class and to an
 interface.  Like a class, it can have fields and methods that
 its extending classes will inherit.  Like an interface, it can
-have methods without implementations.  The class and the
-methods must be marked explicitly as abstract.  A class cannot
+have methods without implementations and constructors.  The class and the
+non-static methods must be marked explicitly as abstract.  A class cannot
 be instantiated (objects of that class cannot be created) unless
 it implements all the required methods from the abstract classes
 it extends:
@@ -272,6 +275,47 @@ class ColoredVector extends Vector:
 
   constructor x/float y/float .color:
     super x y  // Calls the constructor of `Vector`.
+```
+
+### Factory constructors
+
+A factory constructor is rather like a static method
+that returns an instance of the class.  Simply placing
+a return statement in a constructor makes it into a
+factory constructor.
+
+For example, it may be very common to create a special
+instance of an immutable class.  Since it is immutable,
+the constructor can save memory by returning the same
+object every time.  Here we have a factory constructor
+named `origin`.
+
+```
+class Pair:
+  x /int
+  y /int
+
+  // Regular constructor.
+  constructor .x .y:
+
+  // Private singleton object.
+  static SINGLETON_ORIGIN_ ::= Pair 0 0
+
+  // Named factory constructor.
+  constructor.origin:
+    return SINGLETON_ORIGIN_
+```
+
+Factory constructors are the only kinds of constructors
+that interfaces can have.  You cannot instantiate an
+interface, so regular constructors are not possible.  An
+example of this is ByteArray, which is actually an
+interface because there are several different implementations.
+The constructors return a "regular" ByteArray:
+
+```
+  ba1 := ByteArray 10         // Constructs a ByteArray with 10 zeros.
+  ba2 := ByteArray 5: it * 2  // Constructs #[0, 2, 4, 6, 8]
 ```
 
 ### Advanced constructor topics
