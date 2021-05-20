@@ -21,6 +21,12 @@ See some examples of use of `List` and `Map` in the section [Toit blocks](../blo
 
 See also the documentation for the [List](https://libs.toit.io/core/collections/class-List), [Set](https://libs.toit.io/core/collections/class-Set), and [Map](https://libs.toit.io/core/collections/class-Map) classes.
 
+The [string](../strings) and
+[ByteArray](https://libs.toit.io/core/collections/class-ByteArray) classes are
+not subtypes of
+[Collection](https://libs.toit.io/core/collections/class-Collection), but have
+some similarities to collections.
+
 ## Set versus List versus Map
 
 - **Duplicates**: A big difference between `List` and `Set` class is that `List` allows duplicates while `Set` doesn't allow duplicates.
@@ -109,7 +115,8 @@ graduate name/string:
 ```
 
 The index operator, `[]` requires the key to be present in the map, otherwise
-it throws an exception. As an alternative, you can use the `get` method which
+it throws an [exception](../exceptions). As an alternative, you can use the
+`get` method which
 by default returns null for a missing key:
 
 ```

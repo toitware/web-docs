@@ -22,7 +22,8 @@ class Point:
   y /int := 103
 ```
 
-Here we have given our new class two fields, with integer types, and they are
+Here we have given our new class two fields, with integer
+[types](../definitions#type), and they are
 by default initialized to 42 and 103. We create new instance objects of the
 class by naming the class, no `new` keyword is needed:
 
@@ -91,7 +92,8 @@ main:
 ### Interfaces
 
 A class can only extend one class, but can implement several
-interfaces.  Like classes, interfaces act as types in Toit's type
+interfaces.  Like classes, interfaces act as [types](../definitions#type)
+in Toit's type
 system, but unlike classes, they do not include implementations for
 the non-static methods they declare.  Since a method signature declared in an
 interface has no implementation, the colon at the end of the first
@@ -339,7 +341,7 @@ If no `super` call is present, then Toit implicitly adds
 one as late as possible. This is either at the end of the constructor body, or
 as soon the code uses `this`, a reference to the newly constructed object.
 Implicit uses of `this` also count, for example by invoking a method, or by
-creating a lambda that captures `this`.
+creating a [lambda](../tasks) that captures `this`.
 
 <!-- SKIP CODE -->
 ```
