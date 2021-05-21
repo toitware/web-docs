@@ -84,26 +84,9 @@ toit serial provision --baud 460800 -p wifi.ssid=<SSID> -p wifi.password=<passwo
 
 ## Troubleshoot serial port connections
 
-<Note type="warning" title="Install drivers!">
+If you have trouble connecting your ESP32 device with your computer via a serial connection
 
-If you are using macOS or Windows, you might need to install or update 
-
-1. The Virtual COM Port driver (VCP) from
-[here](https://ftdichip.com/drivers/vcp-drivers/) 
-
-For Windows, there is also a setup executable available for download.
-
-2. The USB to UART Bridge VCP driver from
-[here](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers). 
-
-For Windows, install the CP210x Universal Windows Driver.
-For macOS, install the CP210x VCP Mac OSX Driver.
-
-Install both drivers, reboot your computer and try running the serial commands again in the Toit CLI.
-
-</Note>
-
-If you still have trouble connecting your ESP32 device with your computer via a serial connection
+- try updating your drivers. If you are on Windows or macOS make sure your drivers are up to date. See [here](../provision) for links to the latest drivers.
 
 - try a different serial port on your computer and run the `toit serial ports` CLI command again to detect the correct serial port to use in the commands.
 
