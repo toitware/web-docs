@@ -4,7 +4,10 @@ order: 9
 
 # Mathematics in Toit
 
-Find mathematical algorithms in the [math module](https://libs.toit.io/math/library-summary), and the numbers available in the [numbers module](https://libs.toit.io/core/numbers/library-summary) of the core library.
+Find mathematical algorithms in the
+[math module](https://libs.toit.io/math/library-summary), and the numbers available
+in the [numbers module](https://libs.toit.io/core/numbers/library-summary) of
+the core library.
 
 ## Numbers
 
@@ -12,21 +15,31 @@ Toit [numbers](https://libs.toit.io/core/numbers/library-summary) support intege
 
 ### Integers and floats
 
-[Integers](https://libs.toit.io/core/numbers/class-int) are whole numbers such as -1, 0, 1, 2, 3, .. and they have type `int`.
-[Floats](https://libs.toit.io/core/numbers/class-float) are numbers with a decimal point. Floats are contagious, meaning that any binary operation involving a float forces the other operand to be converted to a float before doing the operation (thus yielding a float as result).
+[Integers](https://libs.toit.io/core/numbers/class-int) are whole numbers such
+as -1, 0, 1, 2, 3, .. and they have type `int`.
+[Floats](https://libs.toit.io/core/numbers/class-float) are numbers with a
+decimal point. Floats are contagious, meaning that any binary operation
+involving a float forces the other operand to be converted to a float before
+doing the operation (thus yielding a float as result).
 
 Integers are 64-bit signed integers.
-Floats are of size 64-bit, following the [IEEE 754-1985 double format](https://en.wikipedia.org/wiki/Double-precision_floating-point_format).
+Floats are of size 64-bit, following the
+[IEEE 754-1985 double format](https://en.wikipedia.org/wiki/Double-precision_floating-point_format).
 
 To make large numbers more readable, digits are often grouped using underscores.
 When storing these values and when displaying them on screen, Toit just ignores the underscores.
 
 Underscores work for both [integers](https://libs.toit.io/core/numbers/class-LargeInteger) and floats.
 
-You can use the [mathematics operators](https://libs.toit.io/core/numbers/class-num) such as `+`, `-`, `*`, and `/` to form expressions that include numbers.
-The [int class](https://libs.toit.io/core/numbers/class-int) has additional operations (like bit-shifting) that are not supported by the floating point numbers.
+You can use the [mathematics
+operators](https://libs.toit.io/core/numbers/class-num) such as `+`, `-`, `*`,
+and `/` to form expressions that include numbers.
+The [int class](https://libs.toit.io/core/numbers/class-int) has additional
+operations (like bit-shifting) that are not supported by the floating point
+numbers.
 
-Additional mathematical constants and functions are available in the [math module](https://libs.toit.io/math/library-summary).
+Additional mathematical constants and functions are available in the
+[math module](https://libs.toit.io/math/library-summary).
 
 ```
 import math
@@ -37,7 +50,8 @@ main:
 
 ## Randomization
 
-`random` is a function included in the [core library](https://libs.toit.io/core/utils/library-summary#random(0%2C0%2C0%2C))
+`random` is a function included in the
+[core library](https://libs.toit.io/core/utils/library-summary#random(0%2C0%2C0%2C))
 
 `random 10` gives you a random number between 0 and 10 (10 exclusive).
 

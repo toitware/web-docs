@@ -4,7 +4,10 @@ order: 0
 
 # Toit language basics
 
-This quick-start guide is inspired by [Ruby in Twenty Minutes](https://www.ruby-lang.org/en/documentation/quickstart/). It makes the assumption that you already have [Toit installed](../../installation/toitcli) on your machine.
+This quick-start guide is inspired by [Ruby in Twenty
+Minutes](https://www.ruby-lang.org/en/documentation/quickstart/). It makes the
+assumption that you already have [Toit installed](../../installation/toitcli)
+on your machine.
 
 Toit is an [object-oriented](../objects-constructors-inheritance-interfaces)
 programming language for the internet of things. The Toit language has the following desirable properties:
@@ -18,7 +21,9 @@ Now, let's get started with some programming!
 
 ## Hello, World
 
-A local installation of Toit comes with support for running small programs directly from the command line. If you put the following code in a file called `hello.toit`
+A local installation of Toit comes with support for running small programs
+directly from the command line. If you put the following code in a file called
+`hello.toit`
 
 ```
 main:
@@ -32,9 +37,17 @@ $ toit execute hello.toit
 Hello World!
 ```
 
-What just happened? The `toit` command line tool read your source code (`hello.toit`) and started running it from the `main` method that you defined. The `main` method consists of all the indented statements just below the method declaration line `main:`. Toit is indentation-based like Python, so the spaces you add to your programs are significant.
+What just happened? The `toit` command line tool read your source code
+(`hello.toit`) and started running it from the `main` method that you defined.
+The `main` method consists of all the indented statements just below the method
+declaration line `main:`. Toit is indentation-based like Python, so the spaces
+you add to your programs are significant.
 
-Once the program ran, it printed `Hello World!` in your terminal. This is because the only statement in `hello.toit` is a method call, where you invoke the `print` method with a single argument, which is the [string](../strings) to be printed (in this case to the terminal). If you wanted to output more than one line from your program, you could update it to:
+Once the program ran, it printed `Hello World!` in your terminal. This is
+because the only statement in `hello.toit` is a method call, where you invoke
+the `print` method with a single argument, which is the [string](../strings) to
+be printed (in this case to the terminal). If you wanted to output more than
+one line from your program, you could update it to:
 
 ```
 main:
@@ -67,7 +80,8 @@ main:
   hi
 ```
 
-Calling a function in Toit is as simple as mentioning its name. If the function doesn’t take arguments that’s all you need.
+Calling a function in Toit is as simple as mentioning its name. If the function
+doesn’t take arguments that’s all you need.
 
 What if we want to say hello to one person, and not the whole world? Just redefine hi to take a name as an argument.
 
@@ -106,13 +120,20 @@ hi name="World":
   print "Hello, $name.trim!"
 ```
 
-This way, we call the `trim` function on the `name` string before we insert it into the outer string. If we call `hi "   Lars  "` we still get the familiar greeting `Hello Lars!` and not `Hello   Lars  !`. You can add parentheses around the `name.trim` expression in the string to make it clearer which parts belong to the outer string:
+This way, we call the `trim` function on the `name` string before we insert it
+into the outer string. If we call `hi "   Lars  "` we still get the familiar
+greeting `Hello Lars!` and not `Hello   Lars  !`. You can add parentheses
+around the `name.trim` expression in the string to make it clearer which parts
+belong to the outer string:
 
 ```
   print "Hello, $(name.trim)!"
 ```
 
-Maybe you already spotted that we went ahead and added one other trick to the code above? We added a default value for the `name` parameter, so if the name isn’t supplied when you call `hi`, we use the default name "World". Now we can try:
+Maybe you already spotted that we went ahead and added one other trick to the
+code above? We added a default value for the `name` parameter, so if the name
+isn’t supplied when you call `hi`, we use the default name "World". Now we can
+try:
 
 ```
 main:
@@ -130,7 +151,9 @@ Hello Kasper!
 
 ## Evolving into a greeter
 
-What if we want a real greeter around, one that remembers your name and welcomes you and treats you with respect. You might want to use an object for that. Let’s create a `Greeter` class:
+What if we want a real greeter around, one that remembers your name and
+welcomes you and treats you with respect. You might want to use an object for
+that. Let’s create a `Greeter` class:
 
 ```
 class Greeter:
@@ -164,7 +187,11 @@ parameter actually tells us that the name is immediately stored as a field on
 
 The field parameter `.name` still has a default value, so if we don’t pass a name, the `Greeter` will greet the world.
 
-The `say_hi` and `say_bye` methods are introduced on the next two lines. The methods both have a single statement in them, so we can keep them on one line each. The `say_hi` and `say_bye` method both use the `name` field from the object they are called on. You can refer to fields in the class of a method simply by mentioning them (`name`).
+The `say_hi` and `say_bye` methods are introduced on the next two lines. The
+methods both have a single statement in them, so we can keep them on one line
+each. The `say_hi` and `say_bye` method both use the `name` field from the
+object they are called on. You can refer to fields in the class of a method
+simply by mentioning them (`name`).
 
 ## Creating a greeter object
 
@@ -177,7 +204,9 @@ main:
   greeter.say_bye
 ```
 
-We create an object simply by mentioning the constructor, `Greeter`. The greeter object remembers the name and uses it for the two separate greetings. If we run this, we get the following output:
+We create an object simply by mentioning the constructor, `Greeter`. The
+greeter object remembers the name and uses it for the two separate greetings.
+If we run this, we get the following output:
 
 ```txt
 $ toit execute hello.toit
@@ -193,11 +222,15 @@ main:
   print "How are you $(greeter.name)?"
 ```
 
-This would show `How are you  Helena ?`. Almost neat, right? Unfortunately, the name isn’t trimmed like we expected. Let’s fix that!
+This would show `How are you  Helena ?`. Almost neat, right? Unfortunately, the
+name isn’t trimmed like we expected. Let’s fix that!
 
 ## Fields and methods
 
-As you have just seen, a field on an object introduces a method with the same name. If you wanted to hide a field from the outside world, you could make it private. By convention, methods and fields that end with an underscore (`_`) are private and not supposed to be touched from the outside:
+As you have just seen, a field on an object introduces a method with the same
+name. If you wanted to hide a field from the outside world, you could make it
+private. By convention, methods and fields that end with an underscore (`_`)
+are private and not supposed to be touched from the outside:
 
 <!-- RESET CODE -->
 ```
@@ -206,7 +239,9 @@ class Greeter:
   constructor .name_="World":
 ```
 
-This removes the `name` method from greeters, but if we really want to allow accessing the name from the outside, we could reintroduce a getter with the same meaning as before.
+This removes the `name` method from greeters, but if we really want to allow
+accessing the name from the outside, we could reintroduce a getter with the
+same meaning as before.
 
 <!-- RESET CODE -->
 ```
@@ -220,14 +255,16 @@ class Greeter:
   say_bye: print "Bye $name_.trim, come back soon."
 ```
 
-Here we use the new keyword `return` to specify the value a method returns. We could make it slightly more interesting and trim it in the process:
+Here we use the new keyword `return` to specify the value a method returns. We
+could make it slightly more interesting and trim it in the process:
 
 <!-- SKIP CODE -->
 ```
   name: return name_.trim
 ```
 
-In this way, access to the name from the outside also gets the trimming and we can avoid having to manually call `trim` when getting the name:
+In this way, access to the name from the outside also gets the trimming and we
+can avoid having to manually call `trim` when getting the name:
 
 <!-- RESET CODE -->
 ```
@@ -255,7 +292,10 @@ member variables in classes.
 
 ## Greetings everyone!
 
-This greeter isn’t all that interesting though, it can only deal with one person at a time. What if we had some kind of MegaGreeter that could either greet the world, one person, or a whole list of people? Let’s try to build that. We will start with a class definition:
+This greeter isn’t all that interesting though, it can only deal with one
+person at a time. What if we had some kind of MegaGreeter that could either
+greet the world, one person, or a whole list of people? Let’s try to build
+that. We will start with a class definition:
 
 ```
 class MegaGreeter:
@@ -265,7 +305,13 @@ class MegaGreeter:
     names.add name
 ```
 
-So MegaGreeter objects have a [list](../listsetmap) of `names`. The `names` field is initialized to the empty list (`[]`). The body of the `MegaGreeter` constructor adds the given `name` argument to the end of the list of names. Notice that this is different than using a `.name` parameter that automatically assigns to the field called `name`. Mega greeters don't have a single name and no `name` field, so here the `name` is just an ordinary parameter that we can use in the body of the constructor. All in all, this code:
+So MegaGreeter objects have a [list](../listsetmap) of `names`. The `names`
+field is initialized to the empty list (`[]`). The body of the `MegaGreeter`
+constructor adds the given `name` argument to the end of the list of names.
+Notice that this is different than using a `.name` parameter that automatically
+assigns to the field called `name`. Mega greeters don't have a single name and
+no `name` field, so here the `name` is just an ordinary parameter that we can
+use in the body of the constructor. All in all, this code:
 
 ```
 main:
@@ -327,7 +373,10 @@ Let’s dive into the new constructs in the next sections.
 
 ## Comments and indentation
 
-Not everything in your source files is meant to be run by the Toit compiler. Sometimes, it is nice just to add comments that explain interesting things related to your code. In the example in the last section, there were a few single line comments:
+Not everything in your source files is meant to be run by the Toit compiler.
+Sometimes, it is nice just to add comments that explain interesting things
+related to your code. In the example in the last section, there were a few
+single line comments:
 
 <!-- SKIP CODE -->
 ```
@@ -337,7 +386,9 @@ class MegaGreeter:
 
 Such comments start with `//` and tell the system to ignore the rest of the line.
 
-You have already seen the use of indentation to give hierarchical structure to your code. The general structure is that after a `:` you can have a single construct if it fits on one line:
+You have already seen the use of indentation to give hierarchical structure to
+your code. The general structure is that after a `:` you can have a single
+construct if it fits on one line:
 
 ```
 class SimpleGreeter:
@@ -345,7 +396,8 @@ class SimpleGreeter:
   say_hi: print "Hi!"  // Method all on one line.
 ```
 
-or you can add a newline after the `:` and let the following lines that are indented relative to the outer construct be a sequence of inner constructs:
+or you can add a newline after the `:` and let the following lines that are
+indented relative to the outer construct be a sequence of inner constructs:
 
 ```
   names := []
@@ -356,9 +408,12 @@ or you can add a newline after the `:` and let the following lines that are inde
     print "Bye $everyone, come back soon."
 ```
 
-For methods, we often refer to the inner constructs as the statements of a method or the body of a method. The preferred indentation for inner constructs is two spaces.
+For methods, we often refer to the inner constructs as the statements of a
+method or the body of a method. The preferred indentation for inner constructs
+is two spaces.
 
-For a class, everything that is indented under the class declaration line belongs to the class. We call such things class members:
+For a class, everything that is indented under the class declaration line
+belongs to the class. We call such things class members:
 
 <!-- RESET CODE -->
 ```
@@ -387,7 +442,11 @@ It is common to refer to such nested structure as _block structure_.
 
 ## Iterating over lists
 
-Let’s return to the `MegaGreeter` example and take a look at another place where constructs are block structured. In the `say_hi` method, we want to call `print` for every single name in the `names` [list](../listsetmap). We can do this by calling `names.do` and provide the list of statements we want to run for each element using block structure:
+Let’s return to the `MegaGreeter` example and take a look at another place
+where constructs are block structured. In the `say_hi` method, we want to call
+`print` for every single name in the `names` [list](../listsetmap). We can do
+this by calling `names.do` and provide the list of statements we want to run
+for each element using block structure:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
@@ -419,7 +478,11 @@ main:
   list.do: print "Element = $it"
 ```
 
-One of the methods on lists that is very useful when constructing strings is `join`. It produces a string from a list of strings by joining the parts and adding a separator between them. We use this in the `MegaGreeter` example to produce a single comma-separated list of names for the single line output of `say_bye`:
+One of the methods on lists that is very useful when constructing strings is
+`join`. It produces a string from a list of strings by joining the parts and
+adding a separator between them. We use this in the `MegaGreeter` example to
+produce a single comma-separated list of names for the single line output of
+`say_bye`:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
@@ -456,7 +519,8 @@ Kaixo, World!
 Kaixo, Lars!
 Kaixo, Kasper!
 ```
-However, at the calling site it may not be clear what the argument "Kaixo" is for. We can make it clearer with a named argument:
+However, at the calling site it may not be clear what the argument "Kaixo" is
+for. We can make it clearer with a named argument:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
@@ -500,11 +564,23 @@ main:
   print "The 10th Fibonacci number is $(fib 10)"
 ```
 
-This defines a top-level function called `fib` that is not a member of any class.  (We already saw `main`, which is a top level function with a special name.)
+This defines a top-level function called `fib` that is not a member of any
+class.  (We already saw `main`, which is a top level function with a special
+name.)
 
-The `fib` function is recursive, calling itself, and also makes use of a few new features.  The [if-statement](../loops#if-statements) is well known from other languages.  In Toit it works by taking an expression and conditionally evaluating a block.  Like other blocks we could have used indentation to group multiple lines.
+The `fib` function is recursive, calling itself, and also makes use of a few
+new features.  The [if-statement](../loops#if-statements) is well known from
+other languages.  In Toit it works by taking an expression and conditionally
+evaluating a block.  Like other blocks we could have used indentation to group
+multiple lines.
 
-Toit also has the usual array of infix operators, `+`, `-`, `*`, `/`, `%` etc.  and the relational operators `<`, `<=`, `>`, `>=`, `==` and `!=`.  The operators have higher [precedence](../syntax#precedence) than function arguments, so we had to group the calls in parentheses to get the desired behavior.  The high precedence is what makes the arguments for the recursive invocation of `fib` work.  We could have spaced it more conventionally and got the same effect:
+Toit also has the usual array of infix operators, `+`, `-`, `*`, `/`, `%` etc.
+and the relational operators `<`, `<=`, `>`, `>=`, `==` and `!=`.  The
+operators have higher [precedence](../syntax#precedence) than function
+arguments, so we had to group the calls in parentheses to get the desired
+behavior.  The high precedence is what makes the arguments for the recursive
+invocation of `fib` work.  We could have spaced it more conventionally and got
+the same effect:
 
 <!-- RESET CODE -->
 ```
@@ -515,7 +591,8 @@ fib n:
 
 ## Loops
 
-This is a terribly slow way to calculate a Fibonacci number though, and we could do it with a simple [loop](../loops#loops):
+This is a terribly slow way to calculate a Fibonacci number though, and we
+could do it with a simple [loop](../loops#loops):
 
 ```
 fib2 n:
@@ -528,7 +605,9 @@ fib2 n:
   return s1
 ```
 
-Here we are using the `repeat` method on numbers, which runs a block a given number of times.  Like for the `do` method, there's an automatic variable, `it` that gives the iteration number:
+Here we are using the `repeat` method on numbers, which runs a block a given
+number of times.  Like for the `do` method, there's an automatic variable, `it`
+that gives the iteration number:
 
 ```
 // Prints the numbers from 0 to n (exclusive).
@@ -536,7 +615,9 @@ print_n_numbers n:
   n.repeat: print it
 ```
 
-The `repeat` method is simple and efficient, but sometimes we need something more flexible, and for that we have the well-known `while` and `for` statements:
+The `repeat` method is simple and efficient, but sometimes we need something
+more flexible, and for that we have the well-known `while` and `for`
+statements:
 
 ```
 // Prints the odd numbers less than n.
@@ -578,7 +659,11 @@ main:
   greeter.say_hi
 ```
 
-Here we use a [hash map](../listsetmap) to store the appropriate title for each name.  The empty map is given by `{:}` and we use `[]` to access the values for each key.  The empty set is `{}` and we already met the empty list, `[]`.  The lookup syntax `[]` also works on lists, so instead of the 'do' method we could have used:
+Here we use a [hash map](../listsetmap) to store the appropriate title for each
+name.  The empty map is given by `{:}` and we use `[]` to access the values for
+each key.  The empty set is `{}` and we already met the empty list, `[]`.  The
+lookup syntax `[]` also works on lists, so instead of the 'do' method we could
+have used:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
@@ -604,7 +689,9 @@ main:
     print it
 ```
 
-Syntactically they look like they are built in to the language like `if` and `for`, but they are actually perfectly normal methods on the List and Integer classes:
+Syntactically they look like they are built in to the language like `if` and
+`for`, but they are actually perfectly normal methods on the List and Integer
+classes:
 
 <!-- SKIP CODE -->
 ```
@@ -620,7 +707,12 @@ class Integer:
       block.call i
 ```
 
-They are making use of a feature called [blocks](../blocks).  These are snippets of code that can be passed down the stack as arguments to methods and functions.  At the call site we precede the block with a colon, '`:`', and at the function definition we surround the parameter name with square brackets, '`[]`'.  Often, there is one block parameter, it is in the final position and it is called `block`.
+They are making use of a feature called [blocks](../blocks).  These are
+snippets of code that can be passed down the stack as arguments to methods and
+functions.  At the call site we precede the block with a colon, '`:`', and at
+the function definition we surround the parameter name with square brackets,
+'`[]`'.  Often, there is one block parameter, it is in the final position and
+it is called `block`.
 
 ## Blocks that return a value
 
@@ -634,11 +726,17 @@ short_words words:
     it.size <= 5
 ```
 
-The `filter` method calls the block, `it.size <= 5` for each element in the original list, and returns a new list containing only the short words.
+The `filter` method calls the block, `it.size <= 5` for each element in the
+original list, and returns a new list containing only the short words.
 
-Note that there is no `return` statement in the block.  A block will return the value of the last statement to the place where it was invoked with `block.call`.  In this case there is only one statement, which is the [boolean](../booleans) expression `it.size <= 5`.
+Note that there is no `return` statement in the block.  A block will return the
+value of the last statement to the place where it was invoked with
+`block.call`.  In this case there is only one statement, which is the
+[boolean](../booleans) expression `it.size <= 5`.
 
-If you use the `return` keyword in a block then it returns from the syntactic function or method in which it is written.  Usually this will behave as you would expect:
+If you use the `return` keyword in a block then it returns from the syntactic
+function or method in which it is written.  Usually this will behave as you
+would expect:
 
 ```
 wheres_walter list:
@@ -651,4 +749,7 @@ main:
   print (wheres_walter ["Ib Michael", "Walter White", "Marie Curie"])
 ```
 
-The `return` keyword is inside a block that is passed to the `do` method.  When the name that starts with `"Walter "` is found we immediately return the full name from the `wheres_walter` function without continuing to iterate over the list.
+The `return` keyword is inside a block that is passed to the `do` method.  When
+the name that starts with `"Walter "` is found we immediately return the full
+name from the `wheres_walter` function without continuing to iterate over the
+list.

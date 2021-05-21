@@ -4,7 +4,9 @@ order: 3
 
 # Toit syntax fundamentals
 
-This document describes the basics of the Toit language. To learn about Toit's documentation convention, see the language [documentation convention](../../sdk/toitdoc) section.
+This document describes the basics of the Toit language. To learn about Toit's
+documentation convention, see the language [documentation
+convention](../../sdk/toitdoc) section.
 
 ## Whitespace and indentation
 
@@ -30,6 +32,10 @@ colon-equals.  We assigned a new value to the existing variable,
 giving it a value, you can use a question mark: `:= ?`.
 
 ```
+  x := 0
+  if (random 2) == 0:
+    x = 42
+
   y := ?
   if (random 2) == 0:
     y = 1
@@ -79,9 +85,14 @@ static      true           try
 while       or     and     not
 ```
 
-In addition to these keywords, there are some "pseudo keywords" - like `constructor` - that cannot be used in certain contexts. Trying these pseudo-keywords as globals name will generally give an error message in the IDE.
+In addition to these keywords, there are some "pseudo keywords" - like
+`constructor` - that cannot be used in certain contexts. Trying these
+pseudo-keywords as globals name will generally give an error message in the
+IDE.
 
-Another example of pseudo-keyword is `operator` that is allowed as a local but cannot be the name of a function. Similarly, `string` can be used like a normal global but would shadow the `string` type.
+Another example of pseudo-keyword is `operator` that is allowed as a local but
+cannot be the name of a function. Similarly, `string` can be used like a normal
+global but would shadow the `string` type.
 
 ## String and character literals
 
@@ -142,9 +153,11 @@ A final global that isn't a constant could be something that is mutable itself, 
 ```
 some_global ::= []
 ```
-In this case the global is initialized with an empty list. The content of the list can change, but it will always be the same list.
+In this case the global is initialized with an empty list. The content of the
+list can change, but it will always be the same list.
 
-When you name a global, you should adhere to rules defined earlier about [identifiers](../syntax#identifiers-and-keywords).
+When you name a global, you should adhere to rules defined earlier about
+[identifiers](../syntax#identifiers-and-keywords).
 
 Global variables (and [static class
 variables](../definitions)) are initialized when
