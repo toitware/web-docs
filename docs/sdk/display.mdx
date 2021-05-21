@@ -15,7 +15,7 @@ import texture show *
 import two_color show BLACK
 import pixel_display show *
 
-sans ::= font_get "sans10"
+sans ::= Font.get "sans10"
 display ::= TwoColorPixelDisplay "eink"
 
 main:
@@ -41,7 +41,7 @@ import pixel_display show TwoColorPixelDisplay
 
 main:
   sans_10_bold ::= Font [sans_10_bold.ASCII, sans_10_bold.LATIN_1_SUPPLEMENT]
-  sans_24_font ::= Font.from_pages [sans_24_bold.ASCII, sans_24_bold.LATIN_1_SUPPLEMENT]
+  sans_24_font ::= Font [sans_24_bold.ASCII, sans_24_bold.LATIN_1_SUPPLEMENT]
   display ::= TwoColorPixelDisplay "eink"
 
   sans_10 := display.context
