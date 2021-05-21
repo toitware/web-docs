@@ -62,6 +62,46 @@ class Foo:
     x = y = z = 0   // Set the fields that must be set.
 ```
 
+## Getters and Setters
+
+In Toit the external syntax for getters and setters is
+the same as for public fields:
+
+```
+class Bar:
+  x /int := ?
+
+  constructor .x:
+
+my_function bar/Bar -> none:
+  // Accesses public field x, or uses the x getter.
+  print bar.x
+
+  // Sets the public field x, or uses the x setter.
+  bar.x = 42
+```
+
+If we later decide to make the x field private we rename it to have a final
+underscore.  At the same time, we can introduce getters and setters that keep
+our class compatible with the old version:
+
+<!-- RESET CODE -->
+```
+class Bar:
+  x_ /int := ? // Private field.
+
+  constructor .x_:
+
+  // Getter, returns an int.
+  x -> int:
+    return x_
+
+  // Setter, takes an int, returns nothing.
+  x= value/int -> none:
+    x_ = value
+    print "x_ was set to $x_"
+```
+
 ## Inheritance
 
 Toit is an object-oriented language.  The inheritance and typing
