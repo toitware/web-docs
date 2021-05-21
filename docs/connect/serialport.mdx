@@ -84,12 +84,22 @@ toit serial provision --baud 460800 -p wifi.ssid=<SSID> -p wifi.password=<passwo
 
 ## Troubleshoot serial port connections
 
-<Note type="warning" title="Update drivers!">
+<Note type="warning" title="Install drivers!">
 
-If you are using macOS or Windows, you might need to update the drivers from
-[here](https://ftdichip.com/drivers/vcp-drivers/) and 
+If you are using macOS or Windows, you might need to install or update 
+
+1. The Virtual COM Port driver (VCP) from
+[here](https://ftdichip.com/drivers/vcp-drivers/) 
+
+For Windows, there is also a setup executable available for download.
+
+2. The USB to UART Bridge VCP driver from
 [here](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers). 
-Install both drivers, reboot your computer and try to run the Toit CLI serial commands again.
+
+For Windows, install the CP210x Universal Windows Driver.
+For macOS, install the CP210x VCP Mac OSX Driver.
+
+Install both drivers, reboot your computer and try running the serial commands again in the Toit CLI.
 
 </Note>
 
