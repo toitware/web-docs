@@ -34,7 +34,7 @@ Hello World!
 
 What just happened? The `toit` command line tool read your source code (`hello.toit`) and started running it from the `main` method that you defined. The `main` method consists of all the indented statements just below the method declaration line `main:`. Toit is indentation-based like Python, so the spaces you add to your programs are significant.
 
-Once the program ran, it printed `Hello World!` in your terminal. This is because the only statement in `hello.toit` is a method call, where you invoke the `print` method with a single argument, which is the string to be printed (in this case to the terminal). If you wanted to output more than one line from your program, you could update it to:
+Once the program ran, it printed `Hello World!` in your terminal. This is because the only statement in `hello.toit` is a method call, where you invoke the `print` method with a single argument, which is the [string](../strings) to be printed (in this case to the terminal). If you wanted to output more than one line from your program, you could update it to:
 
 ```
 main:
@@ -265,7 +265,7 @@ class MegaGreeter:
     names.add name
 ```
 
-So MegaGreeter objects have a list of `names`. The `names` field is initialized to the empty list (`[]`). The body of the `MegaGreeter` constructor adds the given `name` argument to the end of the list of names. Notice that this is different than using a `.name` parameter that automatically assigns to the field called `name`. Mega greeters don't have a single name and no `name` field, so here the `name` is just an ordinary parameter that we can use in the body of the constructor. All in all, this code:
+So MegaGreeter objects have a [list](../listsetmap) of `names`. The `names` field is initialized to the empty list (`[]`). The body of the `MegaGreeter` constructor adds the given `name` argument to the end of the list of names. Notice that this is different than using a `.name` parameter that automatically assigns to the field called `name`. Mega greeters don't have a single name and no `name` field, so here the `name` is just an ordinary parameter that we can use in the body of the constructor. All in all, this code:
 
 ```
 main:
@@ -387,7 +387,7 @@ It is common to refer to such nested structure as _block structure_.
 
 ## Iterating over lists
 
-Let’s return to the `MegaGreeter` example and take a look at another place where constructs are block structured. In the `say_hi` method, we want to call `print` for every single name in the `names` list. We can do this by calling `names.do` and provide the list of statements we want to run for each element using block structure:
+Let’s return to the `MegaGreeter` example and take a look at another place where constructs are block structured. In the `say_hi` method, we want to call `print` for every single name in the `names` [list](../listsetmap). We can do this by calling `names.do` and provide the list of statements we want to run for each element using block structure:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
@@ -502,9 +502,9 @@ main:
 
 This defines a top-level function called `fib` that is not a member of any class.  (We already saw `main`, which is a top level function with a special name.)
 
-The `fib` function is recursive, calling itself, and also makes use of a few new features.  The `if` statement is well known from other languages.  In Toit it works by taking an expression and conditionally evaluating a block.  Like other blocks we could have used indentation to group multiple lines.
+The `fib` function is recursive, calling itself, and also makes use of a few new features.  The [if-statement](../loops#if-statements) is well known from other languages.  In Toit it works by taking an expression and conditionally evaluating a block.  Like other blocks we could have used indentation to group multiple lines.
 
-Toit also has the usual array of infix operators, `+`, `-`, `*`, `/`, `%` etc. and the relational operators `<`, `<=`, `>`, `>=`, `==` and `!=`.  The operators have higher precedence than function arguments, so we had to group the calls in parentheses to get the desired behavior.  The high precedence is what makes the arguments for the recursive invocation of `fib` work.  We could have spaced it more conventionally and got the same effect:
+Toit also has the usual array of infix operators, `+`, `-`, `*`, `/`, `%` etc.  and the relational operators `<`, `<=`, `>`, `>=`, `==` and `!=`.  The operators have higher [precedence](../syntax#precedence) than function arguments, so we had to group the calls in parentheses to get the desired behavior.  The high precedence is what makes the arguments for the recursive invocation of `fib` work.  We could have spaced it more conventionally and got the same effect:
 
 <!-- RESET CODE -->
 ```
@@ -515,7 +515,7 @@ fib n:
 
 ## Loops
 
-This is a terribly slow way to calculate a Fibonacci number though, and we could do it with a simple loop:
+This is a terribly slow way to calculate a Fibonacci number though, and we could do it with a simple [loop](../loops#loops):
 
 ```
 fib2 n:
@@ -636,7 +636,7 @@ short_words words:
 
 The `filter` method calls the block, `it.size <= 5` for each element in the original list, and returns a new list containing only the short words.
 
-Note that there is no `return` statement in the block.  A block will return the value of the last statement to the place where it was invoked with `block.call`.  In this case there is only one statement, which is the boolean expression `it.size <= 5`.
+Note that there is no `return` statement in the block.  A block will return the value of the last statement to the place where it was invoked with `block.call`.  In this case there is only one statement, which is the [boolean](../booleans) expression `it.size <= 5`.
 
 If you use the `return` keyword in a block then it returns from the syntactic function or method in which it is written.  Usually this will behave as you would expect:
 
