@@ -32,7 +32,11 @@ main:
 
 ## Throw
 
-The `throw` keyword in Toit is used to explicitly throw an exception from a method or any block of code. Any object can be thrown. Currently the core libraries often throw strings containing error messages. Although it looks like a keyword, `throw` is implemented as a function that takes a value to be thrown.
+The `throw` keyword in Toit is used to explicitly throw an exception from a
+method or any block of code. Any object can be thrown. Currently the core
+libraries often throw strings containing error messages. Although it looks like
+a keyword, `throw` is implemented as a function that takes a value to be
+thrown.
 
 ## Catch
 
@@ -42,9 +46,17 @@ Catch will return the thrown object, or `null` if no object was thrown.
 
 Catch takes two optional arguments
 
-- The `--trace` argument is a boolean or a block that evaluates to a boolean. It controls whether the caught exception is reported in the console. By default the exception is not reported. The `trace` block is passed an argument that is the thrown object.
+- The `--trace` argument is a boolean or a block that evaluates to a boolean.
+It controls whether the caught exception is reported in the console. By default
+the exception is not reported. The `trace` block is passed an argument that is
+the thrown object.
 
-- The `--unwind` argument takes a boolean or a block that evaluates to a boolean. It determines whether the execution stack continues to unwind after the catch. By default `unwind` is `false`. If the block evaluates to `true` then the exception will continue to unwind the call stack as if the catch were not present. The `unwind` block is passed the thrown object as an argument, which it can use to determine whether to unwind.
+- The `--unwind` argument takes a boolean or a block that evaluates to a
+boolean. It determines whether the execution stack continues to unwind after
+the catch. By default `unwind` is `false`. If the block evaluates to `true`
+then the exception will continue to unwind the call stack as if the catch were
+not present. The `unwind` block is passed the thrown object as an argument,
+which it can use to determine whether to unwind.
 
 ```
 my_function:

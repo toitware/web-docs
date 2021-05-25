@@ -4,7 +4,9 @@ order: 5
 
 # Toit blocks
 
-Blocks are a mechanism to conveniently and efficiently provide callbacks to functions. This mechanism is, for example, used for the methods `int.repeat` and `List.do`.
+Blocks are a mechanism to conveniently and efficiently provide callbacks to
+functions. This mechanism is, for example, used for the methods `int.repeat`
+and `List.do`.
 
 ```
 main:
@@ -20,21 +22,27 @@ main:
 Here we used the automatic block argument, `it`, [see
 below](#block-arguments)
 
-Syntactically `repeat` and `do` look like they are built-in to the language like `for` and `if` are, but they are actually normal methods that use the block feature.
+Syntactically `repeat` and `do` look like they are built-in to the language
+like `for` and `if` are, but they are actually normal methods that use the
+block feature.
 
 ## Basic use of blocks
 
-Blocks are used extensively in the Toit standard library, so you need to know the basics of calling functions that accept blocks.
-A function that takes a block as an argument surrounds the parameter with brackets `[ ]`. For example, the function signature of `int.repeat` is
+Blocks are used extensively in the Toit standard library, so you need to know
+the basics of calling functions that accept blocks.
+A function that takes a block as an argument surrounds the parameter with
+brackets `[ ]`. For example, the function signature of `int.repeat` is
 
 ```
 repeat [block]:
   // ...
 ```
 
-The `[block]` parameter states that the `repeat` function takes exactly one argument which must be a block (because of the `[` and `]`).
+The `[block]` parameter states that the `repeat` function takes exactly one
+argument which must be a block (because of the `[` and `]`).
 
-On the caller side, block arguments look like a scope for `if` or `for`. For example, if you want to call `repeat`, you could write
+On the caller side, block arguments look like a scope for `if` or `for`. For
+example, if you want to call `repeat`, you could write
 
 ```
 main:
@@ -51,7 +59,10 @@ main:
 
 ## Block arguments
 
-Blocks often receive arguments when they are called as callbacks. For instance, `List.do` iterates over a list and calls the block with every element. When the block receives one argument you can refer to the argument with the keyword `it`. For example
+Blocks often receive arguments when they are called as callbacks. For instance,
+`List.do` iterates over a list and calls the block with every element. When the
+block receives one argument you can refer to the argument with the keyword
+`it`. For example
 
 ```
 main:
@@ -67,7 +78,9 @@ John
 Sue
 ```
 
-You can name the parameter of the block if you want to use something else than `it`. To do so, you start the block with the name enclosed in pipes `|`. For example
+You can name the parameter of the block if you want to use something else than
+`it`. To do so, you start the block with the name enclosed in pipes `|`. For
+example
 
 ```
 main:
@@ -83,7 +96,10 @@ John
 Sue
 ```
 
-Some blocks receive more than one argument. In that case you have to use the `|` notation. You just write all the names in between the two pipes. For example, `Map.do` iterates all the key-value pairs of a `Map`, and calls the block with the key as the first argument and the value as the second:
+Some blocks receive more than one argument. In that case you have to use the
+`|` notation. You just write all the names in between the two pipes. For
+example, `Map.do` iterates all the key-value pairs of a `Map`, and calls the
+block with the key as the first argument and the value as the second:
 
 ```
 main:
@@ -104,11 +120,15 @@ John has ID 2345
 Sue has ID 3456
 ```
 
-If a block accepts multiple arguments, but you only need to refer to the first, then you can omit the naming and just use `it`. If there are parameters that you don't need, then you can use a wildcard `_` instead of giving them a name.
+If a block accepts multiple arguments, but you only need to refer to the first,
+then you can omit the naming and just use `it`. If there are parameters that
+you don't need, then you can use a wildcard `_` instead of giving them a name.
 
 ## Returning from blocks and accessing variables
 
-Blocks look like they are built-in which makes it important that they also act like they are built-in. This means that returning from a block with `return`, or accessing local variables must just work.
+Blocks look like they are built-in which makes it important that they also act
+like they are built-in. This means that returning from a block with `return`,
+or accessing local variables must just work.
 
 ### Non-local return
 
@@ -136,11 +156,16 @@ which would print
 -3
 ```
 
-The `return it` in `first_negative` is a non-local return which means that it doesn't just return from the block or `do`, it returns from `first_negative`. This means that we can short circuit the search when we find the first negative number.
+The `return it` in `first_negative` is a non-local return which means that it
+doesn't just return from the block or `do`, it returns from `first_negative`.
+This means that we can short circuit the search when we find the first negative
+number.
 
 ### Local return
 
-In some situations, it is useful to do a local return. That is, to just return from the block. To do this, you use the `continue` keyword followed by a dot `.` and the label of the function you want to continue in. For example
+In some situations, it is useful to do a local return. That is, to just return
+from the block. To do this, you use the `continue` keyword followed by a dot
+`.` and the label of the function you want to continue in. For example
 
 ```
 /**
@@ -165,11 +190,14 @@ which prints
 [1, 3, 3, 5]
 ```
 
-Here the block given to `map` uses `continue` to do a local return of an odd value when it sees an even value. The snippet `continue.map` can be read as "continue in the `map` function".
+Here the block given to `map` uses `continue` to do a local return of an odd
+value when it sees an even value. The snippet `continue.map` can be read as
+"continue in the `map` function".
 
 ### Default return
 
-The default return of a block is a local return. The block returns the value of the last statement in the block. For example
+The default return of a block is a local return. The block returns the value of
+the last statement in the block. For example
 
 ```
 /**
@@ -187,7 +215,9 @@ main:
 
 ```
 
-Here the block accepted by `filter` returns the value of the last statement which is `it.size < 6`, a boolean that indicates whether the size of the element is less than 6.
+Here the block accepted by `filter` returns the value of the last statement
+which is `it.size < 6`, a boolean that indicates whether the size of the
+element is less than 6.
 
 It prints
 
@@ -195,7 +225,9 @@ It prints
 [word, small, tiny]
 ```
 
-In the `oddify` example in section [Local return](#local-return), the last local return was unnecessary. If you replace `continue.map it` with `it`, then the block uses the default local return to return `it` from the block. That is
+In the `oddify` example in section [Local return](#local-return), the last
+local return was unnecessary. If you replace `continue.map it` with `it`, then
+the block uses the default local return to return `it` from the block. That is
 
 <!-- RESET CODE -->
 ```
@@ -223,7 +255,9 @@ prints
 
 ## Blocks referencing variables
 
-Blocks can reference everything that can be referenced from the scope the block was defined in. This includes access to local variable, field variables, and globals.
+Blocks can reference everything that can be referenced from the scope the block
+was defined in. This includes access to local variable, field variables, and
+globals.
 
 ```
 my_stringify list -> string:
@@ -244,7 +278,8 @@ main:
 Here the block (given to `do`) references both `is_first` and `str`.
 Notice that the block both accesses and modifies the variables.
 
-The function returns a string representation of the list corresponding to the exact syntactic construct that creates a list, and thus prints
+The function returns a string representation of the list corresponding to the
+exact syntactic construct that creates a list, and thus prints
 
 ```txt
  [1, 2, 3]
@@ -252,7 +287,9 @@ The function returns a string representation of the list corresponding to the ex
 
 ## Examples of block usage
 
-Many `for`-loops follow a common pattern, where the loop uses a loop-variable to count from 0 to a given limit. For example say you want a function that prints the numbers from 1 to `n`, you could write
+Many `for`-loops follow a common pattern, where the loop uses a loop-variable
+to count from 0 to a given limit. For example say you want a function that
+prints the numbers from 1 to `n`, you could write
 
 ```
 /// Prints the numbers from 1 to $n on separate lines.
@@ -264,7 +301,10 @@ main:
     print_numbers 5
 ```
 
-As you can see, the `for`-loop is mostly boilerplate code. All you want to express is that the `print` statement should be executed `n` times. This is where blocks come in handy. We can rewrite the above snippet using `int.repeat`:
+As you can see, the `for`-loop is mostly boilerplate code. All you want to
+express is that the `print` statement should be executed `n` times. This is
+where blocks come in handy. We can rewrite the above snippet using
+`int.repeat`:
 
 <!-- RESET CODE -->
 ```
@@ -304,7 +344,10 @@ main:
   print_list [1, 2, 3, 4, 5]
 ```
 
-Now the example is shorter, but it is still not clear what the intend is. You can do even better than the above. The collections in the Toit standard library have `do` functions that iterate the collections and call a block for each element. You can rewrite `print_list` to
+Now the example is shorter, but it is still not clear what the intend is. You
+can do even better than the above. The collections in the Toit standard library
+have `do` functions that iterate the collections and call a block for each
+element. You can rewrite `print_list` to
 
 <!-- RESET CODE -->
 ```
@@ -321,7 +364,9 @@ Now the intend is clear: you are `do`'ing something to the list which correspond
 
 ## Calling functions with named block parameters
 
-Block parameters can also be named. This is indicated in the function signature by enclosing the named parameter in brackets `[ ]` (the same as for other block parameters). For instance, the signature of `Map.remove` is
+Block parameters can also be named. This is indicated in the function signature
+by enclosing the named parameter in brackets `[ ]` (the same as for other block
+parameters). For instance, the signature of `Map.remove` is
 
 ```
 remove key [--if_absent] -> none:
@@ -387,7 +432,11 @@ Here we have formatted the arguments differently, so each of the block arguments
 
 ## Blocks as values
 
-Blocks are values in Toit which is why functions accept them as arguments. A block value is defined as a colon `:` followed by the body of the block which is either a statement on the same line of the block, such as `: null`, or a series of statements on separate lines following the `:` (all statements indented), such as
+Blocks are values in Toit which is why functions accept them as arguments. A
+block value is defined as a colon `:` followed by the body of the block which
+is either a statement on the same line of the block, such as `: null`, or a
+series of statements on separate lines following the `:` (all statements
+indented), such as
 
 ```
 main:
@@ -395,7 +444,8 @@ main:
   print "line"
 ```
 
-In all the examples so far where we have passed blocks as arguments to function, we were really defining the block value in place.
+In all the examples so far where we have passed blocks as arguments to
+function, we were really defining the block value in place.
 Because blocks are values, they can be stored in local variables, just like other values. For example
 
 ```
@@ -404,9 +454,12 @@ main:
   10.repeat block_variable
 ```
 
-Syntactically, it looks a bit cryptic when blocks are stored in local variables. However, the main purpose of blocks is to pass snippets of code to functions.
+Syntactically, it looks a bit cryptic when blocks are stored in local
+variables. However, the main purpose of blocks is to pass snippets of code to
+functions.
 
-Blocks aren't just "normal" functions as in other programming languages. They are much more efficient, but also come with some restrictions.
+Blocks aren't just "normal" functions as in other programming languages. They
+are much more efficient, but also come with some restrictions.
 
 ### Restrictions
 
@@ -422,7 +475,9 @@ Blocks are stack allocated, which is what makes them so efficient, but it also l
 
 ## Defining functions that take block arguments
 
-You can define your own functions that accept block arguments. You have already seen what the function signature should look like: block arguments must be enclosed by brackets `[ ]`.
+You can define your own functions that accept block arguments. You have already
+seen what the function signature should look like: block arguments must be
+enclosed by brackets `[ ]`.
 
 In order to execute a block, you simply call `call` on it. For example, this is how `int.repeat` is implemented:
 
