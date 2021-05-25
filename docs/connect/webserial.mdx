@@ -1,0 +1,57 @@
+---
+order: 3
+---
+
+import Serial from "../_images/webserial.png";
+
+# Web serial connection
+
+Instead of using the Toit CLI for communicating with your hardware via a serial connection, you can also use the
+`Serial` menu in the left hand side of the Toit console.
+
+<Note type="warning">
+
+Note that the serial commands available via your web browser in the Toit console are only enabled for 
+Chrome and Edge browsers. 
+
+Furthermore, the serial menu is currently in a beta version, ready to be used but with known 
+issues to be fixed.
+
+</Note>
+
+Navigate to the `Serial` menu in the Toit console. Plug in your hardware with a USB cable to a serial port on your computer,
+and press the `Connect` button. 
+
+In the dialog, choose the serial port you want to connect to via your web browser. 
+
+If the serial connection succeeds and the web serial API detects your hardware correctly, you can now communicate with 
+your hardware over the serial connection in your browser. 
+
+<img src={Serial} alt="Screenshot Serial page in the Toit console" />
+
+If the hardware has not been [provisioned](../provision) before with the Toit firmware, settings and hardware ID, the Provision button 
+is enabled on the page, and you can start the initial provisioning of your hardware from here instead of using the Toit CLI.
+
+In the provision dialog, set the WiFi credentials for your hardware. The latest released version of the Toit firmware will be installed on the 
+hardware by default, unless you choose a different version from the drop down menu.
+
+If the hardware is able to go online during the provisioning process, in other words that the hardware is in the range of the 
+WiFi with the credentials given as parameters to the provisioning, then the hardware will be linked to your Toit account and will be visible in the list of devices
+when the provision process has finished. 
+
+<Note title="Trouble with web serial?">
+
+If you have trouble with the serial commands in your web browser, or trouble with the serial connection to your hardware, 
+please visit the [troubleshooting](../serialport) page. 
+
+Also, if you have problems, try to unplug your hardware from your computer and plug the USB cable into the serial port again, 
+and try to connect your hardware again in the browser.
+
+</Note>
+
+The flash button will flash your hardware with the latest released Toit firmware and settings. Flashing is never needed for operating
+a Toit device, but can be a great tool for debugging or recovering a lost device. 
+
+If your device is operating as expected, this means that the device is online and connected to the Toit console, 
+navigate to the device page in the Toit console where you can continue configuring your device and run Toit code on it, 
+monitor logs and much more. 
