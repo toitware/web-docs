@@ -7,17 +7,22 @@ import Serial from "../_images/webserial.png";
 # Web serial connection
 
 Instead of using the Toit CLI for communicating with your hardware via a serial connection, you can also use the
-`Serial` menu in the left hand side of the Toit console.
+`Serial` option in the web-based Toit console.
+
+By using your browser you can provision your serially connected hardware with the Toit firmware and settings. You can 
+monitor the serial output of your hardware, restart them, and if you have lost connection to them you can flash the 
+hardware devices again which will reinstall the Toit firmware and settings.
 
 <Note type="warning">
 
-Note that the serial commands available via your web browser in the Toit console are only enabled for 
-Chrome and Edge browsers. 
+Note that the serial options available via your web browser are only enabled for 
+Google Chrome and Windows Edge browsers. 
 
-Furthermore, the serial menu is currently in a beta version, ready to be used but with known 
-issues to be fixed.
+Furthermore, the serial menu is currently in a beta version, ready to be used but under development and improvement.
 
 </Note>
+
+## Connect via the browser
 
 Navigate to the `Serial` menu in the Toit console. Plug in your hardware with a USB cable to a serial port on your computer,
 and press the `Connect` button. 
@@ -29,15 +34,34 @@ your hardware over the serial connection in your browser.
 
 <img src={Serial} alt="Screenshot Serial page in the Toit console" />
 
-If the hardware has not been [provisioned](../provision) before with the Toit firmware, settings and hardware ID, the Provision button 
+## Web serial provision
+
+If the hardware has not been [provisioned](../provision) before with the Toit firmware, settings and hardware ID, the `Provision` button 
 is enabled on the page, and you can start the initial provisioning of your hardware from here instead of using the Toit CLI.
 
 In the provision dialog, set the WiFi credentials for your hardware. The latest released version of the Toit firmware will be installed on the 
 hardware by default, unless you choose a different version from the drop down menu.
 
 If the hardware is able to go online during the provisioning process, in other words that the hardware is in the range of the 
-WiFi with the credentials given as parameters to the provisioning, then the hardware will be linked to your Toit account and will be visible in the list of devices
+WiFi with the credentials given as parameters to the provisioning, then the hardware will be claimed which means it will be linked to your Toit account and will be visible in the list of devices
 when the provision process has finished. 
+
+When provisioning of your hardware is done, you can find the device in the list of devices in the Toit console. Search for the hardware ID in the list of devices.
+
+The hardware ID is printed in the `Serial` menu when connected via a serial connection.
+
+## Web serial monitor
+
+You can get the serial output of your hardware directly in your browser by pressing the `Monitor` button. Stop the output by pressing the button once more.
+
+## Web serial flash
+
+The `Flash` button will flash your hardware with the latest released Toit firmware and settings. Flashing is never needed for operating
+a Toit device, but can be a great tool for debugging or recovering a lost device. 
+
+If your device is operating as expected, this means that the device is online and connected to the Toit console, 
+navigate to the device page in the Toit console where you can continue configuring your device and run Toit code on it, 
+monitor logs and much more. 
 
 <Note title="Trouble with web serial?">
 
@@ -48,10 +72,3 @@ Also, if you have problems, try to unplug your hardware from your computer and p
 and try to connect your hardware again in the browser.
 
 </Note>
-
-The flash button will flash your hardware with the latest released Toit firmware and settings. Flashing is never needed for operating
-a Toit device, but can be a great tool for debugging or recovering a lost device. 
-
-If your device is operating as expected, this means that the device is online and connected to the Toit console, 
-navigate to the device page in the Toit console where you can continue configuring your device and run Toit code on it, 
-monitor logs and much more. 
