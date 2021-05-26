@@ -1,0 +1,84 @@
+---
+order: 3
+---
+
+import Serial from "../_images/webserial.png";
+
+# Web serial interface
+
+Instead of using the Toit CLI for communicating with your ESP32 via a serial connection, you can also use the
+`Serial` option in the [web-based Toit console](https://console.toit.io/serial).
+
+By using your browser you can provision a serially connected ESP32 with the Toit firmware and settings. You can restart and 
+monitor the serial output of the ESP32, and in the case you have lost connection to it you can flash the 
+ESP32 again, which will reinstall the Toit firmware and settings.
+
+Normally, you will talk to your ESP32 over WiFi or cellular connection, but for the initial setup and for debugging purposes
+the serial option in the web browser is convenient and easy to use - when needed.
+
+<Note type="warning" title="Limitations">
+
+Note that the serial options available via your web browser are only enabled for 
+Google Chrome and Windows Edge browsers. 
+
+Furthermore, the web serial page in the Toit console is currently in a beta version, ready to be used but under development.
+
+</Note>
+
+## Connect via the browser
+
+Navigate to the [Serial menu](https://console.toit.io/serial) in the Toit console. Plug in your ESP32 with a USB cable to a serial port on your computer,
+and press the `Connect` button. 
+
+In the dialog, choose the serial port you want to connect to via your web browser. It can be difficult to figure out which serial port to 
+choose from the list, but doing a check of which ports are available in the list when the ESP32 is physically disconnected followed by a 
+check with it being connected, will make it more clear which serial port to choose.
+
+<img src={Serial} alt="Screenshot Serial page in the Toit console" />
+
+If the serial connection succeeds and the web serial API detects your ESP32 correctly, you can now communicate with 
+it over the serial connection in your browser. 
+
+## Web serial provision
+
+If the ESP32 has not been [provisioned](../provision) before with the Toit firmware, settings and hardware ID, the `Provision` button 
+is enabled on the page, and you can start the initial provisioning of your ESP32 from here instead of using the Toit CLI.
+
+In the provision dialog, set the WiFi credentials to be used for initial WiFi settings. The latest released version of the Toit firmware 
+will be installed on the ESP32 by default, unless you choose a different version from the drop down menu.
+
+If the ESP32 is able to get online during the provisioning process, in other words that the ESP32 is in the range of the 
+WiFi with the credentials given as parameters to the provisioning, then the ESP32 will automatically be claimed which means it will be linked 
+to your Toit account and will be visible in the list of devices when the provision process has finished. 
+
+If the automatic claiming fails during the provisioning steps, then you must manually claim the ESP32, before you can start using the 
+device in the Toit console. First, note the hardware ID of the provisioned ESP32. Then, navigate to the [Devices page](https://console.toit.io/devices) in the Toit console and
+press the `Claim or replace device` button. Paste the hardware ID and an optional device name in the dialog, and press Claim. 
+The ESP32 must be online before this step can take place.
+
+When provisioning and claiming are completed with success, you can find the new device in the list of devices in the Toit console. Search for the hardware ID from the list of devices.
+The hardware ID is printed in the `Serial` menu when connected via a serial connection.
+
+## Web serial monitor
+
+You can get the serial output of your hardware directly in your browser by pressing the `Monitor` button. Stop the output by pressing the 
+button again.
+
+## Web serial flash
+
+The `Flash` button will flash your ESP32 with the latest released Toit firmware and settings. Flashing is never needed for operating
+a Toit device, but can be a great tool for debugging or recovering a lost device. 
+
+If your device is operating as expected, this means that the device is online and connected to the Toit console, 
+navigate to the device page in the Toit console where you can continue configuring your device and run Toit code on it, 
+monitor logs and much more. 
+
+<Note title="Trouble with web serial?">
+
+If you have trouble with the serial connection to your ESP32 via the web browser, 
+please visit the [troubleshooting](../serialport) page. 
+
+You can always try to unplug the ESP32 physically from your computer and plug the USB cable into the serial port again, 
+and try to connect the ESP32 using the `Serial` page in Toit console.
+
+</Note>
