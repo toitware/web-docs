@@ -6,12 +6,12 @@ import Serial from "../_images/webserial.png";
 
 # Web serial interface
 
-Instead of using the Toit CLI for communicating with your ESP32 via a serial connection, you can also use the
-`Serial` option in the [web-based Toit console](https://console.toit.io/serial).
+You can use use the `Serial` option in the [web-based Toit console](https://console.toit.io/serial)
+for communicating with your ESP32 via a serial connection.
 
-By using your browser you can provision a serially connected ESP32 with the Toit firmware and settings. You can restart and 
-monitor the serial output of the ESP32, and in the case you have lost connection to it you can flash the 
-ESP32 again, which will reinstall the Toit firmware and settings.
+By using your browser you can provision a serially connected ESP32 with the Toit firmware and settings. You can
+monitor the serial output of the ESP32, and in the case you have lost connection to it you can reinstall the
+ESP32 with the Toit firmware and settings.
 
 Normally, you will talk to your ESP32 over WiFi or cellular connection, but for the initial setup and for debugging purposes
 the serial option in the web browser is convenient and easy to use - when needed.
@@ -42,31 +42,29 @@ it over the serial connection in your browser.
 ## Web serial provision
 
 If the ESP32 has not been [provisioned](../provision) before with the Toit firmware, settings and hardware ID, the `Provision` button 
-is enabled on the page, and you can start the initial provisioning of your ESP32 from here instead of using the Toit CLI.
+is enabled on the page, and you can start the initial provisioning of your ESP32 from here.
 
 In the provision dialog, set the WiFi credentials to be used for initial WiFi settings. The latest released version of the Toit firmware 
 will be installed on the ESP32 by default, unless you choose a different version from the drop down menu.
 
 If the ESP32 is able to get online during the provisioning process, in other words that the ESP32 is in the range of the 
 WiFi with the credentials given as parameters to the provisioning, then the ESP32 will automatically be claimed which means it will be linked 
-to your Toit account and will be visible in the list of devices when the provision process has finished. 
+to your organization in the Toit console, and will be visible in the list of devices when the provision process has finished.
 
-If the automatic claiming fails during the provisioning steps, then you must manually claim the ESP32, before you can start using the 
+If the automatic claiming fails during the provisioning steps, you must manually claim the ESP32, before you can start using the
 device in the Toit console. First, note the hardware ID of the provisioned ESP32. Then, navigate to the [Devices page](https://console.toit.io/devices) in the Toit console and
-press the `Claim or replace device` button. Paste the hardware ID and an optional device name in the dialog, and press Claim. 
+press the `Claim or replace device` button. Paste the hardware ID and provide an optional device name in the dialog, and press Claim.
 The ESP32 must be online before this step can take place.
 
-When provisioning and claiming are completed with success, you can find the new device in the list of devices in the Toit console. Search for the hardware ID from the list of devices.
-The hardware ID is printed in the `Serial` menu when connected via a serial connection.
+When provisioning and claiming have completed with success, you can find the new device in the list of devices in the Toit console.
 
 ## Web serial monitor
 
-You can get the serial output of your hardware directly in your browser by pressing the `Monitor` button. Stop the output by pressing the 
-button again.
+You can get the serial output of your hardware directly in your browser by pressing the `Monitor` button.
 
-## Web serial flash
+## Web serial reinstall
 
-The `Flash` button will flash your ESP32 with the latest released Toit firmware and settings. Flashing is never needed for operating
+The `Reinstall` button will reinstall your ESP32 with the latest released Toit firmware and settings. This option is never needed for operating
 a Toit device, but can be a great tool for debugging or recovering a lost device. 
 
 If your device is operating as expected, this means that the device is online and connected to the Toit console, 
