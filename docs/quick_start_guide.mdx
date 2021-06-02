@@ -2,9 +2,10 @@
 order: 0
 ---
 
-# Quick Start Guide
+# Quick Start
 
-This guide takes you from signing up for a Toit account, to install the Toit CLI locally and get an [ESP32](https://www.espressif.com/en/products/socs/esp32) microcontroller, and finally how to deploy a Toit app on your ESP32 or a simulated device.
+This guide takes you from signing up for a Toit account, to install the Toit CLI locally and prepare your [ESP32](https://www.espressif.com/en/products/socs/esp32) microcontroller with the Toit firmware, 
+and finally how to deploy a Toit app on your ESP32 device.
 
 ## 1. Sign up
 
@@ -16,7 +17,7 @@ Shortly after, you'll receive a welcome email with a link to set the password fo
 
 Next, install the Toit CLI which is used for preparing your ESP32 with Toit, and to deploy Toit apps. Download [here](../download).
 
-On **macOS** and **Linux**, put the Toit CLI manually to PATH. If you need help, follow the step by step instructions [here](../installation/toitcli).
+On **macOS** and **Linux**, put the Toit CLI manually to PATH. If you need help, follow the step by step instructions [here](../installation).
 
 On **Windows**, the Toit CLI is automatically put on PATH by the installer.
 
@@ -30,7 +31,7 @@ In the meantime, use the Toit [playground](https://console.toit.io/playground) o
 Start a new Toit simulator from the [Toit console](https://console.toit.io/) by clicking the "Start simulator" button, or run the following command in the Toit CLI:
 
 ```shell
-toit simulator start --alias MyToitDevice
+toit simulator start
 ```
 
 Next, jump to step 5 to continue.
@@ -49,7 +50,9 @@ Replace `SSID` and `password` with your own WiFi credentials and run the Toit CL
 toit serial provision -p wifi.ssid=<SSID> -p wifi.password=<password>
 ```
 
-At the end of the provisioning process, you will receive the name of the device, and a URL to view it in the Toit console. If there were errors, please consult the [provision](../connect/provision) or [troubleshooting](../connect/serialport) pages.
+At the end of the provisioning process, you will receive the name of the device, and a URL to view it in the [Toit console](https://console.toit.io/). 
+
+If there were errors, please consult the [provision](../connect/provision) or [troubleshooting](../connect/serialport) pages.
 
 ## 5. Deploy Toit app
 
@@ -63,16 +66,7 @@ main:
   print "Hello, World!"
 ```
 
-<Note title="Run program on a device">
-  Run the Toit program once on your device with the CLI command
-
-  ```shell
-  toit run -d MyToitDevice hello.toit
-  ```
-
-</Note>
-
-To deploy the Toit program as a long-lived app, save the following yaml content in a file named `hello.yaml` and place it next to the `hello.toit` from above:
+To deploy the Toit program as a long-lived app, save the following yaml content in a file named `hello.yaml` and place it in the same folder as the `hello.toit` file from above:
 
 ```yaml
 # Save as hello.yaml
@@ -89,7 +83,7 @@ In this case, when the app is installed on the device and if the device reboots.
 Deploy the Toit app named `HelloApp` on your device with the command:
 
 ```shell
-toit deploy -d MyToitDevice hello.yaml
+toit deploy -d <device-name> hello.yaml
 ```
 
 When deploying an app, the device is not required to be online. The app will be installed on the device when it comes online.
@@ -97,25 +91,25 @@ When deploying an app, the device is not required to be online. The app will be 
 Verify that the app has been deployed with the command:
 
 ```shell
-toit device -d MyToitDevice ps
+toit device -d <device-name> ps
 ```
 
-or go to the [Apps tab](https://console.toit.io/) of your device to view the list of apps deployed.
+or go to the apps tab in the [Toit console](https://console.toit.io/) of your device to view the list of deployed apps.
 
 View the logs from the device with
 
 ```shell
-toit device -d MyToitDevice logs -f 10m
+toit device -d <device-name> logs -f 10m
 ```
 
-or go to the [Logs tab](https://console.toit.io/) of your device to view the logs from the application deployed.
+or go to the Logs tab in the [Toit console](https://console.toit.io/) of your device to view the logs from the device.
 
 ## 6. Uninstall Toit app
 
 As the last step, uninstall the Toit app from the device with the command
 
 ```shell
-toit device -d MyToitDevice uninstall HelloApp
+toit device -d <device-name> uninstall HelloApp
 ```
 
-or go to the [Apps tab](https://console.toit.io/) of your device to uninstall the app.
+or go to the Apps tab in the [Toit console](https://console.toit.io/) of your device to uninstall the app.
