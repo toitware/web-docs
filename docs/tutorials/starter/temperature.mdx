@@ -10,11 +10,15 @@ In this tutorial we are using an ESP32 with the Bosch [BME280 sensor](https://ww
 
 This example illustrates the difference between running a Toit program once on an ESP32 and deploying the same code as an app together with a specification file.
 
+## Connect the sensor
+
+Follow the steps [here](../../../drivers/sensors/bme280/) to connect the BME280 sensor with your ESP32.
+
 ## Run on an ESP32
 
-To get data from the sensors, we make use of the [sensor driver](../../sensors/bme280) by importing it in the Toit program with `import drivers.bme280`.
+To get data from the sensors, we make use of the [bme280 sensor driver](https://libs.toit.io/drivers/bme280/library-summary) by importing it in the Toit program with `import drivers.bme280`.
 
-We also need to specify the [GPIO pins](../../sensors/gpio) and the relevant [connection bus](../../sensors/protocols).
+We also need to specify the [GPIO pins](../../../drivers/sensors/gpio) and the relevant [connection bus](../../../drivers/sensors/protocols).
 
 ```
 // Save this program in a file named thp.toit
