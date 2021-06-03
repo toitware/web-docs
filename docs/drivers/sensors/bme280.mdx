@@ -2,11 +2,11 @@
 order: 2
 ---
 
-import Qwiic from "../_images/qwiic.jpg";
+import Qwiic from "../../_images/qwiic.jpg";
 
-# Add sensors
+# Connect sensors
 
-We are using the [BOSCH BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/) as an example of how to add a sensor to your ESP32.
+We are using the [BOSCH BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/) as an example of how to connect a sensor to your ESP32.
 The BOSCH BME280 chip is an environment sensor measuring temperature, humidity and pressure.
 
 ## Setup
@@ -46,7 +46,7 @@ With the bus configured, we can specify how to address the BME280 device on the 
 The device returned is of type `serial.Device`.
 
 With the device configured we can take a look at the driver.
-The driver is available at `drivers.bme280` and as all other [drivers](https://libs.toit.io/drivers), takes a `serial.Device` as argument - perfect!
+The driver is available at `drivers.bme280` and as all other [drivers](https://libs.toit.io/drivers/library-summary) available, takes a `serial.Device` as argument - perfect!
 
 <!-- SKIP CODE -->
 ```
