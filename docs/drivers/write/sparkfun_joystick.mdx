@@ -1,5 +1,5 @@
 ---
-order: 0
+order: 2
 ---
 
 # Write a driver
@@ -12,10 +12,13 @@ This guide will walk through the steps of identifying how the sensor communicate
 
 The Joystick features a ATtiny85 microcontroller with a custom firmware. As described in the [Hookup Guide](https://learn.sparkfun.com/tutorials/qwiic-joystick-hookup-guide), the firmware exposes several registers. With that in mind, we're going to do the following steps:
 
-1. Connect the Joystick to an I2C bus, configuring the I2C device.
-2. Use the `Registers` abstraction to communicate with the chip.
-3. Validate connectivity to the device.
-4. Read out Axis and Button values.
+  1. Connect the Joystick to an I2C bus, configuring the I2C device.
+
+  2. Use the `Registers` abstraction to communicate with the chip.
+
+  3. Validate connectivity to the device.
+  
+  4. Read out Axis and Button values.
 
 ## I2C setup
 
