@@ -2,9 +2,9 @@
 order: 5
 ---
 
-import ConfigSdkDevice from "../_images/configsdkdevice.png";
-import MaxOfflineConfig from "../_images/maxoffline.png";
-import SetWifiConnections from "../_images/wificonnections.png";
+import ConfigSdkDevice from "../../_images/configsdkdevice.png";
+import MaxOfflineConfig from "../../_images/maxoffline.png";
+import SetWifiConnections from "../../_images/wificonnections.png";
 
 # Configure your hardware
 
@@ -12,7 +12,7 @@ When you have installed the Toit firmware on your hardware, the following two de
 
 - The value of 'Max offline' for the device is 0 seconds, which means that the device is continuously awake.
 
-- The firmware version on the device is the one installed during initial [device provisioning](../provision).
+- The firmware version on the device is the one installed during initial [provisioning](../provision).
 
 How to change the device configurations is explained below. Changes are applied once the device comes online.
 
@@ -155,16 +155,6 @@ This command will automatically delete all previously configured connections.
 </Tab>
 </Tabs>
 
-### Troubleshooting: Unreachable device
-
-If your ESP32 is misconfigured in any way, for example if it does not have valid WiFi connection settings, flash the ESP32 via a serial connection by connecting it with a USB cable to your computer, and run the `toit serial flash` command with the appropriate WiFi connection properties provided.
-
-```shell
-toit serial flash -p wifi.ssid=<SSID> -p wifi.password=<password>
-```
-
-The `flash` command flashes the ESP32 back to factory settings via the serial port without changing its device certificate or hardware ID.
-
 ## Data storage on the device
 
 Your device will attempt to come online based on the 'Max offline' parameter.
@@ -175,4 +165,4 @@ To avoid this situation, it is possible to filter which type of logs and metrics
 
 In addition, a threshold of storage is set to trigger an online connection where data can be flushed from the device to the console.
 
-See how you can minimize data storage and frequent triggered online connection in the [Devices management](../../console/deviceconsole) section.
+See how you can minimize data storage and frequent triggered online connection in the [Devices management](../../../console/deviceconsole) section.

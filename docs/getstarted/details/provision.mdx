@@ -5,7 +5,7 @@ order: 1
 # Provision your hardware
 
 Before you can start interacting with your hardware in the Toit console, it must be provisioned and claimed, 
-as descripbed in the [Quick Start](../quick_start_guide) guide.
+as descripbed in the [Quick Start](../../quick_start) guide.
 
 Provisioning means that the hardware is being granted a hardware ID used for the remaining of its lifecycle, 
 and the latest released Toit firmware will be installed on the hardware. Initial WiFi settings must be provided and 
@@ -28,20 +28,9 @@ Follow the steps to initially provision your device:
 
 <Note type="warning" title="Install drivers!">
 
-If you are using macOS or Windows, you might need to install or update 
+If you are using macOS or Windows, you might need to install or update the USB drivers if you have problems with the serial connection. 
 
-1. The Virtual COM Port driver (VCP) from
-[here](https://ftdichip.com/drivers/vcp-drivers/) 
-
-For Windows, there is also a setup executable available for download.
-
-2. The USB to UART Bridge VCP driver from
-[here](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers). 
-
-For Windows, install the CP210x Universal Windows Driver.
-For macOS, install the CP210x VCP Mac OSX Driver.
-
-Install both drivers, reboot your computer and you are ready to talk to your ESP32 via a serial port.
+Links to drivers can be found [here](../serialport#install-drivers).
 
 </Note>
 
@@ -76,20 +65,33 @@ toit serial provision -p wifi.ssid=xyz -p wifi.password="my pw"
 3. The provision process might take up to 5 minutes. When finished, it will output the following information:
 
 ```txt
-device was successfully flashed
-claiming the device
-device successfully claimed
-+--------------------------------------+---------------+--------------------------------------+
-|              DEVICE ID               |  DEVICE NAME  |             HARDWARE ID              |
-+--------------------------------------+---------------+--------------------------------------+
-| 6e880945-2605-4ed7-bca6-93770bbbc064 | my-device     | 1db312cf-6d19-4c16-84d7-6b7f32b36da1 |
-+--------------------------------------+---------------+--------------------------------------+
+erasing device flash
+successfully erased device flash
+writing device partitions
+successfully written device partitions
+reading hardware chip information
+successfully read hardware chip information
++--------------------------+-----------+
+|         SETTING          |   VALUE   |
++--------------------------+-----------+
+| factory device model     | esp32-4mb |
+| factory firmware version | v1.0.3    |
+| chip ID                  |           |
++--------------------------+-----------+
+hardware was successfully provisioned
+claiming the hardware into your organization
+Hardware successfully claimed
++--------------------------------------+----------------+--------------------------------------+
+|              DEVICE ID               |  DEVICE NAME   |             HARDWARE ID              |
++--------------------------------------+----------------+--------------------------------------+
+| 6e880945-2605-4ed7-bca6-93770bbbc064 | my-device-name | 1db312cf-6d19-4c16-84d7-6b7f32b36da1 |
++--------------------------------------+----------------+--------------------------------------+
 https://console.toit.io/devices/6e880945-2605-4ed7-bca6-93770bbbc064/overview
 ```
 
 <Note title="Troubleshooting">
 
-If you have trouble connecting your ESP32 via a serial port to your computer, or problems with flashing the ESP32, please visit the [troubleshooting](../serialport) page.
+If you have trouble connecting your ESP32 via a serial port to your computer please visit the [troubleshooting](../serialport) page.
 
 </Note>
 
