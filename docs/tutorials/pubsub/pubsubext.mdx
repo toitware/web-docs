@@ -6,19 +6,20 @@ import HelloFromCli from "../../_images/hellofromcli.png";
 
 # Communicate through the cloud
 
-[PubSub](../../../apis/pubsub) is a service for bi-directional communication. In this tutorial, we show how two apps can communicate with each other through the Toit cloud. Communicating through the cloud allows apps installed on different devices to communicate with each other. Note that in this scenario, the publish/subscribe events relies on the Max Offline value set for the device(s) involved.
+[PubSub](../../../apis/pubsub) is a service for bi-directional communication. In this tutorial, we show how two apps can communicate with each other **through the Toit cloud**. 
+
+Communicating through the cloud allows apps installed on different devices to communicate with each other. 
+Note that in this scenario, the publish/subscribe events relies on the `Max Offline` value set for the device(s) involved.
 
 ## The subscriber
 
-In the previous [tutorial](../pubsubint) we showed how the publish/subscribe service works in Toit and gave an example of how to run a subscriber and a publisher on your device.
-
-This time, we create the subscriber as an application that will be installed on your device. 
+In this tutorial, we will implement the subscriber as an application that will be installed on your device as a long-lived application. 
 In the app specification file, we subscribe to the cloud topic. A new message received on this topic will trigger running 
 the Toit program which then consumes the message. This means that the message has
 been acknowledged and removed from the cloud topic. This process ensures that one
 message cannot trigger the app more than once.
 
-The Toit program for subscribing to a cloud topic can be found here:
+The Toit program for subscribing to a cloud topic:
 
 ```
 /// Subscribes to a cloud topic.
@@ -38,7 +39,7 @@ main:
   print "done processing all messages"
 ```
 
-The corresponding app specification file for the subscriber that defines the pubsub trigger, and which is deployed on your device as a Toit application, can be found here:
+The corresponding app specification file for the subscriber that defines the pubsub trigger, and which is deployed on your device as a Toit application, is specified below:
 
 ```yaml
 # The pubsub trigger specifies that the subscribe_cloud program runs 
@@ -60,7 +61,7 @@ toit deploy subscribe_cloud.yaml
 
 ## The publisher
 
-Then run the publisher program from another device by pasting the following program in the Code tab of the device in the Toit console:
+Then run the publisher program from another device by pasting the following program in the Code tab of the given device in the [Toit console](https://console.toit.io):
 
 ```
 /// Publishes a message on the same cloud topic as used in the subscriber
@@ -78,7 +79,11 @@ You can also send a message directly from the CLI with
 toit pubsub write cloud:hello-world "Mr. CLI" -- Hello from the CLI
 ```
 
-Go to the Toit console, and choose the device on which the subscriber
-app was installed on. Look in the LOGS tab of the device to confirm that the message has been received.
+## Confirm the output
+
+Navigate to the [Toit console](https://console.toit.io), and choose the device on which the subscriber
+app was installed on.
+
+Look in the LOGS tab of the device to confirm that the message has been received.
 
 <img src={HelloFromCli} alt="Screenshot of CLI running hello world" />

@@ -1,16 +1,8 @@
 ---
-order: 2
+order: 4
 ---
 
-# Get started - in detail
-
-Before you can start interacting with your hardware in the Toit console, it must be provisioned and claimed.
-
-Provisioning means that the hardware is being granted a hardware ID used for the remaining of its lifecycle, and the latest released Toit firmware will be installed on the hardware.
-
-During the provisioning process, the initial WiFi settings for the hardware is set, but additional connection settings can be added later on or changed.
-
-## Types of hardware
+# Types of hardware
 
 Toit runs on the [ESP32](https://www.espressif.com/en/products/socs/esp32) chip from Espressif. We have chosen the ESP32 because it offers the best price/performance out of all the MCUs.
 The ESP32 has 520 kB RAM, built-in WiFi, and 34 pins for peripherals configurable to be used for e.g. communication protocols (SPI, I2C), analog/digital interfacing (ADC/DAC), Ethernet, and much more. Its deep-sleep mode allows for extremely low power usage, making it possible to run with two AA batteries for years.
@@ -19,7 +11,7 @@ If you don't have an ESP32 yet, you can buy one [here](https://www.digikey.com/e
 
 ## What you need
 
-- An ESP32 board
+- An ESP32 dev board
 
 - USB cable - USB A / micro USB B
 
@@ -31,7 +23,6 @@ If you don't have an ESP32 yet, you can buy one [here](https://www.digikey.com/e
 
 ## ESP32 prerequisites
 
-
 In order to install Toit on an ESP32 microcontroller, it must include at least 4MB of flash and support the following features:
 
 
@@ -41,4 +32,8 @@ In order to install Toit on an ESP32 microcontroller, it must include at least 4
 - UART to transmit and receive serial data
 
 
-<Note type="warning">The ESP32 cannot connect to 5GHz WiFi network.</Note>
+<Note type="warning" title="Limitations">
+
+The ESP32 cannot connect to 5GHz WiFi network.
+
+</Note>

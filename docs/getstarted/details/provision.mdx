@@ -1,0 +1,109 @@
+---
+order: 1
+---
+
+# Provision your hardware
+
+Before you can start interacting with your hardware in the Toit console, it must be provisioned and claimed, 
+as described in the [Quick Start](../../quick_start) guide.
+
+Provisioning means that the hardware is being granted a hardware ID used for the remaining of its lifecycle, 
+and the latest released Toit firmware will be installed on the hardware. Initial WiFi settings must be provided and 
+if your hardware can get online during provisioning it will get a name and will connect to the Toit cloud where you 
+can access it from your organization. 
+Additional connection settings can be added or changed later on.
+
+You need the Toit CLI to complete the provisioning steps below. 
+If you haven't installed Toit on your computer yet, follow the steps described [here](../../installation).
+
+<Note type="warning">
+
+Use the provision command only once per hardware device.
+
+</Note>
+
+Follow the steps to initially provision your device:
+
+1. Connect the ESP32 with a USB cable to your computer where the Toit CLI is installed.
+
+<Note type="warning" title="Install drivers!">
+
+If you are using macOS or Windows, you might need to install or update the USB drivers if you have problems with the serial connection. 
+
+Links to drivers can be found [here](../serialport#install-drivers).
+
+</Note>
+
+List the serial ports currently in use on your computer by running the following command with the Toit CLI
+
+```shell
+toit serial ports
+```
+
+To avoid mistakes when talking with your device on a serial connection, set the default serial port to be used in the CLI with
+
+```shell
+toit serial port use <port>
+```
+
+2. Use the Toit CLI to provision your ESP32 with initial device settings and the latest released Toit firmware.
+Replace `<SSID>` and `<password>` with your own WiFi credentials in the following command:
+
+```shell
+toit serial provision -p wifi.ssid=<SSID> -p wifi.password=<password>
+```
+For example:
+```shell
+toit serial provision -p wifi.ssid=xyz -p wifi.password="my pw"
+```
+
+  The WiFi settings for your ESP32 can be changed later on.
+
+  The provision commands automatically claims the device into your organization,
+  thereby linking it with your Toit account.
+
+3. The provision process might take up to 5 minutes. When finished, it will output the following information:
+
+```txt
+erasing device flash
+successfully erased device flash
+writing device partitions
+successfully written device partitions
+reading hardware chip information
+successfully read hardware chip information
++--------------------------+-----------+
+|         SETTING          |   VALUE   |
++--------------------------+-----------+
+| factory device model     | esp32-4mb |
+| factory firmware version | v1.0.3    |
+| chip ID                  |           |
++--------------------------+-----------+
+hardware was successfully provisioned
+claiming the hardware into your organization
+Hardware successfully claimed
++--------------------------------------+----------------+--------------------------------------+
+|              DEVICE ID               |  DEVICE NAME   |             HARDWARE ID              |
++--------------------------------------+----------------+--------------------------------------+
+| 6e880945-2605-4ed7-bca6-93770bbbc064 | my-device-name | 1db312cf-6d19-4c16-84d7-6b7f32b36da1 |
++--------------------------------------+----------------+--------------------------------------+
+https://console.toit.io/devices/6e880945-2605-4ed7-bca6-93770bbbc064/overview
+```
+
+<Note title="Troubleshooting">
+
+If you have trouble connecting your ESP32 via a serial port to your computer please visit the [troubleshooting](../serialport) page.
+
+</Note>
+
+## Device models
+
+The `provision` command sets the model on the device. The default model is `esp32-4mb`.
+
+If you want to use another device model, you can provide it with `-m` in the provision command:
+
+```shell
+toit serial provision -m <model> -p wifi.ssid=<SSID> -p wifi.password=<password>
+```
+
+Look for available device models for each firmware version available in the
+[Toit console](https://console.toit.io/organization/firmware).
