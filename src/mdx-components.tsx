@@ -12,8 +12,8 @@ import { DocsLink } from "./components/DocsLink";
 import Note from "./components/Note";
 import { Tabs } from "./components/Tabs";
 import Title from "./components/Title";
-import { Table, TableHead, TableBody } from './components/Table';
-import TableRow from '@material-ui/core/TableRow';
+import { Table, TableHead, TableBody } from "./components/Table";
+import TableRow from "@material-ui/core/TableRow";
 
 const P = (props: any) => <Typography paragraph {...props} />;
 const H1 = (props: any) => <Typography variant="h1" {...props} />;
