@@ -1,0 +1,38 @@
+---
+order: 0
+---
+
+# Run or deploy apps
+
+With Toit, there are two ways to execute code on a device:
+
+- **Running programs**
+
+    Running a program means that the Toit code runs once on an online device. Once the program has terminated, or the program lasts longer than 2 minutes, the program is removed from the device.
+
+- **Deploying applications**
+
+    Deploying an application onto a device is done using an app specification file. This means that the Toit code will be executed multiple times over the lifecycle of the device as an application.
+
+## Running programs on a device
+
+This option makes it easy to run small snippets of Toit code on a device. The device needs to be online since the installation and execution of the code happens synchronously such that you get feedback right away. 
+
+Running a program on a device does not allow the device to go into deep sleep as it needs to remain online for the program to run, even if it is set to make a measurement only once a day. Therefore the `toit run` command is great for running small snippets of code on a device but not built for running actual long-lived applications. For this reason, the Toit cloud will terminate any running  program after 2 minutes of execution.
+
+## Deploy apps on a device
+
+
+A Toit application is made of:
+
+- a **toit file** containing the code that will be executed, saved as `.toit`.
+
+- a **YAML file** containing the app specification that describes when and how often the application must run.
+
+Toit apps can only be deployed on a device using the Toit CLI.
+
+The [tutorials](../../tutorials) section explains how to run programs and deploy apps on your device.
+
+<Note>
+An app can be deployed on an offline device, but the app will not be installed onto the device until the device becomes online again, that is the next time it connects to the Toit console.
+</Note>

@@ -1,0 +1,102 @@
+---
+order: 2
+---
+
+# Protocols
+
+The ESP32 supports a wide range of protocols, many of them supported directly by Toit.
+
+## I2C
+
+[I<sup>2</sup>C](https://en.wikipedia.org/wiki/I%C2%B2C) is a serial communication bus able to address multiple devices along the same 2-wire bus.
+
+Toit exposes the peripheral through the `serial.protocols.i2c` library.
+
+```
+import gpio
+import serial.protocols.i2c as i2c
+
+main:
+  bus := i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
+```
+
+Each device must have a unique address. The address can be found in the datasheet for the selected peripheral - it's an 7-bit integer.
+
+In case of the Bosch [BME280 sensor](https://cdn.sparkfun.com/assets/e/7/3/b/1/BME280_Datasheet.pdf), the address is `0x76`:
+
+```
+import gpio
+import serial.protocols.i2c as i2c
+
+main:
+  bus := i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
+
+  device := bus.device 0x76
+```
+
+### Frequency
+
+The default frequency of the I2C bus is 400kHz in Toit. This can be changed as an argument to the `i2c.Bus` at construction time with
+
+```
+  i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
+    --frequency=100000
+```
+
+Remember that when changing the frequency, the associated pull-up resistors may have to be changed as well.
+
+## SPI
+
+[SPI](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) is a serial communication bus able to address multiple devices along a main 3-wire bus with an additional 1 wire per device.
+
+Toit exposes the peripheral through the `serial.protocols.spi` library.
+
+```
+import gpio
+import serial.protocols.spi as spi
+
+main:
+  bus := spi.Bus
+    --miso=gpio.Pin 12
+    --mosi=gpio.Pin 13
+    --clock=gpio.Pin 14
+```
+
+When communicating with a device, a unique chip-select Pin is used to signal when the chip in question is addressed. In addition, it's important to not select a device frequency that exceeds the capabilities of device. The maximum frequency can be found in the datasheet for the selected peripheral.
+
+In case of the Bosch BME280 sensor, the maximum frequency is 10MHz:
+
+```
+import gpio
+import serial.protocols.spi as spi
+
+main:
+  bus := spi.Bus
+    --miso=gpio.Pin 12
+    --mosi=gpio.Pin 13
+    --clock=gpio.Pin 14
+
+  device := bus.device
+    --cs=gpio.Pin 15
+    --frequency=10_000_000
+```
+
+## Selecting the right protocol
+
+Many chips support both SPI and I2C. While Toit makes it easy to develop drivers that are usable by both, there are some clear advantages and disadvantages between the two.
+
+**I2C**
+
+- Supports longer distances
+- Only requires two wires
+
+**SPI**
+
+- Is significantly faster
+- Frequency configurable per device, not the bus
