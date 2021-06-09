@@ -1,5 +1,5 @@
 ---
-order: 3
+order: 4
 ---
 
 # Serial port troubleshooting
@@ -105,13 +105,15 @@ Install both drivers, reboot your computer and you are ready to talk to your ESP
 
 If you have trouble connecting your ESP32 device with your computer via a serial connection
 
-- try updating your drivers. If you are on Windows or macOS make sure your drivers are up to date.
+- try updating your drivers. If you are on Windows or macOS make sure your USB drivers are up to date.
 
 - try a different serial port on your computer and run the `toit serial ports` CLI command again to detect the correct serial port to use in the commands.
 
 - try to disconnect all other serial connections, if any, from your computer, to be sure to only have the ESP32 connected to your computer as the only one.
 
-- avoid USB dongles, if possible.
+- try to plug in the hardware with a USB cable directly into your computer instead of using a USB dongle in between.
+
+- if you are on Linux, make sure you are in the `dialout` group as explained [here](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establish-serial-connection.html#adding-user-to-dialout-on-linux).
 
 - be sure to use the correct type of USB cable to connect with when provisioning your ESP32, in other words a cable for both data and power, and not only for power usage.
 

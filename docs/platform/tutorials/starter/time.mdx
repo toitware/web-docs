@@ -13,7 +13,6 @@ The following Toit program uses `print` to log the current date and time.
 
 ```
 main:
-  print Time.now
   time := Time.now.local
   print "Time: $(%02d time.h):$(%02d time.m)"
   print "Date: $(%04d time.year)-$(%02d time.month)-$(%02d time.day)"
@@ -47,7 +46,6 @@ The output is printed in the terminal window after program execution.
 ```shell
 $ toit run time.toit
 2021-04-15T08:48:41.308244Z: <process initiated>
-2021-04-15T08:48:41Z
 Time: 10:48
 Date: 2021-04-15
 2021-04-15T08:48:41.685042Z: <process terminated - exit code: 0>
@@ -64,17 +62,14 @@ The output will look like this
 ```shell
 $ toit device logs -f 10m
 Waiting to receive device logs...
-2021-04-15T08:41:40.510888Z: 2021-04-15T08:41:40Z
 2021-04-15T08:41:40.524977Z: Time: 10:41
 2021-04-15T08:41:40.538530Z: Date: 2021-04-15
 2021-04-15T08:41:40.549070Z: <process terminated - exit code: 0>
 2021-04-15T08:47:22.796125Z: <process initiated>
-2021-04-15T08:47:22.848207Z: 2021-04-15T08:47:22Z
 2021-04-15T08:47:22.861856Z: Time: 10:47
 2021-04-15T08:47:22.875110Z: Date: 2021-04-15
 2021-04-15T08:47:22.885647Z: <process terminated - exit code: 0>
 2021-04-15T08:48:41.227578Z: <process initiated>
-2021-04-15T08:48:41.278763Z: 2021-04-15T08:48:41Z
 2021-04-15T08:48:41.292218Z: Time: 10:48
 2021-04-15T08:48:41.305468Z: Date: 2021-04-15
 2021-04-15T08:48:41.316585Z: <process terminated - exit code: 0>
