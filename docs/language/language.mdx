@@ -21,7 +21,7 @@ Now, let's get started with some programming!
 
 ## Hello, World
 
-A local installation of Toit comes with support for running small programs
+The Toit CLI offers support for running small programs in the Toit cloud
 directly from the command line. If you put the following code in a file called
 `hello.toit`
 
@@ -33,7 +33,7 @@ main:
 you can run it from the command line like this:
 
 ```txt
-$ toit execute hello.toit
+$ toit run --no-device hello.toit
 Hello World!
 ```
 
@@ -58,7 +58,7 @@ main:
 When you run the updated program, you will see two lines of output:
 
 ```txt
-$ toit execute hello.toit
+$ toit run --no-device hello.toit
 Hello World!
 Hello World!
 ```
@@ -101,7 +101,7 @@ main:
 and it works!
 
 ```txt
-$ toit execute hello.toit
+$ toit run --no-device hello.toit
 Hello Lars!
 Hello Kasper!
 ```
@@ -144,7 +144,7 @@ main:
 and get the following output:
 
 ```txt
-$ toit execute hello.toit
+$ toit run --no-device hello.toit
 Hello World!
 Hello Kasper!
 ```
@@ -209,7 +209,7 @@ greeter object remembers the name and uses it for the two separate greetings.
 If we run this, we get the following output:
 
 ```txt
-$ toit execute hello.toit
+$ toit run --no-device hello.toit
 Hi Helena!
 Bye Helena, come back soon.
 ```
@@ -322,7 +322,7 @@ main:
 will lead to this output:
 
 ```txt
-$ toit execute hello.toit
+$ toit run --no-device hello.toit
 The names are ["World"]
 ```
 
@@ -359,7 +359,7 @@ main:
 If you run this, you’ll get this output:
 
 ```txt
-$ toit execute hello.toit
+$ toit run --no-device hello.toit
 Hello World!
 Bye World, come back soon.
 Hello World!
