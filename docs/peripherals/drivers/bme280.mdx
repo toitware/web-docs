@@ -2,7 +2,7 @@
 order: 10
 ---
 
-import Qwiic from "../../_images/qwiic.jpg";
+import Qwiic from "../../_images/BME280.png";
 
 # Connect sensors
 
@@ -12,8 +12,6 @@ The BOSCH BME280 chip is an environment sensor measuring temperature, humidity a
 ## Setup
 
 The sensor supports both I2C and SPI connection mode. This guide will focus on the SparkFun BME280 breakout board connected using a Qwiic cable.
-
-See [here](../gpio) for a description of how to connect sensors with Qwiic cables.
 
 <Note>
 
@@ -25,7 +23,9 @@ Connect the Qwiic cable to the BME280 breakout board and connect the `red` wire 
 
 The remaining two wires are I2C SDA (`blue`) and I2C SCL (`yellow`). While any GPIO pin of the ESP32 can facilitate an I2C setup we're going to pick _pin 21 and 22_ respectively through this guide.
 
-<img src={Qwiic} alt="Qwiic cable" />
+<img src={Qwiic} alt="BME280 connect" />
+
+A detailed description of adding sensors using the Qwiic cable can be found [here](../gpio/#adding-sensors-with-qwiic-cables).
 
 ## Code
 
