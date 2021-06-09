@@ -1,0 +1,62 @@
+---
+order: 1
+---
+
+import LedZeroOne from "../../_images/led_01.png";
+
+# Work with GPIO Pins
+
+The ESP32 has 34 General Purpose Input/Output (GPIO) pins that can be easily configured and manipulated at runtime.
+
+In Toit, the GPIO pins are exposed in the [gpio.toit module](https://libs.toit.io/gpio/library-summary).
+
+## Output
+
+In output-mode, the GPIO pin can be used to turn an LED on/off for example. The following schematic shows how a simple LED could be connected.
+
+<img src={LedZeroOne} alt="Schematic" width="40%" />
+
+To create a GPIO Pin on `pin 21` in output mode, use `Pin`:
+
+```
+import gpio
+
+main:
+  pin := gpio.Pin 21 --output
+```
+
+The pin is `low (0)` by default, so to set it `high (1)` use `Pin.set`.
+
+```
+import gpio
+
+main:
+  pin := gpio.Pin 21 --output
+  pin.set 1
+  sleep --ms=1000
+```
+
+This will keep the light turned on for 1000ms.
+
+<Note type="warning">
+When the program terminates, the pin will automatically be reset thus turning off the LED.
+</Note>
+
+## Adding sensors with Qwiic cables
+
+Sensors and minimal capacitors are available as break out boards.
+They can be connected to an ESP32 using soldering on pin or using a cable system such as the Qwiic system.
+
+All Qwiic cables have the following color scheme and arrangement:
+
+* Black = GND - to be connected to the GND ground pin of the ESP32
+
+* Red = 3.3V - to be connected to the 3.3V power pin of the ESP32
+
+* Blue = SDA - data channel to be connected to any numbered pin of the ESP32
+
+* Yellow = SCL - clock line to be connected to any numbered pin of the ESP32. It is used to synchronize all data transfers over the I2C bus. 
+
+When more than one sensor / actuator is needed, you can use a breadboard to allow for multiple connections. It is also sometimes possible to connect several sensors one after the other with Qwiic cables.
+
+The drivers I2C, SPI and Pulse Width Modulation are available for use with the sensors, actuators and other peripherals.

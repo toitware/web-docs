@@ -1,0 +1,76 @@
+---
+order: 0
+---
+
+# Communicate within a device
+
+[PubSub](../../../../apis/pubsub) is a service for bi-directional
+communication. In this tutorials, we show how PubSub enables communication between two apps installed on the **same device**. 
+
+In this scenario, the
+data does not need to be sent out to the cloud to be received by the other app.
+We will be communicating on the device topic called `device:hello-world`.
+
+## The subscriber
+
+The subscriber sets up a subscription on a topic.
+
+```
+/// Subscribes to a device topic.
+
+import pubsub
+topic ::= "device:hello-world"
+
+main:
+  pubsub.subscribe topic: | msg/pubsub.Message |
+    print "Received message '$msg.payload.to_string'"
+    // Stop listening for other messages and exit 'main'.
+    return
+```
+
+## The publisher
+
+The publisher publishes the message `"Hello, World!"` on the topic and then terminates.
+
+```
+/// Publishes a message in the appropriate device topic.
+
+import pubsub
+topic ::= "device:hello-world"
+
+main:
+  pubsub.publish topic "Hello, World!"
+```
+
+## Running the example
+
+Run the example with the CLI command
+
+```shell
+toit run subscribe.toit
+```
+
+on your default device. 
+
+Once the program has started, open another terminal window and run
+
+```shell
+toit run publish.toit
+```
+
+The output of both commands are listed below:
+
+```txt
+$ toit run subscribe.toit
+2020-06-12T09:11:49.689210Z: <process initiated>
+Received message 'Hello, World!'
+2020-08-04T10:45:46.397975Z: <process terminated - exit code: 0>
+```
+
+```txt
+$ toit run publish.toit
+2020-08-04T10:45:46.120857Z: <process initiated>
+Hello, World!
+2020-08-04T10:45:46.267676Z: <process terminated - exit code: 0>
+[1]+  Done                    toit run subscribe.toit
+```

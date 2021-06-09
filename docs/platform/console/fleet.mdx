@@ -1,0 +1,37 @@
+---
+order: 2
+---
+
+# Device fleet
+
+You can organize your devices by renaming them so they share an identical prefix.
+
+For example, devices with names
+
+`TemperatureDevice1`, `TemperatureDevice2` and `TemperatureDevice3` 
+
+are seen as a fleet of devices in the Toit CLI by using the 
+prefix 
+
+`-p temperature` 
+
+
+in the `toit fleet` commands. Prefixes are case-insensitive.
+
+Update the firmware on several devices in one command with the Toit CLI command:
+
+```shell
+toit fleet -p <prefix> update
+```
+
+Deploy a Toit app on several devices in one command:
+
+```shell
+toit fleet -p <prefix> deploy job.yaml
+```
+
+or deploy two Toit apps in one command with:
+
+```shell
+toit fleet -p <prefix> deploy job1.yaml job2.yaml
+```
