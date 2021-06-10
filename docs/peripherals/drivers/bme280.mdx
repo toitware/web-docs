@@ -23,7 +23,7 @@ Connect the Qwiic cable to the BME280 breakout board and connect the `red` wire 
 
 The remaining two wires are I2C SDA (`blue`) and I2C SCL (`yellow`). While any GPIO pin of the ESP32 can facilitate an I2C setup we're going to pick _pin 21 and 22_ respectively through this guide.
 
-<img src={Qwiic} alt="BME280 connect" />
+<img src={Qwiic} alt="BME280" width="100%" />
 
 A detailed description of adding sensors using the Qwiic cable can be found [here](../gpio/#adding-sensors-with-qwiic-cables).
 
@@ -62,7 +62,9 @@ bme := drivers.Bme280 device
 ```
 
 <Note>
-Configuring and SPI Bus and Device will also provide a `serial.Device`. The driver thus works seamlessly between I2C and SPI setups.
+
+Configuring an SPI Bus and Device will also provide a `serial.Device`. The driver thus works seamlessly between I2C and SPI setups.
+
 </Note>
 
 The driver will take care of all the communication with the BME280 sensor and provides a high-level API for reading out the relevant data:

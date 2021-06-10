@@ -1,5 +1,5 @@
 ---
-order: 3
+order: 4
 ---
 
 # Serial port troubleshooting
@@ -101,17 +101,20 @@ For macOS, install the CP210x VCP Mac OSX Driver.
 Install both drivers, reboot your computer and you are ready to talk to your ESP32 via a serial port.
 
 
-## Troubleshoot serial port connections
+## Troubleshoot: serial port connections
 
 If you have trouble connecting your ESP32 device with your computer via a serial connection
 
-- try updating your drivers. If you are on Windows or macOS make sure your drivers are up to date.
+- try updating your drivers. If you are using Windows or macOS, make sure your drivers are up to date (install them from 
+[here](https://ftdichip.com/drivers/vcp-drivers/) and [here](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)). 
 
 - try a different serial port on your computer and run the `toit serial ports` CLI command again to detect the correct serial port to use in the commands.
 
 - try to disconnect all other serial connections, if any, from your computer, to be sure to only have the ESP32 connected to your computer as the only one.
 
-- avoid USB dongles, if possible.
+- try to plug in the hardware with a USB cable directly into your computer instead of using a USB hub in between.
+
+- if you are on Linux, make sure you are in the `dialout` group as explained [here](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establish-serial-connection.html#adding-user-to-dialout-on-linux).
 
 - be sure to use the correct type of USB cable to connect with when provisioning your ESP32, in other words a cable for both data and power, and not only for power usage.
 
@@ -121,8 +124,9 @@ If you have trouble connecting your ESP32 device with your computer via a serial
 
 When the ESP32 has been initially provisioned with WiFi credentials, the ESP32 device is connecting to the network via WiFi, and the serial connection is purely for debugging the device if WiFi connection is lost. 
 In other words, you can plug the ESP32 into another power source and communicate with the ESP32 over WiFi from now on.
-Later on you can always add other connection types, like a cellular connection.
+Later on you can always add other connection types, like cellular connection.
 
+</Note>
 
 ## Troubleshoot: Unreachable device
 
@@ -135,5 +139,3 @@ toit serial reinstall -p wifi.ssid=<SSID> -p wifi.password=<password>
 ```
 
 The `reinstall` command reinstalls Toit firmware and settings via the serial port without changing its hardware certificate or hardware ID.
-
-</Note>
