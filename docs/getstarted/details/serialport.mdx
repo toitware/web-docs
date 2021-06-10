@@ -101,7 +101,7 @@ For macOS, install the CP210x VCP Mac OSX Driver.
 Install both drivers, reboot your computer and you are ready to talk to your ESP32 via a serial port.
 
 
-## Troubleshoot serial port connections
+## Troubleshoot: serial port connections
 
 If you have trouble connecting your ESP32 device with your computer via a serial connection
 
@@ -124,8 +124,9 @@ If you have trouble connecting your ESP32 device with your computer via a serial
 
 When the ESP32 has been initially provisioned with WiFi credentials, the ESP32 device is connecting to the network via WiFi, and the serial connection is purely for debugging the device if WiFi connection is lost. 
 In other words, you can plug the ESP32 into another power source and communicate with the ESP32 over WiFi from now on.
-Later on you can always add other connection types, like a cellular connection.
+Later on you can always add other connection types, like cellular connection.
 
+</Note>
 
 ## Troubleshoot: Unreachable device
 
@@ -138,5 +139,3 @@ toit serial reinstall -p wifi.ssid=<SSID> -p wifi.password=<password>
 ```
 
 The `reinstall` command reinstalls Toit firmware and settings via the serial port without changing its hardware certificate or hardware ID.
-
-</Note>
