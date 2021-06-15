@@ -64,13 +64,14 @@ module.exports = {
         path: `${__dirname}/docs/`,
       },
     },
+    "gatsby-plugin-layout",
     {
       resolve: "gatsby-plugin-mdx",
       options: {
         extensions: [".mdx", ".md"],
         defaultLayouts: {
-          docs: require.resolve("./src/components/layout/Layout.tsx"),
-          default: require.resolve("./src/components/layout/Layout.tsx"),
+          docs: require.resolve("./src/components/layout/MdxLayout.tsx"),
+          default: require.resolve("./src/components/layout/MdxLayout.tsx"),
         },
         gatsbyRemarkPlugins: [
           {

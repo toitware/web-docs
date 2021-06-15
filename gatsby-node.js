@@ -2,7 +2,7 @@ const path = require(`path`);
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
-  const blogPostTemplate = path.resolve(`src/components/layout/Layout.tsx`);
+  const docsTemplate = path.resolve(`src/components/layout/MdxLayout.tsx`);
 
   // Variables can be added as the second function parameter
   const result = await graphql(
@@ -27,13 +27,13 @@ exports.createPages = async ({ graphql, actions }) => {
     reporter.panicOnBuild('🚨  ERROR: Loading "createPages" query');
   }
 
-  // Create blog post pages.
+  // Create docs pages.
   result.data.allMdx.nodes.forEach((node) => {
     const path = !node.frontmatter.path ? `/${node.slug}` : node.frontmatter.path;
     createPage({
       // Path for this page — required
       path: path,
-      component: blogPostTemplate,
+      component: docsTemplate,
       context: {
         id: node.id,
         frontmatter: node.frontmatter,

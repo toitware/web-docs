@@ -2,9 +2,9 @@ import { makeStyles } from "@material-ui/core";
 import CookieConsent from "@toitware/cookie-consent";
 import Color from "color";
 import * as React from "react";
-import ToitLogo from "../../assets/images/toit-logo.inline.svg";
-import HamburgerMenu from "../navigation/HamburgerMenu";
-import SearchBar from "../search/SearchBar";
+import ToitLogo from "../assets/images/toit-logo.inline.svg";
+import HamburgerMenu from "../components/navigation/HamburgerMenu";
+import SearchBar from "../components/search/SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   container: {

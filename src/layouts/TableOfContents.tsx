@@ -3,7 +3,7 @@ import clsx from "clsx";
 import Color from "color";
 import { Link } from "gatsby";
 import * as React from "react";
-import { TableOfContents, TableOfContentsItem } from "./Layout";
+import { TableOfContents, TableOfContentsItem } from "./index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
       background: Color(theme.palette.primary.main).alpha(0.06).desaturate(0.6).string(),
       padding: "0.75rem 1.5rem",
       borderRadius: "5px",
+    },
+    [theme.breakpoints.down("md")]: {
+      display: "none",
     },
   },
   link: {
