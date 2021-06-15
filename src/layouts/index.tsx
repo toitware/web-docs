@@ -4,6 +4,7 @@ import * as React from "react";
 import { ReactNode } from "react";
 import { Helmet } from "react-helmet";
 import Navigation from "../components/navigation/Navigation";
+import useDarkMode from "../hooks/use_dark_mode";
 import { darkTheme, lightTheme } from "../theme";
 import Header from "./Header";
 
@@ -110,33 +111,39 @@ interface LayoutProps {
   };
 }
 
-const dark = false;
-
 // This layout is used by the "gatsby-plugin-layout" plugin and wraps all pages.
 // Using this plugin ensures that the menu doesn't jump around when an item is
 // clicked since only the content is changed.
 export function Layout(props: LayoutProps): JSX.Element {
   const { children } = props;
-  const classes = useStyles();
 
   const title = "Toit Documentation";
+
+  const dark = useDarkMode();
 
   return (
     <ThemeProvider theme={dark ? darkTheme : lightTheme}>
       <Helmet title={title}></Helmet>
-      <div className={classes.root}>
-        <Header />
-        <main className={classes.main}>
-          <nav className={classes.nav}>
-            <Navigation />
-          </nav>
-          <div className={classes.contentContainer}>
-            <div className={classes.content}>{children}</div>
-          </div>
-        </main>
-      </div>
+      <Root>{children}</Root>
     </ThemeProvider>
   );
 }
+
+const Root: React.FC = ({ children }) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
+      <Header />
+      <main className={classes.main}>
+        <nav className={classes.nav}>
+          <Navigation />
+        </nav>
+        <div className={classes.contentContainer}>
+          <div className={classes.content}>{children}</div>
+        </div>
+      </main>
+    </div>
+  );
+};
 
 export default Layout;
