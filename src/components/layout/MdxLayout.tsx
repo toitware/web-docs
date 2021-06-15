@@ -1,13 +1,11 @@
-import { ThemeProvider } from "@material-ui/core";
 import { MDXProvider } from "@mdx-js/react";
 import { graphql } from "gatsby";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import * as React from "react";
 import { ReactNode } from "react";
-import { Helmet } from "react-helmet";
+import Body from "../../layouts/Body";
+import TableOfContentsNav from "../../layouts/TableOfContents";
 import { components, shorthands } from "../../mdx-components";
-import { darkTheme, lightTheme } from "../../theme";
-import Root from "./Root";
 
 export type TableOfContents = {
   items: TableOfContentsItem[];
@@ -39,9 +37,11 @@ interface LayoutProps {
   };
 }
 
-const dark = false;
-
-export function Layout(props: LayoutProps): JSX.Element {
+// The actual layout is in /src/layouts/ and the content is wrapped by the
+// "gatsby-plugin-layout" plugin.
+//
+// This is only the mdx component of that.
+export function MdxLayout(props: LayoutProps): JSX.Element {
   const { data, children } = props;
 
   // TODO: https://github.com/toitware/web-docs/issues/50#issuecomment-827398248
@@ -49,19 +49,17 @@ export function Layout(props: LayoutProps): JSX.Element {
   // const pageTitle = pageContext?.frontmatter.title;
   // const title = `${pageTitle ? `${pageTitle} - ` : ""}${data?.site.siteMetadata?.title}`;
 
-  const title = "Toit Documentation";
-
   const mdxBody = data?.mdx?.body;
+
+  const tableOfContents = data?.mdx?.tableOfContents;
 
   return (
     <MDXProvider components={{ ...shorthands, ...components }}>
-      <ThemeProvider theme={dark ? darkTheme : lightTheme}>
-        <Helmet title={title}></Helmet>
-        <Root tableOfContents={data?.mdx?.tableOfContents}>
-          {!mdxBody && children}
-          {mdxBody && <MDXRenderer>{mdxBody}</MDXRenderer>}
-        </Root>
-      </ThemeProvider>
+      <Body>
+        {!mdxBody && children}
+        {mdxBody && <MDXRenderer>{mdxBody}</MDXRenderer>}
+      </Body>
+      {tableOfContents?.items && <TableOfContentsNav table={tableOfContents} />}
     </MDXProvider>
   );
 }
@@ -80,4 +78,4 @@ export const pageQuery = graphql`
   }
 `;
 
-export default Layout;
+export default MdxLayout;

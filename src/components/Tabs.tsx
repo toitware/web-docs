@@ -46,13 +46,15 @@ type TabProps = {
 
 function Tab({ label, isActive, onClick }: TabProps): JSX.Element {
   const classes = useStyles();
+
+  const clickHandler: React.MouseEventHandler = (event) => {
+    event.preventDefault();
+    onClick();
+  };
+
   return (
     <Typography key={label} component="span">
-      <a
-        className={clsx(classes.tab, { [classes.tabActive]: isActive })}
-        href="javascript:undefined;"
-        onClick={onClick}
-      >
+      <a className={clsx(classes.tab, { [classes.tabActive]: isActive })} href="#" onClick={clickHandler}>
         {label}
       </a>
     </Typography>
