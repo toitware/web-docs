@@ -43,6 +43,7 @@ extends:
   # prettier errors as ESLint errors. Make sure this is always the last
   # configuration in the extends array.
   - plugin:prettier/recommended 
+  - plugin:react-hooks/recommended
 
 # Override rules for all files here.
 rules: {}

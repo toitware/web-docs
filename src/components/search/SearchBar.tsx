@@ -1,9 +1,11 @@
 import { InputAdornment, makeStyles, OutlinedInput } from "@material-ui/core";
+import { globalHistory } from "@reach/router";
 import clsx from "clsx";
 import { graphql, Link, useStaticQuery } from "gatsby";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { StoreItem, useFlexSearch } from "react-use-flexsearch";
+import useClickOutside from "../../hooks/use_click_outside";
 
 // This style is just added for reference.
 const useStyles = makeStyles((theme) => ({
@@ -89,6 +91,13 @@ type Props = {
 };
 
 function SearchBar({ className }: Props): JSX.Element {
+  const [showResults, setShowResults] = useState(false);
+
+  const elRef = useRef<HTMLDivElement>(null);
+
+  globalHistory.listen(() => setShowResults(false));
+  useClickOutside(elRef, () => setShowResults(false));
+
   const [query, setQuery] = useState("");
 
   const data: GraphType = useStaticQuery(graphql`
@@ -104,7 +113,7 @@ function SearchBar({ className }: Props): JSX.Element {
   const classes = useStyles();
 
   return (
-    <div className={clsx(classes.container, className)}>
+    <div ref={elRef} className={clsx(classes.container, className)}>
       <form autoComplete="off">
         <OutlinedInput
           className={classes.searchField}
@@ -116,6 +125,7 @@ function SearchBar({ className }: Props): JSX.Element {
           value={query}
           onChange={(_) => {
             setQuery(_.target.value);
+            setShowResults(true);
           }}
           startAdornment={
             <InputAdornment position="start">
@@ -124,7 +134,7 @@ function SearchBar({ className }: Props): JSX.Element {
           }
         />
       </form>
-      {query != "" && (
+      {showResults && query != "" && (
         <div className={classes.results}>
           {results.length == 0 && <div className={classes.noResults}>No results</div>}
           {results.length > 0 && (
