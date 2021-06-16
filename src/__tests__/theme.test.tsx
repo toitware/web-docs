@@ -1,5 +1,5 @@
 import Color from "color";
-import { createTheme, primaryColor } from "../theme";
+import { createTheme, dart } from "../theme";
 
 describe("createTheme", () => {
   it("returns a Theme object with correct colors", () => {
@@ -10,7 +10,7 @@ describe("createTheme", () => {
     expect(theme.palette.text.secondary).toBe("rgba(255, 255, 255, 0.7)");
     expect(theme.palette.text.disabled).toBe("rgba(255, 255, 255, 0.5)");
 
-    expect(theme.palette.primary.main).toBe(primaryColor.string());
-    expect(theme.palette.primary.dark).toBe("hsl(222, 100%, 48%)");
+    expect(theme.palette.primary.main).toBe(dart.string());
+    expect(theme.palette.primary.dark).toBe("hsl(231.79999999999995, 63.5%, 49.1%)");
   });
 });

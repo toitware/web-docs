@@ -1,30 +1,35 @@
 import { makeStyles } from "@material-ui/core";
 import CookieConsent from "@toitware/cookie-consent";
-import Color from "color";
 import * as React from "react";
-import ToitLogo from "../assets/images/toit-logo.inline.svg";
 import HamburgerMenu from "../components/navigation/HamburgerMenu";
 import SearchBar from "../components/search/SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    flexShrink: 0,
+    position: "fixed",
+
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
-    borderBottom: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
+    borderBottom: `1px solid black`,
     color: theme.palette.text.primary,
-    backgroundColor: Color(theme.palette.primary.main).alpha(0.05).string(),
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backdropFilter: "blur(5px)",
     height: "4.5rem",
-    padding: "0 2rem",
+    padding: "0rem 2rem",
   },
   searchBar: {
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
       display: "none",
     },
   },
   hamburgerMenu: {
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       display: "none",
     },
   },
@@ -44,7 +49,6 @@ export function Header(): JSX.Element {
   }
   return (
     <header className={classes.container}>
-      <ToitLogo />
       <CookieConsent show={true} segmentKey={segmentAPIKey || "no-key"} changeConsent={false} />
       <SearchBar className={classes.searchBar} />
       <HamburgerMenu className={classes.hamburgerMenu} />

@@ -1,12 +1,14 @@
 import { makeStyles } from "@material-ui/core";
+import { globalHistory } from "@reach/router";
 import clsx from "clsx";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import Navigation from "./Navigation";
 
 const useStyles = makeStyles((theme) => ({
   icon: {
+    cursor: "pointer",
     color: theme.palette.text.primary,
     display: "block",
     width: "3rem",
@@ -19,20 +21,19 @@ const useStyles = makeStyles((theme) => ({
   },
   close: {
     position: "fixed",
+    color: "white",
     top: "0.75rem",
     right: "2rem",
-    background: theme.palette.background.default,
-    borderRadius: "3rem",
   },
   navigation: {
     top: 0,
     left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 100,
+    width: "100vw",
+    height: "100vh",
+    zIndex: 100000,
     display: "none",
     position: "fixed",
-    background: theme.palette.background.default,
+    background: "black",
     padding: "3rem 1.5rem",
     overflowY: "scroll",
   },
@@ -45,23 +46,29 @@ type Props = {
   className?: string;
 };
 
-/**
- * The actual content of the layout, separated into its own component so it has
- * access to the theme.
- */
 export function HamburgerMenu({ className }: Props): JSX.Element {
   const classes = useStyles();
 
   const [isOpen, setIsOpen] = useState(false);
+  const toggleOpen = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    globalHistory.listen(() => setIsOpen(false));
+  }, []);
 
   return (
     <div className={className}>
-      <a href="#" className={classes.icon} onClick={() => setIsOpen(!isOpen)}>
+      {/* Hamburger button */}
+      <a className={clsx(classes.icon)} onClick={toggleOpen}>
         <FiMenu />
       </a>
+
+      {/* The full screen navigation overlay */}
       <div className={clsx(classes.navigation, { [classes.navigationOpened]: isOpen })}>
         <Navigation />
-        <a href="#" className={clsx(classes.icon, classes.close)} onClick={() => setIsOpen(false)}>
+
+        {/* Close button */}
+        <a className={clsx(classes.icon, classes.close)} onClick={toggleOpen}>
           <FiX />
         </a>
       </div>

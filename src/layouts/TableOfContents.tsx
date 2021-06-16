@@ -17,7 +17,7 @@ export type TableOfContentsItem = {
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "sticky",
-    top: theme.spacing(6),
+    top: theme.spacing(18),
     alignSelf: "flex-start",
     width: "15rem",
     "& ul": {
