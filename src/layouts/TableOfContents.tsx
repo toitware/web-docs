@@ -3,7 +3,16 @@ import clsx from "clsx";
 import Color from "color";
 import { Link } from "gatsby";
 import * as React from "react";
-import { TableOfContents, TableOfContentsItem } from "./index";
+
+export type TableOfContents = {
+  items: TableOfContentsItem[];
+};
+
+export type TableOfContentsItem = {
+  url: string;
+  title: string;
+  items?: TableOfContentsItem[];
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {

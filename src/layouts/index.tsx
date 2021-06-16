@@ -7,6 +7,7 @@ import Navigation from "../components/navigation/Navigation";
 import useDarkMode from "../hooks/use_dark_mode";
 import { darkTheme, lightTheme } from "../theme";
 import Header from "./Header";
+import { TableOfContents } from "./TableOfContents";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -80,16 +81,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
 }));
-
-export type TableOfContents = {
-  items: TableOfContentsItem[];
-};
-
-export type TableOfContentsItem = {
-  url: string;
-  title: string;
-  items?: TableOfContentsItem[];
-};
 
 interface MdxGraphType {
   mdx: { body: string; tableOfContents: TableOfContents };
