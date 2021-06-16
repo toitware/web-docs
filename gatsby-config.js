@@ -64,6 +64,7 @@ module.exports = {
         path: `${__dirname}/docs/`,
       },
     },
+    "gatsby-plugin-remove-trailing-slashes",
     "gatsby-plugin-layout",
     {
       resolve: "gatsby-plugin-mdx",
