@@ -82,7 +82,7 @@ online.
  - if the provision command fails, consider trying with a lower baud rate (here half the default baud rate):
 
 ```shell
-toit serial provision --baud 460800 -p wifi.ssid="mySSID" -p wifi.password="myPassword"
+toit serial provision --baud 460800 -p wifi.ssid="<SSID>" -p wifi.password="<password>"
 ```
 
 ## Install drivers
@@ -137,7 +137,7 @@ and WiFi settings via a serial connection, by connecting it with a USB cable to 
 with the appropriate WiFi connection settings provided.
 
 ```shell
-toit serial reinstall -p wifi.ssid="mySSID" -p wifi.password="myPassword"
+toit serial reinstall -p wifi.ssid="<SSID>" -p wifi.password="<password>"
 ```
 
 The `reinstall` command reinstalls Toit firmware and settings via the serial port without changing its hardware certificate or hardware ID.

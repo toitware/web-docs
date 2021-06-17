@@ -45,10 +45,10 @@ Connect the ESP32 with a USB cable to your computer.
 <Tabs>
 <Tab label="CLI">
 
-Replace `mySSID` and `myPassword` with your own WiFi credentials and run the Toit CLI command:
+Replace `<SSID>` and `<password>` with your own WiFi credentials and run the Toit CLI command:
 
 ```txt
-toit serial provision -p wifi.ssid="mySSID" -p wifi.password="myPassword"
+toit serial provision -p wifi.ssid="<SSID>" -p wifi.password="<password>"
 ```
 
 </Tab>
@@ -67,7 +67,7 @@ At the end of the provisioning process, you will receive the name of the device,
 
 If there were errors, please consult the detailed descriptions in the [provision](../details/provision) page or get help in the [troubleshooting](../details/serialport) page.
 
-When your device is visible in the [Toit console](https://console.toit.io/), all device communication will be via WiFi or cellular (if you have setup cellular connection).
+When your device is visible in the [Toit console](https://console.toit.io/), all device communication will be via WiFi or cellular (if you have setup [cellular connection]()).
 
 ## 5. Deploy Toit app
 
