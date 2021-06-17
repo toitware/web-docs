@@ -2,57 +2,42 @@
 order: 0
 ---
 
-import SdkExAndLib from "../../_images/examplelib.png";
-import ConsoleDevice from "../../_images/consoledevice.png";
-import FleetHealth from "../../_images/fleethealth-new.png";
-import System from "../../_images/system.png";
-
 # Console
 
-The Toit console is the online portal to your device fleet, and offers various tools to upgrade your devices, monitor your fleet health, view your daily data usage and much more.
-
-## User menu
-
-In the upper banner, a three dots icon to the right leads to the documentation, as well as three different online platforms where it is possible to communicate with the Toit team and community: ask a question about the Toit platform or the Toit language in [Stack Overflow](https://stackoverflow.com/questions/tagged/toit), chat with us on the [Toit Slack workspace](https://chat.toit.io) and report bugs using the `toitware/public` [GitHub repository](https://github.com/toitware/public/issues).
+The Toit console is the dashboard for the Toit cloud, and offers various tools to upgrade your devices, monitor your device fleet health, view your daily data usage and much more.
 
 ## Devices
 
-This page lists all devices claimed by your organization. Click on the upper right corner buttons to **Claim** your hardware or **Start a simulator**.
+The Devices page lists all devices that are available in your organization.
 
-<img src={ConsoleDevice} alt="Screenshot of the devices in your organization" />
+The page lists
 
-In full screen, the page lists
+* The device  name.
 
-* The devices' **name**. An icon reflects the health of each device: red indicates that the device has missed its last check-in or that the device firmware is no longer available in the console; the circle means that the device is expecting an update next time it comes online, or that the update is currently taking place; green means that the device is behaving as expected. Hover over the device icon to see a tooltip explaining the reason(s) why your device is not classified as green.
+* The firmware version currently installed on the device.
 
-* The **firmware** version currently running on the device.
-  
+* Date and time of the last time the device was connected to the Toit cloud.
+
+* The device ID
+
+* The health status of the device. 
+
 <Note>
 
-A warning sign next to the firmware version number means that the firmware installed on the device does no longer have a corresponding version available in the console. The currently installed programs will keep on running as they were previously, but to install new apps, the device firmware needs to be updated to an available firmware version.
+A warning sign next to the firmware version means that the firmware installed on the device does no longer have a corresponding version available in the Toit cloud. 
 
 </Note>
 
-* **Last seen** gives the relative time to when the device was last seen, that is the last time it was online. **Now** indicates that the device is currently online. **Unknown** describes a new device which is part of your organization but has never connected to the console yet.
+You can sort devices by clicking on the column header.
 
-* **Next check-in** gives the time when the device is expected to be online next, or how long ago it missed an expected check-in.
-
-* **Id** lists the unique Ids given to each device when claimed. Copy a device ID using the clipboard icon.
-
-You can sort devices according to each of these information by clicking on the column header.
-
-The **Search** field allows the search for devices by name, ID, or firmware versions.
-
-Select a device to open additional functionalities. These are described in detail [here](../deviceconsole). Click on the **Devices** page to the right to return to the initial list of devices.
+The **Search** field allows to search for devices by name, ID, or firmware versions.
 
 ## Fleet health
 
-The fleet health page collects device status for all devices in an organization.
+The fleet health page collects device status for all devices in your organization.
 
-<img src={FleetHealth} alt="Screenshot the Fleet Health page in the Toit console" />
-
-At the top, devices are represented by boxes of different colors based on their current health: green for a device that behaves as expected, and red otherwise.
-A tooltip indicates the name of the device and the list of pending actions or issues for that device.
+At the top, devices are represented by different colors based on their current health: green for a device that behaves as expected, and red otherwise.
+The tooltip shows the name of the device and the list of pending actions or issues for that device.
 
 The overall status section accumulates devices based on their health issues - or lack thereof.
 
@@ -65,15 +50,19 @@ Click on the "Go to devices" link to see the list of devices filtered according 
 
 ## Playground
 
-The playground is a text editor where you can write a Toit program. Click **Run online** to execute the code in the Toit cloud (as opposed to running it on a specific device, which can be done in the Code tab). The playground uses the latest firmware version available in the console.
+The Playground is a text editor where you can write Toit programs. Click **Run online** to execute the code in the Toit cloud. The playground uses the latest firmware version available in the Toit cloud.
   
+## Serial
+
+This pages let's you communicate with your hardware via the Web Serial API. The serial communication is only for initial hardware provisioning or serial debugging.
+
 ## Organization
 
 * **Users** lists all users in the organization, starting with the current user. Click on **Add User** to add new users to the organization by simply entering their email address. A welcome email is sent to the newly created user, with a link to set the password for the new Toit account just created.
 
-* **Details** is used to enter your Organization information and payment methods. It also indicates how many hardware keys are available in your organization to be used when provisioning new devices.
+* **Details** is used to enter your Organization information and payment methods.
 
-* **Firmware** lists all firmware versions available to your organization. A pie chart depicts the distribution of the different firmware versions installed on the devices of your organization.
+* **Firmware** lists all firmware versions available in your organization. A pie chart depicts the distribution of the different firmware versions installed on the devices in your organization.
 
 * **Data Usage** displays data and graphs that give full transparency on your data usage type (application or system data, such as logs and metrics), as well as usage history and forecast, so you always can predict your upcoming bill with Toit.
 
@@ -97,20 +86,14 @@ We serve our payment pages in the Toit console securely using Transport Layer Se
 
 ## System
 
-The System page displays various graphs showing information about metrics, data, logs and PubSub ingestion in the system.
-
-<img src={System} alt="Screenshot System page in the Toit console" />
+The System page displays various graphs showing information about metrics, logs, and PubSub ingestion in the system.
 
 ## Data
 
 The Data page allows to create **metrics** and **logs** subscriptions with the **Create subscription** button. Existing subscription are listed on the page and can be deleted with the bin icon. Selected an existing subscription from the drop down menu in one of the graph to visualize Unacknowledged message count and Oldest unacknowledged message age data for the chosen time interval. 
 Check the [API](../../../apis/api) documentation to learn how to acknowledge messages using the CLI.
 
-<Note>
-While it is also possible to create **app data** subscriptions on the Data page, it is recommended to use the PubSub page for these instead. Subscriptions allow for bi-directional support, as opposed to app data subscriptions on the Data page that only compile messages coming from the device.
-</Note>
-
 ## PubSub
 
-Use this page to create custom subscriptions and access subscription-specific data on unacknowledged message count and oldest unacknowledged message age. 
+Use this page to create custom PubSub subscriptions and access subscription-specific data on unacknowledged message count and oldest unacknowledged message age. 
 See the [PubSub](../../../apis/pubsub) section for more information.
