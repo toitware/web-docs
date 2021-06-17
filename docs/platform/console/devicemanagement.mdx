@@ -4,7 +4,7 @@ order: 1
 
 import ConsoleDevSim from "../../_images/consoledevsim.png";
 
-# Devices management
+# Device management
 
 ## Overview
 
@@ -25,12 +25,12 @@ If the Used storage graph shows that your device often reaches high levels of st
 
 Several icons and messages near the device name summarize the device's activities, past or scheduled.
 
-* A warning sign next to the name of the device means that the firmware installed on the device is no longer available in the console and needs to be updated.
-  
-* An update icon means that a firmware update is scheduled for the next time the device will come online. A double arrow indicates that a configuration update is scheduled.
-  
-* Last seen and Next check-in displays the date and time when the device was last online, and when it is expected to come online next based on its Max offline configuration. A past date for the Next check-in value indicates that a previous scheduled check-in event failed.
 
+* A warning sign next to the name of the device means that the firmware installed on the device is no longer available in the console and needs to be updated.
+
+* An update icon means that a firmware update is scheduled for the next time the device will come online. A double arrow indicates that a configuration update is scheduled.
+
+* Last seen and Next check-in displays the date and time when the device was last online, and when it is expected to come online next based on its Max offline configuration. A past date for the Next check-in value indicates that a previous scheduled check-in event failed.
 
 ## Logs
 
@@ -50,7 +50,7 @@ For each log, you can access the following information:
 
 ## Apps
 
-This tab lists active apps (filled cloud icon toggled) or all apps (white cloud icon toggled).
+This tab lists active apps (filled cloud icon) or all apps (white cloud icon).
 
 App installation status is color-coded to the left hand side of each row in the table. The color is green if the app installed or uninstalled properly, blue if it is in the process of installing or uninstalling, and red if the app needs your attention. For example, when upgrading your device's firmware version, some installed apps' status may become red because of incompatibility between firmware versions. In this case, a small warning icon will be added next to the firmware version in the table. These apps must be re-deployed to fix the issue.
 
@@ -68,7 +68,7 @@ App installation status is color-coded to the left hand side of each row in the 
 
 ## Code
 
-The code tab includes a terminal window where you can write a Toit program. Click on **Run on device** to run it on the device.
+The code tab includes a terminal window where you can write a Toit program. Click on **Run on device** to run the program on the device.
 
 <Note>
 
@@ -78,31 +78,9 @@ A program will automatically stop running after approximately 2 minutes, but you
 
 ## Configuration
 
-This tab allows you to edit the configuration of your device. The changes in configuration will be applied to the device the next time it comes online and starts communicating with the Toit cloud.
-
-* **Firmware** The current version of the device firmware is shown here. To upgrade (or downgrade) the firmware on the device, click the Edit icon and choose a firmware version from the drop-down menu. Click Save.
-The list of firmware versions in the drop-down menu contains only those firmware versions available for the given device model.
-If the device is offline, the actual firmware upgrade/downgrade on the device will take place the next time the device gets online.
-
-* **Max offline** configures how often the device is expected to be online, that is when it will connect to the Toit console, send data to the Toit console, install new firmware and/or new apps and apply new device configuration settings.
-How frequent these connections are set to happen will influence the battery life of the device.
-Change the 'Max offline' duration by clicking the Edit icon. Provide a value (2h, 10m, or 30s, for example) and click Save.
-The changes will be applied the next time the device is online, or immediately if you reboot the device by taking the batteries out of the device for 90 seconds before reinserting them.
-  
-* **Connections** can be used to add or remove WiFi (and Cellular when relevant) connections. 
-When two or more connections are present, choose the order in which they should be used by moving the connections to use in priority above the others. Click Save to add the new connection. Reboot the device if a new priority order needs to be taken into account.
-
-* **Advanced** settings can adjust the quantity and quality of the logs accumulating on a device when it is offline.
-
-    * By default, the **Used storage threshold** determines the storage capacity level at which a device will attempt to come online to flush data.
-
-    * **Logging level** determines what kind of system logs should be sent to the console.
-    It is set by default to INFO but can be edited to another level listed here in increasing order of specificity: PRINT (includes all other logs categories), DEBUG, INFO, WARN, ERROR, and FATAL (which saves the least logs).
-
-    * **Metrics level** determines what system metrics should be sent to the console.
-    It is set by default to DEBUG (which saves all metrics) but can be refined to more specific levels such as INFO and CRITICAL (which saves the least metrics).
-
-* **Unclaim device** Unclaiming a device means that the device no longer belongs to the organization where it initially belonged to.
+This tab allows you to edit the configuration of your device. 
+The configuration changes will be applied to the device the next time it comes online and starts communicating with the Toit cloud.
+A detailed description of the available device configurations can be viewed [here](../deviceconfig).
 
 ## Troubleshoot
 
