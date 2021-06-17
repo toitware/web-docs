@@ -1,11 +1,11 @@
 import { makeStyles } from "@material-ui/core";
-import { globalHistory } from "@reach/router";
+import { useLocation } from "@reach/router";
 import clsx from "clsx";
 import { Link } from "gatsby";
 import * as React from "react";
+import { golden } from "../../theme";
 import { NavPage } from "./Navigation";
 
-// This style is just added for reference.
 const useStyles = makeStyles((theme) => ({
   list: {
     listStyle: "none",
@@ -20,12 +20,11 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
   },
   link: {
-    color: theme.palette.text.primary,
+    color: "white",
     fontSize: "0.875rem",
     fontFamily: theme.typography.fontFamily,
     display: "block",
     lineHeight: "1.75rem",
-    opacity: 0.7,
   },
   groupTitle: {
     fontWeight: "bold",
@@ -39,10 +38,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "0.8em",
   },
   activeTitle: {
-    color: theme.palette.getContrastText(theme.palette.background.default),
+    color: golden.toString(),
   },
   active: {
-    color: theme.palette.primary.main,
+    color: golden.toString(),
     opacity: 1,
   },
 }));
@@ -55,7 +54,11 @@ type Props = {
 function NavTree({ pages, level = 0 }: Props): JSX.Element {
   const classes = useStyles();
 
-  const currentPath = globalHistory.location.pathname;
+  let currentPath = useLocation().pathname;
+
+  if (currentPath.length > 1 && currentPath.endsWith("/")) {
+    currentPath = currentPath.slice(0, -1);
+  }
 
   return (
     <ul
@@ -66,8 +69,7 @@ function NavTree({ pages, level = 0 }: Props): JSX.Element {
       })}
     >
       {pages.map((page) => {
-        let to = `/${page.slug}`;
-        if (!to.endsWith("/")) to += "/";
+        const to = `/${page.slug}`;
 
         if (page.subPages === undefined || page.subPages.length === 0) {
           return (

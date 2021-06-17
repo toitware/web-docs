@@ -1,5 +1,7 @@
+import { makeStyles } from "@material-ui/core";
 import { graphql, useStaticQuery } from "gatsby";
 import * as React from "react";
+import ToitLogo from "../../assets/images/toit-logo.inline.svg";
 import NavTree from "./NavTree";
 import { sortTree } from "./sort_tree";
 
@@ -24,6 +26,11 @@ interface GraphType {
     }[];
   };
 }
+const useStyles = makeStyles(() => ({
+  toitLogo: {
+    marginBottom: "3rem",
+  },
+}));
 
 export function Navigation(): JSX.Element {
   const data: GraphType = useStaticQuery(graphql`
@@ -65,7 +72,17 @@ export function Navigation(): JSX.Element {
 
   sortTree(pagesTree);
 
-  return <NavTree pages={pagesTree} />;
+  const classes = useStyles();
+
+  return (
+    <div>
+      <a href="/">
+        <ToitLogo className={classes.toitLogo} />
+      </a>
+
+      <NavTree pages={pagesTree} />
+    </div>
+  );
 }
 
 /**

@@ -1,9 +1,11 @@
 import { InputAdornment, makeStyles, OutlinedInput } from "@material-ui/core";
+import { globalHistory } from "@reach/router";
 import clsx from "clsx";
 import { graphql, Link, useStaticQuery } from "gatsby";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { StoreItem, useFlexSearch } from "react-use-flexsearch";
+import useClickOutside from "../../hooks/use_click_outside";
 
 // This style is just added for reference.
 const useStyles = makeStyles((theme) => ({
@@ -13,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   results: {
     zIndex: 100,
     position: "absolute",
-    top: "2.8rem",
+    top: "1rem",
     right: "0",
     background: theme.palette.background.paper,
     borderRadius: "6px",
@@ -31,15 +33,18 @@ const useStyles = makeStyles((theme) => ({
   },
   searchField: {
     position: "absolute",
-    height: "3rem",
-    top: "-1.5rem",
+    height: "2rem",
+    top: "-1rem",
     right: 0,
     width: "15rem",
     transition: "all 200ms ease-in-out",
     background: "rgba(255, 255, 255, 0.1)",
-    "&.Mui-focused": {
-      width: "30rem",
-    },
+  },
+  searchFieldFocused: {
+    width: "30rem",
+  },
+  searchFieldOutline: {
+    border: "1px solid black",
   },
   noResults: {
     textAlign: "center",
@@ -89,6 +94,18 @@ type Props = {
 };
 
 function SearchBar({ className }: Props): JSX.Element {
+  const [showResults, setShowResults] = useState(false);
+
+  const elRef = useRef<HTMLDivElement>(null);
+
+  const hideResults = () => setShowResults(false);
+
+  useEffect(() => {
+    globalHistory.listen(hideResults);
+  }, []);
+
+  useClickOutside(elRef, hideResults);
+
   const [query, setQuery] = useState("");
 
   const data: GraphType = useStaticQuery(graphql`
@@ -104,18 +121,20 @@ function SearchBar({ className }: Props): JSX.Element {
   const classes = useStyles();
 
   return (
-    <div className={clsx(classes.container, className)}>
+    <div ref={elRef} className={clsx(classes.container, className)}>
       <form autoComplete="off">
         <OutlinedInput
-          className={classes.searchField}
+          className={clsx(classes.searchField, showResults && classes.searchFieldFocused)}
           fullWidth
           id="password"
           name="password"
           type="search"
           placeholder="Search"
           value={query}
+          classes={{ notchedOutline: classes.searchFieldOutline, focused: classes.searchFieldFocused }}
           onChange={(_) => {
             setQuery(_.target.value);
+            setShowResults(true);
           }}
           startAdornment={
             <InputAdornment position="start">
@@ -124,7 +143,7 @@ function SearchBar({ className }: Props): JSX.Element {
           }
         />
       </form>
-      {query != "" && (
+      {showResults && query != "" && (
         <div className={classes.results}>
           {results.length == 0 && <div className={classes.noResults}>No results</div>}
           {results.length > 0 && (

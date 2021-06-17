@@ -3,7 +3,17 @@ import Color from "color";
 
 const defaultSpacing = 8;
 
-export const primaryColor = Color.hsl(222, 100, 60);
+export const passion = Color("#FF8484");
+export const golden = Color("#FAC864");
+export const dart = Color("#5E6FDB");
+export const python = Color("#53978E");
+export const tiger = Color("#53978E");
+
+export const passionSecondary = Color("#FFB5B5");
+export const goldenSecondary = Color("#FFE598");
+export const dartSecondary = Color("#C1C9FF");
+export const pythonSecondary = Color("#BDDCD8");
+export const tigerSecondary = Color("#FFDBC0");
 
 // The color definitions provided by our corporate identity.
 export const primaryRed = Color.hsl(0, 100, 76);
@@ -21,14 +31,17 @@ export const pinkWhiteTheme = createTheme({
   primary: Color("white"),
   primaryContrast: primaryRed,
 });
+
 export const whiteBlueTheme = createTheme({
-  background: primaryBlue.lightness(99).saturationl(30),
-  text: primaryBlue.desaturate(0.9).lighten(0.5),
+  background: Color("white"),
+  text: Color("black"),
 });
 export const blueWhiteTheme = createTheme({
   type: "dark",
-  background: primaryBlue.desaturate(0.5).darken(0.5),
-  text: primaryBlue.desaturate(0.9).lightness(70),
+  background: Color("black"),
+  text: Color("white"),
+  primary: golden,
+  primaryContrast: Color("black"),
 });
 
 export const primaryTheme = whiteBlueTheme;
@@ -53,9 +66,9 @@ export function createTheme({
   background,
   text,
   errorColor = primaryRed,
-  primary = primaryColor,
+  primary = dart,
   primaryContrast = Color("white"),
-  secondary = secondaryRed,
+  secondary = passion,
   secondaryContrast = Color("white"),
   spacing = defaultSpacing,
 }: CreateThemeParameters): Theme {
