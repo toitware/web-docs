@@ -8,6 +8,8 @@ Before initial hardware provisioning can take place, you must connect the ESP32 
 
 If you have problems connecting your ESP32 to your computer, the Toit CLI offers some commands to help you back on track setting up the ESP32 with Toit.
 
+Note that your computer does not need to be on the same WiFi network as your ESP32 in order to get your ESP32 online during initial provisioning,
+
 ## CLI serial commands
 
 Connect your ESP32 with a USB cable to your computer. List the serial ports currently in use on your computer by running the following command with the Toit CLI
@@ -80,7 +82,7 @@ online.
  - if the provision command fails, consider trying with a lower baud rate (here half the default baud rate):
 
 ```shell
-toit serial provision --baud 460800 -p wifi.ssid=<SSID> -p wifi.password=<password>
+toit serial provision --baud 460800 -p wifi.ssid="<SSID>" -p wifi.password="<password>"
 ```
 
 ## Install drivers
@@ -135,7 +137,7 @@ and WiFi settings via a serial connection, by connecting it with a USB cable to 
 with the appropriate WiFi connection settings provided.
 
 ```shell
-toit serial reinstall -p wifi.ssid=<SSID> -p wifi.password=<password>
+toit serial reinstall -p wifi.ssid="<SSID>" -p wifi.password="<password>"
 ```
 
 The `reinstall` command reinstalls Toit firmware and settings via the serial port without changing its hardware certificate or hardware ID.
