@@ -1,6 +1,5 @@
 import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
-import Color from "color";
 import { Link } from "gatsby";
 import * as React from "react";
 
@@ -15,17 +14,15 @@ export type TableOfContentsItem = {
 };
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  wrapper: {
     position: "sticky",
     top: theme.spacing(18),
     alignSelf: "flex-start",
     width: "15rem",
     "& ul": {
       listStyle: "none",
-      margin: 0,
-      background: Color(theme.palette.primary.main).alpha(0.06).desaturate(0.6).string(),
-      padding: "0.75rem 1.5rem",
-      borderRadius: "5px",
+      padding: 0,
+      margin: "-1.5rem 0",
     },
     [theme.breakpoints.down("md")]: {
       display: "none",
@@ -36,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "0.875rem",
     fontFamily: theme.typography.fontFamily,
     opacity: 0.8,
-    margin: "0.75rem 0",
+    margin: "1.5rem 0",
     display: "block",
     "&:hover": {
       color: theme.palette.primary.main,
@@ -75,7 +72,7 @@ export function TableOfContentsNav({ table, className }: Props): JSX.Element {
   const flatTable = flatten(table);
 
   return (
-    <nav className={clsx(classes.root, className)}>
+    <nav className={clsx(classes.wrapper, className)}>
       <ul>
         {flatTable.map((item) => (
           <li key={item.url}>
