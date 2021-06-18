@@ -7,7 +7,7 @@ describe("Navigation", () => {
       slug: "",
       title: title,
       order: order,
-      subPages: subPages,
+      subPages: subPages ?? [],
       showInMenu: true,
     });
     it("sorts pages according to order field", () => {
