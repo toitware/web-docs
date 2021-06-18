@@ -7,7 +7,7 @@ import { useState } from "react";
 import { golden } from "../../theme";
 import { NavPage } from "./Navigation";
 import NavTree from "./NavTree";
-import { FiHome, FiCloud, FiCode, FiPlusSquare, FiLayers, FiSmile } from "react-icons/fi";
+import { FiHome, FiCloud, FiCode, FiGrid, FiLayers, FiPlay } from "react-icons/fi";
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -119,9 +119,9 @@ function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Eleme
       >
         {page.slug == "apis" && <FiCloud className={classes.titleIcon} />}
         {page.slug == "language" && <FiCode className={classes.titleIcon} />}
-        {page.slug == "peripherals" && <FiPlusSquare className={classes.titleIcon} />}
+        {page.slug == "peripherals" && <FiGrid className={classes.titleIcon} />}
         {page.slug == "platform" && <FiLayers className={classes.titleIcon} />}
-        {page.slug == "getstarted" && <FiSmile className={classes.titleIcon} />}
+        {page.slug == "getstarted" && <FiPlay className={classes.titleIcon} />}
         {page.title}
       </span>
       {isExpanded && (

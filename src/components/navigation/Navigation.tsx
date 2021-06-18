@@ -117,7 +117,7 @@ export function Navigation(): JSX.Element {
       <a className={classes.link} href="https://toit.io">
         <FiArrowLeft className={classes.backArrow} />{" "}
         <span>
-          Back to <strong>toit.io</strong>
+          Go to <strong>toit.io</strong>
         </span>
       </a>
     </div>
