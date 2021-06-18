@@ -1,4 +1,5 @@
 import { makeStyles, ThemeProvider } from "@material-ui/core";
+import CookieConsent from "@toitware/cookie-consent";
 import Color from "color";
 import * as React from "react";
 import { ReactNode } from "react";
@@ -95,9 +96,19 @@ export function Layout(props: LayoutProps): JSX.Element {
   const title = "Toit Documentation";
 
   const dark = useDarkMode();
+  let segmentAPIKey = process.env.GATSBY_SEGMENT_WRITE_KEY;
+
+  if (typeof document !== `undefined`) {
+    // Check if the meta segment-key is set.
+    const segmentKeyDOM = document.querySelector('meta[name="segment-key"]');
+    if (segmentKeyDOM) {
+      segmentAPIKey = segmentKeyDOM.getAttribute("content") || segmentAPIKey;
+    }
+  }
 
   return (
     <ThemeProvider theme={dark ? darkTheme : lightTheme}>
+      <CookieConsent show={true} segmentKey={segmentAPIKey || "no-key"} changeConsent={false} />
       <Helmet title={title}></Helmet>
       <Root>{children}</Root>
     </ThemeProvider>
