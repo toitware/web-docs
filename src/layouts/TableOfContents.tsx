@@ -19,6 +19,8 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(18),
     alignSelf: "flex-start",
     width: "15rem",
+    borderLeft: "1px solid black",
+    paddingLeft: "1.5rem",
     "& ul": {
       listStyle: "none",
       padding: 0,
@@ -30,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     color: theme.palette.text.primary,
-    fontSize: "0.875rem",
     fontFamily: theme.typography.fontFamily,
     opacity: 0.8,
     margin: "1.5rem 0",
