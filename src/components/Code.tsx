@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "block",
     position: "relative",
+    margin: "1.5rem 0",
   },
   code: {
     fontSize: "0.875em",
