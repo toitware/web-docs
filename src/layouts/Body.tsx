@@ -28,12 +28,20 @@ const useStyles = makeStyles((theme) => ({
     },
     "& h1": {
       margin: "1.5rem 0",
+
+      // A bit of a dirty hack to make the anchor links work
+      marginTop: "-4.5rem",
+      paddingTop: "6rem",
       "&:first-child": {
-        marginTop: 0,
+        paddingTop: "4.5rem",
       },
     },
     "& h2": {
       margin: "1.5rem 0",
+
+      // A bit of a dirty hack to make the anchor links work
+      marginTop: "-4.5rem",
+      paddingTop: "6rem",
     },
     "& .table-of-contents-icon": {
       position: "absolute",
