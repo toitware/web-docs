@@ -1,15 +1,17 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, ThemeProvider } from "@material-ui/core";
 import CodeBlock from "@toitware/code-block";
 import clsx from "clsx";
 import Color from "color";
 import * as React from "react";
 import { ReactNode, useRef, useState } from "react";
 import { FiCopy, FiCheck } from "react-icons/fi";
+import { darkTheme } from "../theme";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "block",
     position: "relative",
+    boxShadow: `0 0 10px ${Color(theme.palette.text.primary).alpha(0.1).toString()}`,
   },
   code: {
     fontSize: "0.875em",
@@ -23,12 +25,11 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     right: 0,
     color: theme.palette.text.primary,
-    background: Color(theme.palette.background.default).alpha(0.8).string(),
     borderRadius: "3rem",
     whiteSpace: "nowrap",
     zIndex: 10,
     "&:hover": {
-      background: theme.palette.background.default,
+      color: "white",
     },
     "& svg": {
       display: "block",
@@ -73,9 +74,16 @@ export function Code({ className, children }: Props): JSX.Element {
     }
   }
 
+  const code = children?.toString() ?? "";
+
+  const sanitizedCode = code.replace(/\n$/, "");
+
   return (
     <div className={classes.root}>
-      <CodeBlock mode={mode} className={classes.code} code={children?.toString() ?? ""} />
+      <ThemeProvider theme={darkTheme}>
+        <CodeBlock mode={mode} className={classes.code} code={sanitizedCode} />
+      </ThemeProvider>
+
       <a href="#" onClick={copyCode} className={classes.copyIcon}>
         <FiCopy />
       </a>

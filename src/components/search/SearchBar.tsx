@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     width: "30rem",
   },
   searchFieldOutline: {
-    border: "1px solid black",
+    border: `1px solid ${theme.palette.text.primary}`,
   },
   noResults: {
     textAlign: "center",
@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     "&:hover": {
       background: theme.palette.primary.main,
-      color: "white",
+      color: theme.palette.background.default,
     },
   },
   resultTitle: {

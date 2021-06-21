@@ -24,15 +24,22 @@ const useStyles = makeStyles((theme) => ({
     },
 
     "& p": {
-      marginTop: "0.75rem",
+      margin: "1.5rem 0",
     },
     "& h1": {
-      margin: "1.5rem 0",
-      scrollMarginTop: "6rem",
+      margin: "3rem 0",
+      "&:first-child": {
+        marginTop: 0,
+      },
     },
     "& h2": {
+      margin: "2rem 0",
+      "&:first-child": {
+        marginTop: 0,
+      },
+    },
+    "& h3": {
       margin: "1.5rem 0",
-      scrollMarginTop: "6rem",
     },
     "& .table-of-contents-icon": {
       position: "absolute",

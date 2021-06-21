@@ -20,20 +20,17 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
     color: theme.palette.text.primary,
     border: "1px solid transparent",
-    borderTopLeftRadius: "5px",
-    borderTopRightRadius: "5px",
     fontSize: "0.875rem",
     height: "100%",
   },
   tabActive: {
-    borderColor: Color(theme.palette.text.primary).alpha(0.2).string(),
+    borderColor: Color(theme.palette.text.primary).string(),
     borderBottomColor: theme.palette.background.default,
     color: theme.palette.primary.main,
   },
   content: {
     padding: "1.5rem 2.5rem",
-    border: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
-    borderRadius: "5px",
+    border: `1px solid ${Color(theme.palette.text.primary).string()}`,
     borderTopLeftRadius: 0,
   },
 }));

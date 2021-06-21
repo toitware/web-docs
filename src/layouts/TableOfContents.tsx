@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(18),
     alignSelf: "flex-start",
     width: "15rem",
-    borderLeft: "1px solid black",
+    borderLeft: `1px solid ${theme.palette.text.primary}`,
     paddingLeft: "1.5rem",
     "& ul": {
       listStyle: "none",
