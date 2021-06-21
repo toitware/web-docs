@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     borderBottom: `1px solid black`,
     color: theme.palette.text.primary,
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
     backdropFilter: "blur(5px)",
     height: "4.5rem",
     padding: "0rem 2rem",
