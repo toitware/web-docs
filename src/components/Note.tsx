@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   bodyContent: {},
   icon: {
+    flexShrink: 0,
     width: "1.5rem",
     height: "1.5rem",
     marginRight: "1rem",

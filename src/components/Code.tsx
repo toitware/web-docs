@@ -1,17 +1,15 @@
 import { makeStyles, ThemeProvider } from "@material-ui/core";
 import CodeBlock from "@toitware/code-block";
 import clsx from "clsx";
-import Color from "color";
 import * as React from "react";
 import { ReactNode, useRef, useState } from "react";
-import { FiCopy, FiCheck } from "react-icons/fi";
+import { FiCheck, FiCopy } from "react-icons/fi";
 import { darkTheme } from "../theme";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "block",
     position: "relative",
-    boxShadow: `0 0 10px ${Color(theme.palette.text.primary).alpha(0.1).toString()}`,
   },
   code: {
     fontSize: "0.875em",
@@ -22,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     width: "1.5rem",
     height: "1.5rem",
     padding: "0.25rem",
+    cursor: "pointer",
     bottom: 0,
     right: 0,
     color: theme.palette.text.primary,
@@ -67,7 +66,8 @@ export function Code({ className, children }: Props): JSX.Element {
     mode = className.replace("language-", "");
   }
 
-  async function copyCode() {
+  async function copyCode(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+    e.preventDefault();
     if (children) {
       await navigator.clipboard.writeText(children.toString());
       setCopied(true);
@@ -84,7 +84,7 @@ export function Code({ className, children }: Props): JSX.Element {
         <CodeBlock mode={mode} className={classes.code} code={sanitizedCode} />
       </ThemeProvider>
 
-      <a href="#" onClick={copyCode} className={classes.copyIcon}>
+      <a onClick={copyCode} className={classes.copyIcon}>
         <FiCopy />
       </a>
       <div ref={checkRef} className={clsx(classes.copyCheckmark, { [classes.copyCheckmarkVisible]: copied })}>

@@ -12,13 +12,13 @@ This guide will walk through the steps of identifying how the sensor communicate
 
 The Joystick features a ATtiny85 microcontroller with a custom firmware. As described in the [Hookup Guide](https://learn.sparkfun.com/tutorials/qwiic-joystick-hookup-guide), the firmware exposes several registers. With that in mind, we're going to do the following steps:
 
-  1. Connect the Joystick to an I2C bus, configuring the I2C device.
+1. Connect the Joystick to an I2C bus, configuring the I2C device.
 
-  2. Use the `Registers` abstraction to communicate with the chip.
+2. Use the `Registers` abstraction to communicate with the chip.
 
-  3. Validate connectivity to the device.
-  
-  4. Read out Axis and Button values.
+3. Validate connectivity to the device.
+
+4. Read out Axis and Button values.
 
 ## I2C setup
 
@@ -62,6 +62,7 @@ The hookup guide has a table of I2C registers available in the custom firmware. 
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE import serial -->
+
 ```
 class SparkFunJoystick:
   static REG_DEFAULT_ADDRESS_ ::= 0x00
@@ -72,12 +73,14 @@ class SparkFunJoystick:
     reg := registers_.read_u8 REG_DEFAULT_ADDRESS_
     if reg != I2C_ADDRESS: throw "INVALID_CHIP"
 ```
+
 <!-- HIDDEN CODE   registers_/serial.Registers? := null -->
 <!-- HIDDEN CODE   static I2C_ADDRESS ::= 0x20 -->
 
 With this added, we can validate the setup:
 
 <!-- SKIP CODE -->
+
 ```
 main:
   // ...
@@ -93,7 +96,9 @@ main:
 Running the code should print out the string `SparkFunJoystick` to the terminal. If not, the I2C bus is not configured to match the wiring.
 
 <Note>
-  If the Joystick is connected without the full breakout board from SparkFun, I2C pull-up resistors may be needed.
+
+If the Joystick is connected without the full breakout board from SparkFun, I2C pull-up resistors may be needed.
+
 </Note>
 
 ## Read out data
@@ -101,6 +106,7 @@ Running the code should print out the string `SparkFunJoystick` to the terminal.
 We're going to expand the driver with 3 new methods:
 
 <!-- SKIP CODE -->
+
 ```
 class SparkFunJoystick:
 
@@ -128,8 +134,9 @@ class SparkFunJoystick:
 Both the horizontal and vertical value is formatted the same way; 2 bytes in big endian order (MSB first). We want to transform this value to a float in the range [-1..1]. Let's create a helper function to perform this step:
 
 <Note>
-  The last 6 bits of the result are unused, but to keep the code simple we treat the result as an 16-bit unsigned
-  integer.
+
+The last 6 bits of the result are unused, but to keep the code simple we treat the result as an 16-bit unsigned integer.
+
 </Note>
 
 ```
@@ -147,6 +154,7 @@ class SparkFunJoystick:
     // Perform floating-point division to get to [-1..1] range.
     return value.to_float / binary.INT16_MAX
 ```
+
 <!-- HIDDEN CODE   registers_/serial.Registers? := null -->
 
 With that in place, we can now finish the `horizontal` and `vertical` methods:
@@ -179,6 +187,7 @@ Lastly, we need to implement the `pressed` method. We're simply going to read ou
 Let's try it out:
 
 <!-- SKIP CODE -->
+
 ```
 main:
   // ...
@@ -192,13 +201,15 @@ main:
 This code will run until aborted (Ctrl-C).
 
 <Note>
-  As the joystick is moved around, it's possible to get an I2C error if the I2C bus is accidentally short-circuited by
-  the fingers.
+
+As the joystick is moved around, it's possible to get an I2C error if the I2C bus is accidentally short-circuited by the fingers.
+
 </Note>
 
 <Note>
-  To improve responsibility, the sensor should be read at a higher frequency. However no printing should be done at
-  higher frequencies to avoid logging data building up.
+
+To improve responsibility, the sensor should be read at a higher frequency. However no printing should be done at higher frequencies to avoid logging data building up.
+
 </Note>
 
 ## Full code
@@ -206,6 +217,7 @@ This code will run until aborted (Ctrl-C).
 **`driver.toit`**
 
 <!-- CODE FILENAME driver.toit -->
+
 ```
 import binary
 import serial

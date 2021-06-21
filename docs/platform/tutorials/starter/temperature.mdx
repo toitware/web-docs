@@ -42,7 +42,7 @@ main:
   bme.off
 ```
 
- Save the above Toit program in a file named `thp.toit`.
+Save the above Toit program in a file named `thp.toit`.
 
 <Tabs>
 <Tab label="Console">
@@ -93,8 +93,8 @@ following app specification file:
 name: Hourly THP
 entrypoint: thp.toit
 triggers:
-    on_install: true
-    on_interval: 1h
+  on_install: true
+  on_interval: 1h
 ```
 
 Save the content of the above yaml specification into a file named `thp.yaml`
@@ -114,9 +114,11 @@ The device log will show the three measurements every hour after the program
 has been installed on the device.
 
 <Note>
+
 The device is not required to be online when the app is deployed.
 When the device comes online, the app will be installed on the device and start
 it's scheduled execution.
+
 </Note>
 
 View all apps installed (or waiting to be installed) on your ESP32 from the
@@ -149,6 +151,7 @@ toit device uninstall <app-ID or app-name>
 ```
 
 For example,
+
 ```shell
 toit device uninstall "Hourly THP"
 ```

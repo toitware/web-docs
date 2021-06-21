@@ -19,12 +19,14 @@ toit pkg install morse # Install package "morse".
 ```
 
 <Note>
+
 The installation of "morse" only works if the name is unambiguous. If there are multiple "morse" packages, then one has to use the URL. It is possible to omit leading segments if that makes the package unique:
 
 ```shell
 toit pkg install github.com/toitware/toit-morse
 toit pkg install toitware/toit-morse  # Probably already unique.
 ```
+
 </Note>
 
 ## Adding a Registry
@@ -62,6 +64,7 @@ Optionally (but strongly recommended) add a README.md. The title should be the p
 Optionally (but recommended) add a CHANGELOG.md.
 
 Optional (but strongly recommended): polish the package, with an eye on
+
 - toitdocs,
 - types,
 - examples, and
@@ -69,13 +72,13 @@ Optional (but strongly recommended): polish the package, with an eye on
 
 Create a `package.yaml` in the root of the repository, with the following entries:
 
-* `name`: The name of the package. Don't add this entry if the README's title is the package-name.
+- `name`: The name of the package. Don't add this entry if the README's title is the package-name.
 
-* `description`: A short description of the package. Don't add this entry if the README's first paragraph is a good description.
+- `description`: A short description of the package. Don't add this entry if the README's first paragraph is a good description.
 
-* `license`: The license of the package. Don't add this entry if there is a LICENSE file. The license file or entry should follow [github conventions](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository).
+- `license`: The license of the package. Don't add this entry if there is a LICENSE file. The license file or entry should follow [github conventions](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository).
 
-* `dependencies`: a map of dependencies. Each entry should look as follows:
+- `dependencies`: a map of dependencies. Each entry should look as follows:
   ```
     prefix:
       url: <PKG_URL>
