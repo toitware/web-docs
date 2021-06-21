@@ -29,7 +29,9 @@ const useStyles = makeStyles((theme) => ({
     "& h1": {
       margin: "1.5rem 0",
 
-      // A bit of a dirty hack to make the anchor links work
+      // A bit of a dirty hack to make the anchor links work.
+      // Because the header bar is a fixed overlay, simply linking to the anchor
+      // results in the title being hidden behind the header overlay.
       marginTop: "-4.5rem",
       paddingTop: "6rem",
       "&:first-child": {
