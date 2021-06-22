@@ -2,8 +2,6 @@
 order: 1
 ---
 
-import PubSubSub from "../_images/pubsubsub.png";
-
 # PubSub
 
 Applications communicate with each other through publish/subscribe (PubSub), an asynchronous messaging service that decouples services that produces messages from the services processing them.
@@ -33,8 +31,6 @@ See some examples of PubSub communication between apps in the [Tutorials](../../
 
 Go to the **PubSub** page and click on **Create Subscription**. The topic `cloud:topic-name` is the one defined in the Publisher Toit program. 
 You can provide a name of the subscription, in order to give a description of the topic or in which scenarios it is used.
-
-<img src={PubSubSub} alt="Screenshot of PubSub page on the Toit console" />
 
 Once you have created a subscription, two graphs visualize the number of unacknowledged messages for that subscription, as well as the age of the oldest unacknowledged message for a specific time interval.
 
