@@ -11,6 +11,11 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
     position: "relative",
     margin: "1.5rem 0",
+    "& .CodeMirror-scroll": {
+      // I don't know why this is necessary, but otherwise the containers
+      // cant fully scroll to the right.
+      marginRight: 0,
+    },
   },
   code: {
     fontSize: "0.875em",
