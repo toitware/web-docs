@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${Color(theme.palette.text.primary).string()}`,
     borderTopLeftRadius: 0,
   },
+  contentNoPadding: {
+    padding: 0,
+  },
 }));
 
 type TabProps = {
@@ -59,6 +62,7 @@ function Tab({ label, isActive, onClick }: TabProps): JSX.Element {
 }
 
 type TabsProps = {
+  noPadding?: boolean;
   children: ReactElement<DivProps>[];
 };
 
@@ -85,7 +89,7 @@ type DivProps = {
  *     </div>
  *     </Tabs>
  */
-export function Tabs({ children }: TabsProps): JSX.Element {
+export function Tabs({ children, noPadding = false }: TabsProps): JSX.Element {
   const classes = useStyles();
 
   const [activeTab, setActiveTab] = useState(children[0].props.label);
@@ -110,7 +114,7 @@ export function Tabs({ children }: TabsProps): JSX.Element {
         const { label, children } = child.props;
         if (label != activeTab) return undefined;
         return (
-          <div className={classes.content} key={label}>
+          <div className={clsx(classes.content, { [classes.contentNoPadding]: noPadding })} key={label}>
             {children}
           </div>
         );
