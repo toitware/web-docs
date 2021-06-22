@@ -35,7 +35,7 @@ main:
 
 String and character literals can also contain other escaped
 characters, most of which could be written literally, but where it
-is often more readable to use escapes.  For example, you can
+is often more readable to use escapes. For example, you can
 put a literal tab character in a literal string, but it will
 look like a series of spaces, so you can use `\t` instead to
 make it clearer.
@@ -44,24 +44,24 @@ Toit supports the following escape sequences (see the ASCII
 [control code chart](https://en.wikipedia.org/wiki/ASCII)
 for the list of names):
 
-|                                       | Control code chart names                                   | Unicode character | Unicode code point (rune) |
-| ------------------------------------- | ---------------------------------------------------------- | ----------------- | ------------------------- |
-| `\0`                                  | Null                                                       | NUL               | 0                         |
-| `\a`                                  | Alert (Beep, Bell)                                         | BEL               | 7                         |
-| `\b`                                  | Backspace                                                  | BS                | 8                         |
-| `\f`                                  | Form feed                                                  | FF                | 12                        |
-| `\n`                                  | Line Feed or Newline                                       | LF                | 10                        |
-| `\r`                                  | Carriage Return                                            | CR                | 13                        |
-| `\t`                                  | Horizontal Tab                                             | HT                | 9                         |
-| `\v`                                  | Vertical Tab                                               | VT                | 11                        |
-| `\$`                                  | $ (See below for the use of $ for string interpolation)    |                   | 36                        |
-| `\"`                                  | "                                                          |                   | 34                        |
-| `\'`                                  | '                                                          |                   | 39                        |
-| `\\`                                  | \                                                          |                   | 92                        |
-| `\uXXXX` (where X is a hex char)      | [Unicode rune](<https://en.wikipedia.org/wiki/Code_point>) |                   |                           |
-| `\u{X...}` (where X... are hex chars) | [Unicode rune](<https://en.wikipedia.org/wiki/Code_point>) |                   |                           |
-| `\xXX` (where X is a hex char)        | [Unicode rune](<https://en.wikipedia.org/wiki/Code_point>) |                   |                           |
-| `\x{X...}` (where X... are hex chars) | [Unicode rune](<https://en.wikipedia.org/wiki/Code_point>) |                   |                           |
+|                                       | Control code chart names                                 | Unicode character | Unicode code point (rune) |
+| ------------------------------------- | -------------------------------------------------------- | ----------------- | ------------------------- |
+| `\0`                                  | Null                                                     | NUL               | 0                         |
+| `\a`                                  | Alert (Beep, Bell)                                       | BEL               | 7                         |
+| `\b`                                  | Backspace                                                | BS                | 8                         |
+| `\f`                                  | Form feed                                                | FF                | 12                        |
+| `\n`                                  | Line Feed or Newline                                     | LF                | 10                        |
+| `\r`                                  | Carriage Return                                          | CR                | 13                        |
+| `\t`                                  | Horizontal Tab                                           | HT                | 9                         |
+| `\v`                                  | Vertical Tab                                             | VT                | 11                        |
+| `\$`                                  | $ (See below for the use of $ for string interpolation)  |                   | 36                        |
+| `\"`                                  | "                                                        |                   | 34                        |
+| `\'`                                  | '                                                        |                   | 39                        |
+| `\\`                                  | \                                                        |                   | 92                        |
+| `\uXXXX` (where X is a hex char)      | [Unicode rune](https://en.wikipedia.org/wiki/Code_point) |                   |                           |
+| `\u{X...}` (where X... are hex chars) | [Unicode rune](https://en.wikipedia.org/wiki/Code_point) |                   |                           |
+| `\xXX` (where X is a hex char)        | [Unicode rune](https://en.wikipedia.org/wiki/Code_point) |                   |                           |
+| `\x{X...}` (where X... are hex chars) | [Unicode rune](https://en.wikipedia.org/wiki/Code_point) |                   |                           |
 
 The following shows some examples of the numeric escapes:
 
@@ -99,7 +99,7 @@ string literals.
 
 Strings are represented internally as
 [UTF-8](https://en.wikipedia.org/wiki/UTF-8)
-byte sequences.  This is visible when requesting the length,
+byte sequences. This is visible when requesting the length,
 which is given in bytes with the `size` getter:
 
 ```
@@ -128,7 +128,7 @@ For example, the Euro sign is coded as three bytes:
 ```
 
 Since null is [falsy](../booleans) we can index
-only the valid code points quite simply.  The following
+only the valid code points quite simply. The following
 program iterates over the 5-character, 6-byte string,
 printing 163, 50, 46, 50, 52:
 
@@ -141,11 +141,12 @@ printing 163, 50, 46, 50, 52:
 ```
 
 In this case it would be simpler to use the
-[do --runes](https://libs.toit.io/core/string/class-string#do(2%2C1%2C0%2Crunes))
+[do --runes](<https://libs.toit.io/core/string/class-string#do(2%2C1%2C0%2Crunes)>)
 method:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE main: -->
+
 ```
   STR ::= "£2.24"
   STR.do --runes:
@@ -188,8 +189,8 @@ The raw UTF-8 bytes in a Toit string can be accessed with
 
 Alternatively, the string's UTF-8 bytes can be written to a
 byte array with the
-[to_byte_array](https://libs.toit.io/core/class-string#to_byte_array(0%2C0%2C0%2C))
-or [write_to_byte_array](https://libs.toit.io/core/class-string#write_to_byte_array(1%2C0%2C0%2C))
+[to_byte_array](<https://libs.toit.io/core/class-string#to_byte_array(0%2C0%2C0%2C)>)
+or [write_to_byte_array](<https://libs.toit.io/core/class-string#write_to_byte_array(1%2C0%2C0%2C)>)
 methods.
 
 ## Slices of strings
@@ -207,7 +208,7 @@ x is inclusive and y is exclusive:
 ```
 
 The first index can be omitted, in which case the slice
-starts at the beginning  of the source string.  If the
+starts at the beginning of the source string. If the
 second index is omitted, the slice ends at the end of the
 source string.
 
@@ -235,8 +236,9 @@ main:
 ```
 
 The multi-line strings trim indentation-based white-space
-(see below).  Therefore
+(see below). Therefore
 the above program will output the following:
+
 ```txt
 Toit CLI command
     -h help
@@ -245,28 +247,33 @@ Toit CLI command
 ```
 
 <Note>
+
 Toit removes the first newline if it is immediately after the `"""`.
+
 </Note>
 
 <Note>
+
 You should almost always put a newline after `"""` if you are using the
 triple quotes for multi-line strings, since it makes the indentation rules
 much easier to understand.
+
 </Note>
 
 In multi-line strings there are some extra escapes that can
 be used.
 
-|                                              |                                                                                                |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+|                                              |                                                                                                  |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | `\` followed by a newline (ASCII 10)         | Removes a newline in a multi-line string.                                                        |
 | `\` followed by a carriage return (ASCII 13) | Removes a newline in a multi-line string. If followed by a newline, that one is removed as well. |
-| `\s`                                         | Space (see below for a detailed explanation).                                                   |
+| `\s`                                         | Space (see below for a detailed explanation).                                                    |
 
 Toit removes the indentation of a multi-line string.
 It looks for the line with the smallest indentation and removes that amount of indentation for each line.
 
 If a space (or several spaces) are needed in front of each line, use `\s` to indicate to the compiler that this space shouldn't be seen as indentation.
+
 ```
 main:
   str1 := """
@@ -278,6 +285,7 @@ main:
 ```
 
 Note that multi-line strings frequently end with a newline anyway, in which case the last line can be used to indicate how much the indentation is:
+
 ```
 main:
   print """
@@ -304,13 +312,15 @@ bar
 ## Long string literals
 
 Triple-quoting can also be used for very long strings that
-don't necessarily contain newlines.  In this case you end each line with
+don't necessarily contain newlines. In this case you end each line with
 a backslash, which will cause the parser to ignore the
 newline at the end of the line.
+
 <Note>
-You should start the string
-with a non-escaped newline that will be ignored in accordance
-with the above rules for triple quoted strings.
+
+You should start the string with a non-escaped newline that will be ignored in accordance with the above rules for
+triple quoted strings.
+
 </Note>
 
 ```
@@ -410,8 +420,8 @@ main:
 ```
 
 For other bases than 8, 10, and 16, see
-[stringify](https://libs.toit.io/core/numbers/class-int#stringify(1%2C0%2C0%2C)).
+[stringify](<https://libs.toit.io/core/numbers/class-int#stringify(1%2C0%2C0%2C)>).
 
 The full set of formatting options includes left-padding,
-and center-padding.  See the documentation on the
-static string method, [format](https://libs.toit.io/core/class-string#format(2%2C0%2C0%2C)).
+and center-padding. See the documentation on the
+static string method, [format](<https://libs.toit.io/core/class-string#format(2%2C0%2C0%2C)>).

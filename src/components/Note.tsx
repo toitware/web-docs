@@ -8,10 +8,10 @@ import { IoInformationCircle, IoWarning } from "react-icons/io5";
 const useStyles = makeStyles((theme) => ({
   note: {
     border: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
-    padding: "1rem 1rem 0 1rem",
+    padding: "0 1.5rem 0 1.5rem",
     borderRadius: "4px",
     borderLeft: `3px solid ${theme.palette.text.primary}`,
-    margin: "1.5rem 0",
+    margin: "3rem 0",
   },
   noteInfo: {
     borderLeftColor: theme.palette.primary.main,
@@ -20,14 +20,21 @@ const useStyles = makeStyles((theme) => ({
     borderLeftColor: theme.palette.warning.main,
   },
   title: {
+    marginTop: "1rem",
     fontWeight: "bold",
     display: "flex",
     alignItems: "center",
   },
+  body: {
+    display: "flex",
+    alignItems: "center",
+  },
+  bodyContent: {},
   icon: {
+    flexShrink: 0,
     width: "1.5rem",
     height: "1.5rem",
-    marginRight: "0.5rem",
+    marginRight: "1rem",
   },
   infoIcon: {
     color: theme.palette.primary.main,
@@ -50,12 +57,18 @@ export function Note({ children, title, type = "info" }: Props): JSX.Element {
       className={clsx(classes.note, { [classes.noteWarning]: type == "warning", [classes.noteInfo]: type == "info" })}
       component="div"
     >
-      <div className={classes.title}>
-        {type == "info" && <IoInformationCircle className={clsx(classes.icon, classes.infoIcon)} />}
-        {type == "warning" && <IoWarning className={clsx(classes.icon, classes.warningIcon)} />}
-        {title}
+      {title && (
+        <div className={classes.title}>
+          {type == "info" && <IoInformationCircle className={clsx(classes.icon, classes.infoIcon)} />}
+          {type == "warning" && <IoWarning className={clsx(classes.icon, classes.warningIcon)} />}
+          {title}
+        </div>
+      )}
+      <div className={classes.body}>
+        {!title && type == "info" && <IoInformationCircle className={clsx(classes.icon, classes.infoIcon)} />}
+        {!title && type == "warning" && <IoWarning className={clsx(classes.icon, classes.warningIcon)} />}
+        <div className={classes.bodyContent}>{children}</div>
       </div>
-      {children}
     </Typography>
   );
 }

@@ -12,15 +12,15 @@ The Devices page lists all devices that are available in your organization.
 
 The page lists
 
-* The device  name.
+- The device name.
 
-* The firmware version currently installed on the device.
+- The firmware version currently installed on the device.
 
-* Date and time of the last time the device was connected to the Toit cloud.
+- Date and time of the last time the device was connected to the Toit cloud.
 
-* The device ID
+- The device ID
 
-* The health status of the device. 
+- The health status of the device.
 
 You can sort devices by clicking on the column header.
 
@@ -30,10 +30,9 @@ An detailed description of how to manage and monitor your device, apps and logs 
 
 <Note>
 
-A warning sign next to the firmware version means that the installed firmware does no longer have a corresponding version available in the Toit cloud. 
+A warning sign next to the firmware version means that the installed firmware does no longer have a corresponding version available in the Toit cloud.
 
 </Note>
-
 
 ## Fleet health
 
@@ -45,8 +44,10 @@ The tooltip shows the name of the device and the list of pending actions or issu
 The overall status section accumulates devices based on their health issues - or lack thereof.
 
 <Note>
+
 A device can be counted in more than one category, except for devices in the
 "No issues category" that is exclusive of all others.
+
 </Note>
 
 Click on the "Go to devices" link to see the list of devices filtered according to their status or issue.
@@ -54,27 +55,27 @@ Click on the "Go to devices" link to see the list of devices filtered according 
 ## Playground
 
 The Playground is a text editor where you can write Toit programs. Click **Run online** to execute the code in the Toit cloud. The playground uses the latest firmware version available in the Toit cloud.
-  
+
 ## Serial
 
 This pages let's you communicate with your hardware via the Web Serial API. The serial communication is only for initial hardware provisioning or debugging via the serial port.
 
 ## Organization
 
-* **Users** lists all users in the organization, starting with the current user. Click on **Add User** to add new users to the organization by simply entering their email address. A welcome email is sent to the newly created user, with a link to set the password for the new Toit account just created.
+- **Users** lists all users in the organization, starting with the current user. Click on **Add User** to add new users to the organization by simply entering their email address. A welcome email is sent to the newly created user, with a link to set the password for the new Toit account just created.
 
-* **Details** is used to enter your Organization information and payment methods.
+- **Details** is used to enter your Organization information and payment methods.
 
-* **Firmware** lists all firmware versions available in your organization. A pie chart depicts the distribution of the different firmware versions installed on the devices in your organization.
+- **Firmware** lists all firmware versions available in your organization. A pie chart depicts the distribution of the different firmware versions installed on the devices in your organization.
 
-* **Data Usage** displays data and graphs that give full transparency on your data usage type (application or system data, such as logs and metrics), as well as usage history and forecast, so you always can predict your upcoming bill with Toit.
+- **Data Usage** displays data and graphs that give full transparency on your data usage type (application or system data, such as logs and metrics), as well as usage history and forecast, so you always can predict your upcoming bill with Toit.
 
-* **Invoices** lists previously paid invoices, if any.
+- **Invoices** lists previously paid invoices, if any.
 
-* **API keys** lists the keys that can be used to connect a server application to the API.
+- **API keys** lists the keys that can be used to connect a server application to the API.
 
 <Note title="Payment">
-  
+
 
 If your devices generate more data than the limit on 100MB of free data per month, submit your payment information [here](https://console.toit.io/organization/details) to get access to the full version of the Toit platform.
 
@@ -86,17 +87,16 @@ We serve our payment pages in the Toit console securely using Transport Layer Se
 
 </Note>
 
-
 ## System
 
 The System page displays various graphs showing information about metrics, logs, and PubSub ingestion in the system.
 
 ## Data
 
-The Data page allows to create **metrics** and **logs** subscriptions with the **Create subscription** button. Existing subscription are listed on the page and can be deleted with the bin icon. Selected an existing subscription from the drop down menu in one of the graph to visualize Unacknowledged message count and Oldest unacknowledged message age data for the chosen time interval. 
+The Data page allows to create **metrics** and **logs** subscriptions with the **Create subscription** button. Existing subscription are listed on the page and can be deleted with the bin icon. Selected an existing subscription from the drop down menu in one of the graph to visualize Unacknowledged message count and Oldest unacknowledged message age data for the chosen time interval.
 Check the [API](../../../apis/api) documentation to learn how to acknowledge messages using the CLI.
 
 ## PubSub
 
-Use this page to create custom PubSub subscriptions and access subscription-specific data on unacknowledged message count and oldest unacknowledged message age. 
+Use this page to create custom PubSub subscriptions and access subscription-specific data on unacknowledged message count and oldest unacknowledged message age.
 See the [PubSub](../../../apis/pubsub) section for more information.

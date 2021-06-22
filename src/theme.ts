@@ -74,7 +74,7 @@ export function createTheme({
 }: CreateThemeParameters): Theme {
   const textColor = text.string();
   const bodyFontFamily = "Roboto, Helvetica, Arial, sans-serif";
-  const titleFontFamily = "Canano Light, Helvetica, Arial, sans-serif";
+  const titleFontFamily = "ClashDisplay, Helvetica, Arial, sans-serif";
 
   // Small helper function that blends the color with the background if we're in
   // a "light" theme (since then the background is light), and simply lightens
@@ -146,21 +146,21 @@ export function createTheme({
           fontSize: 13,
         },
         h1: {
-          fontSize: 30,
+          fontSize: 40,
           fontFamily: titleFontFamily,
-          fontWeight: "bold",
+          fontWeight: "normal",
           color: increaseContrast(text).string(),
         },
         h2: {
           fontSize: 22,
           fontFamily: titleFontFamily,
-          fontWeight: "bold",
+          fontWeight: "normal",
           color: increaseContrast(text).string(),
         },
         h3: {
           fontSize: 18,
           fontFamily: titleFontFamily,
-          fontWeight: "bold",
+          fontWeight: "normal",
           color: increaseContrast(text).string(),
         },
         h4: {

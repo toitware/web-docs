@@ -2,6 +2,8 @@ import { makeStyles } from "@material-ui/core";
 import Color from "color";
 import * as React from "react";
 import { ReactNode } from "react";
+import { DocsLink } from "./DocsLink";
+import { FiArrowRight } from "react-icons/fi";
 
 const useStyles = makeStyles((theme) => ({
   boxes: {
@@ -12,8 +14,9 @@ const useStyles = makeStyles((theme) => ({
     gridGap: "1.5rem",
   },
   box: {
-    backgroundColor: Color(theme.palette.primary.main).alpha(0.05).string(),
-    border: `1px solid ${Color(theme.palette.text.primary).alpha(0.05).string()}`,
+    display: "flex",
+    flexDirection: "column",
+    border: `1px solid ${Color(theme.palette.text.primary).string()}`,
     borderRadius: "5px",
     padding: "1.5rem",
     "& p:last-child": {
@@ -23,6 +26,23 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: "bold",
     fontSize: "1.3rem",
+    margin: "0 0 0.5rem 0 !important",
+  },
+  content: {
+    flex: 1,
+    fontSize: "0.875rem",
+    "& p": {
+      fontSize: "0.875rem",
+    },
+  },
+  link: {
+    display: "flex",
+    fontSize: "1.125rem",
+    alignItems: "center",
+    marginTop: "3rem",
+    "& svg": {
+      marginLeft: "1rem",
+    },
   },
 }));
 
@@ -37,15 +57,21 @@ export function Boxes({ children }: BoxesProps): JSX.Element {
 
 type BoxProps = {
   title?: string;
+  to?: string;
   children: ReactNode;
 };
 
-export function Box({ title, children }: BoxProps): JSX.Element {
+export function Box({ title, to, children }: BoxProps): JSX.Element {
   const classes = useStyles();
   return (
     <div className={classes.box}>
       {title && <h1 className={classes.title}>{title}</h1>}
-      {children}
+      <div className={classes.content}>{children}</div>
+      {to && (
+        <DocsLink className={classes.link} href={to}>
+          Learn more <FiArrowRight />
+        </DocsLink>
+      )}
     </div>
   );
 }

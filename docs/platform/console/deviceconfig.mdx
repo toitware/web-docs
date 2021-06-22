@@ -49,7 +49,7 @@ toit device use <name>
 <Tabs>
 <Tab label="Console">
 
-The current firmware version installed on the device is displayed in the Firmware section. Click on the Edit icon and choose a new version from the drop down menu, then click Save. 
+The current firmware version installed on the device is displayed in the Firmware section. Click on the Edit icon and choose a new version from the drop down menu, then click Save.
 The proposed change is displayed both in the Firmware section and with an icon near the name of the device until the new version is actually installed the next time the device comes online.
 
 </Tab>
@@ -74,7 +74,7 @@ You can also downgrade the device with another firmware version with `toit devic
 
 ## Max offline parameter
 
-By default, the device is configured to be continuously online (with 'Max offline' set to zero seconds). 
+By default, the device is configured to be continuously online (with 'Max offline' set to zero seconds).
 If your device operates on battery in production, it is recommended to change this configuration so that the device is online only when necessary to extend battery life.
 
 <Tabs>
@@ -102,16 +102,18 @@ toit device config max-offline 24h
 </Tab>
 </Tabs>
 
-If you install an application measuring the temperature every hour and the `max-offline` parameter is set to 24 hours, the application will run the program every hour. 
+If you install an application measuring the temperature every hour and the `max-offline` parameter is set to 24 hours, the application will run the program every hour.
 Once a day the device will go online and connect to the Toit console and offload all the data to the console.
 
 <Note>
+
 A device can come online due to other triggers than `max-offline`, for example when its storage capacity level reaches a predefined threshold, as explained in the section below.
+
 </Note>
 
 ## Connections
 
-When the device has been online the first time after initial provisioning, you can change or add new connections on the device. 
+When the device has been online the first time after initial provisioning, you can change or add new connections on the device.
 
 <Tabs>
 <Tab label="Console">
@@ -139,16 +141,13 @@ Use
 
 for setting a new WiFi connection, and use
 
-
 ```txt
 -c cellular:<apn>
 ```
 
 for setting up a cellular connection on your ESP32.
 
-<Note>
-This command will automatically delete all previously configured connections.
-</Note>
+<Note>This command will automatically delete all previously configured connections.</Note>
 
 </Tab>
 </Tabs>

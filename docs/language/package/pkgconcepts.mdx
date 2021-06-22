@@ -17,10 +17,12 @@ When a developer calls `toit pkg download` they always get the same packages. A 
 Lock files must be located at the root of the project. Certain commands (like `pkg install`) automatically create a lock file if one doesn't exist yet. Be careful, as the lock-file is created in the current directory, which might not be the root directory.
 
 <Note>
+
 The `package.lock` file should be shared with other developers of the program and should therefore be checked into the Version Control System.
+
 </Note>
 
-A program should *not* have a package.yaml file. These are reserved for packages that are intended to be imported by other programs or packages.
+A program should _not_ have a package.yaml file. These are reserved for packages that are intended to be imported by other programs or packages.
 
 ## Package
 
@@ -28,7 +30,7 @@ A package is a folder of Toit code that is intended to be imported by programs a
 
 With the exception of local packages (see below), packages must be in their own git repository. The URL of the git repository is part of the identity of a package. A package is uniquely identified by the URL together with a version tag.
 
-If a package has itself dependencies, it declares them in a `package.yaml` file. Contrary to programs, packages should declare constraints on their dependencies, and not require specific versions (if possible). This gives the TPM version solver more flexibility when finding compatible packages. 
+If a package has itself dependencies, it declares them in a `package.yaml` file. Contrary to programs, packages should declare constraints on their dependencies, and not require specific versions (if possible). This gives the TPM version solver more flexibility when finding compatible packages.
 
 Typically, dependencies are marked with `^x.y.z` which is a shorthand for `>=x.y.z, <X,0,0` (where `x.y.z` is the current version of the dependency, and `X` is equal to `x + 1`). Such a constraint means that the package will work with the current version, or any future version that is compatible (according to semantic versioning).
 
@@ -41,7 +43,10 @@ TPM supports "local" packages where the package is referenced through a path. Th
 This feature is useful for unpublished (versions of) packages. For example, when developing a program and a package, it can be necessary to change the package and program at the same time. Until the package can be published again, one would use a local package.
 
 <Note>
-Only programs and local packages are allowed to depend on other local packages. Once a package is published it can only depend on Git packages.
+
+Only programs and local packages are allowed to depend on other local packages. Once a package is published it can
+only depend on Git packages.
+
 </Note>
 
 ### Specification - package.yaml
@@ -55,6 +60,7 @@ Otherwise, TPM looks at the Git URL. If the last segment of the URL is a valid i
 Packages that are not intended to be reused should use the keyword `proprietary`. This is generally only useful for private packages.
 If no `license` entry is present, but a `LICENSE` file exists, then TPM tries to infer the license by matching the license file.
 `dependencies`: The dependencies of this package, together with the prefixes by which they are used inside the code. The dependencies entry is a map from prefix to `url`, `version`. For example:
+
 ```yaml
 dependencies:
   prefix1:
@@ -89,7 +95,9 @@ TPM uses [semantic versioning](http://semver.org) to determine whether packages 
 Since Toit supports multiple versions of the same package, upgrades don't need to happen uniformly in the whole ecosystem. This makes it easier to upgrade continuously, where older and newer packages co-exist. However, the same feature also requires package authors to be careful when they, themselves, update their dependencies. Specifically, it might be a breaking change to update a dependency if that package's class is exposed.
 
 Let's have a look at an example of `my_pkg`, a package with version number `1.2.3`.
+
 <!-- SKIP CODE -->
+
 ```
 // my_pkg.toit
 import other_pkg
@@ -98,11 +106,13 @@ class A:
    my_method -> other_pkg.Class_from_other_pkg:
     return ...
 ```
+
 In this example the method `my_method` (inside package `my_pkg`) returns an instance of `Class_from_other_pkg`. One of the dependencies of `my_pkg` would thus be the package `other_pkg`.
 Let's say the current version constraint for `other_pkg` is `^1.0.0` (allowing any package that is compatible with 1.0.0). Suppose we now update the other package to `^2.0.0`. Obviously, we need to ensure that our own code still works with the newer version (since the higher major version number indicates potentially breaking changes), but we also need to update the major version of `my_pkg`!
 Specifically, we need to change our version number from `1.2.3` to `2.0.0`. This is, because users of `my_pkg` are now also exposed to the breaking changes of `other_pkg`. Furthermore, they could have type checks on `Class_from_other_pkg` which would need to match the same version.
 
 ## Registry
+
 A registry collects descriptions of available packages. Conceptually it's a database of packages. Crucially, it doesn't store the content/sources of packages, but only descriptions of them (see below).
 
 Most of the time, developers only work with the github.com/toitware/registry registry, which is maintained by Toit. However, TPM supports multiple registries. Companies are free to create their own private registries and use them instead of, or in addition to the public Toit registry.
@@ -111,18 +121,14 @@ Similar to packages, registries also exist in two variants: Git and local regist
 Local registries are just pointers to a path that contains descriptions.
 
 ## Description
+
 Description files are used by TPM to work with packages without needing to download them. As long as the user doesn't need the code of a package, TPM works with descriptions instead. The descriptions are relatively small, and TPM can thus download all of them onto the user's computers. Most operations are then done locally and therefore very fast.
 
 A description file contains the following information:
 
-* name: The name of a package is mainly for convenience. It is used in the search (together with the description), but is also used as default prefix for the package.
-  
-* description: A small description of the package.
-  
-* license: The license of the package. For many projects it is important that transitive dependencies are all licensed under acceptable terms. Having the license field in the description makes it possible to weed out packages that aren't acceptable before even downloading them.
-  
-* url: The Git location of the package. Together with the version this identifies the package.
-  
-* version: The version of the package. TPM uses this entry to find the corresponding tag.
-  
-* dependencies: the list of dependencies for this package.
+- name: The name of a package is mainly for convenience. It is used in the search (together with the description), but is also used as default prefix for the package.
+- description: A small description of the package.
+- license: The license of the package. For many projects it is important that transitive dependencies are all licensed under acceptable terms. Having the license field in the description makes it possible to weed out packages that aren't acceptable before even downloading them.
+- url: The Git location of the package. Together with the version this identifies the package.
+- version: The version of the package. TPM uses this entry to find the corresponding tag.
+- dependencies: the list of dependencies for this package.

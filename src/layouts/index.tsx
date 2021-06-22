@@ -12,9 +12,13 @@ import { TableOfContents } from "./TableOfContents";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
+    html: {
+      scrollPaddingTop: "6rem",
+    },
     body: {
       margin: 0,
       background: theme.palette.background.default,
+      lineHeight: "1.5",
     },
     a: {
       textDecoration: `none`,

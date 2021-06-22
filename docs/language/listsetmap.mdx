@@ -68,6 +68,7 @@ map := {:}
 These are the preferred short cuts for:
 
 <!-- RESET CODE -->
+
 ```
 list := List
 set := Set
@@ -86,16 +87,20 @@ map_with_values := {
 ```
 
 <Note>
+
 Both `Set` and `Map` use hash values to place elements into the underlying data structure.
 This means that all keys must implement the `hash_code` method. The performance of sets and
 maps is best if two different keys have a different hash code (with high probability).
+
 </Note>
 
 <Note type="warning">
+
 Sets and Maps only use the `hash_code` function if their size is big enough. Objects that
 don't implement `hash_code` might thus not yield errors until the collections grow big enough.
 where the chance of two different objects having the same hash code should be
 low.
+
 </Note>
 
 ## Examples of using Map
@@ -105,6 +110,7 @@ Lookup in a map is done with the indexing operator, `[]`:
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   scores := {"":null} -->
 <!-- HIDDEN CODE   team := "" -->
+
 ```
   score := scores[team]
   print "The score for $team is $score"
@@ -119,6 +125,7 @@ The index operator syntax is understood by the string interpolation syntax, so y
 Updating or adding to a map is done with the `[]=` operator:
 
 <!-- HIDDEN CODE title_map := {:} -->
+
 ```
 graduate name/string:
   title_map[name] = "PhD"
@@ -152,6 +159,7 @@ Often there are more succinct ways to achieve the same with variations of the
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class Scoring: -->
 <!-- HIDDEN CODE   scorers / Map ::= {:} -->
+
 ```
   register_goal team/string new_scorer/string -> none:
     // Get the set of goal-scorers for this team,
@@ -246,7 +254,9 @@ csv list/List -> string:
 ```
 
 A more advanced version would handle strings containing quotes:
+
 <!-- RESET CODE -->
+
 ```
 // Creates a comma-separated list of quoted strings,
 // escaping quotes.
@@ -274,6 +284,7 @@ arbitrary expression in a string interpolation, surrounding it with `$(` and
 `)`:
 
 <!-- RESET CODE -->
+
 ```
 // Creates a comma-separated list of quoted strings,
 // escaping quotes.

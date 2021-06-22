@@ -18,19 +18,19 @@ Here are the common steps for creating a package:
 
 2. Polish the package, with eyes on:
 
-    * The license
+   - The license
 
-    * A README
+   - A README
 
-    * Types
+   - Types
 
-    * Toitdocs
+   - Toitdocs
 
-    * Examples
+   - Examples
 
-    * Tests
+   - Tests
 
-    * A CHANGELOG file
+   - A CHANGELOG file
 
 3. Create a `package.yaml` file.
 
@@ -102,12 +102,15 @@ emit symbols --dot_duration [--on] [--off]:
 There is much more functionality we could add, but for the purpose of this tutorial we are happy now. The next step is to polish the package.
 
 ## Polishing
+
 It's always a good idea to polish code, but for code that is published for external developers that it's even more the case.
 
 ### License
+
 Packages should have a license. We recommend a [permissive free software license](https://en.wikipedia.org/wiki/Permissive_software_license), such as MIT, or BSD for packages that are published publicly. This is not a requirement, but more restrictive licenses are often avoided and would lead to fewer users of a package.
 
 For our tutorial we use the MIT license. Our LICENSE file thus has the following text in it:
+
 ```txt
 MIT License
 
@@ -133,6 +136,7 @@ SOFTWARE.
 ```
 
 You should also add copyright headers to the source files.
+
 ```
 // Copyright <year> <author>. All rights reserved.
 // Use of this source code is governed by a <license>-style license that can be
@@ -140,6 +144,7 @@ You should also add copyright headers to the source files.
 ```
 
 ### README
+
 Packages (and generally all repositories) should have a `README.md` file describing the package. Unless given already in the `package.yaml`, this is also the place where the package gets its description from.
 
 We recommend to have a title `# <package-name>`, followed by a paragraph that makes sense on its own and describes the project. The first paragraph should start as if preceded by "This is a package containing".
@@ -150,14 +155,16 @@ For the tutorial we add the following `README.md` (again, simplified to save spa
 
 <!-- SKIP CODE -->
 
-~~~markdown
+````markdown
 # Morse Tutorial
+
 A tutorial version of the Morse package. Not intended for use as package.
 
 Encodes string to Morse code. Also provides convenience methods
 that call given blocks `on` and `off` with the correct timing.
 
 ## Usage
+
 A simple usage example.
 
 ```
@@ -174,28 +181,36 @@ See the `examples` folder for more examples.
 Please file feature requests and bugs at the [issue tracker][tracker].
 
 [tracker]: https://github.com/toitware/toit-morse-tutorial/issues
-~~~
+````
 
 ### Types
+
 Toit doesn't require any types, but we strongly recommend to add some on API boundaries of a package. It helps new users to understand the package more easily, and also helps the IDE for exploratory development where users use auto-completion and similar IDE features to discover a package.
 
 In our example we will change the signatures of the two exposed functions:
 
 <!-- SKIP CODE -->
+
 ```
 encode_string str/string -> List:
 ```
+
 and
+
 <!-- SKIP CODE -->
+
 ```
 emit symbols/List --dot_duration/Duration [--on] [--off] -> none:
 ```
 
 ### Toitdoc
+
 Similar to types, it's always a good idea to have good documentation; even more so for API boundaries.
 
 We suggest the following changes:
+
 <!-- SKIP CODE -->
+
 ```
 /**
 The dot symbol.
@@ -234,11 +249,13 @@ emit symbols/List --dot_duration/Duration [--on] [--off] -> none:
 ```
 
 ### Examples
+
 Examples are a good way to introduce users to the functionality of the package, and should thus contain typical code with lots of documentation.
 
 A typical use case would be to emit morse on a GPIO pin (`examples/gpio.toit`):
 
 <!-- SKIP CODE -->
+
 ```
 // Copyright (C) 2021 Toitware ApS. All rights reserved.
 // Use of this source code is governed by an MIT-style license that can be
@@ -279,15 +296,19 @@ toit pkg install --local --prefix=morse_tutorial ..
 This creates a `package.lock` file mapping the prefix "morse" to the package at location `..`.
 
 <Note>
+
 We use `toit pkg init` to ensure that the `package.lock` file is created in the current directory. If we just used `toit pkg install`, we would risk adding a new dependency to our package and not to the example.
+
 </Note>
 
 ### Tests
+
 Toit doesn't have a testing framework, yet. For now, developers need to write their tests without much help from the Toit framework. We recommend to simply write executables that use the `expect` module to test the package. Tests should live in the `tests` folder.
 
 Here is a simple test (`tests/morse_test.toit`) for ensuring that an 'a' is correctly translated:
 
 <!-- SKIP CODE -->
+
 ```
 // Copyright (C) 2021 Toitware ApS. All rights reserved.
 // Use of this source code is governed by an MIT-style license that can be
@@ -310,14 +331,17 @@ toit pkg install --local --prefix=morse_tutorial ..
 ```
 
 The test should then execute successfully by running:
+
 ```shell
 toit run --no-device morse_test.toit
 ```
 
 ### Changelog
+
 It's good practice to have a `CHANGELOG.md` file in the project root. There are many variations on how to structure this file.
 
 We recommend having the newest entries on the top. `## <Version> - <Date>`. For example:
+
 ```txt
 ## 1.0.1 - 2021-03-12
 * Add library toitdoc.
@@ -328,6 +352,7 @@ Initial version.
 ```
 
 ## Package.yaml
+
 A package must have a `package.yaml` file at the root of the package. The file can be empty, but it must exist.
 
 Since we already added a license and a README file, we don't need to worry about the license and description entries.
@@ -343,6 +368,7 @@ name: morse_package_tutorial
 This would take precedence over the inferred name.
 
 ### Dependencies
+
 We don't use dependencies in this package, but for completeness sake here is an example of how we would add one:
 
 ```yaml
@@ -358,6 +384,7 @@ dependencies:
 When starting from an application, you can find the dependency information in its `package.lock` file.
 
 ## Tag and Upload
+
 As one of the last steps we need to tag the sources with a version.
 Version numbers follow [semantic versioning](https://semver.org), and the corresponding
 git-tag is simply a "v" followed by the version.
@@ -369,6 +396,7 @@ the package name, or
 "toit-" followed by the package name.
 
 ## Notify a Registry
+
 As the last step we need to inform a registry about the existence of the (new
 version of the) package. For the Toitware registry, it's enough to simply file
 an issue at
