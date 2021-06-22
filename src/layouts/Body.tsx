@@ -57,7 +57,11 @@ const useStyles = makeStyles((theme) => ({
 
 export const Body: React.FC = ({ children }) => {
   const classes = useStyles();
-  return <div className={classes.root}>{children}</div>;
+  return (
+    <div id="content" className={classes.root}>
+      {children}
+    </div>
+  );
 };
 
 export default Body;

@@ -75,6 +75,10 @@ export function TableOfContentsNav({ table, className }: Props): JSX.Element {
 
   const activeItemId = useActiveItemId(flatTable);
 
+  if (flatTable.length <= 1) {
+    return <></>;
+  }
+
   return (
     <nav className={clsx(classes.wrapper, className)}>
       <ul>
