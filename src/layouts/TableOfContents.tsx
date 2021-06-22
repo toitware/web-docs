@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 import { Link } from "gatsby";
 import * as React from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export type TableOfContents = {
   items: TableOfContentsItem[];
@@ -41,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
       opacity: 1,
     },
   },
+  activeLink: {
+    color: theme.palette.primary.main,
+  },
 }));
 
 type Props = {
@@ -53,31 +57,33 @@ type ContentsEntry = {
   url: string;
 };
 
-/**
- * The actual content of the layout, separated into its own component so it has
- * access to the theme.
- */
+// Takes the table of contents, and flattens it into a list.
+function flatten(table: TableOfContentsItem | TableOfContents, list: ContentsEntry[] = []): ContentsEntry[] {
+  if (table.items === undefined) return list;
+
+  for (const item of table.items) {
+    list.push({ title: item.title, url: item.url });
+    flatten(item, list);
+  }
+  return list;
+}
+
 export function TableOfContentsNav({ table, className }: Props): JSX.Element {
   const classes = useStyles();
 
-  function flatten(table: TableOfContentsItem | TableOfContents, list: ContentsEntry[] = []): ContentsEntry[] {
-    if (table.items === undefined) return list;
+  const flatTable = useMemo(() => flatten(table), [table]);
 
-    for (const item of table.items) {
-      list.push({ title: item.title, url: item.url });
-      flatten(item, list);
-    }
-    return list;
-  }
-
-  const flatTable = flatten(table);
+  const activeItemId = useActiveItemId(flatTable);
 
   return (
     <nav className={clsx(classes.wrapper, className)}>
       <ul>
         {flatTable.map((item) => (
           <li key={item.url}>
-            <Link className={classes.link} to={item.url}>
+            <Link
+              className={clsx(classes.link, { [classes.activeLink]: item.url == `#${activeItemId}` })}
+              to={item.url}
+            >
               {item.title}
             </Link>
           </li>
@@ -86,5 +92,36 @@ export function TableOfContentsNav({ table, className }: Props): JSX.Element {
     </nav>
   );
 }
+
+const useActiveItemId = (flatTable: ContentsEntry[]) => {
+  const [activeId, setActiveId] = useState("");
+
+  useEffect(() => {
+    const headers = document.querySelectorAll("#content :is(h1, h2)");
+    const callback: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => entry.target.setAttribute("data-in-viewport", entry.isIntersecting ? "1" : "0"));
+      for (const header of headers) {
+        if (header.getAttribute("data-in-viewport") == "1") {
+          setActiveId(header.id);
+          break;
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(callback, {
+      root: null,
+      rootMargin: "0px",
+      threshold: [1],
+    });
+
+    headers.forEach((header) => {
+      observer.observe(header);
+    });
+
+    return () => observer.disconnect();
+  }, [flatTable]);
+
+  return activeId;
+};
 
 export default TableOfContentsNav;
