@@ -23,11 +23,7 @@ const useStyles = makeStyles((theme) => ({
     height: "4.5rem",
     padding: "0rem 2rem",
   },
-  searchBar: {
-    [theme.breakpoints.down("sm")]: {
-      display: "none",
-    },
-  },
+  searchBar: {},
   hamburgerMenu: {
     [theme.breakpoints.up("md")]: {
       display: "none",

@@ -39,11 +39,12 @@ const useStyles = makeStyles((theme) => ({
     top: "-1rem",
     right: 0,
     width: "15rem",
+    maxWidth: "calc(100vw - 7rem)",
     transition: "all 200ms ease-in-out",
     background: "rgba(255, 255, 255, 0.1)",
   },
   searchFieldFocused: {
-    width: "30rem",
+    width: "min(30rem, calc(100vw - 7rem))",
   },
   searchFieldOutline: {
     border: `1px solid ${theme.palette.text.primary}`,
