@@ -34,12 +34,10 @@ const useStyles = makeStyles((theme) => ({
   link: {
     color: theme.palette.text.primary,
     fontFamily: theme.typography.fontFamily,
-    opacity: 0.8,
     margin: "1.5rem 0",
     display: "block",
     "&:hover": {
       color: theme.palette.primary.main,
-      opacity: 1,
     },
   },
   activeLink: {
