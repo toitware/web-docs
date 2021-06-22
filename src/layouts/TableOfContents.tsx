@@ -58,12 +58,15 @@ type ContentsEntry = {
 };
 
 // Takes the table of contents, and flattens it into a list.
-function flatten(table: TableOfContentsItem | TableOfContents, list: ContentsEntry[] = []): ContentsEntry[] {
+function flatten(table: TableOfContentsItem | TableOfContents, list: ContentsEntry[] = [], level = 0): ContentsEntry[] {
   if (table.items === undefined) return list;
 
   for (const item of table.items) {
     list.push({ title: item.title, url: item.url });
-    flatten(item, list);
+    if (level < 1) {
+      // We only list h1 and h2
+      flatten(item, list, level + 1);
+    }
   }
   return list;
 }

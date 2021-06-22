@@ -32,6 +32,14 @@ const useStyles = makeStyles((theme) => ({
     padding: "1.5rem 2.5rem",
     border: `1px solid ${Color(theme.palette.text.primary).string()}`,
     borderTopLeftRadius: 0,
+    // h1 and h2 shouldn't be used in tabs because they break the table of contents
+    "& h1, & h2": {
+      background: "red",
+      color: "white",
+    },
+    "& h1::after, & h2::after": {
+      content: '" -- Don\'t use h1 or h2 in tabs"',
+    },
   },
   contentNoPadding: {
     padding: 0,

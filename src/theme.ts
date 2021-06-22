@@ -152,13 +152,13 @@ export function createTheme({
           color: increaseContrast(text).string(),
         },
         h2: {
-          fontSize: 22,
+          fontSize: 30,
           fontFamily: titleFontFamily,
           fontWeight: "normal",
           color: increaseContrast(text).string(),
         },
         h3: {
-          fontSize: 18,
+          fontSize: 20,
           fontFamily: titleFontFamily,
           fontWeight: "normal",
           color: increaseContrast(text).string(),
