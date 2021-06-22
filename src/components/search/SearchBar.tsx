@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
     padding: "0.75rem",
     boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
     width: "30rem",
+    maxHeight: "80vh",
+    overflowY: "auto",
     "& ul": {
       listStyle: "none",
       padding: "0",
