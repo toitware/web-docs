@@ -39,7 +39,9 @@ main:
 This will keep the light turned on for 1000ms.
 
 <Note type="warning">
+
 When the program terminates, the pin will automatically be reset thus turning off the LED.
+
 </Note>
 
 ## Adding sensors with Qwiic cables
@@ -49,13 +51,13 @@ They can be connected to an ESP32 using soldering on pin or using a cable system
 
 All Qwiic cables have the following color scheme and arrangement:
 
-* Black = GND - to be connected to the GND ground pin of the ESP32
+- Black = GND - to be connected to the GND ground pin of the ESP32
 
-* Red = 3.3V - to be connected to the 3.3V power pin of the ESP32
+- Red = 3.3V - to be connected to the 3.3V power pin of the ESP32
 
-* Blue = SDA - data channel to be connected to any numbered pin of the ESP32
+- Blue = SDA - data channel to be connected to any numbered pin of the ESP32
 
-* Yellow = SCL - clock line to be connected to any numbered pin of the ESP32. It is used to synchronize all data transfers over the I2C bus. 
+- Yellow = SCL - clock line to be connected to any numbered pin of the ESP32. It is used to synchronize all data transfers over the I2C bus.
 
 When more than one sensor / actuator is needed, you can use a breadboard to allow for multiple connections. It is also sometimes possible to connect several sensors one after the other with Qwiic cables.
 

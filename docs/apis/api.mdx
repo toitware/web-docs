@@ -23,9 +23,9 @@ The Toit console provides a [data ingestion API](https://github.com/toitware/api
 
 <Note type="warning">
 
-  The Toit API also includes App data for application data published using the `data` library. However, for a
-  subscription to this kind of data we recommend using the bi-directional 
-  [PubSub API](../pubsub) instead.
+The Toit API also includes App data for application data published using the `data` library. However, for a
+subscription to this kind of data we recommend using the bi-directional
+[PubSub API](../pubsub) instead.
 
 </Note>
 
@@ -41,7 +41,9 @@ Every time a message has been read it needs to be acknowledged by the subscriber
 Each message must be acknowledged before the acknowledge deadline (10 minutes by default), otherwise it will be enqueued again.
 
 <Note type="warning">
+
 If a subscription is more than 7 days behind, messages will be pruned and missed by the subscriber.
+
 </Note>
 
 It is possible to do concurrent reads on one subscription.
@@ -87,7 +89,7 @@ toit data read metrics temperature
 
 To acknowledge unacked messages, add the `--auto-ack` flag.
 
- For example, to read data of the data type `metrics` from a subscription named `temperature` with acknowledging messages and start making progress on the subscription, use
+For example, to read data of the data type `metrics` from a subscription named `temperature` with acknowledging messages and start making progress on the subscription, use
 
 ```shell
 toit data read metrics temperature --auto-ack
