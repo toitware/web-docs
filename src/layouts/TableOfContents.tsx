@@ -62,7 +62,7 @@ function flatten(table: TableOfContentsItem | TableOfContents, list: ContentsEnt
   for (const item of table.items) {
     list.push({ title: item.title, url: item.url });
     if (level < 1) {
-      // We only list h1 and h2
+      // We only list h1 and h2.
       flatten(item, list, level + 1);
     }
   }
