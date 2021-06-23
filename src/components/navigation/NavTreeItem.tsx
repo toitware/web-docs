@@ -3,7 +3,7 @@ import { useLocation } from "@reach/router";
 import clsx from "clsx";
 import { Link } from "gatsby";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { golden } from "../../theme";
 import { NavPage } from "./Navigation";
 import NavTree from "./NavTree";
@@ -101,6 +101,23 @@ function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Eleme
   const subPages = page.subPages ?? [];
 
   const [isExpanded, setIsExpanded] = useState(level != 0 || isActive);
+
+  // Using a memo here, because we don't want the hook to fire every time
+  // expanded changes.
+  const isExpandedMemo = useRef(isExpanded);
+  isExpandedMemo.current = isExpanded;
+  useEffect(() => {
+    // If the page navigated and we have a new active path, make sure that
+    // the menu is open.
+    // This can only happen when the user clicks a link in the docs content,
+    // because otherwise the menu needs to be open to actually navigate there
+    // (or a link has been used, in which case it's open because it gets set
+    // at startup).
+    if (!isExpandedMemo.current && isActive) {
+      setIsExpanded(true);
+    }
+  }, [isActive, isExpandedMemo, setIsExpanded]);
+
   const toggleIsExpanded = () => {
     if (level == 0) {
       setIsExpanded(!isExpanded);
