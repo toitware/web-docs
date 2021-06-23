@@ -29,7 +29,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
-  bodyContent: {},
+  bodyContent: {
+    // By setting a very small width, and then flex: 1, we allow the content
+    // to grow, without extending over the container.
+    width: "10%",
+    flex: "1",
+  },
   icon: {
     flexShrink: 0,
     width: "1.5rem",
