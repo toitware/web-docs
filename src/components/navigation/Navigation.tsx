@@ -1,12 +1,14 @@
 import { makeStyles } from "@material-ui/core";
+import clsx from "clsx";
 import { graphql, useStaticQuery } from "gatsby";
 import * as React from "react";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
+import { FiArrowLeft } from "react-icons/fi";
 import ToitLogo from "../../assets/images/toit-logo.inline.svg";
+import { useAutoScroll } from "../../hooks/use_auto_scroll";
+import { golden } from "../../theme";
 import NavTree from "./NavTree";
 import { sortTree } from "./sort_tree";
-import { FiArrowLeft } from "react-icons/fi";
-import { golden } from "../../theme";
 
 export type NavPage = {
   slug: string;
@@ -30,6 +32,14 @@ interface GraphType {
   };
 }
 const useStyles = makeStyles((theme) => ({
+  root: {
+    background: "black",
+    color: "white",
+    overflowY: "auto",
+    overflowX: "hidden",
+    margin: 0,
+    padding: "3rem 1.5rem 9rem 3rem",
+  },
   toitLogo: {
     marginBottom: "3rem",
   },
@@ -56,7 +66,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function Navigation(): JSX.Element {
+/**
+ * When using this component, you are in charge of positioning it with
+ * `className`.
+ */
+export function Navigation({ className }: { className?: string }): JSX.Element {
   const data: GraphType = useStaticQuery(graphql`
     query MyQuery {
       allMdx(
@@ -104,8 +118,11 @@ export function Navigation(): JSX.Element {
 
   const classes = useStyles();
 
+  const navRef = useRef<HTMLElement>(null);
+  useAutoScroll(navRef);
+
   return (
-    <div>
+    <nav ref={navRef} className={clsx(classes.root, className)}>
       <a href="/">
         <ToitLogo className={classes.toitLogo} />
       </a>
@@ -120,7 +137,7 @@ export function Navigation(): JSX.Element {
           Go to <strong>toit.io</strong>
         </span>
       </a>
-    </div>
+    </nav>
   );
 }
 

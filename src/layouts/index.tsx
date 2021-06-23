@@ -36,19 +36,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   nav: {
-    background: "black",
-    color: "white",
-    width: "18.75rem",
     position: "fixed",
+    width: "18.75rem",
     top: "0",
     bottom: "0",
     left: "0",
     zIndex: 1000,
-
-    overflowY: "auto",
-    overflowX: "hidden",
-    margin: 0,
-    padding: "3rem 1.5rem 9rem 3rem",
 
     [theme.breakpoints.down("sm")]: {
       display: "none",
@@ -124,9 +117,7 @@ const Root: React.FC = ({ children }) => {
   return (
     <div className={classes.root}>
       <Header />
-      <nav className={classes.nav}>
-        <Navigation />
-      </nav>
+      <Navigation className={classes.nav} />
       <div className={classes.content}>{children}</div>
     </div>
   );

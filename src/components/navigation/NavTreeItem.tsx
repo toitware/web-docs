@@ -1,13 +1,13 @@
 import { makeStyles } from "@material-ui/core";
-import { useLocation } from "@reach/router";
 import clsx from "clsx";
 import { Link } from "gatsby";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
+import { FiCloud, FiCode, FiGrid, FiHome, FiLayers, FiPlay } from "react-icons/fi";
+import useSanitizedPath from "../../hooks/use_sanitized_path";
 import { golden } from "../../theme";
 import { NavPage } from "./Navigation";
 import NavTree from "./NavTree";
-import { FiHome, FiCloud, FiCode, FiGrid, FiLayers, FiPlay } from "react-icons/fi";
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -43,18 +43,6 @@ const useStyles = makeStyles((theme) => ({
     opacity: 1,
   },
 }));
-
-function useSanitizedPath(): string {
-  const currentPath = useLocation().pathname;
-
-  return React.useMemo(() => {
-    if (currentPath.length > 1 && currentPath.endsWith("/")) {
-      return currentPath.slice(0, -1);
-    } else {
-      return currentPath;
-    }
-  }, [currentPath]);
-}
 
 type ItemProps = {
   page: NavPage;
@@ -94,18 +82,14 @@ function LeafItem({ page }: { page: NavPage }): JSX.Element {
 function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Element {
   const to = `/${page.slug}`;
   const classes = useStyles();
-  const currentPath = useSanitizedPath();
 
+  const currentPath = useSanitizedPath();
   const isActive = currentPath.startsWith(to);
 
   const subPages = page.subPages ?? [];
 
   const [isExpanded, setIsExpanded] = useState(level != 0 || isActive);
 
-  // Using a memo here, because we don't want the hook to fire every time
-  // expanded changes.
-  const isExpandedMemo = useRef(isExpanded);
-  isExpandedMemo.current = isExpanded;
   useEffect(() => {
     // If the page navigated and we have a new active path, make sure that
     // the menu is open.
@@ -113,10 +97,23 @@ function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Eleme
     // because otherwise the menu needs to be open to actually navigate there
     // (or a link has been used, in which case it's open because it gets set
     // at startup).
-    if (!isExpandedMemo.current && isActive) {
+    if (isActive) {
       setIsExpanded(true);
     }
-  }, [isActive, isExpandedMemo, setIsExpanded]);
+  }, [isActive, setIsExpanded]);
+
+  // Because we don't want to wait for the hook above to finish before we draw
+  // the expanded items (since otherwise the useAutoScroll() effect doesn't
+  // work) we check if the previous isActive state was `false`, and if so, we
+  // know that this just changed from inactive to active and it should be
+  // expanded.
+  //
+  // In the next render cycle the above hook will have finished and the
+  // `isExpanded` state will be correct.
+  let showExpanded = isExpanded;
+  const wasActiveRef = useRef<boolean>(false);
+  if (wasActiveRef.current === false && isActive) showExpanded = true;
+  wasActiveRef.current = isActive;
 
   const toggleIsExpanded = () => {
     if (level == 0) {
@@ -141,7 +138,7 @@ function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Eleme
         {page.slug == "getstarted" && <FiPlay className={classes.titleIcon} />}
         {page.title}
       </span>
-      {isExpanded && (
+      {showExpanded && (
         <div className={clsx(classes.subPages, { [classes.subPages1]: level == 1 })}>
           <NavTree pages={subPages} level={level + 1} />
         </div>

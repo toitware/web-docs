@@ -103,9 +103,7 @@ function SearchBar({ className }: Props): JSX.Element {
 
   const hideResults = () => setShowResults(false);
 
-  useEffect(() => {
-    globalHistory.listen(hideResults);
-  }, []);
+  useEffect(() => globalHistory.listen(hideResults), []);
 
   useClickOutside(elRef, hideResults);
 
