@@ -25,20 +25,24 @@ const useStyles = makeStyles((theme) => ({
     top: "0.75rem",
     right: "2rem",
   },
-  navigation: {
+  navigationContainer: {
+    position: "fixed",
     top: 0,
     left: 0,
     width: "100vw",
     height: "100vh",
-    zIndex: 100000,
     display: "none",
-    position: "fixed",
-    background: "black",
-    padding: "3rem 1.5rem",
-    overflowY: "scroll",
+    zIndex: 100000,
   },
-  navigationOpened: {
+  navigationContainerOpened: {
     display: "block",
+  },
+  navigation: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
   },
 }));
 
@@ -52,9 +56,7 @@ export function HamburgerMenu({ className }: Props): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const toggleOpen = () => setIsOpen(!isOpen);
 
-  useEffect(() => {
-    globalHistory.listen(() => setIsOpen(false));
-  }, []);
+  useEffect(() => globalHistory.listen(() => setIsOpen(false)), []);
 
   return (
     <div className={className}>
@@ -64,8 +66,8 @@ export function HamburgerMenu({ className }: Props): JSX.Element {
       </a>
 
       {/* The full screen navigation overlay */}
-      <div className={clsx(classes.navigation, { [classes.navigationOpened]: isOpen })}>
-        <Navigation />
+      <div className={clsx(classes.navigationContainer, { [classes.navigationContainerOpened]: isOpen })}>
+        <Navigation className={classes.navigation} />
 
         {/* Close button */}
         <a className={clsx(classes.icon, classes.close)} onClick={toggleOpen}>

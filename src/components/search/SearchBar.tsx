@@ -21,7 +21,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "6px",
     padding: "0.75rem",
     boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-    width: "30rem",
+    width: "min(30rem, calc(100vw - 7rem))",
+    maxHeight: "80vh",
+    overflowY: "auto",
     "& ul": {
       listStyle: "none",
       padding: "0",
@@ -37,11 +39,12 @@ const useStyles = makeStyles((theme) => ({
     top: "-1rem",
     right: 0,
     width: "15rem",
+    maxWidth: "calc(100vw - 7rem)",
     transition: "all 200ms ease-in-out",
     background: "rgba(255, 255, 255, 0.1)",
   },
   searchFieldFocused: {
-    width: "30rem",
+    width: "min(30rem, calc(100vw - 7rem))",
   },
   searchFieldOutline: {
     border: `1px solid ${theme.palette.text.primary}`,
@@ -100,9 +103,7 @@ function SearchBar({ className }: Props): JSX.Element {
 
   const hideResults = () => setShowResults(false);
 
-  useEffect(() => {
-    globalHistory.listen(hideResults);
-  }, []);
+  useEffect(() => globalHistory.listen(hideResults), []);
 
   useClickOutside(elRef, hideResults);
 

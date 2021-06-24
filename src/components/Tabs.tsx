@@ -32,6 +32,17 @@ const useStyles = makeStyles((theme) => ({
     padding: "1.5rem 2.5rem",
     border: `1px solid ${Color(theme.palette.text.primary).string()}`,
     borderTopLeftRadius: 0,
+    // h1 and h2 shouldn't be used in tabs because they break the table of contents
+    "& h1, & h2": {
+      background: "red",
+      color: "white",
+    },
+    "& h1::after, & h2::after": {
+      content: '" -- Don\'t use h1 or h2 in tabs"',
+    },
+  },
+  contentNoPadding: {
+    padding: 0,
   },
 }));
 
@@ -59,6 +70,7 @@ function Tab({ label, isActive, onClick }: TabProps): JSX.Element {
 }
 
 type TabsProps = {
+  noPadding?: boolean;
   children: ReactElement<DivProps>[];
 };
 
@@ -85,7 +97,7 @@ type DivProps = {
  *     </div>
  *     </Tabs>
  */
-export function Tabs({ children }: TabsProps): JSX.Element {
+export function Tabs({ children, noPadding = false }: TabsProps): JSX.Element {
   const classes = useStyles();
 
   const [activeTab, setActiveTab] = useState(children[0].props.label);
@@ -110,7 +122,7 @@ export function Tabs({ children }: TabsProps): JSX.Element {
         const { label, children } = child.props;
         if (label != activeTab) return undefined;
         return (
-          <div className={classes.content} key={label}>
+          <div className={clsx(classes.content, { [classes.contentNoPadding]: noPadding })} key={label}>
             {children}
           </div>
         );
