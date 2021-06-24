@@ -1,5 +1,5 @@
 ---
-order: 10
+order: 3
 ---
 
 import Qwiic from "../../_images/BME280.png";
@@ -27,13 +27,13 @@ The remaining two wires are I2C SDA (`blue`) and I2C SCL (`yellow`). While any G
 
 A detailed description of adding sensors using the Qwiic cable can be found [here](../gpio/#adding-sensors-with-qwiic-cables).
 
-## Code
+## I2C bus
 
 First we're going to set up the I2C bus so we can connect the device:
 
 ```
 import gpio
-import serial.protocols.i2c as i2c
+import i2c
 
 main:
   bus := i2c.Bus
@@ -49,12 +49,14 @@ With the bus configured, we can specify how to address the BME280 device on the 
 
 The device returned is of type `serial.Device`.
 
+## Driver
+
 With the device configured we can take a look at the driver.
 The driver is available at `drivers.bme280` and as all other [drivers](https://libs.toit.io/drivers/library-summary) available, takes a `serial.Device` as argument - perfect!
 
 <!-- SKIP CODE -->
 ```
-import drivers.bme280
+import drivers.bme280 as drivers
 
 // ...
 
@@ -78,24 +80,18 @@ The driver will take care of all the communication with the BME280 sensor and pr
   bme.off
 ```
 
-That will print out something along the lines of
+## Test it on an ESP32
 
-```txt
-$ toit run -d demo-device bme280.toit
-2021-01-20T09:30:07.678192Z: <process initiated>
-Temperature: 22.350000000000001421 C
-Humidity: 45.2626953125 %
-Pressure: 98641.3359375 Pa
-2021-01-20T09:30:07.858870Z: <process terminated - exit code: 0>
-```
+In the ["Weather Station" tutorial](../../../platform/tutorials/starter/weatherstation), you can learn how to run this Toit 
+program on the ESP32 or deploy it as a long-lived application, where a specification file determines the execution intervals.
 
-## Full example
+The full code can be seen below:
 
 <!-- RESET CODE -->
 ```
 import gpio
-import serial.protocols.i2c as i2c
-import drivers.bme280
+import i2c
+import drivers.bme280 as drivers
 
 main:
   bus := i2c.Bus

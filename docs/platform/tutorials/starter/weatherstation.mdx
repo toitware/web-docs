@@ -8,31 +8,31 @@ import Apps from "../../../_images/appslist.png";
 
 In this tutorial we are using an ESP32 with the Bosch [BME280 sensor](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf); an environmental sensor measuring temperature, the relative humidity, and the atmospheric pressure.
 
-This example illustrates the difference between running a Toit program once on an ESP32 and deploying the same code as an app together with a specification file.
+This example illustrates the difference between running a Toit program once on an ESP32 and deploying the same program as a long-lived app by using an app specification file.
+
+The code examples in this tutorial can also be found in the Toit SDK examples available for download [here](../../../../getstarted/download).
 
 ## Connect the sensor
 
-Follow the steps [here](../../../../peripherals/drivers/bme280/) to connect the BME280 sensor with your ESP32.
+Follow the steps [here](../../../../peripherals/drivers/bme280/) to connect the BME280 sensor with your ESP32 using a Qwiic cable.
 
-## Run on an ESP32
+## Run program on the ESP32
 
-To get data from the sensors, we make use of the [bme280 sensor driver](https://libs.toit.io/drivers/bme280/library-summary) by importing it in the Toit program with `import drivers.bme280`.
+To get data from the sensor, we make use of the [bme280 sensor driver](https://libs.toit.io/drivers/bme280/library-summary) by importing it in the Toit program with `import drivers.bme280`.
 
 We also need to specify the [GPIO pins](../../../../peripherals/drivers/gpio) and the relevant [connection bus](../../../../peripherals/drivers/protocols).
 
 ```
-// Save this program in a file named thp.toit
+// Save this program in a file named weather-station.toit
 import gpio
-import serial.protocols.i2c as i2c
-import drivers.bme280
+import i2c
+import drivers.bme280 as drivers
 
 main:
   bus := i2c.Bus
     --sda=gpio.Pin 21
     --scl=gpio.Pin 22
-
   device := bus.device 0x77
-
   bme := drivers.Bme280 device
 
   bme.on
@@ -42,15 +42,17 @@ main:
   bme.off
 ```
 
-Save the above Toit program in a file named `thp.toit`.
+Save the above Toit program in a file named `weather-station.toit`.
+
+If you want to know more about what is happening in each step in the code snippet, see [here](../../../../peripherals/drivers/bme280#i2cbus).
 
 <Tabs>
 <Tab label="Console">
 
 Copy and paste the program above into the Code tab of an online ESP32 with the
-temperature sensor, press the **Run on device** button and go to the **Logs
-tab** of the device to see the logged temperature, humidity
-and pressure from the ESP32.
+temperature sensor connected, press the **Run on device** button and go to the **Logs
+tab** of the device to see the measured temperature, humidity
+and pressure values.
 
 </Tab>
 <Tab label="CLI">
@@ -58,19 +60,19 @@ and pressure from the ESP32.
 To run the program once on the ESP32, execute the CLI command
 
 ```shell
-toit run thp.toit
+toit run weather-station.toit
 ```
 
 If you haven't set your default device in the CLI, add `-d <device-name>` to
 the run command, where `<device-name>` is the name of your ESP32.
 
 ```shell
-$ toit run thp.toit
-2021-04-14T13:09:04.801533Z: &lt;process initiated&gt;
-Temperature is 23.1 C
-Humidity is 29%
-Atmospheric Pressure is 1006.0 Pa
-2021-04-14T13:09:05.020756Z: &lt;process terminated - exit code: 0&gt;
+$ toit run weather-station.toit
+2021-06-23T13:09:04.801533Z: &lt;process initiated&gt;
+Temperature: 25.769999999999999574 C
+Humidity: 42.111328125 %
+Pressure: 101686.515625 Pa
+2021-06-23T13:09:05.020756Z: &lt;process terminated - exit code: 0&gt;
 ```
 
 </Tab>
@@ -78,33 +80,33 @@ Atmospheric Pressure is 1006.0 Pa
 
 Running a Toit program in this way means that it will be uninstalled from the device once the program has terminated.
 
-## Deploy on an ESP32
+## Deploy app on the ESP32
 
 We can use the same Toit program to repeatedly measure the temperature,
 humidity, and pressure once every hour by deploying it on the ESP32 using the
 following app specification file:
 
 ```yaml
-# filename: thp.yaml
+# filename: weather-station.yaml
 
-# This app specification file executes the 'Hourly THP' app on install
-# and subsequently every hour.
+# This app specification file executes the 'Weather Station' app on install
+# and subsequently every 30 seconds.
 
-name: Hourly THP
-entrypoint: thp.toit
+name: Weather Station
+entrypoint: weather-station.toit
 triggers:
   on_install: true
-  on_interval: 1h
+  on_interval: 30s
 ```
 
-Save the content of the above yaml specification into a file named `thp.yaml`
-located in the same directory as the `thp.toit` file from the previous
+Save the content of the above yaml specification into a file named `weather-station.yaml`
+located in the same directory as the `weather-stattion.toit` file from the previous
 step.
 
-Deploy the "Hourly THP" app on your ESP32 with the CLI command
+Deploy the `Weather Station` app on your ESP32 with the CLI command
 
 ```shell
-toit deploy thp.yaml
+toit deploy weather-station.yaml
 ```
 
 If you haven't set your default device in the CLI, add `-d <device-name>` to
@@ -153,7 +155,7 @@ toit device uninstall <app-ID or app-name>
 For example,
 
 ```shell
-toit device uninstall "Hourly THP"
+toit device uninstall "Weather Station"
 ```
 
 </Tab>
