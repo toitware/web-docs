@@ -2,8 +2,6 @@
 order: 1
 ---
 
-import Apps from "../../../_images/appslist.png";
-
 # Weather station
 
 In this tutorial we are using an ESP32 with the Bosch [BME280 sensor](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf); an environmental sensor measuring temperature, the relative humidity, and the atmospheric pressure.
@@ -18,7 +16,7 @@ Follow the steps [here](../../../../peripherals/drivers/bme280/) to connect the 
 
 ## Run program on the ESP32
 
-To get data from the sensor, we make use of the [bme280 sensor driver](https://libs.toit.io/drivers/bme280/library-summary) by importing it in the Toit program with `import drivers.bme280`.
+To get data from the sensor, we make use of the [bme280 sensor driver](https://libs.toit.io/drivers/bme280/library-summary) by importing it in the Toit program with `import drivers.bme280 as drivers`.
 
 We also need to specify the [GPIO pins](../../../../peripherals/drivers/gpio) and the relevant [connection bus](../../../../peripherals/drivers/protocols).
 
@@ -32,7 +30,9 @@ main:
   bus := i2c.Bus
     --sda=gpio.Pin 21
     --scl=gpio.Pin 22
+
   device := bus.device 0x77
+
   bme := drivers.Bme280 device
 
   bme.on
@@ -44,13 +44,13 @@ main:
 
 Save the above Toit program in a file named `weather-station.toit`.
 
-If you want to know more about what is happening in each step in the code snippet, see [here](../../../../peripherals/drivers/bme280#i2cbus).
+If you want to know more about what is happening in each step in the Toit program above, see [here](../../../../peripherals/drivers/bme280#i2cbus).
 
 <Tabs>
 <Tab label="Console">
 
-Copy and paste the program above into the Code tab of an online ESP32 with the
-temperature sensor connected, press the **Run on device** button and go to the **Logs
+Open the [Toit console](https://console.toit.io), find your ESP32 in the list of devices, copy&paste the program above into the Code tab your online ESP32 with the
+BME280 sensor connected, press the **Run on device** button and go to the **Logs
 tab** of the device to see the measured temperature, humidity
 and pressure values.
 
@@ -68,11 +68,11 @@ the run command, where `<device-name>` is the name of your ESP32.
 
 ```shell
 $ toit run weather-station.toit
-2021-06-23T13:09:04.801533Z: &lt;process initiated&gt;
+2021-06-23T12:54:58.131899Z: <process initiated>
 Temperature: 25.769999999999999574 C
 Humidity: 42.111328125 %
 Pressure: 101686.515625 Pa
-2021-06-23T13:09:05.020756Z: &lt;process terminated - exit code: 0&gt;
+2021-06-23T12:54:58.431812Z: <process terminated - exit code: 0>
 ```
 
 </Tab>
@@ -83,7 +83,7 @@ Running a Toit program in this way means that it will be uninstalled from the de
 ## Deploy app on the ESP32
 
 We can use the same Toit program to repeatedly measure the temperature,
-humidity, and pressure once every hour by deploying it on the ESP32 using the
+humidity, and pressure every 30 seconds by deploying it on the ESP32 using the
 following app specification file:
 
 ```yaml
@@ -99,7 +99,10 @@ triggers:
   on_interval: 30s
 ```
 
-Save the content of the above yaml specification into a file named `weather-station.yaml`
+Save the content of the above yaml specification into a file named 
+
+`weather-station.yaml`
+
 located in the same directory as the `weather-stattion.toit` file from the previous
 step.
 
@@ -112,21 +115,19 @@ toit deploy weather-station.yaml
 If you haven't set your default device in the CLI, add `-d <device-name>` to
 the deploy command, where `<device-name>` is the name of your ESP32.
 
-The device log will show the three measurements every hour after the program
+The device log will show the three measurements every 30 seconds after the program
 has been installed on the device.
 
 <Note>
 
-The device is not required to be online when the app is deployed.
+The device is not required to be online when the 'Weather Station' app is deployed.
 When the device comes online, the app will be installed on the device and start
 it's scheduled execution.
 
 </Note>
 
 View all installed apps (or waiting to be installed) on your device from the
-Apps tab
-
-<img src={Apps} alt="The Toit console Apps tab" />
+Apps tab.
 
 ## Uninstall an app
 
