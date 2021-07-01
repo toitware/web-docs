@@ -2,7 +2,7 @@ import { makeStyles, ThemeProvider } from "@material-ui/core";
 import CookieConsent from "@toitware/cookie-consent";
 import Color from "color";
 import * as React from "react";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Navigation from "../components/navigation/Navigation";
 import useDarkMode from "../hooks/use_dark_mode";
@@ -102,6 +102,9 @@ export function Layout(props: LayoutProps): JSX.Element {
       segmentAPIKey = segmentKeyDOM.getAttribute("content") || segmentAPIKey;
     }
   }
+  useEffect(() => {
+    setupCrispChat();
+  }, []);
 
   const setupCrispChat = () => {
     window.$crisp = [];
@@ -114,14 +117,7 @@ export function Layout(props: LayoutProps): JSX.Element {
 
   return (
     <ThemeProvider theme={dark ? darkTheme : lightTheme}>
-      <CookieConsent
-        show={true}
-        segmentKey={segmentAPIKey || "no-key"}
-        changeConsent={false}
-        onAnalyticsReady={() => {
-          setupCrispChat();
-        }}
-      />
+      <CookieConsent show={true} segmentKey={segmentAPIKey || "no-key"} changeConsent={false} />
       <Helmet title={title}></Helmet>
       <Root>{children}</Root>
     </ThemeProvider>
