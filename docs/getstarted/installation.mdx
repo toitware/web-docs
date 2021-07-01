@@ -2,23 +2,13 @@
 order: 3
 ---
 
-import ZshrcBashProfile from "../_images/zshrcbashprofile.png";
 import MacWarning from "../_images/macwarning1.png";
 import DownloadsFolder from "../_images/downloadsfolder.png";
 import Extract from "../_images/extract.png";
 
 # Installation
 
-## Prerequisite
-
-Before you can start writing Toit apps and deploy them on your hardware, you need to install the Toit command-line interface (CLI) locally on your computer.
-
-The Toit CLI is used for interacting with the Toit console and your hardware.
-
-## Optional
-
-Toit comes with a language server, which works with most modern editors. However, we recommend to use
-the Toit Language Extension for Visual Studio Code as it is the most tested, and has more features. You can download Visual Studio Code [here](https://code.visualstudio.com/Download).
+The Toit CLI is used for interacting with the Toit console and your devices.
 
 ## Install the Toit CLI
 
@@ -49,41 +39,21 @@ Mac users may need administrator rights to run `toit` at the end of the installa
 Download the
 [Toit executable for macOS](https://archive.toit.io/cli/latest/darwin).
 
-Unpack the `toit_darwin.tgz` file and save the executable file named `toit` to a new folder (for example the `Applications` folder).
+Unpack the `toit_darwin.tgz` file and save the executable file named `toit` into a folder - for example the `Applications` folder.
 
 ### Add Toit to your PATH
 
-To make sure you can **run the Toit CLI in a terminal window from any directory**, add the toit executable to your PATH environment variable
+To make sure you can run the Toit CLI in a terminal window from any directory, add the Toit executable to your PATH environment variable
 by editing the shell configuration script.
 
-Depending on which shell you are using: open a `.zshrc` file or a `.bash_profile` file with
+Depending on which shell you are using: edit either the `.zshrc` file or the `.bashrc` file.
+
+For example, if you use `bash` and if you chose to put the `toit` executable into the `Applications` folder,
+execute the following command in a terminal window:
 
 ```shell
-open ~/.zshrc
+echo 'export PATH=/Applications:$PATH' >> ~/.bashrc;
 ```
-
-or
-
-```shell
-open ~/.bash_profile
-```
-
-Type in the shell configuration script
-
-```shell
-export PATH=/Applications/mytoitfolder:$PATH
-```
-
-where `Applications/mytoitfolder` is an example of where the `toit` executable is located. Save the file before closing it.
-
-<img src={ZshrcBashProfile} alt="Toit screenshot" />
-
-### Configure VSCode
-
-You also need to configure VSCode PATH on macOS. If you have not done so yet,
-download [Visual Studio Code](https://code.visualstudio.com/download) and
-launch VS Code. In the View menu, choose to open the **Command Palette**. Type
-'shell command' to find the **Shell Command: Install 'code' command in PATH**.
 
 ### Check
 
@@ -105,13 +75,11 @@ Mac users may get the following warning when starting `toit` the first time. Cli
 Download the
 [Toit executable for Linux](https://archive.toit.io/cli/latest/linux).
 
-When the download of the Toit CLI has completed, open the `Downloads` folder on your computer and copy the downloaded file to your preferred installation directory.
+Move the downloaded file to your preferred installation directory.
 
 <img src={DownloadsFolder} alt="Linux screenshot" />
 
-Next, uncompress the downloaded Toit CLI, which is packed as a `tgz` file.
-
-Open a terminal window and navigate to the directory where you copied the downloaded file to.
+Next, uncompress the downloaded Toit CLI, which is packed as a `tgz` file. Open a terminal window and navigate to the directory where you moved the downloaded file to.
 
 To unpack, run
 
@@ -125,16 +93,20 @@ The result of unpacking the Toit CLI is an executable file, named `toit`, and th
 
 ### Add Toit to your PATH
 
-Add the folder where the `toit` executable is located to your PATH environment variable so you can run the Toit CLI tool from any directory in a terminal.
-For example, add the following line to a shell script that runs before you open a terminal, such as `.bash_profile` or `rczsh` located in your home directory:
+Add the folder where the `toit` executable is located to your PATH environment variable so you can run the Toit CLI from any directory in a terminal window.
+
+Depending on which shell you are using: edit either the `.rczsh` file or the `.bashrc` file, located in your home directory.
+
+For example, if you use `bash` and if you chose to put the `toit` executable into the `$HOME/local/bin` folder,
+execute the following command in a terminal window:
 
 ```shell
-export PATH=$HOME/local/bin:$PATH
+echo 'export PATH=$HOME/local/bin:$PATH' >> ~/.bashrc;
 ```
 
 ### Check
 
-A logout/login is required for this to take effect. Reopen a terminal and type `toit` to verify that the changes have taken effect.
+Reopen a terminal window and type `toit` to verify that the changes have taken effect.
 
 </Tab>
 </Tabs>
@@ -147,15 +119,13 @@ toit
 
 in a terminal window is a list of all available commands in the Toit CLI.
 
-## Install the Toit SDK and the Toit language extension
+## Install the Toit SDK
 
 Next, install the **latest released Toit SDK** on your computer by running the CLI command:
 
 ```shell
 toit doctor fix
 ```
-
-If you have installed Visual Studio Code, the same command also installs the **Toit language extension for VSCode**.
 
 The command
 
@@ -168,12 +138,5 @@ reports the health status of your local Toit installation. Its output should loo
 ```txt
 Toit health:
   [OK] Toit SDK
-  [OK] Visual Studio Code
   [OK] Toit CLI
 ```
-
-<Note title="Toit Language Extension">
-
-The Toit Language Extension is currently only supported for Visual Studio Code.
-
-</Note>
