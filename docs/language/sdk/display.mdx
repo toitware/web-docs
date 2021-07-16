@@ -1,31 +1,67 @@
 ---
 order: 3
-hide: true
 ---
 
 # Display
 
-The Toit SDK [pixel_display module](https://libs.toit.io/pixel_display/library-summary) includes support for writing text and printing icons on displays.
+The Toit SDK includes support for writing text and printing icons on displays.
 We highlight in this section the basic functions of display use. You can also learn more about the different fonts available in the SDK by reading [Toit font basics](../fonts).
+
+These examples assume you have installed the [pixel_display](https://github.com/toitware/toit-pixel-display) package into
+your project.  See the [Packages quick start guide](../../package/pkgguide)
+for information on getting started with packages.
+
+You will also need at least one display driver, for example the [SSD1306 driver](https://github.com/toitware/toit-ssd1306)
+which is also available as a package, called `ssd1306`.
+
+## Getting the display driver and PixelDisplay object
+
+Both the `pixel_display` and `ssd1306` packages have some helpful examples which you can see by cloning the
+github repos linked above.  We will assume that you have a `get_display.toit` file in your project, which
+might look something like the following.  Details will depend on your hardware configuration, in particular which
+pins and bus you are using to connect your display.
+
+Example contents of `get_display.toit`
+
+```
+import gpio
+import i2c
+import ssd1306 show *
+import pixel_display show *
+
+get_display -> TwoColorPixelDisplay:
+  scl := gpio.Pin 4
+  sda := gpio.Pin 5
+  bus := i2c.Bus
+    --sda=sda
+    --scl=scl
+    --frequency=800_000
+
+  devices := bus.scan
+  if not devices.contains SSD1306_ID: throw "No SSD1306 display found"
+
+  driver := SSD1306 (bus.device 0x3c)
+
+  return TwoColorPixelDisplay driver
+```
 
 ## Write with built-in sans font
 
 ```
 import font show *
-import texture show *
-import two_color show BLACK
+import pixel_display.texture show *
+import pixel_display.two_color show BLACK
 import pixel_display show *
 
+import .get_display  // Import file in current project, see above.
+
 sans ::= Font.get "sans10"
-display ::= TwoColorPixelDisplay "eink"
+display ::= get_display
 
 main:
   context := display.context --landscape --color=BLACK --font=sans
   display.text context 60 50 "Hello from Toit!"
-  // While display.draw is enough to render on the E-ink display,
-  // we recommend repeating at least twice to increase contrast and remove
-  // shadows from previous content on the display.
-  2.repeat: display.draw --speed=10
+  display.draw
 ```
 
 ## Import additional font
@@ -36,14 +72,16 @@ Import specific fonts from `font.x11_100dpi` with:
 import font show *
 import font.x11_100dpi.sans.sans_10_bold as sans_10_bold
 import font.x11_100dpi.sans.sans_24_bold as sans_24_bold
-import texture show*
-import two_color show WHITE BLACK
+import pixel_display.texture show*
+import pixel_display.two_color show WHITE BLACK
 import pixel_display show TwoColorPixelDisplay
+
+import .get_display  // Import file in current project, see above.
 
 main:
   sans_10_bold ::= Font [sans_10_bold.ASCII, sans_10_bold.LATIN_1_SUPPLEMENT]
   sans_24_font ::= Font [sans_24_bold.ASCII, sans_24_bold.LATIN_1_SUPPLEMENT]
-  display ::= TwoColorPixelDisplay "eink"
+  display ::= get_display
 
   sans_10 := display.context
     --landscape
@@ -58,9 +96,9 @@ main:
     --alignment = TEXT_TEXTURE_ALIGN_CENTER
 
   context := display.context --landscape --color=BLACK
-  display.text sans_10 140 40 "Hello from"
-  display.text sans_24 118 85 "TOITWARE"
-  2.repeat: display.draw --speed=10
+  display.text sans_10 40 30 "Hello from"
+  display.text sans_24 18 65 "TOITWARE"
+  display.draw
 ```
 
 Learn more about all available fonts [here](../fonts).
@@ -74,23 +112,11 @@ import pixel_display show TwoColorPixelDisplay
 // Use "toit pkg install pictogrammers_icons" to get this package.
 import pictogrammers_icons.size_96 as icons
 
+import .get_display  // Import file in current project, see above.
+
 main:
-  display := TwoColorPixelDisplay "eink"
+  display := get_display
   context := display.context --landscape
   icon := display.icon context 63 85 icons.HUMAN_SCOOTER
-  2.repeat: display.draw --speed=10
-```
-
-## Clear the display
-
-A simple `display.draw` is needed to clear a display, but to avoid any remaining
-shadow from previous content, repeat 3 times as in:
-
-```
-import pixel_display show *
-
-display := TwoColorPixelDisplay "eink"
-
-main:
-  3.repeat: display.draw --speed=10
+  display.draw
 ```
