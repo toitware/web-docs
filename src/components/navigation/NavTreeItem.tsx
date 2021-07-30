@@ -133,7 +133,7 @@ function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Eleme
       >
         {page.slug == "apis" && <FiCloud className={classes.titleIcon} />}
         {page.slug == "language" && <FiCode className={classes.titleIcon} />}
-        {page.slug == "peripherals" && <FiGrid className={classes.titleIcon} />}
+        {page.slug == "hardware" && <FiGrid className={classes.titleIcon} />}
         {page.slug == "platform" && <FiLayers className={classes.titleIcon} />}
         {page.slug == "getstarted" && <FiPlay className={classes.titleIcon} />}
         {page.title}

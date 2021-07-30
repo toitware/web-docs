@@ -1,0 +1,22 @@
+---
+order: 2
+title: peripherals
+---
+
+# Overview
+
+The ESP32 supports a wide range of protocols, many of them supported directly by Toit.
+
+## Selecting the right protocol
+
+Many chips support both SPI and I2C. While Toit makes it easy to develop drivers that are usable by both, there are some clear advantages and disadvantages between the two.
+
+**I2C**
+
+- Supports longer distances
+- Only requires two wires
+
+**SPI**
+
+- Is significantly faster
+- Frequency configurable per device, not the bus
