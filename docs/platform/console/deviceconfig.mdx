@@ -26,7 +26,7 @@ To change the device configurations, navigate to the Configuration tab for the g
 To change the device configurations, use the Toit CLI:
 
 ```shell
-toit device config <command>
+toit device config
 ```
 
 See the list of available commands with
@@ -38,8 +38,10 @@ toit device config -h
 You can set your current device as the default device in all `toit device` commands with
 
 ```shell
-toit device use <name>
+toit device use device-name
 ```
+
+by replacing `device-name` with the name of your current device.
 
 </Tab>
 </Tabs>
@@ -90,8 +92,10 @@ In the Configuration tab for a given device, go to the 'Max offline' section and
 Set the duration of how often you want your device to come online with
 
 ```shell
-toit device config max-offline <duration>
+toit device config max-offline duration
 ```
+
+where `duration` is replaced by the preferred duration, such as `10s`, `30m`, `1h` or similar.
 
 For example, set 'Max offline' to 24 hours, which means that the device will wake up once a day:
 
@@ -130,13 +134,13 @@ When two or more connections are present, choose the order in which they should 
 Beware that when using the CLI to configure the connection settings, you need to type in all connections you want to use, in the order you want them to be used.
 
 ```shell
-toit device config connection -c wifi:<SSID>:<MyWiFiPassword> -c cellular:<apn>
+toit device config connection -c wifi:<SSID>:<WiFiPassword> -c cellular:<apn>
 ```
 
 Use
 
 ```txt
--c wifi:<SSID>:<MyWiFiPassword>
+-c wifi:<SSID>:<WiFiPassword>
 ```
 
 for setting a new WiFi connection, and use
