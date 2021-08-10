@@ -43,7 +43,7 @@ Use the CLI commands to acknowledge messages for a subscription.
 
 Create an external pubsub subscription with
 
-```txt
+```shell
 toit pubsub subscription create topic-filter subscription-name
 ```
 
@@ -57,7 +57,7 @@ toit pubsub subscription list cloud:
 
 To read a subscription and acknowledge messages as they are read, use
 
-```txt
+```shell
 toit data read cloud:topic-name subscription-name
 ```
 
@@ -70,7 +70,7 @@ To automatically acknowledge messages, add the `--auto-ack` flag.
 
 PubSub messages can be sent from the cloud to one specific device only by providing the `device-id` in the command:
 
-```txt
+```shell
 toit pubsub write cloud:<topic-name>?device-id=<id> <name> -- <write a message>
 ```
 
@@ -78,6 +78,6 @@ It is also possible to create server-side PubSub subscriptions across multiple t
 
 For example, create a subscription for the topics `cloud:foo/bar` and `cloud:foo/baz` with
 
-```txt
+```shell
 toit pubsub subscription create "cloud:foo/*" subscription-name
 ```

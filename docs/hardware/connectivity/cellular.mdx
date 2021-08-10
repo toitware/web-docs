@@ -10,12 +10,13 @@ import CellularUartNoFlowControl from "../../_images/cellular_uart_no_flow_contr
 # Cellular
 
 The Toit firmware comes with built-in support for Cellular LTE-M/NB-IoT modems. They offer connectivity speeds from 26 kbit/s up to 4 Mbit/s, depending on modem and network of choice.
-LTE-M/NB-IoT also offers great coverage and penetration, making it overall ideal for many IoT solutions.
+LTE-M/NB-IoT also offers great coverage and penetration, thus making it ideal for many IoT solutions.
 
 Due to the way connectivity is designed in Toit, setting up Cellular requires two simple steps: configuring the hardware and configuring the connectivity options.
 
   * **Configuring the hardware** is done by installing the Toit firmware with some model arguments.
-  * **Configuring the connection** can be done either when installing the Toit firmware or later in the Web Console.
+
+  * **Configuring the connection** can be done either when installing the Toit firmware or later in the Toit Console.
 
 ## Modems and Drivers
 
@@ -28,7 +29,7 @@ Currently supported modems are listed here.
 | Quectel BG96  | v1.2.0 | `-p model.cellular.bg96=1` |
 | Sequans Monarch  | v1.2.0 | `-p model.cellular.monarch=1` |
 
-The command shown must be used as part of the reinstall command, as example for the Ublox Sara R4 modem here:
+The following Toit CLI command shows the cellular connection configuration parameters in the serial reinstall command. In this example, the Ublox Sara R4 modem is used:
 
 ```shell
 toit serial reinstall \
@@ -61,30 +62,30 @@ Some Cellular modules use alternative names for the `PWR` pin, e.g. `WAKE` and `
 
 ## UART
 
-Cellular modems are connected using UART. UART is a bi-directional stream with optional flow control. The base pins are called TX and RX, for Transmitting and Receiving.
-Both the MCU and the Cellular modem have such pins, and must be connected TX to RX and RX to TX, such that data *transmitted* from the one, will be *received* by the other.
+Cellular modems are connected using UART. UART is a bi-directional stream with optional flow control. The base pins are called TX and RX, for Transmitting and Receiving, respectively.
+Both the MCU and the Cellular modem have such pins, and must be connected as TX to RX and RX to TX, such that data *transmitted* from one will be *received* by the other.
 
 <img src={CellularUart} alt="Cellular UART TX/RX" />
 
 <Note type="info">
 
-Some Cellular modules show TX & RX as they should be connected directly by the MCU. If connection doesn't work, **try swapping RX and TX**.
+Some Cellular modules show TX and RX as they should be connected directly by the MCU. If connection doesn't work, **try swapping RX and TX**.
 
 </Note>
 
 ### Flow Control
 
 UART also offers flow control, that will help MCU Cellular modems to halt communication when the receiver is busy. They are called RTS and CTS,
-and unlink TX and RX, they are *not* cross connected. They work by pulling down RTS when Cellular Modem can write and likewise pulling down CTS when the MCU can write.
+and unlike TX and RX, they are *not* cross connected. They work by pulling down RTS when Cellular Modem can write, and likewise pulling down CTS when the MCU can write.
 
 #### UART with Flow Control
 
-This example shows how do a full setup for, including flow control, `PWR` and `RESET` lines.
+This example shows how do a full setup for `PWR` and `RESET` lines (including flow control).
 
 <img src={CellularUartFlowControl} alt="Cellular UART setup with RTS/CTS Flow Control" />
 
 
-To configure the firmware as shown here, use the following arguments:
+To configure the Toit firmware (to be installed on your hardware) as shown here, use the following parameters:
 
 ```shell
 toit serial reinstall \
@@ -106,14 +107,14 @@ The selected pins are purely for demonstration, select the GPIO pins that fits y
 
 #### UART without Flow Control
 
-Most Cellular modems and MCUs can handle throughput of the UART, and Flow Control can be skipped for some designs. To disable flow-control,
+Most Cellular modems and MCUs can handle throughput of the UART, and Flow Control can be skipped for some designs. To disable Flow Control,
 pull RTS low on the Cellular modem and leave CTS unconnected.
 
 This example shows how do a setup without Flow Control, with `PWR` and `RESET` lines.
 
 <img src={CellularUartNoFlowControl} alt="Cellular UART setup without Flow Control" />
 
-For the code, simple omit RTS and CTS:
+For the command, simple omit RTS and CTS:
 
 ```shell
 toit serial reinstall \
@@ -133,7 +134,7 @@ While Cellular only requires one setting, the APN, there are a few more for use 
 | --- | --- | --- |
 | APN | `-p cellular.apn=onomondo` | The virtual network name that modem should connect to. This is provided by the Sim Card issuer, and is e.g. `onomondo` for Onomondo and `soracom.io` for Soracom. |
 | Bands | `-p cellular.bands=2,5,20` | List of bands to search for. These are dependent on the region, e.g. EU, NA and Asia |
-| Operator | `-p cellular.operator=23801` | By default, the modem will search and connect to the best suited operator. However, this can be overridden and pined to a single one, by using this command. |
+| Operator | `-p cellular.operator=23801` | By default, the modem will search and connect to the best suited operator. However, this can be overridden and pinned to a single one, by using this command. |
 
 
 ## Examples
@@ -151,7 +152,7 @@ As the GPy is fully embedded, the pin-configuration is already pre-determined.
 | CTS | 18 |
 | WAKE | 27 |
 
-The GPy can thus easily be enabled to run with a cellular stack. The following commands shows how to install Toit configured to use the cellular stack with an Onomondo Sim Card.
+The GPy can thus easily be enabled to run with a cellular stack. The following command shows how to install the Toit firmware configured to use the cellular stack with an Onomondo Sim Card.
 
 
 ```shell
