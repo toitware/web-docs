@@ -12,7 +12,7 @@ This guide will walk you through the steps of identifying how the sensor communi
 
 The Joystick features an `ATtiny85` microcontroller with a custom firmware. As described in the [Hookup Guide](https://learn.sparkfun.com/tutorials/qwiic-joystick-hookup-guide), the firmware exposes several registers. With that in mind, we're going to do the following steps:
 
-1. Connect the Joystick to an I2C bus, configuring the I2C device.
+1. Connect the Joystick to an I<sup>2</sup>C bus, configuring the I<sup>2</sup>C device.
 
 2. Use the `Registers` abstraction to communicate with the chip.
 
@@ -22,7 +22,7 @@ The Joystick features an `ATtiny85` microcontroller with a custom firmware. As d
 
 ## I2C setup
 
-We use a simple I2C setup, currently using pin `21` for `SDA` (blue) and pin `22` for `SCL` (yellow).
+We use a simple I<sup>2</sup>C setup, currently using pin `21` for `SDA` (blue) and pin `22` for `SCL` (yellow).
 
 ```
 import gpio
@@ -36,7 +36,7 @@ main:
 
 ## Driver skeleton
 
-As all I2C/SPI drivers that work using registers, the driver starts with the following skeleton.
+As all I<sup>2</sup>C/SPI drivers that work using registers, the driver starts with the following skeleton.
 
 ```
 import serial
@@ -54,7 +54,7 @@ class SparkFunJoystick:
   off:
 ```
 
-The hookup guide has a table of I2C registers available in the custom firmware. At address `0x00` is the slave address assigned to the device (hard-coded to `0x20`). 
+The hookup guide has a table of I<sup>2</sup>C registers available in the custom firmware. At address `0x00` is the slave address assigned to the device (hard-coded to `0x20`).
 
 ## Validate connectivity
 
@@ -93,11 +93,11 @@ main:
   print "SparkFunJoystick"
 ```
 
-Running the code should print out the string `SparkFunJoystick` to the terminal. If not, the I2C bus is not configured to match the wiring.
+Running the code should print out the string `SparkFunJoystick` to the terminal. If not, the I<sup>2</sup>C bus is not configured to match the wiring.
 
 <Note>
 
-If the Joystick is connected without the full breakout board from SparkFun, I2C pull-up resistors may be needed.
+If the Joystick is connected without the full breakout board from SparkFun, I<sup>2</sup>C pull-up resistors may be needed.
 
 </Note>
 
@@ -202,7 +202,7 @@ This code will run until aborted (Ctrl-C).
 
 <Note>
 
-As the joystick is moved around, it's possible to get an I2C error if the I2C bus is accidentally short-circuited by the fingers.
+As the joystick is moved around, it's possible to get an I<sup>2</sup>C error if the I<sup>2</sup>C bus is accidentally short-circuited by the fingers.
 
 </Note>
 

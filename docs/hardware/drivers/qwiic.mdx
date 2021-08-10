@@ -1,0 +1,22 @@
+---
+order: 4
+---
+
+# Qwiic
+
+## Adding sensors with Qwiic cables
+
+Sensors and minimal capacitors are available as break out boards.
+They can be connected to an ESP32 using soldering on pin or using a cable system such as the Qwiic system.
+
+All Qwiic cables have the following color scheme and arrangement:
+
+- Black = GND - to be connected to the GND ground pin of the ESP32
+
+- Red = 3.3V - to be connected to the 3.3V power pin of the ESP32
+
+- Blue = SDA - data channel to be connected to any numbered pin of the ESP32
+
+- Yellow = SCL - clock line to be connected to any numbered pin of the ESP32. It is used to synchronize all data transfers over the I<sup>2</sup>C bus.
+
+When more than one sensor / actuator is needed, you can use a breadboard to allow for multiple connections. It is also sometimes possible to connect several sensors one after the other with Qwiic cables.
