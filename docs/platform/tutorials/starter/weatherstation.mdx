@@ -12,13 +12,13 @@ The code examples in this tutorial can also be found in the Toit SDK examples av
 
 ## Connect the sensor
 
-Follow the steps [here](../../../../peripherals/drivers/bme280/) to connect the BME280 sensor with your ESP32 using a Qwiic cable.
+Follow the steps [here](../../../../hardware/drivers/bme280) to connect the BME280 sensor with your ESP32 using a Qwiic cable.
 
 ## Run program on the ESP32
 
 To get data from the sensor, we make use of the [bme280 sensor driver](https://libs.toit.io/drivers/bme280/library-summary) by importing it in the Toit program with `import drivers.bme280 as drivers`.
 
-We also need to specify the [GPIO pins](../../../../peripherals/drivers/gpio) and the relevant [connection bus](../../../../peripherals/drivers/protocols).
+We also need to specify the [GPIO pins](../../../../hardware/peripherals/gpio) and the relevant [connection bus](../../../../hardware/peripherals).
 
 ```
 // Save this program in a file named weather-station.toit
@@ -44,7 +44,7 @@ main:
 
 Save the above Toit program in a file named `weather-station.toit`.
 
-If you want to know more about what is happening in each step in the Toit program above, see [here](../../../../peripherals/drivers/bme280#i2cbus).
+If you want to know more about what is happening in each step in the Toit program above, see [here](../../../../hardware/drivers/bme280#i2cbus).
 
 <Tabs>
 <Tab label="Console">

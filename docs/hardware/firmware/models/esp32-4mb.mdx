@@ -4,19 +4,19 @@ order: 1
 
 # `esp32-4mb`
 
-This model supports ESP32s with at least 4MB of flash.
+This model supports ESP32 microcontrollers with at least 4MB of flash.
 
 ## Supported models
 
-Today ESP32s come in multiple flavors. This model supports the *classical* ESP32 chips running a dual-core on the Xtensa LX6 architecture:
+Today ESP32s come in multiple flavors. This model supports the _classical_ ESP32 chips running a dual-core on the Xtensa LX6 architecture:
 
-* ESP32-D0WDQ6
-* ESP32-D0WD-V*
+- ESP32-D0WDQ6
+- ESP32-D0WD-V\*
 
 They are embedded in the following official modules:
 
-* ESP32-WROOM-32*
-* ESP32-WROVER-*
+- ESP32-WROOM-32\*
+- ESP32-WROVER-\*
 
 And most likely any other module with the above mentioned chips, with a minimum of 4 MB flash.
 
@@ -24,10 +24,10 @@ And most likely any other module with the above mentioned chips, with a minimum 
 
 This also means that it doesn't support the following:
 
-* ESP32-S2 *(Single-core / Xtensa LX7)*
-* ESP32-C3 *(Single-core / RISC-V)*
-* ESP32-S3 *(Xtensa LX7)*
-* ESP32-C6 *(Single-core / RISC-V)*
+- ESP32-S2 _(Single-core / Xtensa LX7)_
+- ESP32-C3 _(Single-core / RISC-V)_
+- ESP32-S3 _(Xtensa LX7)_
+- ESP32-C6 _(Single-core / RISC-V)_
 
 ## Model parameters
 
@@ -37,26 +37,25 @@ The `esp32-4mb` model supports a number of model-specific parameters, to control
 
 In case the core peripherals are behind a secondary power circuit, the `pwr` option can be used to turn it on.
 
-Name | Description
---- | ---
-model.pwr | Pin number for the pwr line. Lazily driven active for the duration a core peripheral is needed.
-model.pwr.mode | The mode of the `pwr` pin.
-
+| Name           | Description                                                                                     |
+| -------------- | ----------------------------------------------------------------------------------------------- |
+| model.pwr      | Pin number for the pwr line. Lazily driven active for the duration a core peripheral is needed. |
+| model.pwr.mode | The mode of the `pwr` pin.                                                                      |
 
 ## Cellular
 
 Cellular can be enabled using the follow model parameters. When enabled, the Cellular subsystem will use the device's Cellular connectivity settings that can be configured in the Toit Console at runtime.
 
-Name | Description | Notes
---- | --- | ---
-model.cellular.enabled | If set to `1`, loads the Cellular subsystem. | **Required**
-model.cellular.sara_r4 | If set to `1`, activates the u-blox Sara R4 chip in the Cellular system.
-model.cellular.sara_r5 | If set to `1`, activates the u-blox Sara R5 chip in the Cellular system.
-model.cellular.pwr | Pin number for the power-on line. This pin is periodically driven active to request the Cellular module to turn on. | **Required**
-model.cellular.pwr.mode | The mode of the `pwr` pin.
-model.cellular.reset | Pin number for the power-on line. This pin is occasionally driven active if the Cellular module fails to turn on.
-model.cellular.reset.mode | The mode of the `reset` pin.
-model.cellular.tx | Pin number for the UART TX line. | **Required**
-model.cellular.rx | Pin number for the UART RX line. | **Required**
-model.cellular.rts | Pin number for the UART RTS line.
-model.cellular.cts | Pin number for the UART CTS line.
+| Name                      | Description                                                                                                         | Notes        |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------ |
+| model.cellular.enabled    | If set to `1`, loads the Cellular subsystem.                                                                        | **Required** |
+| model.cellular.sara_r4    | If set to `1`, activates the u-blox Sara R4 chip in the Cellular system.                                            |
+| model.cellular.sara_r5    | If set to `1`, activates the u-blox Sara R5 chip in the Cellular system.                                            |
+| model.cellular.pwr        | Pin number for the power-on line. This pin is periodically driven active to request the Cellular module to turn on. | **Required** |
+| model.cellular.pwr.mode   | The mode of the `pwr` pin.                                                                                          |
+| model.cellular.reset      | Pin number for the power-on line. This pin is occasionally driven active if the Cellular module fails to turn on.   |
+| model.cellular.reset.mode | The mode of the `reset` pin.                                                                                        |
+| model.cellular.tx         | Pin number for the UART TX line.                                                                                    | **Required** |
+| model.cellular.rx         | Pin number for the UART RX line.                                                                                    | **Required** |
+| model.cellular.rts        | Pin number for the UART RTS line.                                                                                   |
+| model.cellular.cts        | Pin number for the UART CTS line.                                                                                   |

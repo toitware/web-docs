@@ -2,11 +2,13 @@
 order: 1
 ---
 
+import LedZeroOne from "../../_images/led_01.png";
+
 # GPIO
 
-General Purpose Input/Output (GPIO) pins are the foundation of working with any peripherals.
+General-Purpose Input/Output (GPIO) pins are the foundation of working with any peripherals.
 
-In Toit, the GPIO Pin class is exposed by the [`gpio` module](https://libs.toit.io/gpio/library-summary).
+In Toit, the GPIO Pin class is exposed by the `gpio` [module](https://libs.toit.io/gpio/library-summary).
 
 GPIO pins are managed across the device. That means that only one instance of a given GPIO pin can
 exist at any given point in time. This ensures that two applications can't configure or use a
@@ -29,22 +31,24 @@ When an application terminates, the pin will automatically be closed and release
 
 ## Output mode
 
-If a GPIO pin is configured for `output` mode, `Pin.set` can be used to either drive the pin voltage high (1) or low (0).
-
-
-  *Set value* | *Effect*
-  --- | ---
-  `0` | Low voltage
-  `1` | High voltage
-
 To configure a GPIO pin in output mode, either do it initially:
+
 ```
   output_pin := gpio.Pin 21 --output // Initialized for output mode.
 ```
+
 or later (independent of previous mode):
+
 ```
   pin.config --output         // Reconfigure for output mode.
 ```
+
+If a GPIO pin is configured for `output` mode, `Pin.set` can be used to either drive the pin voltage high (1) or low (0).
+
+| _Set value_ | _Effect_     |
+| ----------- | ------------ |
+| `0`         | Low voltage  |
+| `1`         | High voltage |
 
 ### Open-drain
 
@@ -56,23 +60,59 @@ GPIO pins also supports output mode as [open-drain](https://en.wikipedia.org/wik
 
 In open-drain output mode, when setting the pin high, the pin will go into open-drain mode. That means the pin is not being pulled in any direction (floating).
 
-
-  *Set value* | *Effect*
-  --- | ---
-  `0` | Low voltage
-  `1` | Open drain
+| _Set value_ | _Effect_    |
+| ----------- | ----------- |
+| `0`         | Low voltage |
+| `1`         | Open drain  |
 
 This can be useful when an external pull-up is connected to the pin.
+
+## Example: LED on/off
+
+In output-mode, the GPIO pin can be used, for example, to turn an LED on/off. The following schematic shows how a simple LED could be connected.
+
+<img src={LedZeroOne} alt="Schematic" width="40%" />
+
+To create a GPIO Pin on `pin 21` in output mode, use `Pin`:
+
+```
+import gpio
+
+main:
+  pin := gpio.Pin 21 --output
+```
+
+The pin is `low (0)` by default, so to set it `high (1)` use `pin.set`.
+
+```
+import gpio
+
+main:
+  pin := gpio.Pin 21 --output
+  pin.set 1
+  sleep --ms=1000
+```
+
+This will keep the light turned on for 1000ms.
+
+<Note type="warning">
+
+When the program terminates, the pin will automatically be reset thus turning off the LED.
+
+</Note>
 
 ## Input mode
 
 The GPIO input mode can be used to read the state of a pin. This can be done by calling `Pin.get`, returning either 0 or 1 depending on the voltage measured at the pin.
 
 To configure a GPIO pin in input mode, either do it initially:
+
 ```
   input_pin := gpio.Pin 21 --input // Initialized for input mode.
 ```
+
 or later (independent of previous mode):
+
 ```
   pin.config --input         // Reconfigure for input mode.
 ```
