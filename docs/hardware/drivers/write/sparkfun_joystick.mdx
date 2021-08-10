@@ -4,13 +4,13 @@ order: 5
 
 # Write a driver
 
-We are using the [SparkFun Qwiic Joystick](https://www.sparkfun.com/products/15168) as an example of how to write a driver for a sensor. The SparkFun Qwiic Joystick is a 2-axis joystick with a single button. Using a Qwiic connector, it's very simple to get the joystick connected.
+We are using the [SparkFun Qwiic Joystick](https://www.sparkfun.com/products/15168) as an example of how to write a driver - in the Toit language - for a sensor. The SparkFun Qwiic Joystick is a 2-axis joystick with a single button. Using a Qwiic connector, it's very simple to get the joystick connected.
 
-This guide will walk through the steps of identifying how the sensor communicates and how to write a fully working driver for it.
+This guide will walk you through the steps of identifying how the sensor communicates and how to write a fully working driver for it.
 
 ## Approach
 
-The Joystick features a ATtiny85 microcontroller with a custom firmware. As described in the [Hookup Guide](https://learn.sparkfun.com/tutorials/qwiic-joystick-hookup-guide), the firmware exposes several registers. With that in mind, we're going to do the following steps:
+The Joystick features an `ATtiny85` microcontroller with a custom firmware. As described in the [Hookup Guide](https://learn.sparkfun.com/tutorials/qwiic-joystick-hookup-guide), the firmware exposes several registers. With that in mind, we're going to do the following steps:
 
 1. Connect the Joystick to an I2C bus, configuring the I2C device.
 
@@ -54,11 +54,11 @@ class SparkFunJoystick:
   off:
 ```
 
-Note the address, as described in the hookup guide.
+The hookup guide has a table of I2C registers available in the custom firmware. At address `0x00` is the slave address assigned to the device (hard-coded to `0x20`). 
 
 ## Validate connectivity
 
-The hookup guide has a table of I2C registers available in the custom firmware. At address `0x00` is the slave address assigned to the device (hard-coded to `0x20`). By reading this register, we can confirm the connectivity to the device is functional.
+By reading the `I2C_ADDRESS` register, we can confirm the connectivity to the device is functional.
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE import serial -->
@@ -131,7 +131,7 @@ class SparkFunJoystick:
     // ...
 ```
 
-Both the horizontal and vertical value is formatted the same way; 2 bytes in big endian order (MSB first). We want to transform this value to a float in the range [-1..1]. Let's create a helper function to perform this step:
+Both the horizontal and vertical values are formatted the same way; 2 bytes in big endian order (MSB first). We want to transform this value to a float in the range [-1..1]. Let's create a helper function to perform this step:
 
 <Note>
 
@@ -214,6 +214,8 @@ To improve responsibility, the sensor should be read at a higher frequency. Howe
 
 ## Full code
 
+### The driver
+
 **`driver.toit`**
 
 <!-- CODE FILENAME driver.toit -->
@@ -266,6 +268,8 @@ class SparkFunJoystick:
     // Perform floating-point division to get to [-1..1] range.
     return value.to_float / binary.INT16_MAX
 ```
+
+### The Toit application running on your device
 
 **`main.toit`**
 
