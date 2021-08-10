@@ -45,10 +45,10 @@ Connect the ESP32 with a USB cable to your computer.
 <Tabs>
 <Tab label="CLI">
 
-Replace `<SSID>` and `<password>` with your own WiFi credentials and run the Toit CLI command:
+Replace `SSID` and `password` with your own WiFi credentials and run the Toit CLI command:
 
 ```shell
-toit serial provision -p wifi.ssid="<SSID>" -p wifi.password="<password>"
+toit serial provision -p wifi.ssid="SSID" -p wifi.password="password"
 ```
 
 </Tab>
@@ -95,10 +95,10 @@ triggers:
 Deploying a Toit app on your device means that the Toit code in the `toit` file will be executed repeatedly according to the scheduling defined in `hello.yaml`.
 In this case, when the app is installed on the device and if the device reboots.
 
-Deploy the Toit app named `HelloApp` on your device with the command:
+Deploy the Toit app named `HelloApp` on your device with the following command. Replace `device-name` with the actual name of your device.
 
 ```shell
-toit deploy -d <device-name> hello.yaml
+toit deploy -d device-name hello.yaml
 ```
 
 When deploying an app, the device is not required to be online. The app will be installed on the device when it comes online.
@@ -106,7 +106,7 @@ When deploying an app, the device is not required to be online. The app will be 
 Verify that the app has been deployed with the command:
 
 ```shell
-toit device -d <device-name> ps
+toit device -d device-name ps
 ```
 
 or go to the apps tab in the [Toit console](https://console.toit.io/) of your device to view the list of deployed apps.
@@ -114,7 +114,7 @@ or go to the apps tab in the [Toit console](https://console.toit.io/) of your de
 View the logs from the device with
 
 ```shell
-toit device -d <device-name> logs -f 10m
+toit device -d device-name logs -f 10m
 ```
 
 or go to the Logs tab in the [Toit console](https://console.toit.io/) of your device to view the logs from the device.
@@ -124,7 +124,7 @@ or go to the Logs tab in the [Toit console](https://console.toit.io/) of your de
 As the last step, uninstall the Toit app from the device with the command
 
 ```shell
-toit device -d <device-name> uninstall HelloApp
+toit device -d device-name uninstall HelloApp
 ```
 
 or go to the Apps tab in the [Toit console](https://console.toit.io/) of your device to uninstall the app.

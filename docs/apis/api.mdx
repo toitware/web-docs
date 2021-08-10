@@ -12,8 +12,8 @@ The Toit console provides a publicly available [gRPC API](https://github.com/toi
 
 The service is available on: `https://api.toit.io`.
 
-The API is guarded so all requests should be authorized with `Authorization: Bearer <access-token>`.
-with the access-token available using the [toit.api.Auth service](https://github.com/toitware/api/blob/master/proto/toit/api/auth.proto).
+The API is guarded so all requests should be authorized with `Authorization: Bearer access-token`.
+with the `access-token` available using the [toit.api.Auth service](https://github.com/toitware/api/blob/master/proto/toit/api/auth.proto).
 
 Use `toit org api-keys` to create a key that can be used to connect server applications to the API.
 

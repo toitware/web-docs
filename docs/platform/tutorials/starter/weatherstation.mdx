@@ -63,8 +63,8 @@ To run the program once on the ESP32, execute the CLI command
 toit run weather-station.toit
 ```
 
-If you haven't set your default device in the CLI, add `-d <device-name>` to
-the run command, where `<device-name>` is the name of your ESP32.
+If you haven't set your default device in the CLI, add `-d device-name` to
+the run command, where `device-name` is the name of your ESP32.
 
 ```shell
 $ toit run weather-station.toit
@@ -99,7 +99,7 @@ triggers:
   on_interval: 30s
 ```
 
-Save the content of the above yaml specification into a file named 
+Save the content of the above yaml specification into a file named
 
 `weather-station.yaml`
 
@@ -112,8 +112,8 @@ Deploy the `Weather Station` app on your ESP32 with the CLI command
 toit deploy weather-station.yaml
 ```
 
-If you haven't set your default device in the CLI, add `-d <device-name>` to
-the deploy command, where `<device-name>` is the name of your ESP32.
+If you haven't set your default device in the CLI, add `-d device-name` to
+the deploy command, where `device-name` is the name of your ESP32.
 
 The device log will show the three measurements every 30 seconds after the program
 has been installed on the device.
