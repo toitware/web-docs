@@ -10,7 +10,7 @@ as described in the [quick start](../../quick_start) guide.
 Provisioning means that the hardware is being granted a hardware ID used for the remaining of its lifecycle,
 and the latest released Toit firmware will be installed on the hardware. Initial WiFi settings must be provided and
 if your hardware can get online during provisioning it will get a name and will connect to the Toit cloud where you
-can access it from your organization.
+can access it from your project.
 Additional connection settings can be added or changed later on.
 
 You need the Toit CLI to complete the provisioning steps below.
@@ -57,7 +57,7 @@ toit serial provision -p wifi.ssid="SSID" -p wifi.password="password"
 
 The WiFi settings for your ESP32 can be changed later on.
 
-The provision commands automatically claims the device into your organization,
+The provision commands automatically claims the device into your project,
 thereby linking it with your Toit account.
 
 3. The provision process might take up to 5 minutes. When finished, it will output the following information:
@@ -77,7 +77,7 @@ successfully read hardware chip information
 | chip ID                  |           |
 +--------------------------+-----------+
 hardware was successfully provisioned
-claiming the hardware into your organization
+claiming the hardware into your project
 Hardware successfully claimed
 +--------------------------------------+----------------+--------------------------------------+
 |              DEVICE ID               |  DEVICE NAME   |             HARDWARE ID              |
