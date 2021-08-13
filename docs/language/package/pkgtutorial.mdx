@@ -36,7 +36,7 @@ Here are the common steps for creating a package:
 
 4. Tag and Upload.
 
-5. Notify a Toit registry.
+5. Publish to the Toit package registry.
 
 ## Develop Code
 
@@ -395,11 +395,9 @@ Then we need to upload the package to a Git repository. Toit packages are downlo
 the package name, or
 "toit-" followed by the package name.
 
-## Notify a Registry
+## Publish to the Toit package registry
 
 As the last step we need to inform a registry about the existence of the (new
-version of the) package. For the Toitware registry, it's enough to simply file
-an issue at
-[https://github.com/toitware/registry/issues](https://github.com/toitware/registry/issues).
+version of the) package. For the Toit package registry, publish your package [here](https://pkg.infra.toit.io/publish).
 
-Once added, the registry will distribute a description of the package so that anyone can start using the package with a simple `toit pkg install`.
+Once successfully published and validated by the Toit team, the registry will distribute a description of the package so that anyone can start using the package with a simple `toit pkg install`.

@@ -42,13 +42,13 @@ toit pkg registry list
 You should have one or more registries:
 
 ```txt
-toitware: github.com/toitware/registry (git)
+toit: github.com/toitware/registry (git)
 ```
 
-If not, add a registry; for example the Toitware registry:
+If not, add a registry; for example the Toit registry:
 
 ```shell
-toit pkg registry add toitware github.com/toitware/registry
+toit pkg registry add toit github.com/toitware/registry
 ```
 
 ## Creating a Package
@@ -91,4 +91,5 @@ Version numbers must be prefixed with `v` and follow [semantic versioning](https
 
 Push your changes to the public repository (if not yet done), and inform a registry of its existence.
 
-For the Toitware registry, file an issue [here](https://github.com/toitware/registry/issues).
+For the Toit package registry, publish your new package [here](https://pkg.infra.toit.io/publish). Your package will be validated by the Toit team, before it can be available for the rest of the
+Toit community. The validation is performed solely to avoid having packages that could be potentially harmful.

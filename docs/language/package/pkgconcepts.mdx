@@ -34,7 +34,7 @@ If a package has itself dependencies, it declares them in a `package.yaml` file.
 
 Typically, dependencies are marked with `^x.y.z` which is a shorthand for `>=x.y.z, <X,0,0` (where `x.y.z` is the current version of the dependency, and `X` is equal to `x + 1`). Such a constraint means that the package will work with the current version, or any future version that is compatible (according to semantic versioning).
 
-Published packages can be discovered by other developers through registries which collect descriptions of known packages (see the 'Registry" section).
+Published packages can be discovered by other developers through registries which collect descriptions of known packages (see the [Registry](#registry) section).
 
 ### Local Package
 
@@ -115,9 +115,9 @@ Specifically, we need to change our version number from `1.2.3` to `2.0.0`. This
 
 A registry collects descriptions of available packages. Conceptually it's a database of packages. Crucially, it doesn't store the content/sources of packages, but only descriptions of them (see below).
 
-Most of the time, developers only work with the `github.com/toitware/registry` registry, which is maintained by Toit. However, TPM supports multiple registries. Companies are free to create their own private registries and use them instead of, or in addition to the public Toit registry.
+Most of the time, developers only work with the public [github.com/toitware/registry](https://github.com/toitware/registry) registry. However, TPM supports multiple registries. Companies are free to create their own private registries and use them instead of, or in addition to the public Toit registry.
 
-Similar to packages, registries also exist in two variants: Git and local registries. Git registries are added to TPM with a Git-URL, and can be synchronized with `toit pkg sync` (see the toit CLI section for more).
+Similar to packages, registries also exist in two variants: Git and local registries. Git registries are added to TPM with a Git-URL, and can be synchronized with `toit pkg sync` (see the [quick start](../pkgguide) section for more).
 Local registries are just pointers to a path that contains descriptions.
 
 ## Description
