@@ -15,7 +15,7 @@ The service is available on: `https://api.toit.io`.
 The API is guarded so all requests should be authorized with `Authorization: Bearer access-token`.
 with the `access-token` available using the [toit.api.Auth service](https://github.com/toitware/api/blob/master/proto/toit/api/auth.proto).
 
-Use `toit org api-keys` to create a key that can be used to connect server applications to the API.
+Use `toit project api-keys add <name>` to create a key that can be used to connect server applications to the API.
 
 ## Data API
 
@@ -35,7 +35,7 @@ On ingestion the data is still grouped into metrics and logs.
 ## Data subscriptions
 
 Data in the Toit console is always grouped into the types Metrics, Logs and App data.
-For each data type, an organization can have multiple subscriptions.
+For each data type, a project can have multiple subscriptions.
 A subscription is simply a cursor managed by the Toit console on which messages the subscriber has read.
 Every time a message has been read it needs to be acknowledged by the subscriber in order to move the subscription cursor forward, permanently.
 Each message must be acknowledged before the acknowledge deadline (10 minutes by default), otherwise it will be enqueued again.
