@@ -8,9 +8,15 @@ The Toit language comes with its own package manager. This document describes ho
 
 ## Introduction
 
-The Toit package manager (henceforth TPM) is integrated with the `toit` CLI.
-All of its commands start with the "pkg" command.
-For example `toit pkg install github.com/toitware/toit-morse` installs the package 'morse'.
+The Toit package manager (henceforth TPM) is integrated with the [`toit` CLI](../../getstarted/installation).
+All of its commands start with the `pkg` command.
+For example
+
+```shell
+toit pkg install github.com/toitware/toit-morse
+```
+
+installs the package 'morse'.
 
 TPM is a powerful, yet convenient package manager with lots of inspiration from Linux package managers and other languages' package managers.
 It combines the best properties of them:
@@ -31,8 +37,8 @@ This section describes how a package is created and then used.
 A package starts out as a folder with Toit files. If they are useful, it makes sense to create a package so they can be shared among different projects and so they can be contributed to the community.
 
 The developer creates a fresh Git repository with these files and adds a _specification_ file. This specification file serves as a signal to TPM that the repository is intended to be used as a package.
-It also contains information such as the package's name, a description, and its dependencies. (See the "specification" section for more details).
-Then the package author creates a Git-tag with the version number.
+It also contains information such as the package's name, a description, and its dependencies. (See the [specification section](pkgconcepts/#package) for more details).
+Then the package author creates a Git tag with the version number.
 TPM uses semantic versioning, so typically, the tag would look something like "v1.2.1" or "v2.0.0".
 
 The developer now needs to register the package. TPM is decentralized and there can be many different registries, but Toit's registry service is a good choice as it is installed by default for Toit programmers.
@@ -102,7 +108,7 @@ It is also good practice to provide a small usage example, and information on ho
 
 ### Toitdocs
 
-The public code of a package should have toitdocs. See the [documentation convention](../../sdk/toitdoc), to learn how to write good inline documentation.
+The public code of a package should have toitdocs. See the [documentation convention](../sdk/toitdoc), to learn how to write good inline documentation.
 
 ### Types
 

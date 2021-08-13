@@ -2,15 +2,15 @@
 order: 1
 ---
 
-# Packages quick start
+# Package quick start
 
-This document provides instructions on how to use the Toit package manager (henceforth TPM) for common operations. See [Packages](packages.md) for a full documentation.
+This section provides instructions on how to use the Toit package manager (henceforth TPM) for common operations. See [Packages](../../package) for the full documentation.
 
 ## Installing a package
 
-The very first time, users might need to install a registry first (see below "Adding a Registry").
+You might need to add a registry as the first thing, before you can proceed with installing a package (see below "Adding a Registry").
 
-The following commands update the local registry, search for a package, and then install it.
+The following CLI commands update the local registry, search for a package, and then install it.
 
 ```shell
 toit pkg sync          # Synchronize the installed registries.
@@ -18,7 +18,7 @@ toit pkg search morse  # Search for a package "morse".
 toit pkg install morse # Install package "morse".
 ```
 
-<Note>
+<Note title="Unique names">
 
 The installation of "morse" only works if the name is unambiguous. If there are multiple "morse" packages, then one has to use the URL. It is possible to omit leading segments if that makes the package unique:
 
@@ -31,7 +31,7 @@ toit pkg install toitware/toit-morse  # Probably already unique.
 
 ## Adding a Registry
 
-Before being able to install any package, one must have a registry installed. Newer toit versions do this automatically, but it never hurts to check:
+Before being able to install any package, one must have a registry installed. Newer versions of the `toit` CLI do this automatically, but it never hurts to check:
 
 See which registries are installed:
 
@@ -65,7 +65,7 @@ Optionally (but recommended) add a CHANGELOG.md.
 
 Optional (but strongly recommended): polish the package, with an eye on
 
-- toitdocs,
+- [toitdocs](../../sdk/toitdoc),
 - types,
 - examples, and
 - tests
