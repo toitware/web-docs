@@ -137,6 +137,13 @@ export function Navigation({ className }: { className?: string }): JSX.Element {
           Go to <strong>toit.io</strong>
         </span>
       </a>
+
+      <a className={classes.link} href="https://pkg.toit.io/">
+        <FiArrowLeft className={classes.backArrow} />{" "}
+        <span>
+          Go to <strong>pkg.toit.io</strong>
+        </span>
+      </a>
     </nav>
   );
 }

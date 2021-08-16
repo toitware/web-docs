@@ -8,9 +8,15 @@ The Toit language comes with its own package manager. This document describes ho
 
 ## Introduction
 
-The Toit package manager (henceforth TPM) is integrated with the `toit` CLI.
-All of its commands start with the "pkg" command.
-For example `toit pkg install github.com/toitware/toit-morse` installs the package 'morse'.
+The Toit package manager (henceforth TPM) is integrated with the [`toit` CLI](../../getstarted/details/installation).
+All of its commands start with the `pkg` command.
+For example
+
+```shell
+toit pkg install github.com/toitware/toit-morse
+```
+
+installs the package 'morse'.
 
 TPM is a powerful, yet convenient package manager with lots of inspiration from Linux package managers and other languages' package managers.
 It combines the best properties of them:
@@ -31,20 +37,22 @@ This section describes how a package is created and then used.
 A package starts out as a folder with Toit files. If they are useful, it makes sense to create a package so they can be shared among different projects and so they can be contributed to the community.
 
 The developer creates a fresh Git repository with these files and adds a _specification_ file. This specification file serves as a signal to TPM that the repository is intended to be used as a package.
-It also contains information such as the package's name, a description, and its dependencies. (See the "specification" section for more details).
-Then the package author creates a Git-tag with the version number.
+It also contains information such as the package's name, a description, and its dependencies. (See the [specification section](pkgconcepts/#package) for more details).
+Then the package author creates a Git tag with the version number.
 TPM uses semantic versioning, so typically, the tag would look something like "v1.2.1" or "v2.0.0".
 
 The developer now needs to register the package. TPM is decentralized and there can be many different registries, but Toit's registry service is a good choice as it is installed by default for Toit programmers.
-As of the writing of this document, the easiest way to register a package is to [file an issue](https://github.com/toitware/registry/issues) in the Toit registry repository.
+You can publish a package via the [Toit package registry](https://pkg.toit.io/publish) web-site.
 
-Registries create descriptions of the known packages and store them in a Git repository. The [Toit registry](http://github.com/toitware/registry) is just a public Git repository with description files.
+Registries create descriptions of the known packages and store them in a Git repository. The [Toit registry](https://github.com/toitware/registry/tree/main/packages/github.com) is just a public Git repository with description files.
 
 Toit programmers synchronize this repository, giving them access to all the descriptions in that registry. This is done through the `toit pkg sync` command which simply pulls the latest changes.
 
 With all the descriptions, Toit programmers can find the package they want. The `toit pkg search <keyword>` command searches for relevant packages.
 Note that searching or browsing packages is done locally in the synchronized registries.
 Developers can then install any of the packages by writing `toit pkg install <package>`.
+
+It's also possible to view the list of all available packages in the [package registry web-site](https://pkg.toit.io/packages) or search for a specific package by its name.
 
 The name of the package must be non-ambiguous, and thus might need a qualifier. Since TPM doesn't have a single namespace, many packages can have a similar short name. This is by design (as it allows decentralized and private packages), but it might sometimes require to be a little bit more specific when installing a package. For example, `toit pkg install utils` might not be specific enough to uniquely identify a package, and a more qualified name, such as `toit pkg install some_company/utils` could be necessary.
 
