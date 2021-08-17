@@ -63,7 +63,7 @@ If provisioning doesn't work, consult the documentation for your ESP32.
 - if the provision command fails, consider trying with a lower baud rate (here half the default baud rate):
 
 ```shell
-toit serial provision --baud 460800 -p wifi.ssid="SSID" -p wifi.password="password"
+toit serial provision --baud 460800 -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
 ```
 
 ## Install drivers
@@ -114,10 +114,10 @@ Later on you can always add other connection types, like cellular connection.
 
 If your ESP32 is misconfigured in any way, for example if it does not have valid WiFi connection settings, reinstall the ESP32 with the Toit firmware
 and WiFi settings via a serial connection, by connecting it with a USB cable to your computer, and run the `toit serial reinstall` command
-with the appropriate WiFi connection settings provided (replace `SSID` and `password` with the correct WiFi credentials):
+with the appropriate WiFi connection settings provided (replace `MY_SSID` and `my_password` with the correct WiFi credentials):
 
 ```shell
-toit serial reinstall -p wifi.ssid="SSID" -p wifi.password="password"
+toit serial reinstall -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
 ```
 
 The `reinstall` command reinstalls the Toit firmware and settings via the serial port without changing its hardware certificate or hardware ID.

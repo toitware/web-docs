@@ -49,10 +49,10 @@ toit serial port use my-port
 and replace `my-port` with the actual port name.
 
 2. Use the Toit CLI to provision your ESP32 with initial device settings and the latest released Toit firmware.
-   Replace `SSID` and `password` with your own WiFi credentials in the following command:
+   Replace `MY_SSID` and `my_password` with your own WiFi credentials in the following command:
 
 ```shell
-toit serial provision -p wifi.ssid="SSID" -p wifi.password="password"
+toit serial provision -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
 ```
 
 The WiFi settings for your ESP32 can be changed later on.
@@ -100,7 +100,7 @@ The `provision` command sets the model on the device. The default model is `esp3
 If you want to use another device model, you can provide it with `-m` in the provision command and replace `model` with the specific device model to use:
 
 ```shell
-toit serial provision -m model -p wifi.ssid="SSID" -p wifi.password="password"
+toit serial provision -m model -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
 ```
 
 Look for available device models for each firmware version available in the
