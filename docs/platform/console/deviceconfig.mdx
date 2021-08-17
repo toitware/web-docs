@@ -134,22 +134,16 @@ When two or more connections are present, choose the order in which they should 
 Beware that when using the CLI to configure the connection settings, you need to type in all connections you want to use, in the order you want them to be used.
 
 ```shell
-toit device config connection -c wifi:<SSID>:<WiFiPassword> -c cellular:<apn>
+toit device config connection -c wifi:"MY_SSID":"MY_WiFiPassword"
 ```
 
 Use
 
 ```txt
--c wifi:<SSID>:<WiFiPassword>
+-c wifi:"MY_SSID":"MY_WiFiPassword"
 ```
 
-for setting a new WiFi connection, and use
-
-```txt
--c cellular:<apn>
-```
-
-for setting up a cellular connection on your microcontroller.
+for setting a new WiFi connection.
 
 <Note>This command will automatically delete all previously configured connections.</Note>
 
