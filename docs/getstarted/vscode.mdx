@@ -4,7 +4,7 @@ order: 4
 
 # Visual Studio Code
 
-Toit comes with a language server and provides a Visual Studio Code Language Extension for the Toit programming language. 
+Toit comes with a language server and provides a Visual Studio Code Language Extension for the Toit programming language.
 
 You can download Visual Studio Code [here](https://code.visualstudio.com/Download).
 
@@ -21,9 +21,46 @@ your devices directly from Visual Studio Code.
 
 <Note title="Configure VSCode on macOS">
 
-On macOS, you need to configure the VSCode PATH. 
-Start by launching Visual Studio Code. In the View menu, choose to open the **Command Palette**. 
+On macOS, you need to configure the VSCode PATH.
+Start by launching Visual Studio Code. In the View menu, choose to open the **Command Palette**.
 
 Type `shell command` to find the **Shell Command: Install 'code' command in PATH**.
 
 </Note>
+
+
+## Troubleshooting
+<Tabs>
+<Tab label="Windows">
+
+#### Error: "Couldn't start client Language Server"
+Make sure `toit` is in your path. When you install `toit` make sure to check "Add the Toit CLI application directory to your PATH variable".
+
+Restart VSCode (reloading the window is not enough).
+
+To check whether `toit` is found be VSCode, open a terminal in VSCode (Ctrl+`) and run
+```shell
+toit
+```
+The result should be a help message.
+
+#### Error: "The Language Server is not responding. Consult the documentation"
+When prompted by Windows Defender, allow the LSP client access to access the network.
+
+#### Still not working?
+Report issues and bugs here [here](https://github.com/toitware/ide-tools).
+
+</Tab>
+
+<Tab label="macOS">
+
+No trouble shooting available. Report issues and bugs [here](https://github.com/toitware/ide-tools).
+
+</Tab>
+
+<Tab label="Linux">
+
+No trouble shooting available. Report issues and bugs [here](https://github.com/toitware/ide-tools).
+
+</Tab>
+</Tabs>
