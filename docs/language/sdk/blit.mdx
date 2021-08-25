@@ -92,7 +92,7 @@ main:
 ## Line strides
 
 When using blit for line-oriented operations it is often the case that the
-lines are not adjacent.  You might be writing only the first 4 bytes of each
+lines are not adjacent.  Or you might be writing only the first 4 bytes of each
 line, but each line has 10 bytes in it.  In this case you can use
 `--destination_line_stride` and `--source_line_stride` to specify the
 distance in bytes between adjacent lines.  You can also use this to
