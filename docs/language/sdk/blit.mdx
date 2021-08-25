@@ -17,7 +17,7 @@ This document provides more of a conceptual overview.
 Tight loops manipulating byte arrays often follow a set pattern.  The blit
 function is implemented in C++ and can be faster than pure Toit code for
 manipulations that can be expressed as a traversal of a byte array, seen as a
-two-dimentional array of values.
+two-dimensional array of values.
 
 ## Model
 
@@ -57,9 +57,9 @@ main:
   print (mask_four_bits source)  // => #[0xf, 0xe, 0xf]
 ```
 
-We can specify a pixel stride for source and destination.  This
-lets us read or write only every 2nd (or nth) byte.  For example
-we might want to double the size of a byte array, writing alternately
+You can specify a pixel stride for source and destination.  This
+lets you read or write only every 2nd (or nth) byte.  For example
+you might want to double the size of a byte array, writing alternately
 the high and low halves of the original byte array:
 
 ```
@@ -92,14 +92,14 @@ main:
 ## Line strides
 
 When using blit for line-oriented operations it is often the case that the
-lines are not adjacent.  We might be writing only the first 4 bytes of each
-line, but each line has 10 bytes in it.  In this case we can use
+lines are not adjacent.  You might be writing only the first 4 bytes of each
+line, but each line has 10 bytes in it.  In this case you can use
 `--destination_line_stride` and `--source_line_stride` to specify the
-distance in bytes between adjacent lines.  We can also use this to
+distance in bytes between adjacent lines.  You can also use this to
 manipulate only every second line, by specifying a line stride that is
 twice as large as the line length.
 
-By making use of both slices and line strides, we can copy an arbitrary
+By making use of both slices and line strides, you can copy an arbitrary
 rectangle from one byte array into a rectangle of another byte array.
 In the example below we place the image in the top left of the
 destination, but we could place it anywhere by using a slice of the
@@ -107,7 +107,7 @@ destination byte array.
 
 <img src={BlitDiagram} alt="Diagram showing blit operation" />
 
-By using `destination_pixel_stride` we can write every second byte
+By using `destination_pixel_stride` you can write every second byte
 in the output, giving the following result.
 
 <img src={BlitStrideDiagram} alt="Diagram showing blit operation with --destination_pixel_stride=2" />
