@@ -1,0 +1,113 @@
+---
+order: 5
+---
+
+import BlitDiagram from "../../_images/blit.png";
+import BlitStrideDiagram from "../../_images/blit-stride.png";
+
+# Bit blit in Toit
+
+The bitmap library contains a powerful tool for manipulating byte arrays, called blit.
+
+The full API is documented in the [library documentation](https://libs.toit.io/bitmap/library-summary).
+This document provides more of a conceptual overview.
+
+## Motivation
+
+Tight loops manipulating byte arrays often follow a set pattern.  The blit
+function is implemented in C++ and can be faster than pure Toit code for
+manipulations that can be expressed as a traversal of a byte array, seen as a
+two-dimentional array of values.
+
+## Model
+
+Blit reads a series of lines from a source byte array, manipulates the
+bytes, and then writes them to a destination byte array.  The number of
+bytes per line is specified, and the operation stops when it hits the
+end of either the source array or destination array.  Only whole lines
+are processed, so the operation may stop early if the byte array size
+is not a multiple of the line size.
+
+If the whole array is not to be processed, for example if you want to start
+at an offset other than zero, or stop before the end, byte array
+[slices](../../syntax#indexing-syntax)
+are used to describe the extent of the blit operation.
+
+If the array is not arranged as a two-dimensional array, the line length
+can be specified to match the entire length of the array, and it will be
+processed as one line.
+
+For example to create a new byte array with only the low four bits of
+each byte in a source array you can write:
+
+```
+import bitmap show blit
+
+mask_four_bits source/ByteArray -> ByteArray:
+  destination := ByteArray source.size
+  blit
+    source
+    destination
+    source.size  // Line length is whole array.
+    --mask=0xf   // Perform dest_byte = source_byte & 0xf.
+  return destination
+
+main:
+  source := #[0xff, 0x3e, 0x9f]
+  print (mask_four_bits source)  // => #[0xf, 0xe, 0xf]
+```
+
+We can specify a pixel stride for source and destination.  This
+lets us read or write only every 2nd (or nth) byte.  For example
+we might want to double the size of a byte array, writing alternately
+the high and low halves of the original byte array:
+
+```
+import bitmap show blit
+
+explode_nibbles source/ByteArray -> ByteArray:
+  destination := ByteArray source.size * 2
+  // Put high nibble in even destination bytes.
+  blit
+    source
+    destination
+    source.size       // Line length is whole array.
+    --destination_pixel_stride=2
+    --shift=4         // Rotate 4 bits to the left
+    --mask=0xf        // Extract the high nibble after rotation.
+  // Put low nibble in odd destination bytes.
+  blit
+    source
+    destination[1..]  // Write into destination with offset 1.
+    source.size       // Line length is whole array.
+    --destination_pixel_stride=2
+    --mask=0xf        // Extract the low nibble
+  return destination
+
+main:
+  source := #[0xff, 0x3e, 0x9f]
+  print (explode_nibbles source)  // => #[0xf, 0xf, 0x3, 0xe, 0x9, 0xf]
+```
+
+## Line strides
+
+When using blit for line-oriented operations it is often the case that the
+lines are not adjacent.  We might be writing only the first 4 bytes of each
+line, but each line has 10 bytes in it.  In this case we can use
+`--destination_line_stride` and `--source_line_stride` to specify the
+distance in bytes between adjacent lines.  We can also use this to
+manipulate only every second line, by specifying a line stride that is
+twice as large as the line length.
+
+By making use of both slices and line strides, we can copy an arbitrary
+rectangle from one byte array into a rectangle of another byte array.
+In the example below we place the image in the top left of the
+destination, but we could place it anywhere by using a slice of the
+destination byte array.
+
+<img src={BlitDiagram} alt="Diagram showing blit operation" />
+
+By using `destination_pixel_stride` we can write every second byte
+in the output, giving the following result.
+
+<img src={BlitStrideDiagram} alt="Diagram showing blit operation with --destination_pixel_stride=2" />
