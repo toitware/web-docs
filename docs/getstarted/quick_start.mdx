@@ -2,7 +2,7 @@
 order: 0
 ---
 
-# Quick start
+# Quick start guide
 
 This guide will show you how to get a Toit account, install the Toit CLI locally, prepare your [ESP32](https://www.espressif.com/en/products/socs/esp32) microcontroller with the Toit firmware,
 and finally how to deploy a Toit app on your ESP32.
@@ -43,24 +43,25 @@ With your ESP32 ready for use, the first step is to initially provision your ESP
 Connect the ESP32 with a USB cable to your computer.
 
 <Tabs>
-<Tab label="CLI">
-
-Replace `MY_SSID` and `my_password` with your own WiFi credentials and run the Toit CLI command:
-
-```shell
-toit serial provision -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
-```
-
-</Tab>
 <Tab label="Console">
 
-Go to the Serial menu in the web-based [Toit console](https://console.toit.io/serial) to initially provision your hardware.
+Go to the Serial menu in the web-based [Toit console](https://console.toit.io/serial) to initially provision your hardware with the Toit firmware.
 
 A detailed description of using Web Serial can be found [here](../details/webserial).
 
 Note that Web Serial only works in Google Chrome and Microsoft Edge browsers.
 
 </Tab>
+<Tab label="CLI">
+
+Open a terminal window, and replace `MY_SSID` and `my_password` with your own WiFi credentials and run the following Toit CLI command in order to 
+provision your hardware with the Toit firmware:
+
+```shell
+toit serial provision -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
+```
+</Tab>
+
 </Tabs>
 
 At the end of the provisioning process, you will receive the name of the device, and a URL to view the device in the [Toit console](https://console.toit.io/).
@@ -134,5 +135,4 @@ or go to the Apps tab in the [Toit console](https://console.toit.io/) of your de
 Congratulations! You are now ready to start developing IoT apps with Toit.
 
 As the next steps, have a look at the [Toit tutorials](../../platform/tutorials) with examples you can run
-on your ESP32, or dive into the [Toit language guide](../../language/language), or view the list of
-[available drivers](../../hardware/drivers/driverslist).
+on your ESP32 or dive into the [Toit language guide](../../language/language).
