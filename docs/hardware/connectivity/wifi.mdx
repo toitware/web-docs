@@ -9,6 +9,18 @@ The ESP32 has integrated WiFi support, and with the Toit firmware and the Toit c
 Using WiFi, your microcontroller can be reached within a large radius, but the power consumption can be high, each time the MCU creates a new connection.
 
 <Tabs>
+<Tab label="Console">
+
+From the [Web Serial](https://console.toit.io/serial) view in the Toit console, you can either provision (or reinstall) the ESP32 with the Toit firmware and provide WiFi connection settings
+when clicking the `Provision` or `Reinstall` buttons, respectively.
+
+If your device has already been flashed with the Toit firmware and is online and successfully connected to the Toit console via WiFi, it's possible to configure the
+device with additional WiFi connections from the `Configuration` tab of the given device in the [Toit console](https://console.toit.io/).
+
+Also, see the [section](../../../platform/console/deviceconfig/#connections)
+about device configuration for more information on how to add additional WiFi connnections to a given device using the Toit console.
+
+</Tab>
 <Tab label="CLI">
 
 Initially provide the WiFi connection settings when [provisioning](../../../../getstarted/details/provision) your ESP32 with the Toit firmware. The following CLI command shows how to set the initial WiFi settings
@@ -42,18 +54,6 @@ Beware that when using the CLI to configure the WiFi connection settings, you ne
 The command above removes all existing WiFi settings, and will only add those provided in the command.
 
 </Note>
-
-</Tab>
-<Tab label="Console">
-
-From the [Web Serial](https://console.toit.io/serial) view in the Toit console, you can either provision (or reinstall) the ESP32 with the Toit firmware and provide WiFi connection settings
-when clicking the `Provision` or `Reinstall` buttons, respectively.
-
-If your device has already been flashed with the Toit firmware and is online and successfully connected to the Toit console via WiFi, it's possible to configure the
-device with additional WiFi connections from the `Configuration` tab of the given device in the [Toit console](https://console.toit.io/).
-
-Also, see the [section](../../../platform/console/deviceconfig/#connections)
-about device configuration for more information on how to add additional WiFi connnections to a given device using the Toit console.
 
 </Tab>
 </Tabs>
