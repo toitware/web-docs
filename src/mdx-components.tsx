@@ -14,6 +14,7 @@ import Note from "./components/Note";
 import { Table, TableBody, TableHead } from "./components/Table";
 import { Tabs } from "./components/Tabs";
 import Title from "./components/Title";
+import ZoomableImage from "./components/ZoomableImage";
 
 const P = (props: any) => <Typography paragraph {...props} />;
 const H1 = (props: any) => <Typography variant="h1" {...props} />;
@@ -40,6 +41,7 @@ export const components: MDXProviderComponentsProp = {
   td: TableBody,
   tr: TableRow,
   th: TableHead,
+  img: ZoomableImage,
 };
 
 /**
