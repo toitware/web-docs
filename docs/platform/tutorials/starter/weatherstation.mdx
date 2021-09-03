@@ -31,7 +31,7 @@ main:
     --sda=gpio.Pin 21
     --scl=gpio.Pin 22
 
-  device := bus.device 0x77
+  device := bus.device drivers.I2C_ADDRESS_ALT
 
   bme := drivers.Bme280 device
 
