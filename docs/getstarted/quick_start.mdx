@@ -6,8 +6,8 @@ import VSCode from "../_images/vscodehello.png";
 
 # Quick start guide
 
-This guide will show you how to sign up with Toit, setup your local development environment, prepare your [ESP32](https://www.espressif.com/en/products/socs/esp32)
-microcontroller with the Toit firmware, and finally how to deploy a Toit app on your ESP32.
+This guide will show you how to sign up with Toit, setup your local development environment, install the Toit firmware on your [ESP32](https://www.espressif.com/en/products/socs/esp32)
+, and finally how to deploy a Toit app on your ESP32.
 
 ## 1. Sign up
 
@@ -21,22 +21,31 @@ On macOS and Linux, put the Toit CLI manually to PATH (see step-by-step instruct
 
 ## 3. Get an ESP32
 
-If you already have one available, jump to step 4 to continue.
+If you already have an ESP32 available, jump to step 4 to continue.
 
-Otherwise, you can buy an ESP32 [here](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990).
+Otherwise, you can buy one [here](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990).
 
-<Note title="Don't have an ESP32 yet?">
+<Tabs>
+<Tab label="Console">
 
-In the meantime, use a simulated device to continue learning about the Toit platform.
-Start a Toit simulator from the [Toit console](https://console.toit.io/) by clicking the "Start simulator" button, or run the following command in the Toit CLI:
+In the meantime, you can start a **Toit simulator** from the [Toit console](https://console.toit.io/) by clicking the "Start simulator" button.
+
+Then, jump to step 5 to continue.
+
+</Tab>
+
+<Tab label="CLI">
+
+In the meantime, you can start a **Toit simulator** from the Toit CLI with:
 
 ```shell
 toit simulator start
 ```
 
-Next, jump to step 5 to continue.
+Then, jump to step 5 to continue.
 
-</Note>
+</Tab>
+</Tabs>
 
 ## 4. Provision your ESP32
 
@@ -66,7 +75,8 @@ Having issues? See the detailed descriptions in the [provision page](../details/
 </Tab>
 </Tabs>
 
-When your device is visible in the [Toit console](https://console.toit.io/), all device communication will be over-the-air.
+At the end of the provisioning process, you will receive the name of the device, and a URL to view the device in the [Toit console](https://console.toit.io/).
+When your device is online, all device communication will be **over-the-air**.
 
 ## 5. Write a Toit app
 
