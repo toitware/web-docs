@@ -26,13 +26,6 @@ If you already have an ESP32 available, jump to step 4 to continue.
 Otherwise, you can buy one [here](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990).
 
 <Tabs>
-<Tab label="Console">
-
-In the meantime, you can start a **Toit simulator** from the [Toit console](https://console.toit.io/) by clicking the "Start simulator" button.
-
-Then, jump to step 5 to continue.
-
-</Tab>
 
 <Tab label="CLI">
 
@@ -45,6 +38,13 @@ toit simulator start
 Then, jump to step 5 to continue.
 
 </Tab>
+<Tab label="Console">
+
+In the meantime, you can start a **Toit simulator** from the [Toit console](https://console.toit.io/) by clicking the "Start simulator" button.
+
+Then, jump to step 5 to continue.
+
+</Tab>
 </Tabs>
 
 ## 4. Provision your ESP32
@@ -52,12 +52,6 @@ Then, jump to step 5 to continue.
 To install the latest Toit firmware on your ESP32, connect the ESP32 with a USB cable to your computer.
 
 <Tabs>
-<Tab label="Console">
-
-Go to the Serial page in the [Toit console](https://console.toit.io/serial) to initially provision your hardware with the Toit firmware and WiFi settings -
-note that it only works in Google Chrome and Microsoft Edge browsers.
-
-</Tab>
 <Tab label="CLI">
 
 Open a terminal window, and replace `MY_SSID` and `my_password` with your own WiFi credentials and run the Toit CLI command to initially
@@ -66,6 +60,12 @@ provision your hardware with the Toit firmware and WiFi settings:
 ```shell
 toit serial provision -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
 ```
+
+</Tab>
+<Tab label="Console">
+
+Go to the Serial page in the [Toit console](https://console.toit.io/serial) to initially provision your hardware with the Toit firmware and WiFi settings -
+note that it only works in Google Chrome and Microsoft Edge browsers.
 
 </Tab>
 <Tab label="Troubleshoot">
