@@ -34,7 +34,8 @@ triggers:
     - "<type:name>"
 
 pubsub:
-  subscriptions: "<type:name>"
+  subscriptions:
+    - "<type:name>"
 ```
 
 - **`name`**:
@@ -80,5 +81,5 @@ pubsub:
 
   - **`subscriptions`**:
 
-    Subscribes to the topic. A topic is a `<type>:<name>`, with `type` being either `cloud` or `device`. The `name` is defined by the user.
+    Subscribes to topics. Each topic is of the form `<type>:<name>`, with `type` being either `cloud` or `device`. The `name` is defined by the user.
     See [PubSub](../../../apis/pubsub) and [Tutorials](../../tutorials/pubsub/pubsubext) for additional information and an example of an app specification file with a PubSub subscription.
