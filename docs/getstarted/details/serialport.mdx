@@ -4,15 +4,14 @@ order: 4
 
 # Serial port troubleshooting
 
-Before initial hardware provisioning can take place, you must connect the ESP32 to a computer with a serial connection - like a USB cable.
+<Tabs>
+<Tab label="CLI">
 
-If you have problems connecting your ESP32 to your computer, the Toit CLI offers some commands to help you back on track setting up the ESP32 with Toit.
+The Toit CLI offers commands to help you connect your ESP32 via a serial connection.
 
-Note that your computer does not need to be on the same WiFi network as your ESP32 in order to get your ESP32 online during initial provisioning,
+Start by connecting your ESP32 with a USB cable to your computer.
 
-## CLI serial commands
-
-Connect your ESP32 with a USB cable to your computer. List the serial ports currently in use on your computer by running the following command with the Toit CLI
+List the serial ports currently in use on your computer by running the following command with the Toit CLI in a terminal window:
 
 ```shell
 toit serial ports
@@ -25,13 +24,6 @@ $ toit serial ports
 COM3
 ```
 
-<Note title="Pro-tip for provisioning">
-
-If you have not set a default serial port to use, and there are multiple serial connections active on your computer, the `toit serial provision` command will prompt you to choose one of
-the serial ports in order to continue the provision command using the correct port.
-
-</Note>
-
 You can monitor the serial output of the ESP32 with the command
 
 ```shell
@@ -40,55 +32,39 @@ toit serial monitor
 
 The `monitor` command can be stopped by `Ctrl+c`
 
-If you have initially provisioned your ESP32, run the following Toit CLI command to read the hardware information via serial output:
+If you have already initially provisioned your ESP32, run the following CLI command to read the hardware information via serial output:
 
 ```shell
 toit serial info
 ```
 
-## Troubleshoot provisioning the ESP32
+</Tab>
+<Tab label="Console">
 
-Some hardware models need physical interaction with the device during initial provisioning - like pushing a button.
-If provisioning doesn't work, consult the documentation for your ESP32.
+In the [Web Serial](https://console.toit.io/serial) page in the Toit console, the serial port dialog will list the serial ports that are open.
 
-- if you have timeout problems when provisioning, some hardware models require you to [hold down BOOT button](https://randomnerdtutorials.com/solved-failed-to-connect-to-esp32-timed-out-waiting-for-packet-header/).
-  Read more info about the bootloader mode [here](https://github.com/espressif/esptool/wiki/ESP32-Boot-Mode-Selection).
+</Tab>
+</Tabs>
 
-- if your device wasn't able to connect via WiFi to the Toit cloud during the provisioning, it is not yet claimed. In this state the device is provisioned with the Toit firmware,
-  but is not yet linked to your Toit account. Follow the instructions [here](../claim) to manually claim the device once it has managed to go
-  online.
+## Install USB driver
 
-- if the provision command fails during the first part of the provisioning process, the hardware ID (if any) is written to the local disk if possible and will be reused the next time the command is executed on the same computer.
+If you have previously connected your ESP32 via a serial connection to your computer, for example using Arduino IDE, you probably do not need to update the USB driver on your computer.
 
-- if the provision command fails, consider trying with a lower baud rate (here half the default baud rate):
+Otherwise, if you are using macOS or Windows, you might need to install or update the following USB driver on your computer:
 
-```shell
-toit serial provision --baud 460800 -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
-```
-
-## Install drivers
-
-If you are using macOS or Windows, you might need to install or update the following two drivers on your computer:
-
-1. The Virtual COM Port driver (VCP) from
-   [here](https://ftdichip.com/drivers/vcp-drivers/)
-
-For Windows, there is also a setup executable available for download.
-
-2. The USB to UART Bridge VCP driver from
+1. The USB to UART Bridge VCP driver from
    [here](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers).
 
 For Windows, install the CP210x Universal Windows Driver.
 For macOS, install the CP210x VCP Mac OSX Driver.
 
-Install both drivers, reboot your computer and you are ready to talk to your ESP32 via a serial port.
+Install the driver, _reboot your computer_ and you are ready to talk to your ESP32 via a serial port.
 
-## Troubleshoot: serial port connections
+## Troubleshooting serial port connections
 
 If you have trouble connecting your ESP32 device with your computer via a serial connection
 
-- try updating your drivers. If you are using Windows or macOS, make sure your drivers are up to date (install them from
-  [here](https://ftdichip.com/drivers/vcp-drivers/) and [here](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)).
+- try updating the USB driver. If you are using Windows or macOS, make sure your drivers are up to date (install from [here](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)).
 
 - try a different serial port on your computer and run the `toit serial ports` CLI command again to detect the correct serial port to use in the commands.
 
@@ -112,14 +88,49 @@ Later on you can always add other connection types, like cellular connection.
 
 </Note>
 
-## Troubleshoot: Unreachable device
+## Troubleshooting the provisioning of an ESP32
+
+Some hardware models need physical interaction with the device during initial provisioning - like pushing a button.
+If provisioning doesn't work, consult the documentation for your ESP32.
+
+- if you have timeout problems when provisioning, some hardware models require you to [hold down BOOT button](https://randomnerdtutorials.com/solved-failed-to-connect-to-esp32-timed-out-waiting-for-packet-header/).
+  Read more info about the bootloader mode [here](https://github.com/espressif/esptool/wiki/ESP32-Boot-Mode-Selection).
+
+- if your device wasn't able to connect via WiFi to the Toit cloud during the provisioning, it is not yet claimed. In this state the device is provisioned with the Toit firmware,
+  but is not yet linked to your Toit project. Follow the instructions [here](../claim) to manually claim the device once it has managed to go
+  online.
+
+- if the provision command fails during the first part of the provisioning process, the hardware ID (if any) is written to the local disk if possible and will be reused the next time the command is executed on the same computer.
+
+- if the provision command fails, consider trying with a lower baud rate (here half the default baud rate):
+
+```shell
+toit serial provision --baud 460800 -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
+```
+
+## Troubleshooting an unreachable device
 
 If your ESP32 is misconfigured in any way, for example if it does not have valid WiFi connection settings, reinstall the ESP32 with the Toit firmware
-and WiFi settings via a serial connection, by connecting it with a USB cable to your computer, and run the `toit serial reinstall` command
+and WiFi settings via a serial connection, by connecting it with a USB cable to your computer.
+
+<Tabs>
+
+<Tab label="Console">
+
+In the [Web Serial](https://console.toit.io/serial) page in the Toit console, press the Reinstall button and provide the WiFi credentials for the WiFi currently available.
+
+</Tab>
+
+<Tab label="CLI">
+
+Run the `toit serial reinstall` CLI command
 with the appropriate WiFi connection settings provided (replace `MY_SSID` and `my_password` with the correct WiFi credentials):
 
 ```shell
 toit serial reinstall -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
 ```
 
-The `reinstall` command reinstalls the Toit firmware and settings via the serial port without changing its hardware certificate or hardware ID.
+</Tab>
+</Tabs>
+
+This will reinstall the Toit firmware and settings via the serial port without changing its hardware certificate or hardware ID.
