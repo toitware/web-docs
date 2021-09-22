@@ -1,66 +1,65 @@
 ---
-order: 1
+order: 2
 ---
 
 # Provision your hardware
 
-Before you can start interacting with your hardware in the Toit console, it must be provisioned and claimed,
-as described in the [quick start](../../quick_start) guide.
+Your hardware must be initially provisioned with the Toit firmware, before you can benefit from the Toit platform and all the features available.
 
-Provisioning means that the hardware is being granted a hardware ID used for the remaining of its lifecycle,
-and the latest released Toit firmware will be installed on the hardware. Initial WiFi settings must be provided and
-if your hardware can get online during provisioning it will get a name and will connect to the Toit cloud where you
-can access it from your project.
-Additional connection settings can be added or changed later on.
+Provisioning means that the hardware is being granted a unique hardware ID used for the remaining of its lifecycle,
+and the latest released Toit firmware will be installed on the hardware.
 
-You need the Toit CLI to complete the provisioning steps below.
-If you haven't installed Toit on your computer yet, follow the steps described [here](../../installation).
+Your WiFi credentials are added in the provisioning step, letting your ESP32 get online and accessible from the Toit console. Additional connection settings can be added later on.
 
-<Note type="warning">
+<Note>
 
-Use the provision command only once per hardware device.
+Note that your computer does not need to be on the same WiFi network as your ESP32 in order to get your ESP32 online during initial provisioning.
 
 </Note>
 
-Follow the steps to initially provision your device:
+## Provisioning steps
 
-1. Connect the ESP32 with a USB cable to your computer where the Toit CLI is installed.
+<Note type="warning" title="Install USB driver">
 
-<Note type="warning" title="Install drivers!">
+If you are using macOS or Windows, you might need to install or update the USB driver, if you have problems with the serial connection.
 
-If you are using macOS or Windows, you might need to install or update the USB drivers if you have problems with the serial connection.
+Follow the link to the USB driver [here](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers).
 
-Links to drivers can be found [here](../serialport#install-drivers).
+If you still have trouble connecting your ESP32 via a serial port to your computer, please visit the [troubleshooting](../serialport) page.
 
 </Note>
 
-List the serial ports currently in use on your computer by running the following command with the Toit CLI
+Follow the steps to initially provision your hardware:
 
-```shell
-toit serial ports
-```
+- If you haven't installed the Toit CLI on your computer yet, follow the steps described [here](../../installation).
 
-To avoid mistakes when talking with your device on a serial connection, set the default serial port to be used in the CLI with
+- Connect the ESP32 with a USB cable to your computer.
 
-```shell
-toit serial port use my-port
-```
+<Tabs>
+<Tab label="Console">
 
-and replace `my-port` with the actual port name.
+Provision your hardware using the [Web Serial interface](https://console.toit.io/serial) and follow the steps in the guide on the page.
 
-2. Use the Toit CLI to provision your ESP32 with initial device settings and the latest released Toit firmware.
-   Replace `MY_SSID` and `my_password` with your own WiFi credentials in the following command:
+</Tab>
+<Tab label="CLI">
+
+Use the Toit CLI to provision your ESP32 with initial device settings and the latest released Toit firmware.
+Replace `MY_SSID` and `my_password` with your own WiFi credentials in the following command:
 
 ```shell
 toit serial provision -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
 ```
 
+<Note title="Pro-tip">
+
+If you have not set a default serial port to use in the CLI, and there are multiple serial connections active on your computer, the `toit serial provision` command will prompt you to choose one of
+the serial ports in order to continue the provision command using the correct port.
+
+</Note>
+
 The WiFi settings for your ESP32 can be changed later on.
 
-The provision commands automatically claims the device into your project,
-thereby linking it with your Toit account.
-
-3. The provision process might take up to 5 minutes. When finished, it will output the following information:
+- The provision process might take up to 5 minutes. When finished, it will output the following information:
 
 ```txt
 erasing device flash
@@ -87,13 +86,7 @@ Hardware successfully claimed
 https://console.toit.io/devices/6e880945-2605-4ed7-bca6-93770bbbc064/overview
 ```
 
-<Note title="Troubleshooting">
-
-If you have trouble connecting your ESP32 via a serial port to your computer please visit the [troubleshooting](../serialport) page.
-
-</Note>
-
-## Device models
+<Note title="Device models">
 
 The `provision` command sets the model on the device. The default model is `esp32-4mb`.
 
@@ -105,3 +98,17 @@ toit serial provision -m model -p wifi.ssid="MY_SSID" -p wifi.password="my_passw
 
 Look for available device models for each firmware version available in the
 [Toit console](https://console.toit.io/project/firmware).
+
+</Note>
+
+</Tab>
+</Tabs>
+
+<Note>
+
+When the ESP32 has been initially provisioned with WiFi credentials, the ESP32 device is connecting to the network via WiFi.
+The serial connection is purely for debugging the device if WiFi connection is lost.
+In other words, you can plug the ESP32 into another power source and communicate with the ESP32 over WiFi from now on.
+Later on you can always add other connection types, like cellular connection.
+
+</Note>
