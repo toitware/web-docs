@@ -25,7 +25,7 @@ To get data from the sensor, we make use of the [bme280 sensor driver](https://l
 We also need to specify the [GPIO pins](../../../../hardware/peripherals/gpio) and the relevant [connection bus](../../../../hardware/peripherals).
 
 ```
-// Save this program in a file named weather-station.toit
+// Save this program in a file named weather_station.toit
 import gpio
 import i2c
 import drivers.bme280 as drivers
@@ -46,7 +46,7 @@ main:
   bme.off
 ```
 
-Save the above Toit program in a file named `weather-station.toit`.
+Save the above Toit program in a file named `weather_station.toit`.
 
 If you want to know more about what is happening in each step in the Toit program above, see [here](../../../../hardware/drivers/bme280#i2cbus).
 
@@ -64,14 +64,14 @@ and pressure values.
 To run the program once on the ESP32, execute the CLI command
 
 ```shell
-toit run weather-station.toit
+toit run weather_station.toit
 ```
 
 If you haven't set your default device in the CLI, add `-d device-name` to
 the run command, where `device-name` is the name of your ESP32.
 
 ```shell
-$ toit run weather-station.toit
+$ toit run weather_station.toit
 2021-06-23T12:54:58.131899Z: <process initiated>
 Temperature: 25.769999999999999574 C
 Humidity: 42.111328125 %
@@ -91,13 +91,13 @@ humidity, and pressure every 30 seconds by deploying it on the ESP32 using the
 following app specification file:
 
 ```yaml
-# filename: weather-station.yaml
+# filename: weather_station.yaml
 
 # This app specification file executes the 'Weather Station' app on install
 # and subsequently every 30 seconds.
 
 name: Weather Station
-entrypoint: weather-station.toit
+entrypoint: weather_station.toit
 triggers:
   on_install: true
   on_interval: 30s
@@ -105,15 +105,15 @@ triggers:
 
 Save the content of the above yaml specification into a file named
 
-`weather-station.yaml`
+`weather_station.yaml`
 
-located in the same directory as the `weather-stattion.toit` file from the previous
+located in the same directory as the `weather_station.toit` file from the previous
 step.
 
 Deploy the `Weather Station` app on your ESP32 with the CLI command
 
 ```shell
-toit deploy weather-station.yaml
+toit deploy weather_station.yaml
 ```
 
 If you haven't set your default device in the CLI, add `-d device-name` to
