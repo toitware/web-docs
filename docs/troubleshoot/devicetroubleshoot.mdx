@@ -11,26 +11,27 @@ _Do you have problems with provisioning your ESP32?_
 <Tabs>
   <Tab label="YES">
 
-    - some hardware models need physical interaction with the device during initial provisioning - like pushing a button.
+- some hardware models need physical interaction with the device during initial provisioning - like pushing a button.
 
-    - if provisioning doesn't work, consult the documentation for your ESP32.
+- if provisioning doesn't work, consult the documentation for your ESP32.
 
-    - if you have timeout problems when provisioning, some hardware models require you to [hold down BOOT button](https://randomnerdtutorials.com/solved-failed-to-connect-to-esp32-timed-out-waiting-for-packet-header/).
-      Read more info about the bootloader mode [here](https://github.com/espressif/esptool/wiki/ESP32-Boot-Mode-Selection).
+- if you have timeout problems when provisioning, some hardware models require you to [hold down BOOT button](https://randomnerdtutorials.com/solved-failed-to-connect-to-esp32-timed-out-waiting-for-packet-header/).
+  Read more info about the bootloader mode [here](https://github.com/espressif/esptool/wiki/ESP32-Boot-Mode-Selection).
 
-    - if your device wasn't able to connect via WiFi to the Toit cloud during the provisioning, it is not yet claimed. In this state the device is provisioned with the Toit firmware,
-      but is not yet linked to your Toit project. Follow the instructions [here](../claim) to manually claim the device once it has managed to go
-      online.
+- if your device wasn't able to connect via WiFi to the Toit cloud during the provisioning, it is not yet claimed. In this state the device is provisioned with the Toit firmware,
+  but is not yet linked to your Toit project. Follow the instructions [here](../claim) to manually claim the device once it has managed to go
+  online.
 
-    - if the provision command fails during the first part of the provisioning process, the hardware ID (if any) is written to the local disk if possible and will be reused the next time the command is executed on the same computer.
+- if the provision command fails during the first part of the provisioning process, the hardware ID (if any) is written to the local disk if possible and will be reused the next time the command is executed on the same computer.
 
-    - if the provision command fails, consider trying with a lower baud rate (here half the default baud rate):
+- if the provision command fails, consider trying with a lower baud rate (here half the default baud rate):
 
-    ```shell
-    toit serial provision --baud 460800 -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
-    ```
+  ```shell
+  toit serial provision --baud 460800 -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
+  ```
 
   </Tab>
+
   <Tab label="NO">
 
 If you have provisioned your ESP32 but the claiming step failed, and you therefore cannot see the device in the list of devices in the Toit console,
@@ -46,14 +47,14 @@ _Do you have problems getting your ESP32 online?_
 <Tabs>
   <Tab label="YES">
 
-    - the ESP32 cannot connect to 5GHz WiFi network, so be sure to use the WiFi that is on 2.4GHz.
+- the ESP32 cannot connect to 5GHz WiFi network, so be sure to use the WiFi that is on 2.4GHz.
 
-    - make sure that you have typed the correct WiFi SSID and password in the provisioning step. If you are unsure, you can use the Monitor button in the
-      [Toit console](https://console.toit.io/serial), and check the serial output of your ESP32 in order to see whether the device connects to the internet or fails trying.
+- make sure that you have typed the correct WiFi SSID and password in the provisioning step. If you are unsure, you can use the Monitor button in the
+  [Toit console](https://console.toit.io/serial), and check the serial output of your ESP32 in order to see whether the device connects to the internet or fails trying.
 
-    - you can configure your device with the WiFi details again using the Reinstall button in the [Toit console](https://console.toit.io/serial).
+- you can configure your device with the WiFi details again using the Reinstall button in the [Toit console](https://console.toit.io/serial).
 
-    - when your device can get online via WiFi (verify with the Monitor button), you must claim your device into your Toit project by using the Claim button on the [devices page](https://console.toit.io/devices). See detailed instructions [here](../claim).
+- when your device can get online via WiFi (verify with the Monitor button), you must claim your device into your Toit project by using the Claim button on the [devices page](https://console.toit.io/devices). See detailed instructions [here](../claim).
 
   </Tab>
 
