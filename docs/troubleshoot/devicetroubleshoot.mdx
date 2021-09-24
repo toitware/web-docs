@@ -9,7 +9,7 @@ order: 2
 _Do you have problems with provisioning your ESP32?_
 
 <Tabs>
-  <Tab label="YES">
+<Tab label="YES">
 
 - some hardware models need physical interaction with the device during initial provisioning - like pushing a button.
 
@@ -26,44 +26,44 @@ _Do you have problems with provisioning your ESP32?_
 
 - if the provision command fails, consider trying with a lower baud rate (here half the default baud rate):
 
-  ```shell
-  toit serial provision --baud 460800 -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
-  ```
+```shell
+toit serial provision --baud 460800 -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
+```
 
-  </Tab>
+</Tab>
 
-  <Tab label="NO">
+<Tab label="NO">
 
 If you have provisioned your ESP32 but the claiming step failed, and you therefore cannot see the device in the list of devices in the Toit console,
 please follow the troubleshooting tips in the next section about WiFi connection issues.
 
-  </Tab>
+</Tab>
 </Tabs>
 
 ## Problems with WiFi connection
 
-_Do you have problems getting your ESP32 online?_
+_Do you have problems getting your ESP32 online with WiFi?_
 
 <Tabs>
-  <Tab label="YES">
+<Tab label="YES">
 
 - the ESP32 cannot connect to 5GHz WiFi network, so be sure to use the WiFi that is on 2.4GHz.
 
-- make sure that you have typed the correct WiFi SSID and password in the provisioning step. If you are unsure, you can use the Monitor button in the
+- make sure that you have typed the correct WiFi SSID and password in the provisioning step. If you are unsure, you can use the `Monitor` button in the
   [Toit console](https://console.toit.io/serial), and check the serial output of your ESP32 in order to see whether the device connects to the internet or fails trying.
 
-- you can configure your device with the WiFi details again using the Reinstall button in the [Toit console](https://console.toit.io/serial).
+- you can configure your device with the WiFi details again using the `Reinstall` button in the [Toit console](https://console.toit.io/serial).
 
-- when your device can get online via WiFi (verify with the Monitor button), you must claim your device into your Toit project by using the Claim button on the [devices page](https://console.toit.io/devices). See detailed instructions [here](../claim).
+- when your device can get online via WiFi (verify with the Monitor button), you must claim your device into your Toit project by using the `Claim` button on the [devices page](https://console.toit.io/devices). See detailed instructions [here](../claim).
 
-  </Tab>
+</Tab>
 
-  <Tab label="NO">
+<Tab label="NO">
 
 If you have other problems or issues with getting your ESP32 setup with Toit, please reach out to the Toit engineering team. We are ready to help you get started using the Toit platform.
 We are available via the integrated chat, via [Slack](https://chat.toit.io) or you can write us an email using developers@toit.io.
 
-  </Tab>
+</Tab>
 
 </Tabs>
 
@@ -75,13 +75,13 @@ If your ESP32 is misconfigured in any way, for example if it does not have valid
 and WiFi settings via a serial connection, by connecting it with a USB cable to your computer.
 
 <Tabs>
-  <Tab label="Console">
+<Tab label="Console">
 
 In the [Web Serial](https://console.toit.io/serial) page in the Toit console, press the Reinstall button and provide the WiFi credentials for the WiFi currently available.
 
-  </Tab>
+</Tab>
 
-  <Tab label="CLI">
+<Tab label="CLI">
 
 Run the `toit serial reinstall` CLI command
 with the appropriate WiFi connection settings provided (replace `MY_SSID` and `my_password` with the correct WiFi credentials):
@@ -90,7 +90,7 @@ with the appropriate WiFi connection settings provided (replace `MY_SSID` and `m
 toit serial reinstall -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
 ```
 
-  </Tab>
+</Tab>
 
 </Tabs>
 
