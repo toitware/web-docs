@@ -1,0 +1,123 @@
+---
+order: 1
+---
+
+# Serial connect troubleshoot
+
+If you have trouble connecting your ESP32 device to your computer via a serial connection, like a USB cable, try the tips and tricks described in this troubleshooting guide.
+
+## Problems with serial connection
+
+_Have you previously connected an ESP32 via a serial connection to your computer, for example using Arduino IDE or similar?_
+
+<details>
+  <summary>Click to expand</summary>
+
+<Tabs>
+<Tab label="YES">
+
+Remember to close your Arduino (or similar) IDE before you continue with the serial connection steps with Toit.
+
+</Tab>
+<Tab label="NO">
+
+If you are using macOS or Windows, you might need to install or update the following USB driver on your computer:
+
+- The USB to UART Bridge VCP driver from [here](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers).
+
+For Windows, install the CP210x Universal Windows Driver.
+For macOS, install the CP210x VCP Mac OSX Driver.
+
+Install the driver, _reboot your computer_ and you are ready to talk to your ESP32 via a serial port.
+
+</Tab>
+</Tabs>
+</details>
+
+## Problems using the Web serial
+
+_Are you trying to connect using the [web serial page](https://console.toit.io/serial) in the Toit console?_
+
+<details>
+  <summary>Click to expand</summary>
+
+<Tabs>
+<Tab label="YES">
+
+- try a different serial port on your computer
+
+- try to disconnect all other serial connections, if any, from your computer, to be sure to only have the ESP32 connected to your computer as the only one
+
+- be sure to use the correct type of USB cable to connect with when provisioning your ESP32, in other words a cable for both data and power, and not only for power usage
+
+</Tab>
+<Tab label="NO">
+
+If you are using the Toit CLI:
+
+- run the `toit serial ports` CLI command to detect the correct serial port to use
+
+- try using a different serial port on your computer
+
+- try to disconnect all other serial connections, if any, from your computer, to be sure to only have the ESP32 connected to your computer as the only one
+
+- remember to close the browser window if you have tried to create a serial connection in the browser via https://console.toit.io/serial first
+
+- if you are on Linux, make sure you are in the `dialout` group as explained [here](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establish-serial-connection.html#adding-user-to-dialout-on-linux)
+
+- be sure to use the correct type of USB cable to connect with when provisioning your ESP32, in other words a cable for both data and power, and not only for power usage
+
+</Tab>
+</Tabs>
+</details>
+
+## Problems with the serial port
+
+_Do you have problems with detecting a serial port on your computer?_
+
+<details>
+  <summary>Click to expand</summary>
+
+<Tabs>
+<Tab label="YES">
+
+The Toit CLI offers commands to help you connect your ESP32 via a serial connection.
+
+Start by connecting your ESP32 with a USB cable to your computer.
+
+List the serial ports currently in use on your computer by running the following command with the Toit CLI in a terminal window:
+
+```shell
+toit serial ports
+```
+
+For example, if exactly one serial port, called `COM3`, is currently in use, the output of the command will look like this
+
+```txt
+$ toit serial ports
+COM3
+```
+
+You can monitor the serial output of the ESP32 with the command
+
+```shell
+toit serial monitor
+```
+
+The `monitor` command can be stopped by `Ctrl+c`
+
+If you have already initially provisioned your ESP32, run the following CLI command to read the hardware information via serial output:
+
+```shell
+toit serial info
+```
+
+</Tab>
+<Tab label="NO">
+
+If you have other problems or issues with getting your ESP32 setup with Toit, please reach out to the Toit engineering team. We are ready to help you get started using the Toit platform.
+We are available via the integrated chat, via [Slack](https://chat.toit.io) or you can write us an email using developers@toit.io.
+
+</Tab>
+</Tabs>
+</details>
