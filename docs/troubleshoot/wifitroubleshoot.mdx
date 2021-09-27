@@ -19,7 +19,13 @@ order: 2
 
 - You can configure your device with the WiFi details again using the `Reinstall` button in the [Toit console](https://console.toit.io/serial).
 
-- When your device can get online via WiFi (verify with the Monitor button), you must claim your device into your Toit project by using the `Claim` button on the [devices page](https://console.toit.io/devices). See detailed instructions [here](../claim).
+- When your device can get online via WiFi (verify with the `Monitor` button), you must claim your device into your Toit project by using the `Claim` button on the [devices page](https://console.toit.io/devices). Read more [here](../claimtroubleshoot).
+
+- If you are using an open WiFi with no password, use the Toit CLI when reinstalling or provisioning your ESP32 in order to provide an empty string as the password to the command, as in:
+
+```shell
+toit serial reinstall -p wifi.ssid="MY_SSID" -p wifi.password=""
+```
 
 </Tab>
 
