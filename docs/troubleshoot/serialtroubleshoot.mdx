@@ -4,14 +4,10 @@ order: 1
 
 # Serial connect troubleshoot
 
-If you have trouble connecting your ESP32 device to your computer via a serial connection, like a USB cable, try the tips and tricks described in this troubleshooting guide.
-
 ## Problems with serial connection
 
-_Have you previously connected an ESP32 via a serial connection to your computer, for example using Arduino IDE or similar?_
-
 <details>
-  <summary>Click to expand</summary>
+  <summary>Have you previously connected an ESP32 via a serial connection to your computer, for example using Arduino IDE or similar?</summary>
 
 <Tabs>
 <Tab label="YES">
@@ -36,36 +32,36 @@ Install the driver, _reboot your computer_ and you are ready to talk to your ESP
 
 ## Problems using the Web serial
 
-_Are you trying to connect using the [web serial page](https://console.toit.io/serial) in the Toit console?_
-
 <details>
-  <summary>Click to expand</summary>
+  <summary>Are you trying to connect using the Web serial page in the Toit console?</summary>
 
 <Tabs>
 <Tab label="YES">
 
-- try a different serial port on your computer
+- Try a different serial port on your computer
 
-- try to disconnect all other serial connections, if any, from your computer, to be sure to only have the ESP32 connected to your computer as the only one
+- If you are on Windows, try to update Windows and/or your browser, if any updates are available.
 
-- be sure to use the correct type of USB cable to connect with when provisioning your ESP32, in other words a cable for both data and power, and not only for power usage
+- Try to disconnect all other serial connections, if any, from your computer, to be sure to only have the ESP32 connected to your computer as the only one
+
+- Be sure to use the correct type of USB cable to connect with when provisioning your ESP32, in other words a cable for both data and power, and not only for power usage
 
 </Tab>
 <Tab label="NO">
 
 If you are using the Toit CLI:
 
-- run the `toit serial ports` CLI command to detect the correct serial port to use
+- Run the `toit serial ports` CLI command to detect the correct serial port to use
 
-- try using a different serial port on your computer
+- Try using a different serial port on your computer
 
-- try to disconnect all other serial connections, if any, from your computer, to be sure to only have the ESP32 connected to your computer as the only one
+- Try to disconnect all other serial connections, if any, from your computer, to be sure to only have the ESP32 connected to your computer as the only one
 
-- remember to close the browser window if you have tried to create a serial connection in the browser via https://console.toit.io/serial first
+- Remember to close the browser window if you have tried to create a serial connection in the browser via https://console.toit.io/serial first
 
-- if you are on Linux, make sure you are in the `dialout` group as explained [here](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establish-serial-connection.html#adding-user-to-dialout-on-linux)
+- If you are on Linux, make sure you are in the `dialout` group as explained [here](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establish-serial-connection.html#adding-user-to-dialout-on-linux)
 
-- be sure to use the correct type of USB cable to connect with when provisioning your ESP32, in other words a cable for both data and power, and not only for power usage
+- Be sure to use the correct type of USB cable to connect with when provisioning your ESP32, in other words a cable for both data and power, and not only for power usage
 
 </Tab>
 </Tabs>
@@ -73,10 +69,8 @@ If you are using the Toit CLI:
 
 ## Problems with the serial port
 
-_Do you have problems with detecting a serial port on your computer?_
-
 <details>
-  <summary>Click to expand</summary>
+  <summary>Do you have problems with detecting a serial port on your computer?</summary>
 
 <Tabs>
 <Tab label="YES">

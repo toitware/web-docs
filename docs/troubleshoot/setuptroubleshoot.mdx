@@ -1,0 +1,43 @@
+---
+order: 3
+---
+
+# Setup ESP32 troubleshoot
+
+## Problems with setting up your ESP32 with Toit firmware
+
+<details>
+  <summary>Do you have problems with the initial provisioning your ESP32?</summary>
+
+<Tabs>
+<Tab label="YES">
+
+- Some hardware models need physical interaction with the device during initial provisioning - like pushing a button.
+
+- If provisioning doesn't work, consult the documentation for your ESP32 chip.
+
+- If you have timeout problems when provisioning, some hardware models require you to [hold down BOOT button](https://randomnerdtutorials.com/solved-failed-to-connect-to-esp32-timed-out-waiting-for-packet-header/).
+  Read more info about the bootloader mode [here](https://github.com/espressif/esptool/wiki/ESP32-Boot-Mode-Selection).
+
+- If your device wasn't able to connect via WiFi to the Toit cloud during the provisioning, it is not yet claimed. In this state the device is provisioned with the Toit firmware,
+  but is not yet added to your Toit project. Follow the instructions [here](../claim) to manually claim the device once it has managed to go
+  online.
+
+- If the provision command fails during the first part of the provisioning process, the hardware ID (if any) is written to the local disk if possible and will be reused the next time the command is executed on the same computer.
+
+- If the provision command fails, consider trying with a lower baud rate (here half the default baud rate):
+
+```shell
+toit serial provision --baud 460800 -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
+```
+
+</Tab>
+
+<Tab label="NO">
+
+If you have provisioned your ESP32 but the claiming step failed, and you therefore cannot see the device in the list of devices in the Toit console,
+please follow the troubleshooting tips in the next section about WiFi connection issues.
+
+</Tab>
+</Tabs>
+</details>
