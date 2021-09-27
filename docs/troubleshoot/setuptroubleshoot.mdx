@@ -20,7 +20,7 @@ order: 3
   Read more info about the bootloader mode [here](https://github.com/espressif/esptool/wiki/ESP32-Boot-Mode-Selection).
 
 - If your device wasn't able to connect via WiFi to the Toit cloud during the provisioning, it is not yet claimed. In this state the device is provisioned with the Toit firmware,
-  but is not yet added to your Toit project. Follow the instructions [here](../claim) to manually claim the device once it has managed to go
+  but is not yet added to your Toit project. Follow the steps [here](./claimtroubleshoot) to manually claim the device once it has managed to go
   online.
 
 - If the provision command fails during the first part of the provisioning process, the hardware ID (if any) is written to the local disk if possible and will be reused the next time the command is executed on the same computer.
@@ -36,7 +36,7 @@ toit serial provision --baud 460800 -p wifi.ssid="MY_SSID" -p wifi.password="my_
 <Tab label="NO">
 
 If you have provisioned your ESP32 but the claiming step failed, and you therefore cannot see the device in the list of devices in the Toit console,
-please follow the troubleshooting tips in the next section about WiFi connection issues.
+please follow the troubleshooting tips [here](./claimtroubleshoot).
 
 </Tab>
 </Tabs>
