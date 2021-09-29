@@ -4,22 +4,34 @@ order: 0
 
 # TCP (and TLS)
 
-MQTT is a IoT friendly protocol for publishing and subscribing to a shared MQTT broker, from a wide range of devices. While Toits pub-sub implementation has some benefits for seamlessly storing and offloading messages, there may be usecases where connecting to an MQTT broker can be beneficial. For example if
+[MQTT](https://mqtt.org/) is an IoT friendly messaging protocol for publishing and subscribing to a shared MQTT broker from a wide range of devices.
+While Toit's [PubSub](../../../../apis/pubsub) implementation has some benefits for seamlessly storing and offloading messages, there may be use cases where
+connecting to an MQTT broker can be beneficial.
 
-1. You want to send the data to a local machine and not through the internet.
-2. Your stack already operates using an existing MQTT broker.
-3. You want to quickly evalute Toit.
+For example, if
 
-Either way, this guide shows you how to connect to a MQTT broker using TCP (or TLS).
+- You want to send the data to a local machine and not through the internet.
+- Your stack already operates using an existing MQTT broker.
+- You want to quickly evaluate Toit.
 
-## Connecting
+Either way, this tutorial shows you how to connect to an MQTT broker using TCP (or TLS).
 
-MQTT requires every client to have an unique `CLIENT_ID`. That ID is send when connecting to the broker and helps the broker to ensures
-easy client will get a copy of data broadcasted, etc.
+## Connect
 
-Next, some brokers requires the client to provide a `username` and `password`.
+MQTT requires every client to have a unique `CLIENT_ID`. That `ID` is sent when connecting to the broker, and helps the broker to ensure that
+every client will get a copy of the data broadcasted etc.
 
-The Toit MQTT client is available from the [`mqtt` package](https://pkg.toit.io/package/github.com%2Ftoitware%2Fmqtt).
+Next, some brokers require the client to provide a `username` and `password`.
+
+The Toit MQTT client is available from the [`mqtt` package](https://pkg.toit.io/package/github.com%2Ftoitware%2Fmqtt) - in the Toit package registry.
+
+Install the package using the Toi CLI:
+
+```shell
+toit pkg install github.com/toitware/mqtt
+```
+
+and use it by importing it into your application with `import mqtt`
 
 ```toit
 import net
@@ -40,31 +52,33 @@ main:
 
 ## Publish
 
-Simple sensor applications mainly have one purpose; send sensor data. When sending data, you simply need to tell which topic to publish to, along with the payload.
-
+Simple sensor applications mainly have one purpose; to send sensor data. When sending data, you simply need to specify which topic to publish to, together with the payload.
 
 ```toit
 import mqtt
 import encoding.json
 
 publish value/float client/mqtt.Client:
+  topic ::= "my/sensor/data"
   payload := json.encode {
     "value": value
   }
-  client.publish "my/sensor/data" payload
+  client.publish topic payload
 
 ```
 
 ## Subscribe
 
-Subscribing to data requires two steps. First, you have to set up the callback to handle the incoming messages. Second, you have to register to the topics you want data from.
+Subscribing to data requires two steps. First, you have to set up the callback to handle the incoming messages.
+Second, you need to register to the topics you want to receive data from.
 
 ```toit
 import mqtt
 import encoding.json
 
 subscribe client/mqtt.Client:
-  client.subscribe "my/sensor/*" --qos=1
+  topic ::= "my/sensor/*"
+  client.subscribe topic --qos=1
 
   client.handle: | topic/string payload/ByteArray |
     decoded := json.decode payload
@@ -75,7 +89,6 @@ subscribe client/mqtt.Client:
 
 The `TcpTransport` used so far works with any TCP-compatible socket, including TLS sockets. To upgrade a TCP socket to TLS, you need to perform
 a TLS handshake.
-
 
 ```toit
 import mqtt
