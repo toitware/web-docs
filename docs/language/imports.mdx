@@ -9,7 +9,7 @@ library. They must be at the top-level and at the top of the file (possibly
 following some comments).
 
 An import always starts with the `import` keyword, followed by identifier
-segments that tell Toit how to find the library. Optionally it can then be
+segments that tell Toit how to find the library. Optionally it can be
 suffixed by customizations:
 
 For example:
@@ -111,7 +111,7 @@ For example, assume we have the following structure:
 1 directory, 2 files
 ```
 
-Inside `main.toit` we can import `my_lib.toit` by writing `import .sub.sub`.
+Inside `main.toit` we can import `sub.toit` by writing `import .sub.sub`.
 As discussed, this is repetitive, so instead this can be shortened to:
 `import .sub`.
 
