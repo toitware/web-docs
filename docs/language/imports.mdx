@@ -1,5 +1,5 @@
 ---
-order: 19
+order: 350
 ---
 
 # Imports
@@ -21,7 +21,7 @@ import .other
 ```
 
 Depending on whether the identifier segments start with a `.` or not, the
-import is a local or global import. Toit uses a different strategy to
+ import is a local or global import. Toit uses a different strategy to
 locate the target file for each of these two strategies.
 
 ## Local
@@ -58,14 +58,14 @@ import ..sibling.sibling2
 
 Note, that `import .sub.sub` and `import ..sibling.sibling` could
 be shortened to `import .sub` and `import ..sibling` respectively.
-(See #<link> folder shortcut below).
+(See [folder shortcut](#folder-shortcut) below).
 
 The first `.` indicates that the import is a local import. Further
 dots move up the folder hierarchy.
 
 For locally imported libraries all their top-level elements are
 directly visible inside the importing library without any prefix.
-See <customizations> below for ways of changing that.
+See [customizations](#customizations) below for ways of changing that.
 
 ## Global
 
@@ -76,9 +76,8 @@ with the SDK.
 The compiler has a mapping from identifier to location. The first
 identifier in the segment list is used to find a folder or file. After that,
 the local and global resolution works the same. That is, a global import
-can dot into sub-folders the same way as for local imports.
-
-For example, a common sub-folder import is for the JSON library:
+can dot into sub-folders the same way as for local imports. A common
+use of dotting is for the JSON library which is a sub-folder of encodings:
 
 ```
 import encodings.json
@@ -88,10 +87,10 @@ Once imported, all global elements of the imported library are available
 through a prefix. By default the prefix is the last identifier of the
 segment list. In the case of the `encodings.json` import above, the prefix
 would thus be `json`, and one could call `json.parse` to call the
-top-level `parse` function of that library (https://libs.toit.io/encoding/json/library-summary#parse(1%2C0%2C0%2C)).
+top-level `parse` function of that library ([toitdoc](https://libs.toit.io/encoding/json/library-summary#parse(1%2C0%2C0%2C))).
 
 Note, that global imports also apply the folder shortcut, as
-described <#link-below>.
+described [below](#folder-shortcut).
 
 ## Folder shortcut
 
@@ -119,9 +118,9 @@ The same mechanism applies to SDK or package imports. If the resolution
 of an import finds a folder, Toit tries to find a file with the same
 name as the last segment instead.
 
-Say, we want to use the `morse` package
-(https://github.com/toitware/toit-morse). When installing this package
-with `toit pkg install github.com/toitware/toit-morse` the package manager
+Say, we want to use the [morse package](https://github.com/toitware/toit-morse).
+When installing this package
+with `toit pkg install github.com/toitware/toit-morse`, the package manager
 downloads the sources and adds a mapping from the package's name `morse` to
 the location it downloaded the sources. Specifically, the mapping points to
 the `src` folder of the package.
