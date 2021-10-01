@@ -40,7 +40,7 @@ Here are the common steps for creating a package:
 
 ## Develop Code
 
-In this section we write the Morse code module. We are simplifying the code a lot, so that it fits into the tutorial.
+In this section we write the Morse code library. We are simplifying the code a lot, so that it fits into the tutorial.
 
 Usually, the code for a package is initially developed as part of an application. This can be a simple example
 program, or a bigger existing application. Once the code looks ready for other developers, the code that should
@@ -303,7 +303,7 @@ We use `toit pkg init` to ensure that the `package.lock` file is created in the 
 
 ### Tests
 
-Toit doesn't have a testing framework, yet. For now, developers need to write their tests without much help from the Toit framework. We recommend to simply write executables that use the `expect` module to test the package. Tests should live in the `tests` folder.
+Toit doesn't have a testing framework, yet. For now, developers need to write their tests without much help from the Toit framework. We recommend to simply write executables that use the `expect` library to test the package. Tests should live in the `tests` folder.
 
 Here is a simple test (`tests/morse_test.toit`) for ensuring that an 'a' is correctly translated:
 
