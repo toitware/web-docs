@@ -126,7 +126,7 @@ your pages:
 ```md
 ---
 title: Getting Started
-order: 3
+order: 300
 ---
 
 # How to get started
