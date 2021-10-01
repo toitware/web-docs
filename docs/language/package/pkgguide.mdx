@@ -8,7 +8,7 @@ This section provides instructions on how to use the Toit package manager (hence
 
 ## Installing a package
 
-You might need to add a registry as the first thing, before you can proceed with installing a package (see below "Adding a Registry").
+You might need to add a registry as the first thing, before you can proceed with installing a package (see [below](#adding-a-registry)).
 
 The following CLI commands update the local registry, search for a package, and then install it.
 
@@ -17,6 +17,14 @@ toit pkg sync          # Synchronize the installed registries.
 toit pkg search morse  # Search for a package "morse".
 toit pkg install morse # Install package "morse".
 ```
+
+It is important to execute these commands in the correct folder. Ideally,
+they should be run in the root of the project that needs the package.
+
+Note that the example and test folder generally are considered to be
+separate projects as they might have different dependencies than the package
+itself. We recommend to open the example or test folder in separate instances
+of the IDE.
 
 <Note title="Unique names">
 

@@ -36,15 +36,15 @@ This section describes how a package is created and then used.
 
 A package starts out as a folder with Toit files. If they are useful, it makes sense to create a package so they can be shared among different projects and so they can be contributed to the community.
 
-The developer creates a fresh Git repository with these files and adds a _specification_ file. This specification file serves as a signal to TPM that the repository is intended to be used as a package.
-It also contains information such as the package's name, a description, and its dependencies. (See the [specification section](pkgconcepts/#package) for more details).
+The developer creates a fresh Git repository with these files and adds a file specification file `package.yaml`. This file serves as a signal to TPM that the repository can be used as a package.
+It also contains information such as the package's dependencies. (See the [specification section](pkgconcepts/#package) for more details).
 Then the package author creates a Git tag with the version number.
 TPM uses semantic versioning, so typically, the tag would look something like "v1.2.1" or "v2.0.0".
 
 The developer now needs to register the package. TPM is decentralized and there can be many different registries, but Toit's registry service is a good choice as it is installed by default for Toit programmers.
 You can publish a package via the [Toit package registry](https://pkg.toit.io/publish) web-site.
 
-Registries create descriptions of the known packages and store them in a Git repository. The [Toit registry](https://github.com/toitware/registry/tree/main/packages/github.com) is just a public Git repository with description files.
+Registries create descriptions of the known packages and store them in a Git repository. The [Toit registry](https://github.com/toitware/registry/tree/main/packages/github.com) is just a public Git repository with description files. It also has a human readable facade at https://pkg.toit.io.
 
 Toit programmers synchronize this repository, giving them access to all the descriptions in that registry. This is done through the `toit pkg sync` command which simply pulls the latest changes.
 
@@ -58,9 +58,9 @@ The name of the package must be non-ambiguous, and thus might need a qualifier. 
 
 Before TPM downloads the sources of a package it first looks at all of the package's dependencies and finds versions that work. This is, again, done locally using the synchronized descriptions.
 
-TPM then downloads the packages from their original locations (or, potentially, a mirror). It stores the downloaded packages in a cache directory, by default `$HOME/.cache/toit/tpkg`, so that future references to the package can reuse the downloaded code. For safety, downloaded packages are checked against their descriptions to make sure that they haven't been tampered with.
+TPM then downloads the packages from their original locations (or, potentially, a mirror). It stores the downloaded packages in a cache directory, by default in the project folder in `.packages`.
 
-After the package and its dependencies have all been successfully downloaded and verified, a reference to them is added to the application's package.lock file (assuming that the `install` command was done inside an application). If no such file exists, it is created.
+After the package and its dependencies have all been successfully downloaded, a reference to them is added to the application's package.lock file. If no such file exists, it is created.
 
 At this point the application can use the newly installed package with its prefix (by default the package name, but can also be changed during installation). For example, for the package 'morse' the user would write:
 
@@ -71,8 +71,14 @@ main:
   morse.encode_string "hello world"
 ```
 
-Since the `package.lock` specifies the dependencies of an application it should be checked in and shared with other developers who want to work on the same application.
-On different computers, dependent packages aren't necessarily downloaded yet. The command `toit pkg download` fixes that by downloading all referenced packages (with the same versions).
+Both the `package.yaml` and the `package.lock` files should be checked in and
+shared with other developers who want to work with the same application or
+package. However the `.packages` directory is local and should not be
+committed. For git, `.packages` should be added to your `.gitignore` file.
+
+Before being able to use a program or package on a different computer one
+has to run `toit pkg install` to download the packages that are specified in
+the lock file.
 
 ## Good Practice
 
