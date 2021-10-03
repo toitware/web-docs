@@ -1,0 +1,44 @@
+---
+order: 1
+---
+
+# Scanning
+
+To start a scan for nearby devices, simply call `scan` on the `ble.Device`. The provided block will be called by each scan result:
+
+```toit
+import ble
+
+main:
+  device := ble.Device.default
+
+  device.scan: | remote_device/ble.RemoteDevice |
+    print "Found $remote_device"
+```
+
+Here the scan will run indefinitely.
+
+## Collecting results
+
+Sometimes a scan is about finding a list of remote devices that matches a criteria, e.g. implementing a specific service. Services are expressed as UUIDs, with a select few
+being defined by [Bluetooth SIG](https://www.bluetooth.com/specifications/assigned-numbers/). As an example, the 16-bit UUID `0x190F` represent a battery service.
+
+The following example shows how to scan for 3 seconds for remote devices implementing a battery service, collecting the addresses of the remote services.
+
+```toit
+import ble
+
+BATTERY_SERVICE ::= ble.uuid 0x180F
+SCAN_DURATION   ::= Duration --s=3
+
+main:
+  device := ble.Device.default
+
+  addresses := []
+
+  device.scan --duration=SCAN_DURATION: | remote_device/ble.RemoteDevice |
+    if remote_service.service_classes.contains BATTERY_SERVICE:
+      addresses.add remote_service.address
+
+  print addresses
+```

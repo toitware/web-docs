@@ -1,0 +1,56 @@
+---
+order: 1
+---
+
+# Client
+
+A BLE device is able to connect to a remote device. The result of initiating a connection is a client. The client can then be used to navigate the
+services implemented by the remote device as well as the characteristics.
+
+## Connecting to a remote device
+
+Before a connection can be established, the address must be found. The following example shows how to scan for the first remote device implementing a given service.
+
+```toit
+import ble
+
+// Find first address with service.
+find_with_service device/ble.Device service/uuid.Uuid -> ble.Address:
+  device.scan --duration=SCAN_DURATION: | remote_device/ble.RemoteDevice |
+    if remote_service.service_classes.contains service:
+      return remote_service.address
+```
+
+With the address available, the connection can be established.
+
+```toit
+import ble
+
+BATTERY_SERVICE ::= ble.uuid 0x180F
+
+main:
+  device := ble.Device.default
+  address := find_with_service device BATTERY_SERVICE
+  client := device.connect address
+```
+
+With the client in place the battery service can be accesses and the battery level read out.
+
+```toit
+import ble
+
+BATTERY_SERVICE ::= ble.uuid 0x180F
+BATTERY_LEVEL   ::= ble.uuid 0x2A19
+
+main:
+  device := ble.Device.default
+
+  address := find_with_service device BATTERY_SERVICE
+  client := device.connect address
+  service := client.read_service BATTERY_SERVICE
+  value := service.read_value BATTERY_LEVEL
+
+  // The battery level is a single-byte attribute, between 0 and 100.
+  battery_level := value[0]
+  print "Battery level of $address: $battery_level"
+```

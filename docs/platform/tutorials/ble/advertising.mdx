@@ -1,0 +1,89 @@
+---
+order: 2
+---
+
+# Advertising
+
+In the base form, advertising will just advertise the address of the device.
+
+```toit
+import ble
+
+main:
+  device := ble.Device.default
+
+  advertiser := device.advertise
+  advertiser.start
+```
+
+## Name
+
+Sometimes it can be beneficial to advertise the name of the device. That can be for debugging purposes or when a protocol requires it.
+
+```toit
+import ble
+
+main:
+  device := ble.Device.default
+
+  data := ble.AdvertisementData
+    --name="Toit device"
+
+  advertiser := device.advertise
+  advertiser.set_data data
+  advertiser.start
+```
+
+As the name is included in all advertisements, power and bandwidth can be save by omitting it.
+
+## Service classes
+
+To signal what services the device implements, service classes can be added to the advertisement data. Service classes takes form of UUIDs.
+
+```toit
+import ble
+
+BATTERY_SERVICE ::= ble.uuid 0x180F
+
+main:
+  device := ble.Device.default
+
+  data := ble.AdvertisementData
+    --service_classes=[BATTERY_SERVICE]
+
+  advertiser := device.advertise
+  advertiser.set_data data
+  advertiser.start
+```
+
+<Note type="info">
+
+In case the advertised UUIDs are 16 or 32-bit BLE uuids, the system will automatically report them as such.
+
+</Note>
+
+## Manufacturer data
+
+In contrast to what the fields may sound like, the manufacturer data is a custom payload that can be sent with any advertisement.
+
+An example of a use-case may be to periodically report a sensor value, that may be available to all; the local temperature or GPS location.
+
+Here an incremental value from 0 to 255 is reported, once every 5 seconds.
+
+```toit
+import ble
+
+INTERVAL ::= Duration --s=5
+
+main:
+  device := ble.Device.default
+
+  advertiser := device.advertise
+  advertiser.start --interval=INTERVAL
+
+  256.repeat:
+    data := ble.AdvertisementData
+      --manufacturer_data=#[it]
+    advertiser.set_data data
+    sleep INTERVAL
+```
