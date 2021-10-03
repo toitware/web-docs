@@ -34,6 +34,8 @@ main:
   client := device.connect address
 ```
 
+## Reading service characteristics
+
 With the client in place the battery service can be accesses and the battery level read out.
 
 ```toit
@@ -50,7 +52,7 @@ main:
   service := client.read_service BATTERY_SERVICE
   value := service.read_value BATTERY_LEVEL
 
-  // The battery level is a single-byte attribute, between 0 and 100.
+  // The battery level is a single-byte characteristic, between 0 and 100.
   battery_level := value[0]
   print "Battery level of $address: $battery_level"
 ```
