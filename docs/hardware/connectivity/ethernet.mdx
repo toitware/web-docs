@@ -4,9 +4,9 @@ order: 300
 
 # Ethernet
 
-The ESP32 supports Ethernet in a couple of ways:
+The ESP32 supports Ethernet in two different ways:
 
-  * Using the ESP32 for the MAC layer but an external chip for the PHY layer, using RMII.
+  * Using the ESP32 for the MAC layer but with an external chip for the PHY layer, using RMII.
   * Using an external chip for both the MAC and PHY layer, using SPI.
 
 ## External PHY chip
@@ -31,7 +31,7 @@ In additional to these variable options, there is a set of fixed pins that must 
 
 <Note type="info">
 
-Only boards with an external reference clock connected to GPIO 0 is supported.
+Only boards with an external reference clock connected to GPIO 0 are supported.
 
 </Note>
 
@@ -52,7 +52,7 @@ toit serial reinstall \
 
 ## External MAC chip
 
-When an external MAC chip is used, it's communicated with using an dedicated SPI bus.
+When an external MAC chip is used, it's communicated with using a dedicated SPI bus.
 
 A few different chips are supported, as indicated below.
 
@@ -89,6 +89,6 @@ toit serial reinstall \
   -p model.ethernet.mac.int=39
 ```
 
-## MAC Address
+## MAC address
 
-The ESP32 comes with a an allocated Ethernet MAC address that by default will be used by both internal and external MAC configurations.
+The ESP32 comes with an allocated Ethernet MAC address that by default will be used by both internal and external MAC configurations.
