@@ -36,7 +36,7 @@ This section describes how a package is created and then used.
 
 A package starts out as a folder with Toit files. If they are useful, it makes sense to create a package so they can be shared among different projects and so they can be contributed to the community.
 
-The developer creates a fresh Git repository with these files and adds a file specification file `package.yaml`. This file serves as a signal to TPM that the repository can be used as a package.
+The developer creates a fresh Git repository with these files and adds a specification file `package.yaml`. This file serves as a signal to TPM that the repository can be used as a package.
 It also contains information such as the package's dependencies. (See the [specification section](pkgconcepts/#package) for more details).
 Then the package author creates a Git tag with the version number.
 TPM uses semantic versioning, so typically, the tag would look something like "v1.2.1" or "v2.0.0".
@@ -60,7 +60,7 @@ Before TPM downloads the sources of a package it first looks at all of the packa
 
 TPM then downloads the packages from their original locations (or, potentially, a mirror). It stores the downloaded packages in a cache directory, by default in the project folder in `.packages`.
 
-After the package and its dependencies have all been successfully downloaded, a reference to them is added to the application's package.lock file. If no such file exists, it is created.
+After the package and its dependencies have all been successfully downloaded, a reference to them is added to the application's `package.lock` file. If no such file exists, it is created.
 
 At this point the application can use the newly installed package with its prefix (by default the package name, but can also be changed during installation). For example, for the package 'morse' the user would write:
 
