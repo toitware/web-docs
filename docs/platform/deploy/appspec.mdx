@@ -50,7 +50,9 @@ pubsub:
 
 - **`triggers`**:
 
-  The events triggering the execution of the application.
+  The events triggering the execution of the application. Programs can query which trigger started them by using the [job library](https://libs.toit.io/job/library-summary).
+
+  Without any trigger, the application is always running. In case the application terminates, it is immediately restarted.
 
   - **`on_boot`**:
 
