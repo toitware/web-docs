@@ -2,8 +2,6 @@
 order: 0
 ---
 
-import DataSub from "../_images/dataview.png";
-
 # APIs
 
 ## GRPC API
@@ -22,7 +20,7 @@ Create an API key to be used when connecting server applications to the API.
 <Tabs>
 <Tab label="Console">
 
-Navigate to the [API keys section](https://console.toit.io/project/apikeys) in the Toit console and press the `Create API key` button.
+Navigate to the [API keys section](https://console.toit.io/project/apikeys) in the Toit console and press the **Create API key** button.
 
 </Tab>
 <Tab label="CLI">
@@ -100,16 +98,12 @@ If a subscription is more than 7 days behind, messages will be pruned and missed
 It is possible to do concurrent reads on one subscription.
 When doing so, the concurrent reads will receive different batches of the same data set, making it easier to make ingestion concurrent.
 
-### Create a subscription
+### Create a subscription for logs or metrics
 
 <Tabs>
 <Tab label="Console">
 
-Go to the **Data** page and click on **Create Subscription**. Select **Logs** or **Metrics** and type in the name of the subscription.
-
-<img src={DataSub} alt="Screenshot of Data page on the Toit console" />
-
-Once you created a subscription, you can choose to visualize in two graphs at the top of the page the number of unacknowledged messages for that subscription, as well as the age of the oldest unacknowledged message for the selected time interval.
+Go to the [Data](https://console.toit.io/data) section in the Toit console, choose either the Logs or Metrics tabs, click on **Create Subscription**, and add a name to the subscription to create.
 
 Use the CLI commands to acknowledge messages for a subscription.
 
