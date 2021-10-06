@@ -8,7 +8,7 @@ This document describes the preferred style for the Toit language.
 To learn about Toit's syntax see [the syntax summary](../syntax).
 To learn about Toit's
 documentation convention, see the language [documentation
-convention](../../sdk/toitdoc) section.
+convention](../sdk/toitdoc) section.
 
 ## Whitespace and indentation
 
@@ -83,7 +83,7 @@ case you can add parentheses or newlines.
   my_func x+1 x-1          // Not enough spaces.
   my_func x + 1 x - 1      // Hard to read.
   my_func (x + 1) (x - 1)  // Easier to read.
-  my_func                  // Newlines between arguments have an uncluttered look.
+  my_func                  // Nice uncluttered look with newlines.
     x + 1
     x - 1
 ```
@@ -108,8 +108,8 @@ Classes are named with initial capital letters and camel case.
 class MyClass:
 ```
 
-This applies even if they contain abbreviations that [would normally be written in all-caps]
-(https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest).
+This applies even if they contain abbreviations that
+[would normally be written in all-caps](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest).
 
 ```
 class MyRgbToYuvConverter:
@@ -174,7 +174,7 @@ sense.
 
 Similarly for members:
 ```
-class Foo
+class Foo:
   x/int? := null  // Don't assign null unless you want this default
   y/int  := ?     // Value comes from constructor.
 
