@@ -2,13 +2,17 @@
 order: 600
 ---
 
-# List, Set and Map in Toit
+# List, ByteArray, Set and Map in Toit
 
 The following classes are included in the core SDK as part of the
 [collections.toit module](https://libs.toit.io/core/collections/library-summary):
 
 `List` provides an ordered and indexed collection which may contain duplicates.
 This is roughly analogous to extendable arrays in other languages.
+
+`ByteArray` is similar to a list for integer elements in the range 0 to 255.
+Byte arrays cannot change size, but see [Buffer](https://libs.toit.io/bytes/class-Buffer)
+which has a `write` method and can be extended.
 
 `Set` provides a collection of unique objects. When iterating over a `Set`, the
 objects are processed in insertion order.
@@ -57,10 +61,11 @@ some similarities to collections.
   methods `first` and `last` that are useful when using them as deduplicating queues or
   FIFOs.
 
-- **Literals**: Lists, Sets and Maps have literals:
+- **Literals**: Lists, ByteArrays, Sets and Maps have literals:
 
 ```
 list := []
+byte_array := #[]
 set := {}
 map := {:}
 ```
@@ -71,6 +76,7 @@ These are the preferred short cuts for:
 
 ```
 list := List
+byte_array := ByteArray
 set := Set
 map := Map
 ```
@@ -79,6 +85,7 @@ Literals may also contain values:
 
 ```
 list_with_values := [1, 2, 3]
+byte_array_with_values := #[1, 2, 3]
 set_with_values := {1, 2}
 map_with_values := {
   "key": 499,
