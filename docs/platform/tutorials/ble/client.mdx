@@ -9,7 +9,7 @@ services implemented by the remote device as well as the characteristics.
 
 ## Connecting to a remote device
 
-Before a connection can be established, the address must be found. The following example shows how to scan for the first remote device implementing a given service.
+In order for a BLE device to establish a connection to a remote device, the device must know the address. In most cases, the BLE device needs to discover the address which is done by scanning remote devices. The following example shows how to scan for the first remote device that implements a specific service.
 
 ```toit
 import ble
