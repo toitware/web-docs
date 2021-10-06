@@ -20,8 +20,8 @@ Here the scan will run indefinitely.
 
 ## Collecting results
 
-Sometimes a scan is about finding a list of remote devices that matches a criteria, e.g. implementing a specific service. Services are expressed as UUIDs, with a select few
-being defined by [Bluetooth SIG](https://www.bluetooth.com/specifications/assigned-numbers/). As an example, the 16-bit UUID `0x190F` represent a battery service.
+A scan can be used to create a list of remote devices that match a criteria, e.g. implement a specific service. A service is identified by a UUID with a select few services 
+being represented by [Bluetooth SIG](https://www.bluetooth.com/specifications/assigned-numbers/). As an example, the 16-bit UUID `0x190F` represents a battery service.
 
 The following example shows how to scan for 3 seconds for remote devices implementing a battery service, collecting the addresses of the remote services.
 
