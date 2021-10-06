@@ -4,7 +4,7 @@ order: 2
 
 # Advertising
 
-In the base form, advertising will just advertise the address of the device.
+A device can advertise itself for other devices to see it. So in the base form, BLE advertising will just advertise the address of the BLE device.
 
 ```toit
 import ble
@@ -38,7 +38,7 @@ The name is included in all advertisements, so power and bandwidth is saved by o
 
 ## Service classes
 
-To signal what services the device implements, service classes can be added to the advertisement data. Service classes takes form of UUIDs.
+To signal what services the device implements, service classes can be added to the advertisement data. Service classes are represented as UUIDs.
 
 ```toit
 import ble

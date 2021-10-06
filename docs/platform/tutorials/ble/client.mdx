@@ -5,7 +5,7 @@ order: 1
 # Client
 
 A BLE device can connect to a remote device. The result of initiating a connection is a client. The client can be used to navigate the
-services implemented by the remote device as well as the characteristics.
+services implemented by the remote device as well as the service characteristics.
 
 ## Connecting to a remote device
 
@@ -13,8 +13,9 @@ In order for a BLE device to establish a connection to a remote device, the devi
 
 ```toit
 import ble
+import uuid
 
-// Find first address with service.
+// Find the address with the service.
 find_with_service device/ble.Device service/uuid.Uuid -> ble.Address:
   device.scan --duration=SCAN_DURATION: | remote_device/ble.RemoteDevice |
     if remote_service.service_classes.contains service:
