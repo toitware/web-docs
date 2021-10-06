@@ -66,9 +66,9 @@ In case the advertised UUIDs are 16 or 32-bit BLE uuids, the system will automat
 
 The manufacturer data field is a custom payload that can be sent with _any_ advertisement (even though the name may suggest otherwise).
 
-An example of a use-case may be to periodically report a sensor value, that may be available to all; the local temperature or GPS location.
+For example, the manufacturer data field can be used to periodically broadcast a sensor value, e.g. the temperature or the GPS location, to make it available to all nearby devices.
 
-Here an incremental value from 0 to 255 is reported, once every 5 seconds.
+In the following example, the values between 0 and 255 are broadcasted incrementally with a new value every 5 seconds.
 
 ```toit
 import ble
