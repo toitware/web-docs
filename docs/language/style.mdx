@@ -32,9 +32,9 @@ my_function x/num y/num -> num:
 ### Line length
 
 There is no hard line length limit in Toit, but it is often
-more readable to limit line lengths to 80 characters.
+more readable to limit line lengths to 80 or 120 characters.
 
-Comments can be line-wrapped at any point and should almost always be limited
+Block comments can be line-wrapped at any point and should almost always be limited
 to 80 characters for readability, even in code that is wider for some reason.
 
 When breaking longer lines, the point of lowest [precedence](../syntax#precedence)
@@ -55,6 +55,12 @@ As seen above prefer to break before operators, not after operators.
 This fits well with the ability to [use newlines in long argument
 lists](../syntax#line-breaks-in-function-arguments), since argument lists have
 lower precedence than operators.
+```
+  // Using newline instead of parentheses to delineate the
+  // single argument to the print function.
+  print
+    unary_function argument
+```
 
 ### Whitespace around operators
 
@@ -77,7 +83,7 @@ fib n:
 ```
 
 For functions with more than one argument this can be hard to read, in which
-case you can add parentheses or newlines.
+case you should add parentheses or newlines.
 
 ```
   my_func x+1 x-1          // Not enough spaces.
@@ -153,8 +159,6 @@ letter and ending with a period (.).  At least two spaces should separate the
 // This is a single line comment in Toit.
 ```
 
-Old-style comments, /* */, are preferred for longer multiline comments.
-
 See also [documentation comments](../sdk/toitdoc).
 
 ## Declarations
@@ -163,7 +167,7 @@ Variables and members are not given an initial value unless it makes
 sense.
 ```
   x := 0      // No need to give x an inital value.
-  y/int := ?  // Compiler will check it is initialized before being used.
+  y /int := ?  // Compiler will check it is initialized before being used.
   if z == 1:
     x = 1
     y = 2
@@ -175,8 +179,8 @@ sense.
 Similarly for members:
 ```
 class Foo:
-  x/int? := null  // Don't assign null unless you want this default
-  y/int  := ?     // Value comes from constructor.
+  x /int? := null  // Don't assign null unless you want this default
+  y /int  := ?     // Value comes from constructor.
 
   constructor .x .y:  // Compiler will check that y is initialized.
 ```
@@ -193,7 +197,7 @@ setters and getters:
 class UnneededPrivacy:
   // No point in making this private since it has a trivial
   // getter and setter.
-  x_/int  // Private member variable.
+  x_ /int  // Private member variable.
 
   constructor x/int:
     x_ = x
@@ -215,39 +219,35 @@ class Simple:
   constructor .x:
 ```
 
-If you later need to intercept the setter (eg for logging), you can always
+If you later need to intercept the setter (for example for logging), you can always
 change the `Simple` to the implementation used by `UnneededPrivacy`
 without having to change users of the class.
-
-### Constructors
-
-Prefer
-[named constructors](../objects-constructors-inheritance-interfaces#named-constructors)
-and
-[factory constructors](../objects-constructors-inheritance-interfaces#factory-constructors)
-to static methods that return an instance.
-```
-class MyClass:
-  x/int? := ?
-
-  constructor .x:
-
-  static NULL_INSTANCE_ ::= MyClass null
-
-  // No need for a static.
-  static get_null_instance -> MyClass:
-    return NULL_INSTANCE_
-
-  // Use a factory constructor instead.
-  constructor.null_instance:
-    return NULL_INSTANCE_
-```
 
 ## Types
 
 Elements of public APIs should be typed.  Internal variables should
-be typed where it aids readability and according to taste.  Many
-types are inferred by the compiler for untyped variables.
+be typed where it aids readability and according to taste.  It is
+often useful to type parameters, as they cannot be inferred by the
+compiler.
+
+Types in argument lists are written without spaces in order to
+group the arguments visually:
+```
+my_function x/int y/float z/string -> none:
+  // Implementation
+```
+
+Types of
+[instance variables](../objects-constructors-inheritance-interfaces#classes-in-toit)
+and locals are written with a space
+before the `/`:
+```
+class Foo:
+  x /int
+  y /string
+
+  constructor .x .y:
+```
 
 ## Literals
 
@@ -263,7 +263,7 @@ RGB ::= [
 As seen above, the closing bracket is dedented to the initial indentation.
 
 If all values are in the 0-255 range and you don't expect to modify the
-list, use a ByteArray literal:
+list with a non-byte value, consider using a ByteArray literal:
 ```
 RGB ::= #[
   0,
@@ -279,7 +279,7 @@ For simple zero-to-n loops prefer `repeat` to `for`-loops.
   for i := 0; i < n; i++:  // No need for a for-loop.
     print i
 
-  n.repeat:  // Easier to read and just as fast.
+  n.repeat:  // Easier to read and actually faster.
     print it
 ```
 
