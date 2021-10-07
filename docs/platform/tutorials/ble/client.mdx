@@ -17,7 +17,7 @@ import uuid
 
 // Find the address with the service.
 find_with_service device/ble.Device service/uuid.Uuid -> ble.Address:
-  device.scan --duration=SCAN_DURATION: | remote_device/ble.RemoteDevice |
+  device.scan: | remote_device/ble.RemoteDevice |
     if remote_service.service_classes.contains service:
       return remote_service.address
 ```
