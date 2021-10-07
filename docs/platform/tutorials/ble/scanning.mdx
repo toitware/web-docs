@@ -37,8 +37,8 @@ main:
   addresses := []
 
   device.scan --duration=SCAN_DURATION: | remote_device/ble.RemoteDevice |
-    if remote_service.service_classes.contains BATTERY_SERVICE:
-      addresses.add remote_service.address
+    if remote_device.service_classes.contains BATTERY_SERVICE:
+      addresses.add remote_device.address
 
   print addresses
 ```
