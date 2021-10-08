@@ -14,6 +14,8 @@ main:
 
   advertiser := device.advertise
   advertiser.start
+
+  advertiser.wait_for_done
 ```
 
 ## Name
@@ -32,6 +34,8 @@ main:
   advertiser := device.advertise
   advertiser.set_data data
   advertiser.start
+
+  advertiser.wait_for_done
 ```
 
 The name is included in all advertisements, so power and bandwidth is saved by omitting it.
@@ -54,6 +58,8 @@ main:
   advertiser := device.advertise
   advertiser.set_data data
   advertiser.start
+
+  advertiser.wait_for_done
 ```
 
 <Note type="info">
@@ -64,7 +70,7 @@ In case the advertised UUIDs are 16 or 32-bit BLE uuids, the system will automat
 
 ## Manufacturer data
 
-The manufacturer data field is a custom payload that can be sent with _any_ advertisement (even though the name may suggest otherwise).
+The manufacturer data field is a custom payload that can be sent with a advertisement. The first two bytes is the company ID, followed by the payload. The sequence `[0xFF, 0xFF]` can be used for testing purposes.
 
 For example, the manufacturer data field can be used to periodically broadcast a sensor value, e.g. the temperature or the GPS location, to make it available to all nearby devices.
 
@@ -73,7 +79,7 @@ In the following example, the values between 0 and 255 are broadcasted increment
 ```toit
 import ble
 
-INTERVAL ::= Duration --s=5
+INTERVAL ::= Duration --s=1
 
 main:
   device := ble.Device.default
@@ -83,7 +89,7 @@ main:
 
   256.repeat:
     data := ble.AdvertisementData
-      --manufacturer_data=#[it]
+      --manufacturer_data=#[0xFF, 0xFF, it]
     advertiser.set_data data
     sleep INTERVAL
 ```
