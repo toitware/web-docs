@@ -1,0 +1,89 @@
+---
+order: 2
+---
+
+# Advertising
+
+A device can advertise itself for other devices to see it. So in the base form, BLE advertising will just advertise the address of the BLE device.
+
+```toit
+import ble
+
+main:
+  device := ble.Device.default
+
+  advertiser := device.advertise
+  advertiser.start
+```
+
+## Name
+
+Sometimes it can be beneficial to advertise the name of the device. That can be for debugging purposes or when a protocol requires it.
+
+```toit
+import ble
+
+main:
+  device := ble.Device.default
+
+  data := ble.AdvertisementData
+    --name="Toit device"
+
+  advertiser := device.advertise
+  advertiser.set_data data
+  advertiser.start
+```
+
+The name is included in all advertisements, so power and bandwidth is saved by omitting it.
+
+## Service classes
+
+To signal what services the device implements, service classes can be added to the advertisement data. Service classes are represented as UUIDs.
+
+```toit
+import ble
+
+BATTERY_SERVICE ::= ble.uuid 0x180F
+
+main:
+  device := ble.Device.default
+
+  data := ble.AdvertisementData
+    --service_classes=[BATTERY_SERVICE]
+
+  advertiser := device.advertise
+  advertiser.set_data data
+  advertiser.start
+```
+
+<Note type="info">
+
+In case the advertised UUIDs are 16 or 32-bit BLE uuids, the system will automatically report them as such.
+
+</Note>
+
+## Manufacturer data
+
+The manufacturer data field is a custom payload that can be sent with _any_ advertisement (even though the name may suggest otherwise).
+
+For example, the manufacturer data field can be used to periodically broadcast a sensor value, e.g. the temperature or the GPS location, to make it available to all nearby devices.
+
+In the following example, the values between 0 and 255 are broadcasted incrementally with a new value every 5 seconds.
+
+```toit
+import ble
+
+INTERVAL ::= Duration --s=5
+
+main:
+  device := ble.Device.default
+
+  advertiser := device.advertise
+  advertiser.start --interval=INTERVAL
+
+  256.repeat:
+    data := ble.AdvertisementData
+      --manufacturer_data=#[it]
+    advertiser.set_data data
+    sleep INTERVAL
+```

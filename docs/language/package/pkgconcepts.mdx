@@ -12,7 +12,7 @@ Package programs are Toit projects that are not intended to be used by other pro
 
 When a program uses a package, that dependency is registered in the program's lock file `package.lock`. This is where the mapping from `prefix` to package is stored. Programs have concrete dependencies. All their dependent packages are resolved to a specific version. This version is written in the lock file.
 
-When a developer calls `toit pkg download` they always get the same packages. A team of developers working on the same project will thus work with the exact same versions.
+When a developer calls `toit pkg install` they always get the same packages. A team of developers working on the same project will thus work with the exact same versions.
 
 Lock files must be located at the root of the project. Certain commands (like `pkg install`) automatically create a lock file if one doesn't exist yet. Be careful, as the lock-file is created in the current directory, which might not be the root directory.
 
@@ -22,7 +22,6 @@ The `package.lock` file should be shared with other developers of the program an
 
 </Note>
 
-A program should _not_ have a package.yaml file. These are reserved for packages that are intended to be imported by other programs or packages.
 
 ## Package
 
@@ -54,9 +53,8 @@ only depend on Git packages.
 The specification file, `package.yaml`, provides information about the package. A `package.yaml` file can contain the following entries:
 `name`: The name of the package. If not given, the package name is inferred from the `README.md` or the Git repository URL.
 If a `README.md` exists, and the title (`# title`) is a valid identifier, then that identifier is used as the package name.
-Otherwise, TPM looks at the Git URL. If the last segment of the URL is a valid identifier, optionally prefixed with `toit-`, then that identifier is used as the package name.
 `description`: A short description of the package. If none is provided, and a `README.md` exists, then the first paragraph of the `README.md` is used.
-`license`: The license of the package. Whenever possible, packages should use the same license keywords as [github uses](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository).
+`license`: The license of the package. Whenever possible, packages should use the same license keywords as provided by [SPDX](https://spdx.github.io/license-list-data/).
 Packages that are not intended to be reused should use the keyword `proprietary`. This is generally only useful for private packages.
 If no `license` entry is present, but a `LICENSE` file exists, then TPM tries to infer the license by matching the license file.
 `dependencies`: The dependencies of this package, together with the prefixes by which they are used inside the code. The dependencies entry is a map from prefix to `url`, `version`. For example:
@@ -131,4 +129,5 @@ A description file contains the following information:
 - license: The license of the package. For many projects it is important that transitive dependencies are all licensed under acceptable terms. Having the license field in the description makes it possible to weed out packages that aren't acceptable before even downloading them.
 - url: The Git location of the package. Together with the version this identifies the package.
 - version: The version of the package. TPM uses this entry to find the corresponding tag.
+- hash: the Git hash of the package.
 - dependencies: the list of dependencies for this package.

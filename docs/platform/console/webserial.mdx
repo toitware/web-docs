@@ -1,10 +1,10 @@
 ---
-order: 300
+order: 50
 ---
 
 import Serial from "../../_images/webserial.png";
 
-# Web serial interface
+# Web serial
 
 Use the `Serial` option in the [web-based Toit console](https://console.toit.io/serial)
 for communicating with the ESP32 via a serial connection.
@@ -44,7 +44,7 @@ it over the serial connection in the browser.
 
 ## Web serial provision
 
-If the ESP32 has not been [provisioned](../provision) before with the Toit firmware, settings and hardware ID, the `Provision` button
+If the ESP32 has not been [provisioned](../../concepts/provision) before with the Toit firmware, settings and hardware ID, the `Provision` button
 is enabled on the page, and it's possible to start the initial provisioning of the ESP32 from here.
 
 In the provision dialog, set the WiFi credentials to be used for initial WiFi settings. The latest released version of the Toit firmware
@@ -77,7 +77,7 @@ monitor logs and much more.
 <Note title="Trouble with web serial?">
 
 If you have trouble with the serial connection to the ESP32 via the web browser,
-please visit the [troubleshoot](../troubleshoot) section.
+please visit the [troubleshoot](../../../troubleshoot) section.
 
 Try to unplug the ESP32 physically from your computer and plug the USB cable into the serial port again,
 and try to connect the ESP32 using the `Serial` page in Toit console.

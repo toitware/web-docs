@@ -32,6 +32,8 @@ triggers:
     - "0 */2 * * *"
   on_pubsub_topic:
     - "<type:name>"
+  gpios:
+    - pin: <pin>
 
 pubsub:
   subscriptions:
@@ -48,7 +50,9 @@ pubsub:
 
 - **`triggers`**:
 
-  The events triggering the execution of the application.
+  The events triggering the execution of the application. Programs can query which trigger started them by using the [job library](https://libs.toit.io/job/library-summary).
+
+  Without any trigger, the application is always running. In case the application terminates, it is immediately restarted.
 
   - **`on_boot`**:
 
@@ -74,6 +78,12 @@ pubsub:
   - **`on_pubsub_topic`**:
 
     Runs the application when a message from the defined pubsub topic `<type>:<name>` is received on the device. The on_pubsub_topic can only trigger on topics that the device is subscribed to (see below for subscribing to a topic).
+
+  - **`gpios`**:
+
+    Runs the application when any of the specified GPIO pins are high. This GPIOs trigger is level-triggered, so it'll continue running the application while the GPIO pin is high.
+    This will also wake up the device from deep-sleep to run the app and go back to deep sleep.
+
 
 - **`pubsub`**:
 

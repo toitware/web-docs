@@ -1,10 +1,10 @@
 ---
-order: 200
+order: 10
 ---
 
-# Manually claim hardware
+# Claiming
 
-All devices must be claimed in order to be visible in the [Devices list](https://console.toit.io/devices) in the Toit console.
+Toit devices must be claimed in order to be visible in the [Devices list](https://console.toit.io/devices) in the Toit console.
 
 When a device has been claimed, it belongs to a Toit project. Only users that have access to the given Toit project can communicate with the device via the Toit cloud.
 
@@ -20,7 +20,7 @@ Connect the ESP32 to a computer with a USB cable. It requires 3.3V voltage.
 
 Open the [serial page](https://console.toit.io/serial) in the Toit console, and click the button to connect the ESP32 via the web serial interface.
 
-If the ESP32 has been provisioned, but not claimed yet, the hardware ID is printed at the top of the page.
+If the ESP32 has been provisioned, the hardware ID is printed at the top of the page.
 
 </Tab>
 <Tab label="CLI">
@@ -53,23 +53,17 @@ Therefore, if the command takes more than 5 seconds to print the device's inform
 
 The ESP32 must be connected to the internet via WiFi before you can claim it into your project. Start by ensuring that the correct WiFi credentials were provided during provisioning.
 
-You can use the Monitor command to verify whether the ESP32 tries to connect to the Toit console via WiFi.
+You can use the `Monitor` button in the [serial page](https://console.toit.io/serial) to verify whether the ESP32 tries to connect to the Toit console via WiFi.
 
-If this fails, add the correct WiFi credentials again using the Reinstall command.
+If connection fails, add the correct WiFi credentials again using the `Reinstall` button.
 
 Also, if the WiFi connection is unstable, the claim step might fail, so try to use another WiFi, if possible.
 
-## Claim ESP32
+## Claim device
 
-Follow the steps to claim the ESP32 into your project:
+Manually claim the ESP32 into your Toit project by navigating to the [Toit console](https://console.toit.io/devices) and click the "Add device" button in the upper right corner. 
+Choose "Claim existing" in the view. Enter the hardware ID of the ESP32.
 
-1. Connect the ESP32 with a USB cable to your computer.
+An optional device name can be provided. If left blank, a random name will be assigned to your ESP32. Click Claim. The device is assigned a device ID.
 
-2. Get the hardware ID of the ESP32 to be claimed (as described above).
-
-3. Navigate to the [Toit console](https://console.toit.io/), and click the "Claim" button in the upper right corner. In the "Claim new" tab, enter the hardware ID of the ESP32 you want to claim.
-   An optional device name can be provided. If left blank, a random name will be assigned to your ESP32.
-
-4. Click Claim. The device is assigned a device ID.
-
-5. The device has now been claimed by your project, and can be viewed in the devices list from the [Toit console](https://console.toit.io/devices).
+The device can now be viewed in the [list of devices](https://console.toit.io/devices).
