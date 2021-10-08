@@ -18,7 +18,7 @@ PubSub can be used internally on devices through the [PubSub library](https://li
 
   - Cloud topic: A topic that enables inter-communication between devices and external systems. These topics will be prefixed with: `cloud:`
 
-- subscription: an identifier of a stream of messages from a specific topic. Note that is possible to do concurrent reads on one subscription. When doing so, the concurrent reads will receive different batches of the same data set, making it easier to make ingestion concurrent.
+- subscription: an identifier of a stream of messages from a specific topic. Note that it is possible to do concurrent reads on one subscription. When doing so, the concurrent reads will receive different batches of the same data set, making it easier to make ingestion concurrent.
 
 - message: the combination of the data from the publisher and an identification of the sender.
 
@@ -29,10 +29,12 @@ See some examples of PubSub communication between apps in the [Tutorials](../../
 <Tabs>
 <Tab label="Console">
 
-Go to the **PubSub** page and click on **Create Subscription**. The topic `cloud:topic-name` is the one defined in the Publisher Toit program.
-You can provide a name of the subscription, in order to give a description of the topic or in which scenarios it is used.
+Go to the [Data](https://console.toit.io/data) section in the Toit console, choose the PubSub tab, and click the **Create Subscription** button.
+Provide a name to the topic, which is prefixed with `cloud:` as in `cloud:topic-name`.
+You can provide a name to the subscription, in order to give a description of the topic or in which scenario it is used.
 
-Once you have created a subscription, two graphs visualize the number of unacknowledged messages for that subscription, as well as the age of the oldest unacknowledged message for a specific time interval.
+Once you have created a PubSub subscription, you can view the number of unacknowledged messages for that subscription, as well as the age of the oldest unacknowledged message for a specific time interval
+in two graphs, by clicking the subscription.
 
 Delete a subscription with the bin icon.
 
@@ -62,6 +64,12 @@ toit pubsub read cloud:topic-name subscription-name
 ```
 
 To automatically acknowledge messages, add the `--auto-ack` flag.
+
+For example, to read data from a subscription named `temperature`, on a topic named `cloud:my-topic` which automatically acknowledges messages and starts making progress on the subscription, use
+
+```shell
+toit pubsub read cloud:my-topic temperature --auto-ack
+```
 
 </Tab>
 </Tabs>
