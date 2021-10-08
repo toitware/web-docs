@@ -46,6 +46,7 @@ This particular layout use pin 5 as PHY Reset. The rest are kept as the default.
 toit serial reinstall \
   -p ethernet=1 \
   -p model.ethernet.enabled=1 \
+  -p model.ethernet.mac.chip.esp32=1 \
   -p model.ethernet.phy.chip.ip101=1 \
   -p model.ethernet.phy.reset=5
 ```
