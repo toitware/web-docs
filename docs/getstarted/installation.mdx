@@ -23,7 +23,13 @@ and follow the instructions in the installer.
 
 ### Check
 
-Type `toit` in a terminal window.
+Open terminal window and type
+
+```shell
+toit
+```
+
+The output is a list of all available commands in the Toit CLI.
 
 </Tab>
 <Tab label="Install on macOS">
@@ -57,7 +63,13 @@ echo 'export PATH=/Applications:$PATH' >> ~/.bashrc;
 
 ### Check
 
-To verify that you successfully configured the PATH with the `toit` executable, type `toit` in a **new** terminal window.
+To verify that you successfully configured the PATH with the `toit` executable, reopen a terminal window and type
+
+```shell
+toit
+```
+
+to verify that the changes have taken effect. The output is a list of all available commands in the Toit CLI.
 
 <Note>
 
@@ -106,40 +118,13 @@ echo 'export PATH=$HOME/local/bin:$PATH' >> ~/.bashrc;
 
 ### Check
 
-Reopen a terminal window and type `toit` to verify that the changes have taken effect.
-
-</Tab>
-</Tabs>
-
-The output of running
+Reopen a terminal window and type
 
 ```shell
 toit
 ```
 
-in a terminal window is a list of all available commands in the Toit CLI.
+to verify that the changes have taken effect. The output is a list of all available commands in the Toit CLI.
 
-## Install the Toit SDK
-
-Install the latest released [Toit SDK](../../language/sdk/sdk) on your computer by running the CLI command:
-
-```shell
-toit doctor fix
-```
-
-## Toit doctor
-
-The command
-
-```shell
-toit doctor
-```
-
-reports the health status of your local Toit installation. Its output should look like this, if you have installed the [Toit language extension](../vscode) for Visual Studio Code:
-
-```txt
-Toit health:
-  [OK] Toit SDK
-  [OK] Visual Studio Code
-  [OK] Toit CLI
-```
+</Tab>
+</Tabs>
