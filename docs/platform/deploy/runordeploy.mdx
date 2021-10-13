@@ -8,7 +8,7 @@ With Toit, there are two ways to execute code on a device:
 
 - **Running programs**
 
-  Running a program means that the Toit code runs once on an online device. When the program has terminated, or the program lasts longer than 2 minutes, the program is removed from the device.
+  Running a program means that the Toit code runs once on an online device. When the program has terminated, the program is removed from the device.
 
 - **Deploying applications**
 
@@ -18,7 +18,7 @@ With Toit, there are two ways to execute code on a device:
 
 This option makes it easy to run small snippets of Toit code on a device. The device needs to be online since the installation and execution of the code happens synchronously such that you get feedback right away.
 
-Running a program on a device does not allow the device to go into deep sleep as it needs to remain online for the program to run, even if it is set to make a measurement only once a day. Therefore the `toit run` command is great for running small snippets of code on a device but not built for running actual long-lived applications. For this reason, the Toit cloud will terminate any running program after 2 minutes of execution.
+Running a program on a device does not allow the device to go into deep sleep as it needs to remain online for the program to run, even if it is set to make a measurement only once a day. Therefore the `toit run` command is great for running small snippets of code on a device but not built for running actual long-lived applications.
 
 ## Deploy apps on a device
 
