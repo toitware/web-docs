@@ -7,11 +7,11 @@ import Qwiic from "../../_images/BME280.png";
 # Connect sensors
 
 We are using the [BOSCH BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/) as an example of how to connect a sensor to your ESP32.
-The BOSCH BME280 chip is an environment sensor measuring temperature, humidity and pressure.
+The BOSCH BME280 chip is an environmental sensor measuring temperature, humidity and pressure.
 
 ## Setup
 
-The sensor supports both and SPI connection mode. This guide will focus on the SparkFun BME280 breakout board connected using a Qwiic cable.
+The sensor supports both I<sup>2</sup>C and SPI connection mode. This guide will focus on the SparkFun BME280 breakout board connected using a Qwiic cable.
 
 <Note>
 
@@ -19,9 +19,10 @@ If you connect a different BME280 sensor breakout board, you may have to place a
 
 </Note>
 
-Connect the Qwiic cable to the BME280 breakout board and connect the `red` wire to 3.3V (`3V3`) and the `black` wire to ground (GND).
+Connect the Qwiic cable to the BME280 breakout board and connect the **red** wire to 3.3V (`3V3`) and the **black** wire to ground (GND).
 
-The remaining two wires are I<sup>2</sup>C SDA (`blue`) and I<sup>2</sup>C SCL (`yellow`). While any GPIO pin of the ESP32 can facilitate an I<sup>2</sup>C setup we're going to pick _pin 21 and 22_ respectively through this guide.
+The remaining two wires are I<sup>2</sup>C SDA (**blue**) and I<sup>2</sup>C SCL (**yellow**).
+While almost any GPIO pin of the ESP32 can facilitate an I<sup>2</sup>C setup we are going to pick **pin 21** and **pin 22**, respectively, throughout this guide.
 
 <img src={Qwiic} alt="BME280" width="100%" />
 
@@ -41,7 +42,8 @@ main:
     --scl=gpio.Pin 22
 ```
 
-With the bus configured, we can specify how to address the BME280 device on the bus. From the SparkFun BME280 breakout documentation we can see that the default configured address is `0x77`:
+With the bus configured, we can specify how to address the BME280 device on the bus.
+From the SparkFun BME280 breakout documentation we can see that the default configured address is `0x77`:
 
 ```
   device := bus.device 0x77
@@ -52,16 +54,18 @@ The device returned is of type `serial.Device`.
 ## Driver
 
 With the device configured we can take a look at the driver.
-The driver is available at `drivers.bme280` and as all other [drivers](https://libs.toit.io/drivers/library-summary) available, takes a `serial.Device` as argument - perfect!
+The driver is available as a package from [pkg.toit.io](https://pkg.toit.io/package/github.com%2Ftoitware%2Fbme280-driver@v1.0.0).
+
+The driver takes a `serial.Device` as argument - perfect!
 
 <!-- SKIP CODE -->
 
 ```
-import drivers.bme280 as drivers
+import bme280
 
 // ...
 
-bme := drivers.Bme280 device
+driver := bme280.Driver device
 ```
 
 <Note>
@@ -75,16 +79,14 @@ The driver will take care of all the communication with the BME280 sensor and pr
 <!-- SKIP CODE -->
 
 ```
-  bme.on
-  print "Temperature: $bme.read_temperature C"
-  print "Humidity: $bme.read_humidity %"
-  print "Pressure: $bme.read_pressure Pa"
-  bme.off
+  print "Temperature: $driver.read_temperature C"
+  print "Humidity: $driver.read_humidity %"
+  print "Pressure: $driver.read_pressure Pa"
 ```
 
 ## Test it on an ESP32
 
-In the ["Weather Station" tutorial](../../../platform/tutorials/starter/weatherstation), you can learn how to run this Toit
+In the [Weather Station tutorial](../../../platform/tutorials/starter/weatherstation), you can learn how to run this Toit
 program on the ESP32 or deploy it as a long-lived application, where a specification file determines the execution intervals.
 
 The full code can be seen below:
@@ -92,20 +94,25 @@ The full code can be seen below:
 <!-- RESET CODE -->
 
 ```
+/**
+Program measuring temperature, relative humidity, and atmospheric pressure
+  with a BME280.
+*/
+
 import gpio
 import i2c
-import drivers.bme280 as drivers
+import bme280
 
 main:
   bus := i2c.Bus
     --sda=gpio.Pin 21
     --scl=gpio.Pin 22
-  device := bus.device drivers.Bme280.I2C_ADDRESS_ALT
-  bme := drivers.Bme280 device
 
-  bme.on
-  print "Temperature: $bme.read_temperature C"
-  print "Humidity: $bme.read_humidity %"
-  print "Pressure: $bme.read_pressure Pa"
-  bme.off
+  device := bus.device bme280.I2C_ADDRESS_ALT
+
+  driver := bme280.Driver device
+
+  print "Temperature: $driver.read_temperature C"
+  print "Humidity: $driver.read_humidity %"
+  print "Pressure: $driver.read_pressure Pa"
 ```
