@@ -2,7 +2,7 @@
 order: 100
 ---
 
-import Qwiic from "../../_images/BME280.png";
+import Qwiic from "../../../_images/BME280.png";
 
 # Weather station
 
@@ -18,12 +18,17 @@ The code examples shown in this tutorial are also available [here](https://githu
 
 Follow the steps [here](../../../../hardware/drivers/bme280) to connect the BME280 sensor with your ESP32 using a Qwiic cable.
 
-## Run Toit program
+## Install package
 
-In order to get data from the sensor we make use of the BME280 driver available as a package from
+If you haven't installed the VSCode language extension for Toit yet,
+follow this [guide](../../../../getstarted/vscode) before proceeding with the tutorial.
+You also need the Toit CLI, which can be downloaded and
+installed as described [here](../../../../getstarted/installation).
+
+In order to get data from the sensor we make use of the BME280 driver available as a **package** from
 [pkg.toit.io](https://pkg.toit.io/package/github.com%2Ftoitware%2Fbme280-driver@v1.0.0).
 
-Open Visual Studio Code, and create a new file. Paste the following Toit program into the file and save the file as `weather_station.toit`:
+Open Visual Studio Code, and create a new file. Paste the following Toit program into the file and save the file as: `weather_station.toit`:
 
 ```
 /**
@@ -49,10 +54,6 @@ main:
   print "Pressure: $driver.read_pressure Pa"
 ```
 
-If you haven't installed the VSCode language extension for Toit yet,
-follow this [guide] (../../../getstarted/vscode) before proceeding with this tutorial. Also, you need the Toit CLI which can be downloaded and
-installed as described [here](../../../getstarted/installation).
-
 Then, open a terminal window in VSCode and execute the following two commands in order to install the BME280 driver package locally:
 
 ```shell
@@ -60,11 +61,9 @@ toit pkg init
 toit pkg install bme280
 ```
 
-In the Toit code above, we import the driver package with `import bme280`.
+## Run Toit program
 
-We also specify the [GPIO pins](../../../../hardware/peripherals/gpio) and the relevant [connection bus](../../../../hardware/peripherals).
-
-If you want to know more about what is happening in each step in the Toit program, see [here](../../../../hardware/drivers/bme280#i2cbus).
+If you want to know more about what is happening in each step in the Toit program above, see [here](../../../../hardware/drivers/bme280#i2cbus).
 
 <Tabs>
 <Tab label="Console">
@@ -118,14 +117,10 @@ triggers:
   on_interval: 30s
 ```
 
-Save the content of the above yaml specification into a file named
-
-`weather_station.yaml`
-
-located in the same directory as the `weather_station.toit` file from the previous
+Save the content of the above yaml specification into a file named `weather_station.yaml` located in the same directory as the `weather_station.toit` file from the previous
 step.
 
-Deploy the `Weather Station` app on your ESP32 with the CLI command
+Deploy the **Weather Station** app on your ESP32 with the CLI command
 
 ```shell
 toit deploy weather_station.yaml
@@ -134,27 +129,40 @@ toit deploy weather_station.yaml
 If you haven't set your default device in the CLI, add `-d device-name` to
 the deploy command, where `device-name` is the name of your ESP32.
 
-The device log will show the three measurements every 30 seconds after the program
-has been installed on the device.
-
-View the device log in the [Toit console](https://console.toit.io), in the **Logs** tab of the device or using the CLI command (showing logs from 15 minutes ago and trailing):
-
-```shell
-toit device logs -f 15m
-```
-
 <Note>
 
-The device is not required to be online when the 'Weather Station' app is deployed.
+The device is not required to be online when the **Weather Station** app is deployed.
 When the device comes online, the app will be installed on the device and start
 it's scheduled execution.
 
 </Note>
 
-View all installed apps (or waiting to be installed) on your device from the
-**Apps** tab in the [Toit console](https://console.toit.io).
+## View logs
+
+The device log will show the three measurements every 30 seconds after the program
+has been installed on the device.
+
+<Tabs>
+<Tab label="Console">
+
+View the device log in the [Toit console](https://console.toit.io) in the **Logs** tab of the device.
+
+</Tab>
+<Tab label="CLI">
+
+View the device log using the Toit CLI which shows logs from 15 minutes ago and trailing:
+
+```shell
+toit device logs -f 15m
+```
+
+</Tab>
+</Tabs>
 
 ## Uninstall app
+
+View all installed apps (or waiting to be installed) on your device from the
+**Apps** tab in the [Toit console](https://console.toit.io).
 
 <Tabs>
 <Tab label="Console">
