@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { Link } from "gatsby";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { FiCloud, FiCode, FiGrid, FiHome, FiLayers, FiPlay, FiTool } from "react-icons/fi";
+import { FiBookOpen, FiCloud, FiCode, FiGrid, FiHome, FiLayers, FiPlay, FiTool } from "react-icons/fi";
 import useSanitizedPath from "../../hooks/use_sanitized_path";
 import { golden } from "../../theme";
 import { NavPage } from "./Navigation";
@@ -137,6 +137,7 @@ function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Eleme
         {page.slug == "platform" && <FiLayers className={classes.titleIcon} />}
         {page.slug == "getstarted" && <FiPlay className={classes.titleIcon} />}
         {page.slug == "troubleshoot" && <FiTool className={classes.titleIcon} />}
+        {page.slug == "tutorials" && <FiBookOpen className={classes.titleIcon} />}
         {page.title}
       </span>
       {showExpanded && (
