@@ -2,19 +2,19 @@
 order: 100
 ---
 
-import HelloFromCli from "../../../_images/hellofromcli.png";
+import HelloFromCli from "../../_images/hellofromcli.png";
 
 # Communicate through the cloud
 
-[PubSub](../../../../apis/pubsub) is a service for bi-directional communication. In this tutorial, we show how two apps can communicate with each other **through the Toit cloud**. 
+[PubSub](../../../apis/pubsub) is a service for bi-directional communication. In this tutorial, we show how two apps can communicate with each other **through the Toit cloud**.
 
-Communicating through the cloud allows apps installed on different devices to communicate with each other. 
+Communicating through the cloud allows apps installed on different devices to communicate with each other.
 Note that in this scenario, the publish/subscribe events relies on the `Max Offline` value set for the device(s) involved.
 
 ## The subscriber
 
-In this tutorial, we will implement the subscriber as an application that will be installed on your device as a long-lived application. 
-In the app specification file, we subscribe to the cloud topic. A new message received on this topic will trigger running 
+In this tutorial, we will implement the subscriber as an application that will be installed on your device as a long-lived application.
+In the app specification file, we subscribe to the cloud topic. A new message received on this topic will trigger running
 the Toit program which then consumes the message. This means that the message has
 been acknowledged and removed from the cloud topic. This process ensures that one
 message cannot trigger the app more than once.
@@ -42,7 +42,7 @@ main:
 The corresponding app specification file for the subscriber that defines the pubsub trigger, and which is deployed on your device as a Toit application, is specified below:
 
 ```yaml
-# The pubsub trigger specifies that the subscribe_cloud program runs 
+# The pubsub trigger specifies that the subscribe_cloud program runs
 # every time a message is received on the given cloud topic.
 
 name: Subscribe
@@ -50,7 +50,7 @@ entrypoint: subscribe_cloud.toit
 
 triggers:
   on_pubsub_topic:
-   - "cloud:hello-world"
+    - "cloud:hello-world"
 ```
 
 Deploy the subscriber app using the CLI with
