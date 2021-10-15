@@ -6,7 +6,7 @@ import Logs from "../../../_images/logtime.png";
 
 # Log the date and time
 
-In this tutorial we show you how to run a simple data-logging program on your device. 
+In this tutorial we show you how to run a simple data-logging program on your device.
 The program logs the current date and time, which can then be viewed in the Toit console or with the Toit CLI.
 
 The following Toit program uses `print` to log the current date and time.
@@ -45,13 +45,14 @@ The output is printed in the terminal window after program execution.
 
 ```shell
 $ toit run time.toit
-2021-04-15T08:48:41.308244Z: <process initiated>
-Time: 10:48
-Date: 2021-04-15
-2021-04-15T08:48:41.685042Z: <process terminated - exit code: 0>
+2021-10-15T07:43:30.559917Z: <process initiated>
+Time: 09:43
+Date: 2021-10-15
+2021-10-15T07:43:30.590457Z: <process terminated - exit code: 0>
+
 ```
 
-To view the recent device logs from 10 minutes ago and wait for future logs, run
+To view the recent device logs from 10 minutes ago and up until now, and waiting for future logs, run
 
 ```shell
 toit device logs -f 10m
@@ -62,17 +63,14 @@ The output will look like this
 ```shell
 $ toit device logs -f 10m
 Waiting to receive device logs...
-2021-04-15T08:41:40.524977Z: Time: 10:41
-2021-04-15T08:41:40.538530Z: Date: 2021-04-15
-2021-04-15T08:41:40.549070Z: <process terminated - exit code: 0>
-2021-04-15T08:47:22.796125Z: <process initiated>
-2021-04-15T08:47:22.861856Z: Time: 10:47
-2021-04-15T08:47:22.875110Z: Date: 2021-04-15
-2021-04-15T08:47:22.885647Z: <process terminated - exit code: 0>
-2021-04-15T08:48:41.227578Z: <process initiated>
-2021-04-15T08:48:41.292218Z: Time: 10:48
-2021-04-15T08:48:41.305468Z: Date: 2021-04-15
-2021-04-15T08:48:41.316585Z: <process terminated - exit code: 0>
+2021-10-15T07:43:18.860308Z: [toit,network] DEBUG: connecting network=system
+2021-10-15T07:43:18.860372Z: INFO: connected to system in less than a second
+2021-10-15T07:43:18.860436Z: [toit,network] DEBUG: connected network=system
+2021-10-15T07:43:30.558984Z: <process initiated>
+2021-10-15T07:43:30.560538Z: Time: 09:43
+2021-10-15T07:43:30.560718Z: Date: 2021-10-15
+2021-10-15T07:43:30.560894Z: <process terminated - exit code: 0>
+
 ```
 
 </Tab>
