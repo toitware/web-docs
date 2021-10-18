@@ -14,6 +14,7 @@ import Note from "./components/Note";
 import { Table, TableBody, TableHead } from "./components/Table";
 import { Tabs } from "./components/Tabs";
 import Title from "./components/Title";
+import Expandable from "./components/Expandable";
 import ZoomableImage from "./components/ZoomableImage";
 
 const P = (props: any) => <Typography paragraph {...props} />;
@@ -54,4 +55,5 @@ export const shorthands = {
   Tabs,
   Boxes,
   Box,
+  Expandable,
 };
