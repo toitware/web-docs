@@ -6,8 +6,7 @@ order: 200
 
 ## Problems with WiFi connection
 
-<details>
-  <summary>Do you have problems getting your ESP32 online with WiFi?</summary>
+<Expandable title="Do you have problems getting your ESP32 online with WiFi?">
 
 <Tabs>
 <Tab label="YES">
@@ -37,12 +36,12 @@ We are available via the integrated chat, via [Slack](https://chat.toit.io) or y
 </Tab>
 
 </Tabs>
-</details>
+
+</Expandable>
 
 ## Problems with an unreachable device
 
-<details>
-  <summary>Do you have an unreachable device?</summary>
+<Expandable title="Do you have an unreachable device?">
 
 If your ESP32 is misconfigured in any way, for example if it does not have valid WiFi connection settings, reinstall the ESP32 with the Toit firmware
 and WiFi settings via a serial connection, by connecting it with a USB cable to your computer.
@@ -68,4 +67,5 @@ toit serial reinstall -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
 </Tab>
 </Tabs>
 This will reinstall the Toit firmware and settings via the serial port without changing its hardware certificate or hardware ID.
-</details>
+
+</Expandable>
