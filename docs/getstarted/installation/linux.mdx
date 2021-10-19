@@ -4,7 +4,6 @@ hide: true
 ---
 
 import Extract from "../../_images/extract.png";
-import DownloadsFolder from "../../_images/downloadsfolder.png";
 
 # Toit for Linux
 
@@ -12,30 +11,31 @@ import DownloadsFolder from "../../_images/downloadsfolder.png";
 
 The Toit CLI is used for interacting with the Toit console and your Toit devices.
 
-Download the
-[Toit executable for Linux](https://archive.toit.io/cli/latest/linux).
+### Download
 
-Move the downloaded file to your preferred installation directory.
+- Download the [Toit executable for Linux](https://archive.toit.io/cli/latest/linux).
 
-<img src={DownloadsFolder} alt="Linux screenshot" />
+- Move the downloaded file to your preferred installation directory.
 
-Next, uncompress the downloaded `tgz`-file that contains the Toit CLI. Open a terminal window and navigate to the directory where you uncompressed Toit CLI.
+- Uncompress the downloaded `tgz`-file that contains the Toit CLI.
 
-To unpack, run
+- Open a terminal window and navigate to the directory where you uncompressed the Toit CLI.
+
+To unpack the Toit CLI, run
 
 ```shell
 tar x -vzf toit_linux.tgz
 ```
 
-The result of unpacking the Toit CLI is an executable file, named `toit`, and the result should look like this:
+The result of unpacking the Toit CLI is an executable file, named `toit`:
 
 <img src={Extract} alt="Linux screenshot" />
 
 ### Add Toit to your PATH
 
-Add the folder where the `toit` executable is located to your PATH environment variable, so you can run the Toit CLI from any directory in a terminal window.
+Add the **folder** where the `toit` executable is located to your PATH environment variable, so that you can run the Toit CLI in a terminal window from any directory.
 
-Depending on the shell you use: edit either the `.rczsh` file or the `.bashrc` file, located in your home directory.
+Depending on the shell you use: edit either the `.rczsh` file or the `.bashrc` file located in your _home_ directory.
 
 For example, if you use `bash` and if you chose to put the `toit` executable into the `$HOME/local/bin` folder,
 execute the following command in a terminal window:
