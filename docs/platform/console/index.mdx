@@ -3,7 +3,7 @@ order: 500
 title: Toit console
 ---
 
-# Overview
+# Toit console
 
 The Toit console is the dashboard for the Toit cloud, which offers various tools to upgrade your devices, monitor your device fleet health, view your daily data usage and much more.
 
@@ -55,12 +55,13 @@ Click on the "Go to devices" link to see the list of devices filtered according 
 
 ## Playground
 
-The Playground is a text editor where you can write Toit programs. Click **Run online** to execute the code in the Toit cloud. The playground uses the latest firmware version available in the Toit cloud.
+The Playground is an online text editor where you can write Toit programs. Click **Run online** to execute the code in the Toit cloud.
+The playground uses the latest firmware version available in the Toit cloud.
 
 ## Serial
 
-This pages let's you communicate with your hardware via the Web Serial API. The serial communication is only for initial hardware provisioning or debugging via the serial port.
-Learn more [here](./webserial).
+This pages let's you communicate with your hardware via the Web Serial API. The serial communication is only for initial hardware provisioning or
+debugging via the serial port. Read more [here](./webserial).
 
 ## Project
 
@@ -68,7 +69,7 @@ The Project page is for managing and viewing the various top-level information o
 
 - **Details** is used to enter the project owner information and payment methods.
 
-- **Users** lists all users in the project, starting with the current user. Click on **Add User** to add new users to the project by simply entering their email address. A welcome email is sent to the newly created user, with a link to set the password for the new Toit account just created.
+- **Users** lists all users in the project, starting with the current user. Click on **Add user** to add new users to the project by simply entering their email address. A welcome email is sent to the newly created user, with a link to set the password for the new Toit account just created.
 
 - **Firmware** lists all firmware versions available in your project. A pie chart depicts the distribution of the different firmware versions installed on the devices in your project.
 
@@ -76,7 +77,7 @@ The Project page is for managing and viewing the various top-level information o
 
 - **Invoices** lists previously paid invoices, if any.
 
-- **API keys** lists the keys that can be used to connect a server application to the API.
+- **API keys** lists the keys that can be used to connect a server application with the Toit API to your devices.
 
 <Note title="Payment">
 
@@ -92,14 +93,10 @@ We serve our payment pages in the Toit console securely using Transport Layer Se
 
 ## System
 
-The System page displays various graphs showing information about metrics, logs, and PubSub ingestion in the system.
+The System page displays various graphs showing information about Logs and PubSub ingestion in the system.
 
 ## Data
 
-The Data page allows to create **metrics** and **logs** subscriptions with the **Create subscription** button. Existing subscription are listed on the page and can be deleted with the bin icon. Selected an existing subscription from the drop down menu in one of the graph to visualize Unacknowledged message count and Oldest unacknowledged message age data for the chosen time interval.
+The Data page allows to create PubSub, Logs, and Metrics subscriptions. Existing subscription are listed on the page and can be deleted with the bin icon.
+Select a subscription from the list to visualize the unacknowledged message count and the oldest unacknowledged message age for the chosen time interval.
 Check the [API](../../../apis/api) documentation to learn how to acknowledge messages using the CLI.
-
-## PubSub
-
-Use this page to create custom PubSub subscriptions and access subscription-specific data on unacknowledged message count and oldest unacknowledged message age.
-See the [PubSub](../../../apis/pubsub) section for more information.
