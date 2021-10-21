@@ -170,5 +170,27 @@ module.exports = {
         trackPage: true,
       },
     },
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: [
+          {
+            resolve: `@raae/gatsby-remark-oembed`,
+            options: {
+              // usePrefix defaults to false
+              // usePrefix: true is the same as ["oembed"]
+              usePrefix: ["oembed", "video"],
+              providers: {
+                include: ["YouTube"],
+                // Important to exclude providers
+                // that adds js to the page.
+                // If you do not need them.
+                exclude: ["Reddit", "Twitter", "Flickr", "Instagram"],
+              },
+            },
+          },
+        ],
+      },
+    },
   ],
 };
