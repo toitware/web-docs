@@ -6,7 +6,7 @@ order: 0
 
 This quick-start guide is inspired by [Ruby in Twenty
 Minutes](https://www.ruby-lang.org/en/documentation/quickstart/). It makes the
-assumption that you already have [Toit installed](../../getstarted/installation/)
+assumption that you already have [Toit installed](../../getstarted/installation)
 on your machine.
 
 Toit is an [object-oriented](../objects-constructors-inheritance-interfaces)
@@ -121,8 +121,8 @@ hi name="World":
 ```
 
 This way, we call the `trim` function on the `name` string before we insert it
-into the outer string. If we call `hi "   Lars  "` we still get the familiar
-greeting `Hello Lars!` and not `Hello   Lars  !`. You can add parentheses
+into the outer string. If we call `hi " Lars "` we still get the familiar
+greeting `Hello Lars!` and not `Hello Lars !`. You can add parentheses
 around the `name.trim` expression in the string to make it clearer which parts
 belong to the outer string:
 
@@ -168,11 +168,12 @@ class Greeter:
 
 The new keyword here is `class`. This defines a new class called `Greeter` and
 a bunch of methods for that class. Methods are just functions that are attached
-to an object.  Pay special attention to the method `constructor`. There is
+to an object. Pay special attention to the method `constructor`. There is
 nothing after the `:` and the `constructor` method isn’t followed by any
 indented lines, so the constructor has no statements in it:
 
 <!-- SKIP CODE -->
+
 ```
   constructor .name="World":
 ```
@@ -222,7 +223,7 @@ main:
   print "How are you $(greeter.name)?"
 ```
 
-This would show `How are you  Helena ?`. Almost neat, right? Unfortunately, the
+This would show `How are you Helena ?`. Almost neat, right? Unfortunately, the
 name isn’t trimmed like we expected. Let’s fix that!
 
 ## Fields and methods
@@ -233,6 +234,7 @@ private. By convention, methods and fields that end with an underscore (`_`)
 are private and not supposed to be touched from the outside:
 
 <!-- RESET CODE -->
+
 ```
 class Greeter:
   name_ := null
@@ -244,6 +246,7 @@ accessing the name from the outside, we could reintroduce a getter with the
 same meaning as before.
 
 <!-- RESET CODE -->
+
 ```
 class Greeter:
   name_ := null
@@ -259,6 +262,7 @@ Here we use the new keyword `return` to specify the value a method returns. We
 could make it slightly more interesting and trim it in the process:
 
 <!-- SKIP CODE -->
+
 ```
   name: return name_.trim
 ```
@@ -267,6 +271,7 @@ In this way, access to the name from the outside also gets the trimming and we
 can avoid having to manually call `trim` when getting the name:
 
 <!-- RESET CODE -->
+
 ```
 class Greeter:
   name_ := null
@@ -287,7 +292,7 @@ main:
 ```
 
 and you should see `How are you Erik?`. `greeter` is a local variable, only visible in the
-`main` method.  We declared it with the `:=` syntax, just like we used `:=` to declare
+`main` method. We declared it with the `:=` syntax, just like we used `:=` to declare
 member variables in classes.
 
 ## Greetings everyone!
@@ -329,6 +334,7 @@ The names are ["World"]
 We can now go ahead and add greeter methods that show all the names:
 
 <!-- RESET CODE -->
+
 ```
 // Greeter that says hi to everybody.
 class MegaGreeter:
@@ -379,6 +385,7 @@ related to your code. In the example in the last section, there were a few
 single line comments:
 
 <!-- SKIP CODE -->
+
 ```
 // Greeter that says hi to everybody.
 class MegaGreeter:
@@ -416,6 +423,7 @@ For a class, everything that is indented under the class declaration line
 belongs to the class. We call such things class members:
 
 <!-- RESET CODE -->
+
 ```
 class MegaGreeter:
   // class members start
@@ -426,6 +434,7 @@ class MegaGreeter:
 For methods in a class, the statements in them are nested one level further (two spaces) than the class members:
 
 <!-- RESET CODE -->
+
 ```
 class MegaGreeter:
   // class members start
@@ -451,6 +460,7 @@ for each element using block structure:
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
 <!-- HIDDEN CODE   names := [] -->
+
 ```
   say_hi:
     // Greet everyone individually!
@@ -487,6 +497,7 @@ produce a single comma-separated list of names for the single line output of
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
 <!-- HIDDEN CODE   names := [] -->
+
 ```
   say_bye:
     everyone := names.join ", "
@@ -514,17 +525,20 @@ main:
 ```
 
 Which produces the output:
+
 ```txt
 Kaixo, World!
 Kaixo, Lars!
 Kaixo, Kasper!
 ```
+
 However, at the calling site it may not be clear what the argument "Kaixo" is
 for. We can make it clearer with a named argument:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
 <!-- HIDDEN CODE   names := [] -->
+
 ```
   say_hi --greeting="Hello,":
     // Greet everyone individually!
@@ -565,24 +579,25 @@ main:
 ```
 
 This defines a top-level function called `fib` that is not a member of any
-class.  (We already saw `main`, which is a top level function with a special
+class. (We already saw `main`, which is a top level function with a special
 name.)
 
 The `fib` function is recursive, calling itself, and also makes use of a few
-new features.  The [if-statement](../loops#if-statements) is well known from
-other languages.  In Toit it works by taking an expression and conditionally
-evaluating a block.  Like other blocks we could have used indentation to group
+new features. The [if-statement](../loops#if-statements) is well known from
+other languages. In Toit it works by taking an expression and conditionally
+evaluating a block. Like other blocks we could have used indentation to group
 multiple lines.
 
 Toit also has the usual array of infix operators, `+`, `-`, `*`, `/`, `%` etc.
-and the relational operators `<`, `<=`, `>`, `>=`, `==` and `!=`.  The
+and the relational operators `<`, `<=`, `>`, `>=`, `==` and `!=`. The
 operators have higher [precedence](../syntax#precedence) than function
 arguments, so we had to group the calls in parentheses to get the desired
-behavior.  The high precedence is what makes the arguments for the recursive
-invocation of `fib` work.  We could have spaced it more conventionally and got
+behavior. The high precedence is what makes the arguments for the recursive
+invocation of `fib` work. We could have spaced it more conventionally and got
 the same effect:
 
 <!-- RESET CODE -->
+
 ```
 fib n:
   if n <= 1: return n
@@ -606,7 +621,7 @@ fib2 n:
 ```
 
 Here we are using the `repeat` method on numbers, which runs a block a given
-number of times.  Like for the `do` method, there's an automatic variable, `it`
+number of times. Like for the `do` method, there's an automatic variable, `it`
 that gives the iteration number:
 
 ```
@@ -637,6 +652,7 @@ collatz n:
 Perhaps we need titles for our greeters:
 
 <!-- RESET CODE -->
+
 ```
 class MegaGreeter:
   names := []
@@ -660,14 +676,15 @@ main:
 ```
 
 Here we use a [hash map](../listsetmap) to store the appropriate title for each
-name.  The empty map is given by `{:}` and we use `[]` to access the values for
-each key.  The empty set is `{}` and we already met the empty list, `[]`.  The
+name. The empty map is given by `{:}` and we use `[]` to access the values for
+each key. The empty set is `{}` and we already met the empty list, `[]`. The
 lookup syntax `[]` also works on lists, so instead of the 'do' method we could
 have used:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
 <!-- HIDDEN CODE   names := [] -->
+
 ```
   say_hi:
     for i := 0; i < names.size; i++:
@@ -694,6 +711,7 @@ Syntactically they look like they are built in to the language like `if` and
 classes:
 
 <!-- SKIP CODE -->
+
 ```
 class List:
   // ...
@@ -707,16 +725,16 @@ class Integer:
       block.call i
 ```
 
-They are making use of a feature called [blocks](../blocks).  These are
+They are making use of a feature called [blocks](../blocks). These are
 snippets of code that can be passed down the stack as arguments to methods and
-functions.  At the call site we precede the block with a colon, '`:`', and at
+functions. At the call site we precede the block with a colon, '`:`', and at
 the function definition we surround the parameter name with square brackets,
-'`[]`'.  Often, there is one block parameter, it is in the final position and
+'`[]`'. Often, there is one block parameter, it is in the final position and
 it is called `block`.
 
 ## Blocks that return a value
 
-A block can return a value each time it is run.  This is used for example in the `filter` method on lists.
+A block can return a value each time it is run. This is used for example in the `filter` method on lists.
 
 ```
 // Takes a list of words, and returns a new list with only the
@@ -729,13 +747,13 @@ short_words words:
 The `filter` method calls the block, `it.size <= 5` for each element in the
 original list, and returns a new list containing only the short words.
 
-Note that there is no `return` statement in the block.  A block will return the
+Note that there is no `return` statement in the block. A block will return the
 value of the last statement to the place where it was invoked with
-`block.call`.  In this case there is only one statement, which is the
+`block.call`. In this case there is only one statement, which is the
 [boolean](../booleans) expression `it.size <= 5`.
 
 If you use the `return` keyword in a block then it returns from the syntactic
-function or method in which it is written.  Usually this will behave as you
+function or method in which it is written. Usually this will behave as you
 would expect:
 
 ```
@@ -749,7 +767,7 @@ main:
   print (wheres_walter ["Ib Michael", "Walter White", "Marie Curie"])
 ```
 
-The `return` keyword is inside a block that is passed to the `do` method.  When
+The `return` keyword is inside a block that is passed to the `do` method. When
 the name that starts with `"Walter "` is found we immediately return the full
 name from the `wheres_walter` function without continuing to iterate over the
 list.

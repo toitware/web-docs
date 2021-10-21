@@ -3,7 +3,6 @@ import Color from "color";
 import * as React from "react";
 import { ReactNode } from "react";
 import { DocsLink } from "./DocsLink";
-import { FiArrowRight } from "react-icons/fi";
 
 const useStyles = makeStyles((theme) => ({
   boxes: {
@@ -22,11 +21,20 @@ const useStyles = makeStyles((theme) => ({
     "& p:last-child": {
       marginBottom: 0,
     },
+    // Because the a element takes precedent over this class, we need
+    // to use important here. Refactoring this would make it unnecessarily
+    // complicated.
+    textDecoration: "none !important",
+    color: `${Color(theme.palette.text.primary).string()} !important`,
+    transition: "background 200ms ease",
+    "&:hover": {
+      background: `${Color(theme.palette.primary.main).alpha(0.1).string()}`,
+    },
   },
   title: {
     fontWeight: "bold",
     fontSize: "1.3rem",
-    margin: "0 0 0.5rem 0 !important",
+    margin: "0 0 0 0 !important",
   },
   content: {
     flex: 1,
@@ -57,21 +65,16 @@ export function Boxes({ children }: BoxesProps): JSX.Element {
 
 type BoxProps = {
   title?: string;
-  to?: string;
+  to: string;
   children: ReactNode;
 };
 
 export function Box({ title, to, children }: BoxProps): JSX.Element {
   const classes = useStyles();
   return (
-    <div className={classes.box}>
+    <DocsLink href={to} className={classes.box}>
       {title && <h1 className={classes.title}>{title}</h1>}
-      <div className={classes.content}>{children}</div>
-      {to && (
-        <DocsLink className={classes.link} href={to}>
-          Learn more <FiArrowRight />
-        </DocsLink>
-      )}
-    </div>
+      {children && <div className={classes.content}>{children}</div>}
+    </DocsLink>
   );
 }
