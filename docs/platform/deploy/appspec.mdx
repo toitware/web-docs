@@ -16,13 +16,15 @@ To benefit from the modularity of Toit, we recommend writing and deploying separ
 
 </Note>
 
-This section describes content of an app specification.
+## Description
+
+This section describes the content of an app specification.
 
 ```yaml
-# Example of an app specification file.
+# Description of an app specification file using YAML syntax.
 
 name: <App name>
-entrypoint: <toit entrypoint>
+entrypoint: <toit file entrypoint>
 triggers:
   on_boot: <bool>
   on_install: <bool>
@@ -31,13 +33,13 @@ triggers:
     - "*/5 7 * * *"
     - "0 */2 * * *"
   on_pubsub_topic:
-    - "<type:name>"
+    - "<type>:<name>"
   gpios:
     - pin: <pin>
 
 pubsub:
   subscriptions:
-    - "<type:name>"
+    - "<type>:<name>"
 ```
 
 - **`name`**:
@@ -46,7 +48,8 @@ pubsub:
 
 - **`entrypoint`**:
 
-  The Toit file where the `main` function of the program is located. The entrypoint can be the name of the Toit file, such as `hello.toit`Toit if it is saved in the same folder as its configuration file, or a relative path to the Toit file including the Toit file, such as `myproject/hello.toit`.
+  The Toit file where the `main` function of the program is located. The entrypoint can be the name of the Toit file, such as `hello.toit`,
+  if it is saved in the same folder as its configuration file, or a relative path to the Toit file including the Toit file, such as `myproject/hello.toit`.
 
 - **`triggers`**:
 
@@ -77,7 +80,7 @@ pubsub:
 
   - **`on_pubsub_topic`**:
 
-    Runs the application when a message from the defined pubsub topic `<type>:<name>` is received on the device. The on_pubsub_topic can only trigger on topics that the device is subscribed to (see below for subscribing to a topic).
+    Runs the application when a message from the defined pubsub topic `<type>:<name>` is received on the device. The `on_pubsub_topic` can only trigger on topics that the device is subscribed to (see below for subscribing to a topic).
 
   - **`gpios`**:
 
@@ -91,4 +94,28 @@ pubsub:
   - **`subscriptions`**:
 
     Subscribes to topics. Each topic is of the form `<type>:<name>`, with `type` being either `cloud` or `device`. The `name` is defined by the user.
-    See [PubSub](../../../apis/pubsub) and [Tutorials](../tutorials/pubsub/pubsubext) for additional information and an example of an app specification file with a PubSub subscription.
+    See [PubSub](../../../apis/pubsub) and [Tutorials](../../../tutorials/pubsub/pubsubext) for additional information and an example of an app specification file with a PubSub subscription.
+
+## Example
+
+```yaml
+# An example of an app specification file.
+
+name: My App Name
+entrypoint: hello.toit
+triggers:
+  on_boot: true
+  on_install: true
+  on_interval: "10m"
+  cron:
+    - "*/5 7 * * *"
+    - "0 */2 * * *"
+  on_pubsub_topic:
+    - "cloud:hello-world"
+  gpios:
+    - pin: 21
+
+pubsub:
+  subscriptions:
+    - "cloud:hello-world"
+```

@@ -5,15 +5,15 @@ order: 200
 import MaxOfflineConfig from "../../_images/setmaxoffline.png";
 import SetWifiConnections from "../../_images/changeconnections.png";
 
-# Configure your device
+# Device configurations
 
 When you have installed the Toit firmware on your hardware, the following two default configurations have been set:
 
-- The value of 'Max offline' for the device is 0 seconds, which means that the device is continuously awake.
+- The default value of 'Max offline' for the device is 0 seconds, which means that the device is continuously awake.
 
-- The firmware version on the device is the one installed during initial provisioning.
+- The default firmware version on the device is the one installed during initial provisioning.
 
-How to change the device configurations is explained below. Changes are applied once the device comes online.
+How to change the device configurations is explained below. Changes are applied once the device comes online. Some changes needs a device reboot.
 
 <Tabs>
 <Tab label="Console">
@@ -69,7 +69,11 @@ Update the firmware on your device to the latest version with
 toit device update
 ```
 
-You can also downgrade the device with another firmware version with `toit device update [<older-firmware-version>]`, with the firmware version being formatted as `vx.x.x`.
+You can also downgrade the device with another firmware version with
+
+`toit device update [<older-firmware-version>]`
+
+with the firmware version being formatted as `vx.x.x`.
 
 </Tab>
 </Tabs>
@@ -160,4 +164,6 @@ To avoid this situation, it is possible to filter which type of logs and metrics
 
 In addition, a threshold of storage is set to trigger an online connection where data can be flushed from the device to the console.
 
-See how you can minimize data storage and frequent triggered online connection in the [Devices](../deviceconsole) section.
+## Remove a device
+
+You can remove a device from your Toit project using the **Unclaim** button.
