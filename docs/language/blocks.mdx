@@ -1,7 +1,3 @@
----
-order: 500
----
-
 # Toit blocks
 
 Blocks are a mechanism to conveniently and efficiently provide callbacks to
@@ -230,6 +226,7 @@ local return was unnecessary. If you replace `continue.map it` with `it`, then
 the block uses the default local return to return `it` from the block. That is
 
 <!-- RESET CODE -->
+
 ```
 /**
 Takes a list of integers $list and maps it to a list of odd
@@ -307,6 +304,7 @@ where blocks come in handy. We can rewrite the above snippet using
 `int.repeat`:
 
 <!-- RESET CODE -->
+
 ```
 /// Prints the numbers from 1 to $n on separate lines.
 print_numbers n:
@@ -334,6 +332,7 @@ main:
 Again, you can use `int.repeat` to rewrite the `for`-loop:
 
 <!-- RESET CODE -->
+
 ```
 /// Prints the elements of the list on separate lines.
 print_list list:
@@ -350,6 +349,7 @@ have `do` functions that iterate the collections and call a block for each
 element. You can rewrite `print_list` to
 
 <!-- RESET CODE -->
+
 ```
 /// Prints the elements of the list on separate lines.
 print_list list:
@@ -387,6 +387,7 @@ class Map:
 We could also implement a `remove` that ignores the absence of a key:
 
 <!-- SKIP CODE -->
+
 ```
 class Map:
   // ...
@@ -482,6 +483,7 @@ enclosed by brackets `[ ]`.
 In order to execute a block, you simply call `call` on it. For example, this is how `int.repeat` is implemented:
 
 <!-- SKIP CODE -->
+
 ```
 class int:
   // ...

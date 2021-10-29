@@ -1,7 +1,3 @@
----
-order: 350
----
-
 # Imports
 
 Import statements make code from other libraries available in the current
@@ -13,6 +9,7 @@ segments that tell Toit how to find the library. Optionally it can be
 suffixed by customizations:
 
 For example:
+
 ```
 import math
 import net.tcp as network
@@ -21,7 +18,7 @@ import .other
 ```
 
 Depending on whether the identifier segments start with a `.` or not, the
- import is a local or global import. Toit uses a different strategy to
+import is a local or global import. Toit uses a different strategy to
 locate the target file for each of these two strategies.
 
 ## Local
@@ -31,7 +28,7 @@ current library.
 
 For example, let's assume we have a file structure as follows:
 
-``` text
+```text
 .
 ├── my_lib
 │   ├── my_lib.toit
@@ -87,7 +84,7 @@ Once imported, all global elements of the imported library are available
 through a prefix. By default the prefix is the last identifier of the
 segment list. In the case of the `encodings.json` import above, the prefix
 would thus be `json`, and one could call `json.parse` to call the
-top-level `parse` function of that library ([toitdoc](https://libs.toit.io/encoding/json/library-summary#parse(1%2C0%2C0%2C))).
+top-level `parse` function of that library ([toitdoc](<https://libs.toit.io/encoding/json/library-summary#parse(1%2C0%2C0%2C)>)).
 
 Note, that global imports also apply the folder shortcut, as
 described [below](#folder-shortcut).

@@ -1,7 +1,3 @@
----
-order: 300
----
-
 import WeatherExample from "../../_images/display-example.png";
 
 # Display
@@ -10,18 +6,18 @@ The Toit SDK includes support for writing text and printing icons on displays.
 We highlight in this section the basic functions of display use. You can also learn more about the different fonts available in the SDK by reading [Toit font basics](../fonts).
 
 These examples assume you have installed the [pixel_display](https://github.com/toitware/toit-pixel-display) package into
-your project.  See the [Packages quick start guide](../../package/pkgguide)
+your project. See the [Packages quick start guide](../../package/pkgguide)
 for information on getting started with packages.
 
 You will also need at least one display driver, for example the [SSD1306 driver](https://github.com/toitware/toit-ssd1306)
-which is also available as a package, called `ssd1306`.  A color TFT driver that supports many common displays is available
+which is also available as a package, called `ssd1306`. A color TFT driver that supports many common displays is available
 in the [toit-color-tft](https://github.com/toitware/toit-color-tft) and can be installed as the `color-tft` package.
 
 ## Getting the display driver and PixelDisplay object
 
 Both the `color-tft` and `ssd1306` packages have some helpful examples which you can see by cloning the
-github repos linked above.  We will assume that you have a `get_display.toit` file in your project, which
-might look something like the following.  Details will depend on your hardware configuration, in particular which
+github repos linked above. We will assume that you have a `get_display.toit` file in your project, which
+might look something like the following. Details will depend on your hardware configuration, in particular which
 pins and bus you are using to connect your display.
 
 Example contents of `get_display.toit`
@@ -62,13 +58,13 @@ most of the same methods:
 `TrueColorPixelDisplay` for color displays like the ones supported by the `color-tft` driver.
 
 A display maintains a list of objects that it is currently displaying.
-These objects are called `Texture`s.  They are mutable objects that
-represent a shape on the display.  For example a geometric shape or a
-piece of text.  Together, the textures added to a display describe a
+These objects are called `Texture`s. They are mutable objects that
+represent a shape on the display. For example a geometric shape or a
+piece of text. Together, the textures added to a display describe a
 scene.
 
 To update the display, you add or remove textures, or modify the
-existing textures.  When you have made your changes you update the
+existing textures. When you have made your changes you update the
 physical display by calling the `draw` method on the display object.
 
 Normally you will import all the textures for your given color model
@@ -76,7 +72,7 @@ into your namespace with an import like `import pixel_display.true_color show *`
 
 ## Write with built-in sans font
 
-Let us start with a simple example using a text texture.  In this
+Let us start with a simple example using a text texture. In this
 example we use the sans10 font, which is a simple ASCII-only font
 that is built in to the Toit SDK and does not need to be
 imported with a package.
@@ -105,14 +101,14 @@ main:
 ```
 
 When creating a texture to add to the scene there are a huge
-number of parameters to specify.  This includes the color, the
-orientation, the font, and the coordinate system.  We combine
+number of parameters to specify. This includes the color, the
+orientation, the font, and the coordinate system. We combine
 almost all these parameters into an immutable object called a
 graphics context.
 
 In the above example we created a context that uses a landscape
 orientation and coordinates, draws in black, and uses the
-built-in sans10 font for text objects.  Often, contexts are
+built-in sans10 font for text objects. Often, contexts are
 created from other contexts using the `with` method:
 
 ```
@@ -184,7 +180,7 @@ main:
 ## Updating the display
 
 In order to update the display we can build up a scene, then create a loop
-that updates the scene as new data arrives.  Here is a bigger example that
+that updates the scene as new data arrives. Here is a bigger example that
 subscribes to a pubsub stream for its weather information, and uses the
 local time to update a digital clock on the same display.
 
