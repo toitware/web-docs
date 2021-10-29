@@ -19,64 +19,20 @@ Download and install the Toit development environment from [here](../installatio
 
 ## 3. Get an ESP32
 
-If you already have an ESP32 available, jump to step 4 to continue.
-
-Otherwise, you can buy one [here](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990).
-
-<Tabs>
-
-<Tab label="CLI">
-
-In the meantime, you can start a **Toit simulator** from the Toit CLI with:
-
-```shell
-toit simulator start
-```
-
-Then, jump to step 5 to continue.
-
-</Tab>
-<Tab label="Console">
-
-In the meantime, you can start a **Toit simulator** from the [Toit console](https://console.toit.io/) by clicking the "Start simulator" button.
-
-Then, jump to step 5 to continue.
-
-</Tab>
-</Tabs>
+If you already have an ESP32 available, jump to step 4 to continue. Otherwise, you can buy one [here](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990).
 
 ## 4. Provision your ESP32
 
 To install the latest Toit firmware on your ESP32, connect the ESP32 with a USB cable to your computer.
 
-<Tabs>
-<Tab label="CLI">
-
-Open a terminal window, and replace `MY_SSID` and `my_password` with your own WiFi credentials and run the Toit CLI command to initially
-provision your hardware with the Toit firmware and WiFi settings:
-
-```shell
-toit serial provision -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
-```
-
-</Tab>
-<Tab label="Console">
-
 Go to the Serial page in the [Toit console](https://console.toit.io/serial) to initially provision your hardware with the Toit firmware and WiFi settings -
 note that it only works in Google Chrome and Microsoft Edge browsers.
 
-</Tab>
-<Tab label="Troubleshoot">
-
-Having issues? Get help in the [troubleshooting](../../troubleshoot) section.
-
-</Tab>
-</Tabs>
-
-At the end of the provisioning process, you will receive the name of the device, and a URL to view the device in the [Toit console](https://console.toit.io/).
-When your device is online, all device communication will be **over-the-air**.
+Having issues? Get help in the [troubleshooting](../../troubleshoot) section. (You can also use the [Toit CLI to provision](../../platform/concepts/provision).)
 
 Your device has now been added to your Toit project. Only users with access to the same Toit project can communicate with the device via the Toit cloud.
+
+When your device is online, all device communication will be **over-the-air**.
 
 ## 5. Write a Toit app
 
@@ -101,9 +57,7 @@ triggers:
   on_install: true
 ```
 
-Note! Install the Toit [extension](../vscode) for Visual Studio Code for better language support.
-
-Find more Toit code examples [here](https://github.com/toitware/examples).
+Find more Toit code examples [here](https://github.com/toitware/examples), or in the Code tab of your device in the [Toit console](https://console.toit.io).
 
 ## 6. Deploy a Toit app
 
@@ -133,78 +87,16 @@ When deploying an app, the device is not required to be online. The app will be 
 
 ### Verify that the app has been deployed
 
-<Tabs>
-<Tab label="CLI">
-
-Run the following command (replace `device-name` with the actual name of your device)
-
-```shell
-toit device -d device-name ps
-```
-
-</Tab>
-<Tab label="Console">
-
 Go to the Apps tab in the [Toit console](https://console.toit.io/) of your device to view the list of deployed apps.
-
-</Tab>
-<Tab label="VSCode">
-
-In the VSCode extension for Toit, view the name of the deployed app below the device name.
-
-</Tab>
-</Tabs>
 
 ### View the logs from the device
 
-<Tabs>
-<Tab label="CLI">
-
-Run the following command (replace `device-name` with the actual name of your device)
-
-```shell
-toit device -d device-name logs -f 10m
-```
-
-</Tab>
-<Tab label="Console">
-
 Go to the Logs tab in the [Toit console](https://console.toit.io/) of your device to view the logs from the device.
-
-</Tab>
-<Tab label="VSCode">
-
-In the VSCode extension for Toit, view the logs from the device by pressing the logs button next to the device name.
-
-</Tab>
-</Tabs>
 
 ## 7. Uninstall Toit app
 
-Uninstall the Toit app from the device:
-
-<Tabs>
-<Tab label="CLI">
-
-Run the following command (replace `device-name` with the actual name of your device)
-
-```shell
-toit device -d device-name uninstall HelloApp
-```
-
-</Tab>
-<Tab label="Console">
-
 Go to the Apps tab in the [Toit console](https://console.toit.io/) of your device to uninstall the app using the uninstall button.
-
-</Tab>
-<Tab label="VSCode">
-
-In the VSCode extension for Toit, uninstall the app from the device by pressing the bin icon next to the app name.
-
-</Tab>
-</Tabs>
 
 ## 8. What's next?
 
-Congratulations! You are now ready to start developing IoT projects using Toit. Next step, look in the [tutorials](../../tutorials) or dive into the [Toit language guide](../../language/language).
+Congratulations! You are now ready to start developing IoT applications using Toit. Next step, look in the [tutorials](../../tutorials) or dive into the [Toit language guide](../../language/language).
