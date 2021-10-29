@@ -6,9 +6,9 @@ import { useEffect, useRef, useState } from "react";
 import { FiBookOpen, FiCloud, FiCode, FiGrid, FiHome, FiLayers, FiPlay, FiTool } from "react-icons/fi";
 import useSanitizedPath from "../../hooks/use_sanitized_path";
 import { golden } from "../../theme";
-import { NavPage } from "./Navigation";
 import NavTree from "./NavTree";
 
+import { MenuItem } from "../../../docs/menu.yaml";
 const useStyles = makeStyles((theme) => ({
   link: {
     color: "white",
@@ -45,12 +45,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type ItemProps = {
-  page: NavPage;
+  page: MenuItem;
   level: number;
 };
 
 function NavTreeItem({ page, level }: ItemProps): JSX.Element {
-  const hasSubPages = page.subPages.length !== 0;
+  const hasSubPages = !!page.children;
 
   if (!hasSubPages) {
     return <LeafItem page={page} />;
@@ -63,14 +63,13 @@ function NavTreeItem({ page, level }: ItemProps): JSX.Element {
  * This is a "leaf" entry: it doesn't have subpages so it is a direct link to a
  * page.
  */
-function LeafItem({ page }: { page: NavPage }): JSX.Element {
-  const to = `/${page.slug}`;
+function LeafItem({ page }: { page: MenuItem }): JSX.Element {
   const classes = useStyles();
   return (
-    <li key={page.slug}>
-      <Link to={to} className={classes.link} activeClassName={classes.active}>
-        {page.slug == "" && <FiHome className={classes.titleIcon} />}
-        {page.title}
+    <li key={page.path}>
+      <Link to={page.path} className={classes.link} activeClassName={classes.active}>
+        <Icon page={page} />
+        {page.name}
       </Link>
     </li>
   );
@@ -79,14 +78,13 @@ function LeafItem({ page }: { page: NavPage }): JSX.Element {
 /**
  * This is a group entry. It does not link to a page.
  */
-function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Element {
-  const to = `/${page.slug}`;
+function GroupItem({ page, level }: { page: MenuItem; level: number }): JSX.Element {
   const classes = useStyles();
 
   const currentPath = useSanitizedPath();
-  const isActive = currentPath.startsWith(to);
+  const isActive = currentPath.startsWith(page.path);
 
-  const subPages = page.subPages ?? [];
+  const subPages = page.children ?? [];
 
   const [isExpanded, setIsExpanded] = useState(level != 0 || isActive);
 
@@ -122,7 +120,7 @@ function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Eleme
   };
 
   return (
-    <li key={page.slug}>
+    <li key={page.path}>
       <span
         className={clsx(classes.link, {
           [classes.groupTitle]: level === 0,
@@ -131,14 +129,8 @@ function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Eleme
         })}
         onClick={toggleIsExpanded}
       >
-        {page.slug == "apis" && <FiCloud className={classes.titleIcon} />}
-        {page.slug == "language" && <FiCode className={classes.titleIcon} />}
-        {page.slug == "hardware" && <FiGrid className={classes.titleIcon} />}
-        {page.slug == "platform" && <FiLayers className={classes.titleIcon} />}
-        {page.slug == "getstarted" && <FiPlay className={classes.titleIcon} />}
-        {page.slug == "troubleshoot" && <FiTool className={classes.titleIcon} />}
-        {page.slug == "tutorials" && <FiBookOpen className={classes.titleIcon} />}
-        {page.title}
+        <Icon page={page} />
+        {page.name}
       </span>
       {showExpanded && (
         <div className={clsx(classes.subPages, { [classes.subPages1]: level == 1 })}>
@@ -149,4 +141,30 @@ function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Eleme
   );
 }
 
+// If you want to add an icon, make sure to also add it to
+// `src/@types/index.d.ts`
+const Icon = ({ page }: { page: MenuItem }): JSX.Element => {
+  const classes = useStyles();
+
+  switch (page.icon) {
+    case "home":
+      return <FiHome className={classes.titleIcon} />;
+    case "apis":
+      return <FiCloud className={classes.titleIcon} />;
+    case "language":
+      return <FiCode className={classes.titleIcon} />;
+    case "hardware":
+      return <FiGrid className={classes.titleIcon} />;
+    case "platform":
+      return <FiLayers className={classes.titleIcon} />;
+    case "getstarted":
+      return <FiPlay className={classes.titleIcon} />;
+    case "troubleshoot":
+      return <FiTool className={classes.titleIcon} />;
+    case "tutorials":
+      return <FiBookOpen className={classes.titleIcon} />;
+    case undefined:
+      return <></>;
+  }
+};
 export default NavTreeItem;

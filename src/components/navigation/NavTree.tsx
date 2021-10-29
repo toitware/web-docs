@@ -1,8 +1,8 @@
 import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 import * as React from "react";
-import { NavPage } from "./Navigation";
 import NavTreeItem from "./NavTreeItem";
+import { MenuItem } from "../../../docs/menu.yaml";
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
-  pages: NavPage[];
+  pages: MenuItem[];
   level?: number;
 };
 
@@ -38,7 +38,7 @@ function NavTree({ pages, level = 0 }: Props): JSX.Element {
       })}
     >
       {pages.map((page) => (
-        <NavTreeItem key={page.slug} page={page} level={level} />
+        <NavTreeItem key={page.path} page={page} level={level} />
       ))}
     </ul>
   );
