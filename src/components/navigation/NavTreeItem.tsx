@@ -96,39 +96,6 @@ function GroupItem({ page, level }: { page: MenuItem; level: number }): JSX.Elem
 
   const subPages = page.children ?? [];
 
-  const [isExpanded, setIsExpanded] = useState(isActive);
-
-  useEffect(() => {
-    // If the page navigated and we have a new active path, make sure that
-    // the menu is open.
-    // This can only happen when the user clicks a link in the docs content,
-    // because otherwise the menu needs to be open to actually navigate there
-    // (or a link has been used, in which case it's open because it gets set
-    // at startup).
-    if (isActive) {
-      setIsExpanded(true);
-    }
-  }, [isActive, setIsExpanded]);
-
-  // Because we don't want to wait for the hook above to finish before we draw
-  // the expanded items (since otherwise the useAutoScroll() effect doesn't
-  // work) we check if the previous isActive state was `false`, and if so, we
-  // know that this just changed from inactive to active and it should be
-  // expanded.
-  //
-  // In the next render cycle the above hook will have finished and the
-  // `isExpanded` state will be correct.
-  let showExpanded = isExpanded;
-  const wasActiveRef = useRef<boolean>(false);
-  if (wasActiveRef.current === false && isActive) showExpanded = true;
-  wasActiveRef.current = isActive;
-
-  const toggleIsExpanded = () => {
-    if (level == 0) {
-      setIsExpanded(!isExpanded);
-    }
-  };
-
   return (
     <li key={page.path}>
       <Link
@@ -138,12 +105,11 @@ function GroupItem({ page, level }: { page: MenuItem; level: number }): JSX.Elem
           [classes.subGroupTitle]: level > 0,
           [classes.activeTitle]: isActive,
         })}
-        onClick={toggleIsExpanded}
       >
         <Icon page={page} />
         {page.name}
       </Link>
-      {showExpanded && (
+      {isActive && (
         <div className={clsx(classes.subPages, { [classes.subPages1]: level == 1 })}>
           <NavTree pages={subPages} level={level + 1} />
         </div>
