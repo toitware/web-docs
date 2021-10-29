@@ -114,10 +114,6 @@ module.exports = {
                     id
                     slug
                     excerpt
-                    frontmatter {
-                      title
-                      path
-                    }
                     headings {
                       value
                     }
@@ -147,13 +143,12 @@ module.exports = {
         // field above (default: 'id'). This is required.
         normalizer: ({ data }) =>
           data.allMdx.nodes.map((node) => {
-            let path = `/${node.slug}`;
-            if (!path.endsWith("/")) path += "/";
+            let path = `/${node.slug}`.replace(/\/$/, "");
 
             return {
               id: node.id,
-              path: node.frontmatter.path || path,
-              title: node.frontmatter.title ? node.frontmatter.title : node.headings[0].value,
+              path: path,
+              title: node.headings[0]?.value ?? "",
               body: node.rawBody,
               excerpt: node.excerpt,
             };
