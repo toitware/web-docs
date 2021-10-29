@@ -62,12 +62,25 @@ function NavTreeItem({ page, level }: ItemProps): JSX.Element {
  */
 function LeafItem({ page }: { page: MenuItem }): JSX.Element {
   const classes = useStyles();
+
+  const Content = (
+    <>
+      <Icon page={page} />
+      {page.name}
+    </>
+  );
   return (
     <li key={page.path}>
-      <Link to={page.path} className={classes.link} activeClassName={classes.active}>
-        <Icon page={page} />
-        {page.name}
-      </Link>
+      {!page.href && (
+        <Link to={page.path} className={classes.link} activeClassName={classes.active}>
+          {Content}
+        </Link>
+      )}
+      {page.href && (
+        <a href={page.href} target="_blank" rel="noreferrer" className={classes.link}>
+          {Content}
+        </a>
+      )}
     </li>
   );
 }
