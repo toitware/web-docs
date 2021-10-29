@@ -261,13 +261,13 @@ A typical use case would be to emit morse on a GPIO pin (`examples/gpio.toit`):
 // Use of this source code is governed by an MIT-style license that can be
 // found in the LICENSE file.
 
+import morse_tutorial
+import gpio
+
 /**
 This example demonstrates the use of the morse package with an ESP32.
 It assumes that pin 23 is connected to an LED (and an appropriate resistor).
 */
-
-import morse_tutorial
-import gpio
 
 // Update the pin here if you use a different one.
 LED_PIN ::= 23
@@ -289,8 +289,8 @@ relying on the uploaded package (which would be a bit circular), we use the pack
 
 ```shell
 # In the examples directory:
-toit pkg init --app
-toit pkg install --local --prefix=morse_tutorial ..
+toit pkg init
+toit pkg install --local --name=morse_tutorial ..
 ```
 
 This creates a `package.lock` file mapping the prefix "morse" to the package at location `..`.
@@ -326,8 +326,8 @@ Similarly to the examples, it's necessary to install the local package to be abl
 
 ```shell
 # In the test directory:
-toit pkg init --app
-toit pkg install --local --prefix=morse_tutorial ..
+toit pkg init
+toit pkg install --local --name=morse_tutorial ..
 ```
 
 The test should then execute successfully by running it locally:
@@ -387,7 +387,7 @@ When starting from an application, you can find the dependency information in it
 
 As one of the last steps we need to tag the sources with a version.
 Version numbers follow [semantic versioning](https://semver.org), and the corresponding
-git-tag is simply a "v" followed by the version.
+git-tag is a "v" followed by the version.
 
 After committing all sources, we simply execute `git tag v1.0.0`.
 
