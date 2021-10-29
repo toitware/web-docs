@@ -11,7 +11,9 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
   level0: {},
-  level1: {},
+  level1: {
+    paddingLeft: theme.spacing(2),
+  },
   level2: {
     paddingLeft: theme.spacing(2),
   },

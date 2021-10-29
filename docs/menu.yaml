@@ -92,7 +92,7 @@ items:
           - name: Models
             path: /hardware/firmware/models
             children:
-              - name: esp32-4mb
+              - name: ESP32-4mb
                 path: /hardware/firmware/models/esp32-4mb
       - name: Connectivity
         path: /hardware/connectivity
@@ -103,7 +103,7 @@ items:
             path: /hardware/connectivity/cellular
           - name: Ethernet
             path: /hardware/connectivity/ethernet
-      - name: peripherals
+      - name: Peripherals
         path: /hardware/peripherals
         children:
           - name: GPIO

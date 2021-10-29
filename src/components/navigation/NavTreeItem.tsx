@@ -27,9 +27,6 @@ const useStyles = makeStyles((theme) => ({
   },
   subGroupTitle: {
     margin: "1rem 0",
-    textTransform: "uppercase",
-    fontSize: "0.875em",
-    fontWeight: 300,
   },
   subPages: {},
   subPages1: {
@@ -86,7 +83,7 @@ function GroupItem({ page, level }: { page: MenuItem; level: number }): JSX.Elem
 
   const subPages = page.children ?? [];
 
-  const [isExpanded, setIsExpanded] = useState(level != 0 || isActive);
+  const [isExpanded, setIsExpanded] = useState(isActive);
 
   useEffect(() => {
     // If the page navigated and we have a new active path, make sure that
@@ -121,7 +118,8 @@ function GroupItem({ page, level }: { page: MenuItem; level: number }): JSX.Elem
 
   return (
     <li key={page.path}>
-      <span
+      <Link
+        to={page.path}
         className={clsx(classes.link, {
           [classes.groupTitle]: level === 0,
           [classes.subGroupTitle]: level > 0,
@@ -131,7 +129,7 @@ function GroupItem({ page, level }: { page: MenuItem; level: number }): JSX.Elem
       >
         <Icon page={page} />
         {page.name}
-      </span>
+      </Link>
       {showExpanded && (
         <div className={clsx(classes.subPages, { [classes.subPages1]: level == 1 })}>
           <NavTree pages={subPages} level={level + 1} />
