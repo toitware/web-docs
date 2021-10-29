@@ -18,10 +18,10 @@ declare module "react-use-flexsearch" {
 
 declare module "*/docs/menu.yaml" {
   export interface MenuItem {
-    name: string;
-    path: string;
+    name: string; // The text that should appear in the menu.
+    path: string; // The path in the URL, with a leading slash (/).
     children?: MenuItem[];
-    href?: string;
+    href?: string; // Can link to external resources.
     icon?: "home" | "apis" | "language" | "hardware" | "platform" | "getstarted" | "troubleshoot" | "tutorials";
   }
   const content: {
