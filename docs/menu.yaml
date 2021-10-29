@@ -2,6 +2,9 @@ items:
   - name: Home
     path: /
     icon: home
+  # - name: Example
+  #   path: /example/path
+  #   href: http://external-resource
   - name: Get started
     path: /getstarted
     icon: getstarted
