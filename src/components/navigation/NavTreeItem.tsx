@@ -2,13 +2,12 @@ import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 import { Link } from "gatsby";
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
 import { FiBookOpen, FiCloud, FiCode, FiGrid, FiHome, FiLayers, FiPlay, FiTool } from "react-icons/fi";
+import { MenuItem } from "../../../docs/menu.yaml";
 import useSanitizedPath from "../../hooks/use_sanitized_path";
 import { golden } from "../../theme";
 import NavTree from "./NavTree";
 
-import { MenuItem } from "../../../docs/menu.yaml";
 const useStyles = makeStyles((theme) => ({
   link: {
     color: "white",
