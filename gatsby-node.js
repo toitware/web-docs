@@ -1,6 +1,8 @@
 const path = require(`path`);
+const yaml = require(`js-yaml`);
+const fs = require(`fs`);
 
-exports.createPages = async ({ graphql, actions }) => {
+exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions;
   const docsTemplate = path.resolve(`src/components/layout/MdxLayout.tsx`);
 
@@ -14,8 +16,6 @@ exports.createPages = async ({ graphql, actions }) => {
             slug
             frontmatter {
               title
-              path
-              order
             }
           }
         }
@@ -27,9 +27,13 @@ exports.createPages = async ({ graphql, actions }) => {
     reporter.panicOnBuild('🚨  ERROR: Loading "createPages" query');
   }
 
+  // A cache for all paths so we can check their validity more easily later on.
+  const allMdPaths = [];
+
   // Create docs pages.
   result.data.allMdx.nodes.forEach((node) => {
-    const path = !node.frontmatter.path ? `/${node.slug}` : node.frontmatter.path;
+    const path = `/${node.slug.replace(/\/$/, "")}`;
+    allMdPaths.push(path);
     createPage({
       // Path for this page — required
       path: path,
@@ -48,4 +52,18 @@ exports.createPages = async ({ graphql, actions }) => {
       },
     });
   });
+
+  const menu = yaml.load(fs.readFileSync("./docs/menu.yaml", "utf-8"));
+
+  // Now check that each entry in the menu file has a corresponding md file.
+  (function validatePaths(entries) {
+    for (const entry of entries) {
+      if (entry.path != "/" && !allMdPaths.includes(entry.path)) {
+        reporter.panicOnBuild(`🚨  ERROR: The path ${entry.path} does not have a corresponding .md file`);
+      }
+      if (entry.children) {
+        validatePaths(entry.children);
+      }
+    }
+  })(menu.items);
 };

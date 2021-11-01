@@ -1,7 +1,3 @@
----
-order: 100
----
-
 # Toit definitions
 
 ## Library
@@ -63,6 +59,7 @@ main:
   Methods without arguments behave similarly to instance fields.
 
 <!-- RESET CODE -->
+
 ```
 // Implicitly static, not inside a class, and doesn't
 // require one.
@@ -176,6 +173,7 @@ be a reference to an instance of the `Bar` class or interface, but
 it can also be null, which also happens to be the initial value:
 
 <!-- HIDDEN CODE class Bar: -->
+
 ```
 class Foo:
   bar /Bar? := null
@@ -219,6 +217,7 @@ The `-> type` can be anywhere in the signature, but it's convention to put it
 at the end of the line that declares the name of a function:
 
 <!-- RESET CODE -->
+
 ```
 // A function that doesn't return anything.
 foo -> none:

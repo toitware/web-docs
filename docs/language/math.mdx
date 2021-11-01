@@ -1,7 +1,3 @@
----
-order: 900
----
-
 # Mathematics in Toit
 
 Find mathematical algorithms in the
@@ -51,7 +47,7 @@ main:
 ## Randomization
 
 `random` is a function included in the
-[core library](https://libs.toit.io/core/utils/library-summary#random(0%2C0%2C0%2C))
+[core library](<https://libs.toit.io/core/utils/library-summary#random(0%2C0%2C0%2C)>)
 
 `random 10` gives you a random number between 0 and 10 (10 exclusive).
 
@@ -80,7 +76,7 @@ main:
 ## Bit operations
 
 The bit operations on integers work on 64 bit signed twos-complement
-numbers.  Thus the shift operators can take shift distances of up to 63:
+numbers. Thus the shift operators can take shift distances of up to 63:
 
 ```
   print 0x8000_0000_0000_0000 >>> 63  // >> 1
@@ -89,7 +85,6 @@ numbers.  Thus the shift operators can take shift distances of up to 63:
 The shift-right operator, `>>` preserves the sign of its input, while
 the unsigned shift-right operator `>>>` shifts in zeros, which can
 give a positive result for a negative input.
-
 
 ```
   print -20 >> 2  // >> -5

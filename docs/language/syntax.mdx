@@ -1,7 +1,3 @@
----
-order: 300
----
-
 # Toit syntax fundamentals
 
 This document describes the basics of the Toit language. To learn about Toit's
@@ -12,6 +8,7 @@ convention](../../sdk/toitdoc) section.
 
 Toit uses whitespace and indentation to construct the code structure:
 comment. For example:
+
 ```
 // Defines globals first, and then uses main function to
 // print out something.
@@ -27,8 +24,8 @@ main:
 ## Declaration and assignment
 
 In the above, we declared new variables `i` and `j` using
-colon-equals.  We assigned a new value to the existing variable,
-`i`, using a single equals sign.  To declare a variable without
+colon-equals. We assigned a new value to the existing variable,
+`i`, using a single equals sign. To declare a variable without
 giving it a value, you can use a question mark: `:= ?`.
 
 ```
@@ -50,6 +47,7 @@ used.
 ## Comments
 
 In Toit, a single line comment begins with a double slash `//` followed by the comment. For example:
+
 ```
 // This is a single line comment in Toit.
 ```
@@ -68,10 +66,10 @@ comment
 
 Identifiers are names that identify globals, locals, functions, classes, libraries, and other objects in Toit.
 
-* Identifier names can contain only letters, numbers, and underscores (_), but cannot contain spaces.
-* Identifiers need to start with a letter or an underscore (_), but not with a number. The following characters can be alphanumeric or underscore.
-* Toit identifiers are case-sensitive.
-* Identifier names cannot be the same as keywords and built-in functions in Toit.
+- Identifier names can contain only letters, numbers, and underscores (\_), but cannot contain spaces.
+- Identifiers need to start with a letter or an underscore (\_), but not with a number. The following characters can be alphanumeric or underscore.
+- Toit identifiers are case-sensitive.
+- Identifier names cannot be the same as keywords and built-in functions in Toit.
 
 The following Toit keywords cannot be used for naming identifiers:
 
@@ -102,6 +100,7 @@ rune.
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE main: -->
+
 ```
   print 'A' // Prints "65", the ASCII code of 'A'.
   print '*' // Prints "42", the ASCII code of '*'.
@@ -111,6 +110,7 @@ rune.
 ```
 
 Toit uses only double quotes `"` to denote a string literal:
+
 ```
   print "Hello, World!"
   str := "a string"  // str has type string.
@@ -122,6 +122,7 @@ you must use the backslash `\` to
 can also be used for characters that are [difficult to
 type](../strings#escaped-characters)
 For example:
+
 ```
 message := "This is a \"valid\" string"
 ```
@@ -142,17 +143,23 @@ global_name := 103
 ```
 
 If the global is final (that is, can't be assigned to), then you can use `::=` as in:
+
 ```
 global_number ::= 42
 ```
+
 Note that this in this case, `global_number` is actually a constant, and should thus be written in capital characters:
+
 ```
 GLOBAL_NUMBER ::= 42
 ```
+
 A final global that isn't a constant could be something that is mutable itself, such as
+
 ```
 some_global ::= []
 ```
+
 In this case the global is initialized with an empty list. The content of the
 list can change, but it will always be the same list.
 
@@ -161,7 +168,7 @@ When you name a global, you should adhere to rules defined earlier about
 
 Global variables (and [static class
 variables](../definitions)) are initialized when
-they are first used.  This is noticeable if their value is
+they are first used. This is noticeable if their value is
 determined by some function call, for example `Time.now`
 
 ```
@@ -180,7 +187,7 @@ This program will print two different times, the second one twice.
 ## Indexing syntax
 
 Indexing into lists, maps, byte arrays, and strings can be
-done with square brackets, `[]`.  The first element has an
+done with square brackets, `[]`. The first element has an
 index of zero.
 
 For example, an ASCII string is a sequence of characters,
@@ -188,6 +195,7 @@ and you can access its elements using square
 brackets [] and indexes.
 
 <!-- RESET CODE -->
+
 ```
 str := "Toit String"
 byte_array := #[1, 42, 103]
@@ -208,7 +216,7 @@ Indexing into strings is done by [UTF-8 byte
 offset](../strings#string-representation), so the
 story is a little more complex for non-ASCII strings.
 
-Toit also has support for slices.  These are views into part
+Toit also has support for slices. These are views into part
 of a list, byte array, or string:
 
 ```
@@ -222,7 +230,7 @@ syntax](../strings#slices-of-strings) in the string
 guide.
 
 A slice may keep the underlying object alive, preventing a
-garbage collection.  To avoid that you can use `copy` to
+garbage collection. To avoid that you can use `copy` to
 create a new object containing only the elements in the
 slice:
 
@@ -252,6 +260,7 @@ A long statement can also span multiple lines by using the backslash (\) charact
 The following example illustrates how to use per-argument
 newlines, or the backslash (\) character to continue a
 statement in the second line:
+
 ```
 // A method with many parameters.
 foo a b c d e f g h i j: ...
@@ -343,13 +352,16 @@ See the
 ## Precedence
 
 Operators and other syntactic elements have precedence, like in other
-languages.  From highest to lowest:
+languages. From highest to lowest:
 
 [Postfix operators](#postfix-operators):
+
 ```txt
   ++    --
 ```
+
 [Math operators](#math-operators):
+
 ```txt
   -    ~    (unary operators)
   *    /    %
@@ -359,21 +371,29 @@ languages.  From highest to lowest:
   ^
   |
 ```
+
 [Type operators](#type-operators)
+
 ```txt
   is    is not    as
 ```
+
 [Comparison operators](#comparison-operators)
+
 ```txt
   ==    !=    <    <=    >    >=
 ```
+
 [Assignment operators](#assignment-operators)
+
 ```txt
   =  :=  ::=  +=  -=  *=  /=  %=  |=  ^=  &=  <<=  >>=  >>>=
 ```
+
 [Calls and arguments](#calls-and-arguments)
 
 [Logical operators](#logical-operators)
+
 ```txt
   not
   and
@@ -383,12 +403,13 @@ languages.  From highest to lowest:
 
 ### Postfix operators
 
-The postfix operators, `++` and `--` have the highest precedence.  Thus
+The postfix operators, `++` and `--` have the highest precedence. Thus
 the following two lines are equivalent:
 
 <!-- HIDDEN CODE class MyClass: -->
 <!-- HIDDEN CODE   static x/int := 0 -->
 <!-- HIDDEN CODE   static y/int := 0 -->
+
 ```
   z1 := x + y++
   z2 := x + (y++)
@@ -397,6 +418,7 @@ the following two lines are equivalent:
 Toit does not have the prefix forms of `++` and `--`:
 
 <!-- HIDDEN CODE main: -->
+
 ```
   for i :=0; i < 10; ++i:  // Error!  There is no prefix ++.
     // ...
@@ -404,16 +426,16 @@ Toit does not have the prefix forms of `++` and `--`:
 
 ### Math operators
 
-The [math](../math) operators have the next highest precedence.  In order of
+The [math](../math) operators have the next highest precedence. In order of
 descending precedence the order is:
 
-* Unary operators, `-` `~`
-* Multiplicative operators, `*` `/` `%`
-* Additive operators, `+` `-`
-* Bit-shift operators, `<<` `>>>` `>>`
-* Bit-and operator, `&`
-* Bit-xor operator, `^`
-* Bit-or operator, `|`
+- Unary operators, `-` `~`
+- Multiplicative operators, `*` `/` `%`
+- Additive operators, `+` `-`
+- Bit-shift operators, `<<` `>>>` `>>`
+- Bit-and operator, `&`
+- Bit-xor operator, `^`
+- Bit-or operator, `|`
 
 Thus the following pairs of lines are equivalent:
 
@@ -423,6 +445,7 @@ Thus the following pairs of lines are equivalent:
 <!-- HIDDEN CODE   static z/int := 0 -->
 <!-- HIDDEN CODE   static mask/int := 0 -->
 <!-- HIDDEN CODE   static distance/int := 0 -->
+
 ```
   a1 := ~x * 3
   a2 := (~x) * 3
@@ -443,7 +466,7 @@ Thus the following pairs of lines are equivalent:
   b4 := x | (y ^ z)
 ```
 
-The math operators group from left to right.  Thus the following pairs of lines
+The math operators group from left to right. Thus the following pairs of lines
 are equivalent
 
 ```
@@ -455,8 +478,8 @@ are equivalent
 ```
 
 Note that the [bitwise operators](../math#bit-operations) have higher
-precedence than the comparison operators in Toit.  This is like Dart, but
-unlike C and Java.  Thus the following are equivalent in Toit, but not in C:
+precedence than the comparison operators in Toit. This is like Dart, but
+unlike C and Java. Thus the following are equivalent in Toit, but not in C:
 
 ```
   c1 := x & 1 == 0
@@ -480,6 +503,7 @@ correct static type:
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   my_function 0 0 -->
 <!-- HIDDEN CODE   my_function2 0 0 0 0 0 0 0 0 0 -->
+
 ```
 my_function x y:
   if x is int:
@@ -502,6 +526,7 @@ Thus the following pairs of lines are equivalent:
 <!-- HIDDEN CODE class MyClass2: -->
 <!-- HIDDEN CODE   static x/int := 0 -->
 <!-- HIDDEN CODE   static y/int := 0 -->
+
 ```
   c3 := x + 1 <= y * 2
   c4 := (x + 1) >= (y * 2)
@@ -511,10 +536,11 @@ Thus the following pairs of lines are equivalent:
 ```
 
 The comparison operators form a group with ternary and other
-n-ary forms so that they can be used in the mathematical way.  Thus the
+n-ary forms so that they can be used in the mathematical way. Thus the
 following pairs are equivalent:
 
 <!-- HIDDEN CODE my_function2 x y z from to base level top size: -->
+
 ```
   if 0 <= x < y:
     // ...
@@ -535,7 +561,7 @@ following pairs are equivalent:
 ### Calls and arguments
 
 Calls and arguments are done with spaces in Toit, not with
-parentheses and commas.  Thus we write:
+parentheses and commas. Thus we write:
 
 ```
 import math show *
@@ -556,12 +582,13 @@ so the following are equivalent:
   cos (x + PI / 4)  // In C: cos(x + PI / 4)
   cos(x + PI / 4)   // Looks like C call syntax.
 ```
+
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   my_function 0 0 0 -->
 <!-- HIDDEN CODE foo x y z: -->
 
 The third form, with the redundant parentheses and no space, looks like
-a C-style call syntax.  However this is an illusion:
+a C-style call syntax. However this is an illusion:
 
 ```
 import math show *
@@ -573,6 +600,7 @@ my_function x/float y/float:
   atan2 x y       // Correct.
   atan2(x, y)     // Syntax error!
 ```
+
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   my_function 0.0 0.0 -->
 <!-- HIDDEN CODE   my_function 0 0 0 -->
@@ -582,12 +610,12 @@ my_function x/float y/float:
 
 In descending precedence order:
 
-* `not`
-* `and`
-* `or`
-* `?:`  (the ternary operator)
+- `not`
+- `and`
+- `or`
+- `?:` (the ternary operator)
 
-The first three match the names used in Python and C++.  In
+The first three match the names used in Python and C++. In
 C++ these alphabetical forms are rarely used, and
 it is more common to see the symbolic forms, `&&`, `||`, and `!`.
 The symbolic forms are not available in Toit.
@@ -646,9 +674,9 @@ equivalently:
 Assignment operators are only allowed at the start of statements and
 in the first clause of a `for`, `if`, or `while` statement.
 
-
 <!-- HIDDEN CODE import reader show Reader -->
 <!-- HIDDEN CODE my_function3 reader/Reader str/string: -->
+
 ```
   while data := reader.read:
     // data was not null.

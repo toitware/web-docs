@@ -1,0 +1,217 @@
+items:
+  - name: Home
+    path: /
+    icon: home
+  # - name: Example
+  #   path: /example/path
+  #   href: http://external-resource
+  - name: Get started
+    path: /getstarted
+    icon: getstarted
+    children:
+      - name: Quick start guide
+        path: /getstarted/quick_start
+      - name: Installation
+        path: /getstarted/installation
+        children:
+          - name: Toit for Windows
+            path: /getstarted/installation/windows
+          - name: Toit for macOS
+            path: /getstarted/installation/macos
+          - name: Toit for Linux
+            path: /getstarted/installation/linux
+  - name: Tutorials
+    path: /tutorials
+    icon: tutorials
+    children:
+      - name: Starter tutorials
+        path: /tutorials/starter
+        children:
+          - name: Log the date and time
+            path: /tutorials/starter/time
+          - name: Weather station
+            path: /tutorials/starter/weatherstation
+      - name: BLE tutorials
+        path: /tutorials/ble
+        children:
+          - name: Basic
+            path: /tutorials/ble/basic
+          - name: Scanning
+            path: /tutorials/ble/scanning
+          - name: Advertising
+            path: /tutorials/ble/advertising
+          - name: Client
+            path: /tutorials/ble/client
+      - name: PubSub tutorials
+        path: /tutorials/pubsub
+        children:
+          - name: Communicate within a device
+            path: /tutorials/pubsub/pubsubint
+          - name: Communicate through the cloud
+            path: /tutorials/pubsub/pubsubext
+      - name: MQTT tutorial
+        path: /tutorials/mqtt
+        children:
+          - name: TCP (and TLS)
+            path: /tutorials/mqtt/tcp
+  - name: Platform
+    path: /platform
+    icon: platform
+    children:
+      - name: Deploy apps
+        path: /platform/deploy
+        children:
+          - name: Run or deploy apps
+            path: /platform/deploy/runordeploy
+          - name: App specification
+            path: /platform/deploy/appspec
+      - name: Toit console
+        path: /platform/console
+        children:
+          - name: Device details
+            path: /platform/console/devicemanagement
+          - name: Device configurations
+            path: /platform/console/deviceconfig
+          - name: Web serial
+            path: /platform/console/webserial
+      - name: Concepts
+        path: /platform/concepts
+        children:
+          - name: Claiming
+            path: /platform/concepts/claim
+          - name: Provisioning
+            path: /platform/concepts/provision
+          - name: Device fleet
+            path: /platform/concepts/fleet
+          - name: Core concepts
+            path: /platform/concepts/concepts
+  - name: Hardware
+    path: /hardware
+    icon: hardware
+    children:
+      - name: Toit firmware
+        path: /hardware/firmware
+        children:
+          - name: Models
+            path: /hardware/firmware/models
+            children:
+              - name: ESP32-4mb
+                path: /hardware/firmware/models/esp32-4mb
+      - name: Connectivity
+        path: /hardware/connectivity
+        children:
+          - name: WiFi
+            path: /hardware/connectivity/wifi
+          - name: Cellular
+            path: /hardware/connectivity/cellular
+          - name: Ethernet
+            path: /hardware/connectivity/ethernet
+      - name: Peripherals
+        path: /hardware/peripherals
+        children:
+          - name: GPIO
+            path: /hardware/peripherals/gpio
+          - name: I2C
+            path: /hardware/peripherals/i2c
+          - name: SPI
+            path: /hardware/peripherals/spi
+      - name: Drivers
+        path: /hardware/drivers
+        children:
+          - name: List of drivers
+            path: /hardware/drivers/driverslist
+          - name: Connect sensors
+            path: /hardware/drivers/bme280
+          - name: Qwiic
+            path: /hardware/drivers/qwiic
+          - name: Write drivers
+            path: /hardware/drivers/write
+            children:
+              - name: Write a driver
+                path: /hardware/drivers/write/sparkfun_joystick
+              - name: Bitwise operations
+                path: /hardware/drivers/write/bitmask
+      - name: Hardware prerequisites
+        path: /hardware/hardware
+  - name: Language
+    path: /language
+    icon: language
+    children:
+      - name: Toit language basics
+        path: /language/language
+      - name: Common conversions
+        path: /language/typeconversion
+      - name: Toit definitions
+        path: /language/definitions
+      - name: Language comparison
+        path: /language/toitversus
+      - name: Toit style guide
+        path: /language/style
+      - name: Toit syntax fundamentals
+        path: /language/syntax
+      - name: Imports
+        path: /language/imports
+      - name: Classes in Toit
+        path: /language/objects-constructors-inheritance-interfaces
+      - name: Toit strings
+        path: /language/strings
+      - name: Toit blocks
+        path: /language/blocks
+      - name: List, ByteArray, Set and Map in Toit
+        path: /language/listsetmap
+      - name: Control flow in Toit
+        path: /language/loops
+      - name: Booleans
+        path: /language/booleans
+      - name: Mathematics in Toit
+        path: /language/math
+      - name: Tasks in Toit
+        path: /language/tasks
+      - name: Exception handling in Toit
+        path: /language/exceptions
+      - name: Toit SDK
+        path: /language/sdk
+        children:
+          - name: Toit SDK
+            path: /language/sdk/sdk
+          - name: Toit standard libraries
+            path: /language/sdk/standard-libraries
+          - name: Documentation convention
+            path: /language/sdk/toitdoc
+          - name: Display
+            path: /language/sdk/display
+          - name: Toit font basics
+            path: /language/sdk/fonts
+          - name: Bit blit in Toit
+            path: /language/sdk/blit
+      - name: Toit packages
+        path: /language/package
+        children:
+          - name: Concepts around packages
+            path: /language/package/pkgconcepts
+          - name: Package quick start
+            path: /language/package/pkgguide
+          - name: Package tutorial
+            path: /language/package/pkgtutorial
+  - name: Toit APIs
+    path: /apis
+    icon: apis
+    children:
+      - name: APIs
+        path: /apis/api
+      - name: PubSub
+        path: /apis/pubsub
+  - name: Troubleshoot
+    path: /troubleshoot
+    icon: troubleshoot
+    children:
+      - name: Serial connect
+        path: /troubleshoot/serialtroubleshoot
+      - name: WiFi credentials
+        path: /troubleshoot/wifitroubleshoot
+      - name: ESP32 setup
+        path: /troubleshoot/setuptroubleshoot
+      - name: Claim device
+        path: /troubleshoot/claimtroubleshoot
+      - name: VSCode extension
+        path: /troubleshoot/vscodetroubleshoot
