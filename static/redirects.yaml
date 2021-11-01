@@ -3,3 +3,4 @@ redirects:
   "/getstarted/details/troubleshoot": "/troubleshoot/serialtroubleshoot"
   "/platform/tutorials/ble/advertising": "/tutorials/ble/advertising"
   "/getstarted/quick_start": "/getstarted"
+  "/platform/deploy/runordeploy": "/platform/deploy"
