@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
   },
   level2: {
+    borderLeft: "1px solid rgba(255, 255, 255, 0.5)",
     paddingLeft: theme.spacing(2),
   },
   level3: {
