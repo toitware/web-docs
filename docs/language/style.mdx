@@ -1,7 +1,3 @@
----
-order: 295
----
-
 # Toit style guide
 
 This document describes the preferred style for the Toit language.
@@ -13,6 +9,7 @@ convention](../sdk/toitdoc) section.
 ## Whitespace and indentation
 
 We use two spaces, never tabs, to indent Toit:
+
 ```
 j := 10
 
@@ -23,6 +20,7 @@ main:
 ```
 
 If indenting because lines are too long, use four spaces:
+
 ```
 my_function x/num y/num -> num:
   return x * x * x
@@ -55,6 +53,7 @@ As seen above prefer to break before operators, not after operators.
 This fits well with the ability to [use newlines in long argument
 lists](../syntax#line-breaks-in-function-arguments), since argument lists have
 lower precedence than operators.
+
 ```
   // Using newline instead of parentheses to delineate the
   // single argument to the print function.
@@ -135,11 +134,11 @@ very well established.
 ```
 // Name too abbreviated unless it is solely used internally.
 f_to_c f/num -> num:
-  return (f - 32.0) / 9 * 5 
+  return (f - 32.0) / 9 * 5
 
 // Better.
 fahrenheit_to_celcius fahrenheit/num -> num:
-  return (f - 32.0) / 9 * 5 
+  return (f - 32.0) / 9 * 5
 ```
 
 An exception must be made for variables named `str` since the name
@@ -151,8 +150,9 @@ Package-private names end with an underscore.
 ## Comments
 
 A single line comment is written as a full sentence, starting with a capital
-letter and ending with a period (.).  At least two spaces should separate the
+letter and ending with a period (.). At least two spaces should separate the
 `//` from code, and a space separates the `//` from the text of the comment.
+
 ```
 //bad
 
@@ -165,6 +165,7 @@ See also [documentation comments](../sdk/toitdoc).
 
 Variables and members are not given an initial value unless it makes
 sense.
+
 ```
   x := 0      // No need to give x an inital value.
   y /int := ?  // Compiler will check it is initialized before being used.
@@ -177,6 +178,7 @@ sense.
 ```
 
 Similarly for members:
+
 ```
 class Foo:
   x /int? := null  // Don't assign null unless you want this default
@@ -190,7 +192,7 @@ class Foo:
 ### Getters and setters
 
 In Toit, getters and setters have the same syntax (for users of a class)
-as public member variables.  Therefore there is no need to write trivial
+as public member variables. Therefore there is no need to write trivial
 setters and getters:
 
 ```
@@ -212,6 +214,7 @@ class UnneededPrivacy:
 ```
 
 Instead just make the member public:
+
 ```
 class Simple:
   x/int
@@ -225,13 +228,14 @@ without having to change users of the class.
 
 ## Types
 
-Elements of public APIs should be typed.  Internal variables should
-be typed where it aids readability and according to taste.  It is
+Elements of public APIs should be typed. Internal variables should
+be typed where it aids readability and according to taste. It is
 often useful to type parameters, as they cannot be inferred by the
 compiler.
 
 Types in argument lists are written without spaces in order to
 group the arguments visually:
+
 ```
 my_function x/int y/float z/string -> none:
   // Implementation
@@ -241,6 +245,7 @@ Types of
 [instance variables](../objects-constructors-inheritance-interfaces#classes-in-toit)
 and locals are written with a space
 before the `/`:
+
 ```
 class Foo:
   x /int
@@ -252,6 +257,7 @@ class Foo:
 ## Literals
 
 For list literals on multiple lines put a comma on every line, even the last:
+
 ```
 RGB ::= [
   0.0,
@@ -264,6 +270,7 @@ As seen above, the closing bracket is dedented to the initial indentation.
 
 If all values are in the 0-255 range and you don't expect to modify the
 list with a non-byte value, consider using a ByteArray literal:
+
 ```
 RGB ::= #[
   0,
@@ -275,6 +282,7 @@ RGB ::= #[
 ## Loops
 
 For simple zero-to-n loops prefer `repeat` to `for`-loops.
+
 ```
   for i := 0; i < n; i++:  // No need for a for-loop.
     print i
@@ -284,6 +292,7 @@ For simple zero-to-n loops prefer `repeat` to `for`-loops.
 ```
 
 If possible use the iteration built-in to the collection:
+
 ```
   for i := 0; i < list.size; i++:  // Not using the collection's own iterator.
     print list[i]
@@ -297,6 +306,7 @@ If possible use the iteration built-in to the collection:
 
 In loop bodies more than one or two lines, give the iteration variable
 a name instead of just using `it`:
+
 ```
   list.do: | element |
     if element >= 0:

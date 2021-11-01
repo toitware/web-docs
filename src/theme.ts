@@ -1,4 +1,4 @@
-import { createMuiTheme, PaletteType, responsiveFontSizes, Theme } from "@material-ui/core";
+import { createTheme as createMuiTheme, PaletteType, responsiveFontSizes, Theme } from "@material-ui/core";
 import Color from "color";
 
 const defaultSpacing = 8;

@@ -1,7 +1,3 @@
----
-order: 900
----
-
 # Models
 
 Models are designed to target different core hardware, allowing the Toit stack to be used across many different systems.
@@ -16,8 +12,8 @@ Some models supports custom model-parameters, for example to wire up core periph
 
 When utility pins are exposed through model parameters, an optional mode may be given as well. Pins have 3 modes available as described below.
 
-Value | Description | Notes
---- | --- | ---
-0 | Configures the pin as active-low
-1 | Configures the pin as active-high
-2 | Configures the pin as open-drain active-low | **Default**
+| Value | Description                                 | Notes       |
+| ----- | ------------------------------------------- | ----------- |
+| 0     | Configures the pin as active-low            |
+| 1     | Configures the pin as active-high           |
+| 2     | Configures the pin as open-drain active-low | **Default** |

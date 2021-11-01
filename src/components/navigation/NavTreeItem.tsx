@@ -2,11 +2,10 @@ import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 import { Link } from "gatsby";
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
 import { FiBookOpen, FiCloud, FiCode, FiGrid, FiHome, FiLayers, FiPlay, FiTool } from "react-icons/fi";
+import { MenuItem } from "../../../docs/menu.yaml";
 import useSanitizedPath from "../../hooks/use_sanitized_path";
 import { golden } from "../../theme";
-import { NavPage } from "./Navigation";
 import NavTree from "./NavTree";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,9 +26,6 @@ const useStyles = makeStyles((theme) => ({
   },
   subGroupTitle: {
     margin: "1rem 0",
-    textTransform: "uppercase",
-    fontSize: "0.875em",
-    fontWeight: 300,
   },
   subPages: {},
   subPages1: {
@@ -45,12 +41,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type ItemProps = {
-  page: NavPage;
+  page: MenuItem;
   level: number;
 };
 
 function NavTreeItem({ page, level }: ItemProps): JSX.Element {
-  const hasSubPages = page.subPages.length !== 0;
+  const hasSubPages = !!page.children;
 
   if (!hasSubPages) {
     return <LeafItem page={page} />;
@@ -63,15 +59,27 @@ function NavTreeItem({ page, level }: ItemProps): JSX.Element {
  * This is a "leaf" entry: it doesn't have subpages so it is a direct link to a
  * page.
  */
-function LeafItem({ page }: { page: NavPage }): JSX.Element {
-  const to = `/${page.slug}`;
+function LeafItem({ page }: { page: MenuItem }): JSX.Element {
   const classes = useStyles();
+
+  const Content = (
+    <>
+      <Icon page={page} />
+      {page.name}
+    </>
+  );
   return (
-    <li key={page.slug}>
-      <Link to={to} className={classes.link} activeClassName={classes.active}>
-        {page.slug == "" && <FiHome className={classes.titleIcon} />}
-        {page.title}
-      </Link>
+    <li key={page.path}>
+      {!page.href && (
+        <Link to={page.path} className={classes.link} activeClassName={classes.active}>
+          {Content}
+        </Link>
+      )}
+      {page.href && (
+        <a href={page.href} target="_blank" rel="noreferrer" className={classes.link}>
+          {Content}
+        </a>
+      )}
     </li>
   );
 }
@@ -79,68 +87,28 @@ function LeafItem({ page }: { page: NavPage }): JSX.Element {
 /**
  * This is a group entry. It does not link to a page.
  */
-function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Element {
-  const to = `/${page.slug}`;
+function GroupItem({ page, level }: { page: MenuItem; level: number }): JSX.Element {
   const classes = useStyles();
 
   const currentPath = useSanitizedPath();
-  const isActive = currentPath.startsWith(to);
+  const isActive = currentPath.startsWith(page.path);
 
-  const subPages = page.subPages ?? [];
-
-  const [isExpanded, setIsExpanded] = useState(level != 0 || isActive);
-
-  useEffect(() => {
-    // If the page navigated and we have a new active path, make sure that
-    // the menu is open.
-    // This can only happen when the user clicks a link in the docs content,
-    // because otherwise the menu needs to be open to actually navigate there
-    // (or a link has been used, in which case it's open because it gets set
-    // at startup).
-    if (isActive) {
-      setIsExpanded(true);
-    }
-  }, [isActive, setIsExpanded]);
-
-  // Because we don't want to wait for the hook above to finish before we draw
-  // the expanded items (since otherwise the useAutoScroll() effect doesn't
-  // work) we check if the previous isActive state was `false`, and if so, we
-  // know that this just changed from inactive to active and it should be
-  // expanded.
-  //
-  // In the next render cycle the above hook will have finished and the
-  // `isExpanded` state will be correct.
-  let showExpanded = isExpanded;
-  const wasActiveRef = useRef<boolean>(false);
-  if (wasActiveRef.current === false && isActive) showExpanded = true;
-  wasActiveRef.current = isActive;
-
-  const toggleIsExpanded = () => {
-    if (level == 0) {
-      setIsExpanded(!isExpanded);
-    }
-  };
+  const subPages = page.children ?? [];
 
   return (
-    <li key={page.slug}>
-      <span
+    <li key={page.path}>
+      <Link
+        to={page.path}
         className={clsx(classes.link, {
           [classes.groupTitle]: level === 0,
           [classes.subGroupTitle]: level > 0,
           [classes.activeTitle]: isActive,
         })}
-        onClick={toggleIsExpanded}
       >
-        {page.slug == "apis" && <FiCloud className={classes.titleIcon} />}
-        {page.slug == "language" && <FiCode className={classes.titleIcon} />}
-        {page.slug == "hardware" && <FiGrid className={classes.titleIcon} />}
-        {page.slug == "platform" && <FiLayers className={classes.titleIcon} />}
-        {page.slug == "getstarted" && <FiPlay className={classes.titleIcon} />}
-        {page.slug == "troubleshoot" && <FiTool className={classes.titleIcon} />}
-        {page.slug == "tutorials" && <FiBookOpen className={classes.titleIcon} />}
-        {page.title}
-      </span>
-      {showExpanded && (
+        <Icon page={page} />
+        {page.name}
+      </Link>
+      {isActive && (
         <div className={clsx(classes.subPages, { [classes.subPages1]: level == 1 })}>
           <NavTree pages={subPages} level={level + 1} />
         </div>
@@ -149,4 +117,30 @@ function GroupItem({ page, level }: { page: NavPage; level: number }): JSX.Eleme
   );
 }
 
+// If you want to add an icon, make sure to also add it to
+// `src/@types/index.d.ts`
+const Icon = ({ page }: { page: MenuItem }): JSX.Element => {
+  const classes = useStyles();
+
+  switch (page.icon) {
+    case "home":
+      return <FiHome className={classes.titleIcon} />;
+    case "apis":
+      return <FiCloud className={classes.titleIcon} />;
+    case "language":
+      return <FiCode className={classes.titleIcon} />;
+    case "hardware":
+      return <FiGrid className={classes.titleIcon} />;
+    case "platform":
+      return <FiLayers className={classes.titleIcon} />;
+    case "getstarted":
+      return <FiPlay className={classes.titleIcon} />;
+    case "troubleshoot":
+      return <FiTool className={classes.titleIcon} />;
+    case "tutorials":
+      return <FiBookOpen className={classes.titleIcon} />;
+    case undefined:
+      return <></>;
+  }
+};
 export default NavTreeItem;
