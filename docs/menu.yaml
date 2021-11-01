@@ -10,7 +10,7 @@ items:
     icon: getstarted
     children:
       - name: Quick start guide
-        path: /getstarted/quick_start
+        path: /getstarted
       - name: Installation
         path: /getstarted/installation
         children:
@@ -28,14 +28,14 @@ items:
         path: /tutorials/starter
         children:
           - name: Log the date and time
-            path: /tutorials/starter/time
+            path: /tutorials/starter
           - name: Weather station
             path: /tutorials/starter/weatherstation
       - name: BLE tutorials
         path: /tutorials/ble
         children:
           - name: Basic
-            path: /tutorials/ble/basic
+            path: /tutorials/ble
           - name: Scanning
             path: /tutorials/ble/scanning
           - name: Advertising
@@ -46,14 +46,14 @@ items:
         path: /tutorials/pubsub
         children:
           - name: Communicate within a device
-            path: /tutorials/pubsub/pubsubint
+            path: /tutorials/pubsub
           - name: Communicate through the cloud
             path: /tutorials/pubsub/pubsubext
       - name: MQTT tutorial
         path: /tutorials/mqtt
         children:
           - name: TCP (and TLS)
-            path: /tutorials/mqtt/tcp
+            path: /tutorials/mqtt
   - name: Platform
     path: /platform
     icon: platform
@@ -62,7 +62,7 @@ items:
         path: /platform/deploy
         children:
           - name: Run or deploy apps
-            path: /platform/deploy/runordeploy
+            path: /platform/deploy
           - name: App specification
             path: /platform/deploy/appspec
       - name: Toit console
@@ -83,8 +83,6 @@ items:
             path: /platform/concepts/provision
           - name: Device fleet
             path: /platform/concepts/fleet
-          - name: Core concepts
-            path: /platform/concepts/concepts
   - name: Hardware
     path: /hardware
     icon: hardware
@@ -138,7 +136,7 @@ items:
     icon: language
     children:
       - name: Toit language basics
-        path: /language/language
+        path: /language
       - name: Common conversions
         path: /language/typeconversion
       - name: Toit definitions
@@ -198,7 +196,7 @@ items:
     icon: apis
     children:
       - name: APIs
-        path: /apis/api
+        path: /apis
       - name: PubSub
         path: /apis/pubsub
   - name: Troubleshoot
