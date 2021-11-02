@@ -22,7 +22,16 @@ declare module "*/docs/menu.yaml" {
     path: string; // The path in the URL, with a leading slash (/).
     children?: MenuItem[];
     href?: string; // Can link to external resources.
-    icon?: "home" | "apis" | "language" | "hardware" | "platform" | "getstarted" | "troubleshoot" | "tutorials";
+    icon?:
+      | "home"
+      | "apis"
+      | "language"
+      | "firmware"
+      | "peripherals"
+      | "platform"
+      | "getstarted"
+      | "support"
+      | "tutorials";
   }
   const content: {
     items: MenuItem[];

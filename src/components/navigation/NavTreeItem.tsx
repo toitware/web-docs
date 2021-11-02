@@ -2,7 +2,7 @@ import { Collapse, makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 import { Link } from "gatsby";
 import * as React from "react";
-import { FiBookOpen, FiCloud, FiCode, FiGrid, FiHome, FiLayers, FiPlay, FiTool } from "react-icons/fi";
+import { FiBookOpen, FiCloud, FiCode, FiCpu, FiGrid, FiHome, FiLayers, FiPlay, FiTool } from "react-icons/fi";
 import { MenuItem } from "../../../docs/menu.yaml";
 import useSanitizedPath from "../../hooks/use_sanitized_path";
 import { golden } from "../../theme";
@@ -72,13 +72,15 @@ const Icon = ({ page }: { page: MenuItem }): JSX.Element => {
       return <FiCloud className={classes.icon} />;
     case "language":
       return <FiCode className={classes.icon} />;
-    case "hardware":
+    case "firmware":
       return <FiGrid className={classes.icon} />;
+    case "peripherals":
+      return <FiCpu className={classes.icon} />;
     case "platform":
       return <FiLayers className={classes.icon} />;
     case "getstarted":
       return <FiPlay className={classes.icon} />;
-    case "troubleshoot":
+    case "support":
       return <FiTool className={classes.icon} />;
     case "tutorials":
       return <FiBookOpen className={classes.icon} />;
