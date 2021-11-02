@@ -83,54 +83,51 @@ items:
             path: /platform/concepts/provision
           - name: Device fleet
             path: /platform/concepts/fleet
-  - name: Hardware
-    path: /hardware
-    icon: hardware
+  - name: Firmware
+    path: /firmware
+    icon: firmware
     children:
-      - name: Toit firmware
-        path: /hardware/firmware
+      - name: Prerequisites
+        path: /firmware/prerequisites
+      - name: Microprocessors
+        path: /firmware/microprocessors
         children:
-          - name: Models
-            path: /hardware/firmware/models
-            children:
-              - name: ESP32-4mb
-                path: /hardware/firmware/models/esp32-4mb
+          - name: ESP32
+            path: /firmware/microprocessors/esp32
       - name: Connectivity
-        path: /hardware/connectivity
+        path: /firmware/connectivity
         children:
           - name: WiFi
-            path: /hardware/connectivity/wifi
+            path: /firmware/connectivity/wifi
           - name: Cellular
-            path: /hardware/connectivity/cellular
+            path: /firmware/connectivity/cellular
           - name: Ethernet
-            path: /hardware/connectivity/ethernet
-      - name: Peripherals
-        path: /hardware/peripherals
-        children:
-          - name: GPIO
-            path: /hardware/peripherals/gpio
-          - name: I2C
-            path: /hardware/peripherals/i2c
-          - name: SPI
-            path: /hardware/peripherals/spi
+            path: /firmware/connectivity/ethernet
+  - name: Peripherals
+    path: /peripherals
+    icon: peripherals
+    children:
+      - name: GPIO
+        path: /peripherals/gpio
+      - name: I2C
+        path: /peripherals/i2c
+      - name: SPI
+        path: /peripherals/spi
+      - name: Network
+        path: /peripherals/network
       - name: Drivers
-        path: /hardware/drivers
+        path: /peripherals/drivers
         children:
           - name: List of drivers
-            path: /hardware/drivers/driverslist
+            path: /peripherals/drivers/driverslist
           - name: Connect sensors
-            path: /hardware/drivers/bme280
+            path: /peripherals/drivers/bme280
           - name: Qwiic
-            path: /hardware/drivers/qwiic
-          - name: Write drivers
-            path: /hardware/drivers/write
-            children:
-              - name: Write a driver
-                path: /hardware/drivers/write/sparkfun_joystick
-              - name: Bitwise operations
-                path: /hardware/drivers/write/bitmask
-      - name: Hardware prerequisites
-        path: /hardware/hardware
+            path: /peripherals/drivers/qwiic
+          - name: How to write a driver
+            path: /peripherals/drivers/sparkfun_joystick
+          - name: Bitwise operations
+            path: /peripherals/drivers/bitmask
   - name: Language
     path: /language
     icon: language
@@ -191,7 +188,7 @@ items:
             path: /language/package/pkgguide
           - name: Package tutorial
             path: /language/package/pkgtutorial
-  - name: Toit APIs
+  - name: Cloud APIs
     path: /apis
     icon: apis
     children:
@@ -199,17 +196,22 @@ items:
         path: /apis
       - name: PubSub
         path: /apis/pubsub
-  - name: Troubleshoot
-    path: /troubleshoot
-    icon: troubleshoot
+  - name: Support
+    path: /support
+    icon: support
     children:
-      - name: Serial connect
-        path: /troubleshoot/serialtroubleshoot
-      - name: WiFi credentials
-        path: /troubleshoot/wifitroubleshoot
-      - name: ESP32 setup
-        path: /troubleshoot/setuptroubleshoot
-      - name: Claim device
-        path: /troubleshoot/claimtroubleshoot
-      - name: VSCode extension
-        path: /troubleshoot/vscodetroubleshoot
+      - name: FAQ
+        path: /support/faq
+      - name: Troubleshoot
+        path: /support/troubleshoot
+        children:
+          - name: Serial connect
+            path: /support/troubleshoot/serialtroubleshoot
+          - name: WiFi credentials
+            path: /support/troubleshoot/wifitroubleshoot
+          - name: ESP32 setup
+            path: /support/troubleshoot/setuptroubleshoot
+          - name: Claim device
+            path: /support/troubleshoot/claimtroubleshoot
+          - name: VSCode extension
+            path: /support/troubleshoot/vscodetroubleshoot

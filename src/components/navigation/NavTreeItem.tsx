@@ -72,13 +72,15 @@ const Icon = ({ page }: { page: MenuItem }): JSX.Element => {
       return <FiCloud className={classes.icon} />;
     case "language":
       return <FiCode className={classes.icon} />;
-    case "hardware":
+    case "firmware":
+      return <FiGrid className={classes.icon} />;
+    case "peripherals":
       return <FiGrid className={classes.icon} />;
     case "platform":
       return <FiLayers className={classes.icon} />;
     case "getstarted":
       return <FiPlay className={classes.icon} />;
-    case "troubleshoot":
+    case "support":
       return <FiTool className={classes.icon} />;
     case "tutorials":
       return <FiBookOpen className={classes.icon} />;
