@@ -4,3 +4,8 @@ redirects:
   "/platform/tutorials/ble/advertising": "/tutorials/ble/advertising"
   "/getstarted/quick_start": "/getstarted"
   "/platform/deploy/runordeploy": "/platform/deploy"
+  "/troubleshoot": "/troubleshoot/support"
+  "/apis/api": "/apis"
+  "/language/language": "/language"
+  "/hardware/peripherals": "/peripherals"
+  "/hardware/firmware": "/firmware"
