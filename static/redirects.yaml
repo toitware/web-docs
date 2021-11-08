@@ -9,3 +9,4 @@ redirects:
   "/language/language": "/language"
   "/hardware/peripherals": "/peripherals"
   "/hardware/firmware": "/firmware"
+  "/hardware/peripherals/spi": "/peripherals/spi"
