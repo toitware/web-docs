@@ -8,10 +8,10 @@ This section also lists the model of the ESP32, and the firmware version current
 **Most recent check-ins** visualizes as green squares the successful recent connections of the device with the Toit cloud.
 A missed check-in is represented by a red square.
 
-- The **Used storage graph** shows how much data (such as logs, metrics, app data and PubSub messages) is saved on the device while in deep sleep.
+- The **Used storage graph** shows how much data (such as logs, system metrics, app data and PubSub messages) is saved on the device while in deep sleep.
   Data is flushed to the console every time the device comes online. This happens as often as it is configured by the max offline parameter, but can also happen sooner if the flash drive capacity reaches a user-defined threshold of stored events.
   The latter situation is needed to prevent a loss of data due to a full flash drive.
-  If the Used storage graph shows that your device often reaches high levels of storage, thereby requiring the device to come online too frequently, it is recommended to reduce the amount of data stored by the apps running on the device, or to filter more restrictively the logs and metrics saved on the device (see the Configuration | Advanced section below).
+  If the Used storage graph shows that your device often reaches high levels of storage, thereby requiring the device to come online too frequently, it is recommended to reduce the amount of data stored by the apps running on the device, or to filter more restrictively the logs and system metrics saved on the device (see the Configuration | Advanced section below).
 
 - The **Signal strength** graph depicts WiFi (and Cellular when relevant) signal strength during the successive check-ins of the device.
 
