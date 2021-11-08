@@ -90,7 +90,7 @@ items:
       - name: Prerequisites
         path: /firmware/prerequisites
       - name: Microprocessors
-        path: /firmware/microprocessors
+        path: /firmware/microprocessors/esp32
         children:
           - name: ESP32
             path: /firmware/microprocessors/esp32
@@ -113,10 +113,8 @@ items:
         path: /peripherals/i2c
       - name: SPI
         path: /peripherals/spi
-      - name: Network
-        path: /peripherals/network
       - name: Drivers
-        path: /peripherals/drivers
+        path: /peripherals/drivers/driverslist
         children:
           - name: List of drivers
             path: /peripherals/drivers/driverslist
@@ -197,11 +195,9 @@ items:
       - name: PubSub
         path: /apis/pubsub
   - name: Support
-    path: /support
+    path: /support/troubleshoot
     icon: support
     children:
-      - name: FAQ
-        path: /support/faq
       - name: Troubleshoot
         path: /support/troubleshoot
         children:
