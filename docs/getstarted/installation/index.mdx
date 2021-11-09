@@ -1,6 +1,6 @@
-import LinuxIcon from "../../_images/linux-brands.png";
-import WindowsIcon from "../../_images/windows-brands.png";
-import MacOSIcon from "../../_images/apple-brands.png";
+import LinuxIcon from "../../_images/linux-brands.svg";
+import WindowsIcon from "../../_images/windows-brands.svg";
+import MacOSIcon from "../../_images/apple-brands.svg";
 
 # Install development environment
 
@@ -10,22 +10,10 @@ Choose the relevant platform.
 
 <Boxes>
 
-<Box to="./windows" title="Toit for Windows">
+<Box to="./windows" title="Toit for Windows" imageUrl={WindowsIcon} />
 
-<img src={WindowsIcon} alt="Windows icon" width="50" height="50" style="float:right" />
+<Box to="./macos" title="Toit for macOS" imageUrl={MacOSIcon} />
 
-</Box>
-
-<Box to="./macos" title="Toit for macOS">
-
-<img src={MacOSIcon} alt="MacOS icon" width="50" height="50" style="float:right" />
-
-</Box>
-
-<Box to="./linux" title="Toit for Linux">
-
-<img src={LinuxIcon} alt="Linux icon" width="50" height="50" style="float:right" />
-
-</Box>
+<Box to="./linux" title="Toit for Linux" imageUrl={LinuxIcon} />
 
 </Boxes>
