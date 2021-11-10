@@ -18,10 +18,13 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     position: "sticky",
     top: theme.spacing(18),
+    maxHeight: `calc(100vh - ${theme.spacing(22)}px)`,
     alignSelf: "flex-start",
     width: "15rem",
     borderLeft: `1px solid ${theme.palette.text.primary}`,
     paddingLeft: "1.5rem",
+    paddingRight: "1rem",
+    overflowY: "auto",
     "& ul": {
       listStyle: "none",
       padding: 0,
