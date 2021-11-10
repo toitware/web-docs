@@ -40,6 +40,15 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primary.main,
     },
   },
+  link1: {},
+  link2: {
+    paddingLeft: "1rem",
+    fontSize: "0.9375rem",
+  },
+  link3: {
+    paddingLeft: "2rem",
+    fontSize: "0.875rem",
+  },
   activeLink: {
     color: theme.palette.primary.main,
   },
@@ -53,16 +62,23 @@ type Props = {
 type ContentsEntry = {
   title: string;
   url: string;
+  level: number;
 };
+
+// The limit until headers aren't shown anymore. (4 means h4 is the last header
+// to be included).
+const maxHeaderLevel = 4;
+
+// h1...h-maxHeaderLevel
+const includedHeaders = [...Array(maxHeaderLevel).keys()].map((num) => `h${num + 1}`);
 
 // Takes the table of contents, and flattens it into a list.
 function flatten(table: TableOfContentsItem | TableOfContents, list: ContentsEntry[] = [], level = 0): ContentsEntry[] {
   if (table.items === undefined) return list;
 
   for (const item of table.items) {
-    list.push({ title: item.title, url: item.url });
-    if (level < 1) {
-      // We only list h1 and h2.
+    list.push({ title: item.title, url: item.url, level: level });
+    if (level + 1 < maxHeaderLevel) {
       flatten(item, list, level + 1);
     }
   }
@@ -86,7 +102,12 @@ export function TableOfContentsNav({ table, className }: Props): JSX.Element {
         {flatTable.map((item) => (
           <li key={item.url}>
             <Link
-              className={clsx(classes.link, { [classes.activeLink]: item.url == `#${activeItemId}` })}
+              className={clsx(classes.link, {
+                [classes.activeLink]: item.url == `#${activeItemId}`,
+                [classes.link1]: item.level == 1,
+                [classes.link2]: item.level == 2,
+                [classes.link3]: item.level == 3,
+              })}
               to={item.url}
             >
               {item.title}
@@ -102,7 +123,7 @@ const useActiveItemId = (flatTable: ContentsEntry[]) => {
   const [activeId, setActiveId] = useState("");
 
   useEffect(() => {
-    const headers = document.querySelectorAll("#content :is(h1, h2)");
+    const headers = document.querySelectorAll(`#content :is(${includedHeaders.join(", ")})`);
     const callback: IntersectionObserverCallback = (entries) => {
       entries.forEach((entry) => entry.target.setAttribute("data-in-viewport", entry.isIntersecting ? "1" : "0"));
       for (const header of headers) {
