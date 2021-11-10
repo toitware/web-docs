@@ -9,3 +9,7 @@ redirects:
   "/language/language": "/language"
   "/hardware/peripherals": "/peripherals"
   "/hardware/firmware": "/firmware"
+  "/hardware/peripherals/spi": "/peripherals/spi"
+  "/hardware/peripherals/i2c": "/peripherals/i2c"
+  "/hardware/peripherals/gpio": "/peripherals/gpio"
+  "/hardware/drivers/driverslist": "/peripherals/drivers/driverslist"
