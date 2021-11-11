@@ -2,11 +2,11 @@
 
 [SPI](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) is a serial communication bus able to address multiple devices along a main 3-wire bus with an additional 1 wire per device.
 
-Toit exposes the peripheral through the `serial.protocols.spi` library.
+Toit exposes the peripheral through the [`spi` library](https://libs.toit.io/spi/library-summary).
 
 ```
 import gpio
-import serial.protocols.spi as spi
+import spi
 
 main:
   bus := spi.Bus
@@ -21,7 +21,7 @@ In case of the Bosch BME280 sensor, the maximum frequency is 10MHz:
 
 ```
 import gpio
-import serial.protocols.spi as spi
+import spi
 
 main:
   bus := spi.Bus
