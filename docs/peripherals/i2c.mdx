@@ -2,11 +2,11 @@
 
 [I<sup>2</sup>C](https://en.wikipedia.org/wiki/I%C2%B2C) is a serial communication bus able to address multiple devices along the same 2-wire bus.
 
-Toit exposes the peripheral through the `serial.protocols.i2c` library.
+Toit exposes the peripheral through the [`i2c` library](https://libs.toit.io/i2c/library-summary).
 
 ```
 import gpio
-import serial.protocols.i2c as i2c
+import i2c
 
 main:
   bus := i2c.Bus
@@ -20,7 +20,7 @@ In case of the Bosch [BME280 sensor](https://cdn.sparkfun.com/assets/e/7/3/b/1/B
 
 ```
 import gpio
-import serial.protocols.i2c as i2c
+import i2c
 
 main:
   bus := i2c.Bus
