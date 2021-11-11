@@ -122,8 +122,6 @@ items:
             path: /peripherals/drivers/qwiic
           - name: How to write a driver
             path: /peripherals/drivers/sparkfun_joystick
-          - name: Bitwise operations
-            path: /peripherals/drivers/bitmask
   - name: Language
     path: /language
     icon: language
