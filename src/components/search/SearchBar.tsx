@@ -1,13 +1,12 @@
 import { InputAdornment, makeStyles, OutlinedInput } from "@material-ui/core";
 import { globalHistory } from "@reach/router";
 import clsx from "clsx";
-import { graphql, Link, useStaticQuery } from "gatsby";
+import { Link } from "gatsby";
 import React, { useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { StoreItem, useFlexSearch } from "react-use-flexsearch";
 import useClickOutside from "../../hooks/use_click_outside";
+import useFlexSearch from "../../hooks/use_flex_search";
 
-// This style is just added for reference.
 const useStyles = makeStyles((theme) => ({
   container: {
     position: "relative",
@@ -83,15 +82,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type GraphType = {
-  localSearchPages: {
-    index: string;
-    store: {
-      [key: string]: StoreItem;
-    };
-  };
-};
-
 type Props = {
   className?: string;
 };
@@ -109,15 +99,7 @@ function SearchBar({ className }: Props): JSX.Element {
 
   const [query, setQuery] = useState("");
 
-  const data: GraphType = useStaticQuery(graphql`
-    query LocalSearchQuery {
-      localSearchPages {
-        index
-        store
-      }
-    }
-  `);
-  const results = useFlexSearch(query, data.localSearchPages.index, data.localSearchPages.store);
+  const results = useFlexSearch(query);
 
   const classes = useStyles();
 
