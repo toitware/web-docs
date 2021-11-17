@@ -33,8 +33,9 @@ declare module "*/docs/menu.yaml" {
       | "support"
       | "tutorials";
   }
-  const content: {
+  export interface Menu {
     items: MenuItem[];
-  };
+  }
+  const content: Menu;
   export default content;
 }

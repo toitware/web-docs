@@ -1,18 +1,45 @@
-const path = require(`path`);
-const yaml = require(`js-yaml`);
-const fs = require(`fs`);
-const crypto = require("crypto");
-const { Index, Document, Worker } = require("flexsearch");
-const { resolve } = require("path/posix");
-const { reporter } = require("gatsby-cli/lib/reporter/reporter");
+import crypto from "crypto";
+import { Document } from "flexsearch";
+import fs from "fs";
+import { Actions, CreatePagesArgs, GatsbyNode } from "gatsby";
+import yaml from "js-yaml";
+import path from "path";
+import type { Menu } from "./docs/menu.yaml";
+// import menu from "./docs/menu.yaml";
 
-exports.createPages = async ({ graphql, actions, reporter, getNode, createNodeId }) => {
+type SearchDocument = {
+  id: string;
+  path: string;
+  title: string;
+  excerpt: string;
+  h1: string;
+  h2: string;
+  h3: string;
+  h4: string;
+  rawBody: string;
+};
+
+type MdxNode = {
+  id: string;
+  slug: string;
+  excerpt: string;
+  rawBody: string;
+  headings: [{ value: string; depth: number }];
+};
+
+type MdxGraphType = {
+  allMdx: {
+    nodes: MdxNode[];
+  };
+};
+
+export const createPages: GatsbyNode["createPages"] = async ({ graphql, actions, reporter, createNodeId }) => {
   const { createPage, createNode } = actions;
-  const searchDocuments = [];
+  const searchDocuments: SearchDocument[] = [];
   const docsTemplate = path.resolve(`src/components/layout/MdxLayout.tsx`);
 
   // Variables can be added as the second function parameter
-  const result = await graphql(
+  const result = await graphql<MdxGraphType>(
     `
       query {
         allMdx(filter: { fileAbsolutePath: { regex: "//docs//" } }) {
@@ -31,16 +58,16 @@ exports.createPages = async ({ graphql, actions, reporter, getNode, createNodeId
     `
   );
 
-  if (result.errors) {
+  if (result.errors || !result.data) {
     reporter.panicOnBuild('🚨  ERROR: Loading "createPages" query');
+    return;
   }
 
   // A cache for all paths so we can check their validity more easily later on.
-  const allMdPaths = [];
+  const allMdPaths: string[] = [];
+  const menu = yaml.load(fs.readFileSync("./docs/menu.yaml", "utf-8")) as Menu;
 
-  const menu = yaml.load(fs.readFileSync("./docs/menu.yaml", "utf-8"));
-
-  const flatMenu = (function flattenMenu(entries, flatMenu = []) {
+  const flatMenu = (function flattenMenu(entries, flatMenu: { path: string; name: string }[] = []) {
     for (const entry of entries) {
       flatMenu.push({ path: entry.path, name: entry.name });
       if (entry.children && entry.children.length > 0) {
@@ -50,7 +77,7 @@ exports.createPages = async ({ graphql, actions, reporter, getNode, createNodeId
     return flatMenu;
   })(menu.items);
 
-  const getHeadings = (node, depth) =>
+  const getHeadings = (node: MdxNode, depth: number) =>
     node.headings
       .filter((heading) => heading.depth === depth)
       .map((heading) => heading.value)
@@ -75,26 +102,6 @@ exports.createPages = async ({ graphql, actions, reporter, getNode, createNodeId
     } else if (node.headings.length > 0) {
       title = node.headings[0].value;
     }
-
-    const page = {
-      // Path for this page — required
-      path: path,
-      component: docsTemplate,
-      context: {
-        title: title,
-        id: node.id,
-        excerpt: node.excerpt,
-        rawBody: node.rawBody,
-        // Add optional context data to be inserted
-        // as props into the page component..
-        //
-        // The context data can also be used as
-        // arguments to the page GraphQL query.
-        //
-        // The page "path" is always available as a GraphQL
-        // argument.
-      },
-    };
 
     createPage({
       // Path for this page — required
@@ -133,13 +140,22 @@ exports.createPages = async ({ graphql, actions, reporter, getNode, createNodeId
       reporter.panicOnBuild(`🚨  ERROR: The path ${entry.path} does not have a corresponding .md file`);
     }
   }
-  createSearchNode({ searchDocuments, createNode, createNodeId });
+  await createSearchNode({ searchDocuments, createNode, createNodeId });
 };
 
 const SEARCH_NODE_TYPE = `SiteSearch`;
 
-async function createSearchNode({ searchDocuments, createNode, createNodeId }) {
+async function createSearchNode({
+  searchDocuments,
+  createNode,
+  createNodeId,
+}: {
+  searchDocuments: SearchDocument[];
+  createNode: Actions["createNode"];
+  createNodeId: CreatePagesArgs["createNodeId"];
+}) {
   const documentConfig = {
+    id: "Document id",
     store: ["path", "title", "excerpt"],
     index: [
       {
@@ -170,34 +186,20 @@ async function createSearchNode({ searchDocuments, createNode, createNodeId }) {
         field: "rawBody",
         tokenize: "strict",
         optimize: true,
-        resolution: 4,
-        minlength: 3,
         resolution: 3,
+        minlength: 3,
       },
     ],
   };
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const index = new Document(documentConfig);
 
   searchDocuments.forEach((value) => index.add(value));
 
   // Exporting the index into a serializable store.
-  const store = {};
-  const exportFinished = new Promise((resolve) => {
-    // Unfortunately the FlexSearch export API is not great. You provide
-    // callbacks for each export but you don't know beforehand how often it's
-    // going to be called and don't get access to a list of promises to handle
-    // this properly.
-    //
-    // I realised that the "store" key was always last, so I just built a
-    // Promise myself that I resolve as soon as the callback for "store" is
-    // invoked. I really hope that this gets fixed in a future version.
-    function exportCallback(key, data) {
-      store[key] = data;
-      if (key == "store") resolve();
-    }
-    index.export(exportCallback);
-  });
-  await exportFinished;
+  const store: { [key: string]: unknown } = {};
+  await index.export((key, data) => (store[key] = data));
 
   const content = JSON.stringify(store);
   const contentDigest = crypto.createHash("md5").update(content).digest("hex");
@@ -218,10 +220,9 @@ async function createSearchNode({ searchDocuments, createNode, createNodeId }) {
 /**
  * Adds the GraphQL schema customization for our search index.
  */
-exports.createSchemaCustomization = async (gatsbyContext, pluginOptions) => {
-  const { actions, schema, reporter, pathPrefix } = gatsbyContext;
+export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = (gatsbyContext) => {
+  const { actions, schema } = gatsbyContext;
   const { createTypes } = actions;
-  const { name } = pluginOptions;
 
   createTypes([
     schema.buildObjectType({
