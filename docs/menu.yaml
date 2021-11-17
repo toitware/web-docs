@@ -82,7 +82,7 @@ items:
         children:
           - name: Running programs
             path: /platform/apps/runprogram
-          - name: Specifying
+          - name: Specification
             path: /platform/apps/appspec
           - name: Deploying
             path: /platform/apps/installingapp
