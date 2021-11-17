@@ -106,8 +106,8 @@ toit device config max-offline 24h
 </Tab>
 </Tabs>
 
-If you install an application measuring the temperature every hour and the `max-offline` parameter is set to 24 hours, the application will run the program every hour.
-Once a day the device will go online and connect to the Toit console and offload all the data to the console.
+If you install an application measuring the temperature every hour and the `max-offline` parameter is set to 24 hours, the application will run the program every hour and the ESP32 will go to deep sleep between runs.
+Every 24 hours after application deployment, the device will go online, connect to the Toit console, and offload all the data to the console, as well as check for updated configuration and firmware updates.
 
 <Note>
 
@@ -126,7 +126,9 @@ Navigate to the Configuration tab, Connections section for the given device. Cli
 
 <img src={SetWifiConnections} alt="Screenshot of changing the WiFi connection in the Toit console" />
 
-When two or more connections are present, choose the order in which they should be used by moving the connections to use in priority above the others.
+When two or more connections are present, choose the order in which they should be prioritized by drag-dropping the connections.
+ 
+Note that changes to connections will not take effect until the device is rebooted.
 
 </Tab>
 <Tab label="CLI">

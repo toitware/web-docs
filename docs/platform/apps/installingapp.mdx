@@ -1,0 +1,44 @@
+import vscode_deploy from "../../_images/vscode_deploy.png";
+
+# Deploying apps
+
+A Toit application is made of:
+
+- a **toit file** containing the code that will be executed, saved as `.toit`.
+
+- a **YAML file** containing the app specification that describes when and how often the application must run, saved as `.yaml` or `.yml`.
+
+Toit apps can be deployed on a device using the Toit CLI or directly in VSCode with the Toit language extension.
+
+<Tabs>
+<Tab label="VSCode">
+
+If you have installed the Toit VSCode extension, you should have a Toit logo in the left-hand menu in VSCode. Clicking this logo will bring up a list of your devices. 
+To install your Toit app, press the double-play symbol next to your device name.
+
+If your yaml scheduling file is open in VSCode, the app will be deployed immediately. If not, you will be asked to specify where your yaml file is located.
+
+<img src={vscode_deploy} alt="Screenshot VSCode deploy button" />
+
+Any output from your Toit code will be echoed to the Output window in VSCode.
+
+
+</Tab>
+<Tab label="CLI">
+
+In order to run a piece of Toit code, you specify which device to run it on, and what toit code to run:
+
+```shell
+toit device -d MyDevice deploy MyToitApp.yaml
+```
+
+Any output from your Toit code will published in the Logs tab for that particular device in the Toit console.
+
+</Tab>
+</Tabs>
+
+<Note>
+
+An app can be deployed on an offline device, but the app will not be installed onto the device until the device goes online and connects to the Toit console.
+
+</Note>

@@ -1,0 +1,19 @@
+# Devices
+
+An ESP32 microcontroller running Toit is referred to as a **device**. The process of installing the Toit firmware onto the ESP32 is referred to as [provisioning](./provision),
+and a provisioned device can subsequently be [claimed](./claim) into a project.
+
+<Note>
+
+Your device will be automatically claimed into your project, both when provisioning a device using our [Web Serial interface](https://console.toit.io/serial) and the [CLI](/platform/cli/#provisioning). 
+Manually claiming a device is only necessary if you have an already provisioned device that you would like to claim into a project.
+
+</Note>
+
+Once the device is claimed and online, one or more [apps](../apps) can be installed onto the device. This can be done from the CLI, as well as by using the VSCode Toit extension.
+Apps are installed and uninstalled run-time, over-the-air, and installation/uninstallation does not require reboots or resets.
+
+A group of devices is often referred to as a [fleet](./fleet), and operations like app installations and [configuration changes](./deviceconfig) can be performed both on single devices or a fleet
+consisting of many devices.
+
+Once a device is no longer needed in a project, it can be unclaimed. Once unclaimed, the device can be claimed by other projects. 

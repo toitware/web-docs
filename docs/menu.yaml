@@ -58,31 +58,36 @@ items:
     path: /platform
     icon: platform
     children:
-      - name: Deploy apps
-        path: /platform/deploy
-        children:
-          - name: Run or deploy apps
-            path: /platform/deploy
-          - name: App specification
-            path: /platform/deploy/appspec
-      - name: Toit console
+  #    - name: Overview
+  #      path: /platform/concepts
+      - name: Console
         path: /platform/console
+  #    - name: Projects
+  #      path: /platform/projects
+      - name: Devices
+        path: /platform/devices
         children:
-          - name: Device details
-            path: /platform/console/devicemanagement
-          - name: Device configurations
-            path: /platform/console/deviceconfig
-          - name: Web serial
-            path: /platform/console/webserial
-      - name: Concepts
-        path: /platform/concepts
-        children:
-          - name: Claiming
-            path: /platform/concepts/claim
           - name: Provisioning
-            path: /platform/concepts/provision
-          - name: Device fleet
-            path: /platform/concepts/fleet
+            path: /platform/devices/provision
+          - name: Claiming
+            path: /platform/devices/claim
+          - name: Device management
+            path: /platform/devices/devicemanagement
+          - name: Device configuration
+            path: /platform/devices/deviceconfig  
+          - name: Fleet management
+            path: /platform/devices/fleet
+      - name: Apps
+        path: /platform/apps
+        children:
+          - name: Running programs
+            path: /platform/apps/runprogram
+          - name: Specifying
+            path: /platform/apps/appspec
+          - name: Deploying
+            path: /platform/apps/installingapp
+      - name: Data
+        path: /platform/data
   - name: Firmware
     path: /firmware
     icon: firmware

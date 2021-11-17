@@ -1,0 +1,46 @@
+import vscode_run from "../../_images/vscode_run.png";
+
+# Running programs
+
+This option makes it easy to quickly Toit code once on a device. The device needs to be online since the installation and execution of the code happens synchronously such that you get feedback right away.
+
+Running a program on a device does not allow the device to go into deep sleep since it needs to remain online for the program to run, even if it is set to make a measurement only once a day. Therefore this method of executing code is great for running small snippets of code on a device but not built for running actual long-lived applications.
+
+<Tabs>
+<Tab label="VSCode">
+
+If you have installed the Toit VSCode extension, you should have a Toit logo in the left-hand menu in VSCode. Clicking this logo will bring up a list of your devices. To run your Toit code,
+press the play symbol next to the device name.
+
+If your Toit code is open in VSCode, it will run immediately. If not, you will be asked to specify where your file with toit code is located.
+
+<img src={vscode_run} alt="Screenshot VSCode run button" />
+
+Any output from your Toit code will be echoed to the Output window in VSCode.
+
+
+</Tab>
+<Tab label="CLI">
+
+In order to run a piece of Toit code, you specify which device to run it on, and what toit code to run:
+
+```shell
+toit device -d MyDevice run MyToitCode.toit
+```
+
+Any output from your Toit code will be echoed to your command line.
+
+```txt
+~% toit device -d MyDevice run MyToitCode.toit
+2021-11-11T10:34:50.423362Z: <process initiated>
+Pressure: 1018.6 hPa
+Gas resistance: 14.367 kΩ
+Humidity: 49.3%
+Temperature: 26.9°C
+2021-11-11T10:34:51.198497Z: <process terminated - exit code: 0>
+
+```
+</Tab>
+</Tabs>
+
+
