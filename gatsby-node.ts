@@ -4,8 +4,6 @@ import fs from "fs";
 import { Actions, CreatePagesArgs, GatsbyNode } from "gatsby";
 import yaml from "js-yaml";
 import path from "path";
-import type { Menu } from "./docs/menu.yaml";
-// import menu from "./docs/menu.yaml";
 
 type SearchDocument = {
   id: string;
@@ -32,7 +30,16 @@ type MdxGraphType = {
     nodes: MdxNode[];
   };
 };
-
+type MenuItem = {
+  name: string; // The text that should appear in the menu.
+  path: string; // The path in the URL, with a leading slash (/).
+  children?: MenuItem[];
+  href?: string; // Can link to external resources.
+  icon?: string;
+};
+type Menu = {
+  items: MenuItem[];
+};
 export const createPages: GatsbyNode["createPages"] = async ({ graphql, actions, reporter, createNodeId }) => {
   const { createPage, createNode } = actions;
   const searchDocuments: SearchDocument[] = [];
