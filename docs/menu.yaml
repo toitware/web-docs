@@ -9,8 +9,6 @@ items:
     path: /getstarted
     icon: getstarted
     children:
-      - name: Quick start guide
-        path: /getstarted
       - name: Installation
         path: /getstarted/installation
         children:
@@ -95,7 +93,7 @@ items:
       - name: Prerequisites
         path: /firmware/prerequisites
       - name: Microprocessors
-        path: /firmware/microprocessors
+        path: /firmware/microprocessors/esp32
         children:
           - name: ESP32
             path: /firmware/microprocessors/esp32
@@ -118,10 +116,8 @@ items:
         path: /peripherals/i2c
       - name: SPI
         path: /peripherals/spi
-      - name: Network
-        path: /peripherals/network
       - name: Drivers
-        path: /peripherals/drivers
+        path: /peripherals/drivers/driverslist
         children:
           - name: List of drivers
             path: /peripherals/drivers/driverslist
@@ -131,14 +127,10 @@ items:
             path: /peripherals/drivers/qwiic
           - name: How to write a driver
             path: /peripherals/drivers/sparkfun_joystick
-          - name: Bitwise operations
-            path: /peripherals/drivers/bitmask
   - name: Language
     path: /language
     icon: language
     children:
-      - name: Toit language basics
-        path: /language
       - name: Common conversions
         path: /language/typeconversion
       - name: Toit definitions
@@ -197,26 +189,19 @@ items:
     path: /apis
     icon: apis
     children:
-      - name: APIs
-        path: /apis
       - name: PubSub
         path: /apis/pubsub
   - name: Support
-    path: /support
+    path: /support/troubleshoot
     icon: support
     children:
-      - name: FAQ
-        path: /support/faq
-      - name: Troubleshoot
-        path: /support/troubleshoot
-        children:
-          - name: Serial connect
-            path: /support/troubleshoot/serialtroubleshoot
-          - name: WiFi credentials
-            path: /support/troubleshoot/wifitroubleshoot
-          - name: ESP32 setup
-            path: /support/troubleshoot/setuptroubleshoot
-          - name: Claim device
-            path: /support/troubleshoot/claimtroubleshoot
-          - name: VSCode extension
-            path: /support/troubleshoot/vscodetroubleshoot
+      - name: Serial connect
+        path: /support/troubleshoot/serialtroubleshoot
+      - name: WiFi credentials
+        path: /support/troubleshoot/wifitroubleshoot
+      - name: ESP32 setup
+        path: /support/troubleshoot/setuptroubleshoot
+      - name: Claim device
+        path: /support/troubleshoot/claimtroubleshoot
+      - name: VSCode extension
+        path: /support/troubleshoot/vscodetroubleshoot

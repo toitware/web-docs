@@ -1,6 +1,6 @@
 # Scanning
 
-To start scanning for nearby devices, simply call `scan` on the `ble.Device`. The provided block will be called for each scan result:
+To start scanning and for nearby BLE devices, simply call `scan` on the `ble.Device`. The provided block will be called for each scan result:
 
 ```toit
 import ble
@@ -38,3 +38,16 @@ main:
 
   print addresses
 ```
+
+## Example: mobile phone as a BLE device
+
+If you want to discover and find your mobile phone as a BLE device using the above Toit program, you can
+download a mobile app, like nRF Connect.
+
+Download the app on your mobile phone for [iOS](https://apps.apple.com/us/app/nrf-connect-for-mobile/id1054362403) or for
+[Android](https://play.google.com/store/apps/details?id=no.nordicsemi.android.mcp&hl=en).
+
+The nRF Connect app allows your iOS or Android device to advertise as a BLE peripheral,
+as well as discovering nearby peripherals, like your Toit device.
+
+When running the above Toit program for scanning, you will be able to see your mobile phone on the list of discovered BLE devices.

@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
   box: {
     display: "flex",
-    flexDirection: "column",
+    alignItems: "stretch",
     border: `1px solid ${Color(theme.palette.text.primary).string()}`,
     borderRadius: "5px",
     padding: "1.5rem",
@@ -30,6 +30,18 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       background: `${Color(theme.palette.primary.main).alpha(0.1).string()}`,
     },
+  },
+  wrapper: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    // We center all content of this wrapper vertically, but because the actual
+    // .content has `flex: 1`, it will push the title and effectively "top
+    // align" everything **if it exists**.
+    //
+    // This way, the title is always vertically centered, unless there is
+    // content text, at which point it will all be top aligned.
+    justifyContent: "center",
   },
   title: {
     fontWeight: "bold",
@@ -52,6 +64,9 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: "1rem",
     },
   },
+  image: {
+    maxWidth: "3.125rem",
+  },
 }));
 
 type BoxesProps = {
@@ -67,14 +82,22 @@ type BoxProps = {
   title?: string;
   to: string;
   children: ReactNode;
+  imageUrl?: string;
 };
 
-export function Box({ title, to, children }: BoxProps): JSX.Element {
+export function Box({ title, to, imageUrl, children }: BoxProps): JSX.Element {
   const classes = useStyles();
   return (
     <DocsLink href={to} className={classes.box}>
-      {title && <h1 className={classes.title}>{title}</h1>}
-      {children && <div className={classes.content}>{children}</div>}
+      <div className={classes.wrapper}>
+        {title && <h1 className={classes.title}>{title}</h1>}
+        {children && <div className={classes.content}>{children}</div>}
+      </div>
+      {imageUrl && (
+        <div className={classes.image}>
+          <img src={imageUrl} alt="" />
+        </div>
+      )}
     </DocsLink>
   );
 }
