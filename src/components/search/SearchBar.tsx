@@ -92,6 +92,7 @@ function SearchBar({ className }: Props): JSX.Element {
   const classes = useStyles();
 
   const [showResults, setShowResults] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -139,6 +140,8 @@ function SearchBar({ className }: Props): JSX.Element {
     }
   };
 
+  const placeholderText = isFocused ? "Type your search" : "Search (Press / to focus)";
+
   return (
     <div className={clsx(classes.container, className)} ref={containerRef}>
       <form onSubmit={onSubmit} autoComplete="off">
@@ -148,7 +151,7 @@ function SearchBar({ className }: Props): JSX.Element {
           fullWidth
           name="search"
           type="search"
-          placeholder="Search"
+          placeholder={placeholderText}
           value={query}
           classes={{ notchedOutline: classes.searchFieldOutline, focused: classes.searchFieldFocused }}
           onChange={(_) => {
@@ -156,8 +159,10 @@ function SearchBar({ className }: Props): JSX.Element {
             setShowResults(true);
           }}
           onFocus={() => {
+            setIsFocused(true);
             if (query) setShowResults(true);
           }}
+          onBlur={() => setIsFocused(false)}
           startAdornment={
             <InputAdornment position="start">
               <FiSearch />
