@@ -12,7 +12,7 @@ Toit apps can be deployed on a device using the Toit CLI or directly in VSCode w
 If you have installed the Toit VSCode extension, you should have a Toit logo in the left-hand menu in VSCode. Clicking this logo will bring up a list of your devices. 
 To install your Toit app, press the double-play symbol next to your device name.
 
-If your yaml scheduling file is open in VSCode, the app will be deployed immediately. If not, you will be asked to specify where your yaml file is located.
+If your app specification file is open in VSCode, the app will be deployed immediately. If not, you will be asked to specify where your yaml file is located.
 
 <img src={vscode_deploy} alt="Screenshot VSCode deploy button" />
 
@@ -22,13 +22,13 @@ Any output from your Toit code will be echoed to the Output window in VSCode.
 </Tab>
 <Tab label="CLI">
 
-In order to run a piece of Toit code, you specify which device to run it on, and what toit code to run:
+In order to deploy a Toit app, you specify which device to run it on, and which specification file to deploy:
 
 ```shell
 toit device -d MyDevice deploy MyToitApp.yaml
 ```
 
-Any output from your Toit code will published in the Logs tab for that particular device in the Toit console.
+Any print statements in your Toit code will published in the Logs tab for that particular device in the Toit console.
 
 </Tab>
 </Tabs>
