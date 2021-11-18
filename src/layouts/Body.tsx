@@ -11,11 +11,6 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(6),
     },
 
-    // Setting the basic typography so things like list bullets are colored properly
-    color: theme.palette.text.primary,
-    fontSize: theme.typography.body1.fontSize,
-    fontFamily: theme.typography.body1.fontFamily,
-
     "& a": {
       color: theme.palette.primary.main,
       "&:hover": {

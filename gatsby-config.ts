@@ -18,6 +18,7 @@ export const plugins = [
   "gatsby-plugin-eslint",
   "gatsby-plugin-material-ui",
   "gatsby-plugin-react-helmet",
+  "gatsby-plugin-emotion",
   {
     resolve: `gatsby-plugin-svgr-svgo`,
     options: {

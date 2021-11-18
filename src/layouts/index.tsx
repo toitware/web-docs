@@ -1,4 +1,4 @@
-import { makeStyles, ThemeProvider } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import CookieConsent from "@toitware/cookie-consent";
 import Color from "color";
 import * as React from "react";
@@ -9,6 +9,7 @@ import useDarkMode from "../hooks/use_dark_mode";
 import { darkTheme, lightTheme } from "../theme";
 import Header from "./Header";
 import { TableOfContents } from "./TableOfContents";
+import ThemeProvider from "./ThemeProvider";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -19,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
       margin: 0,
       background: theme.palette.background.default,
       lineHeight: "1.5",
+      color: theme.palette.text.primary,
+      fontSize: theme.typography.body1.fontSize,
+      fontFamily: theme.typography.body1.fontFamily,
     },
     a: {
       textDecoration: `none`,
@@ -75,7 +79,7 @@ interface MdxGraphType {
 
 interface LayoutProps {
   children: ReactNode;
-  data: MdxGraphType;
+  data?: MdxGraphType;
   pageContext?: {
     frontmatter: {
       title?: string;
