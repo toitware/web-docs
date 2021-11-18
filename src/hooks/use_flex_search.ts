@@ -37,10 +37,7 @@ export const useFlexSearch = (query: string): SearchResultDocument[] => {
   // Import the search index asynchronously.
   const [indexImported, setIndexImported] = useState(false);
   useEffect(() => {
-    // The type handling is pretty ugly, but flexsearch doesn't export the types
-    // properly at this moment.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const index = JSON.parse(indexJSON) as { [key: string]: any };
+    const index = JSON.parse(indexJSON) as { [key: string]: unknown };
 
     void (async () => {
       for (const key of Object.keys(index)) {

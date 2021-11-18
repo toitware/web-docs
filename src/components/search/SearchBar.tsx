@@ -1,11 +1,13 @@
 import { InputAdornment, makeStyles, OutlinedInput } from "@material-ui/core";
 import { globalHistory } from "@reach/router";
 import clsx from "clsx";
-import { Link } from "gatsby";
-import React, { useEffect, useRef, useState } from "react";
+import { Link, navigate } from "gatsby";
+import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import useClickOutside from "../../hooks/use_click_outside";
 import useFlexSearch from "../../hooks/use_flex_search";
+import useResultSelection from "../../hooks/use_result_selection";
+import { goldenSecondary } from "../../theme";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -67,10 +69,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "0.75rem",
     borderRadius: "4px",
     color: theme.palette.text.primary,
-    "&:hover": {
-      background: theme.palette.primary.main,
-      color: theme.palette.background.default,
-    },
+  },
+  resultLinkActive: {
+    background: goldenSecondary.string(),
+    color: "black",
   },
   resultTitle: {
     margin: 0,
@@ -87,30 +89,64 @@ type Props = {
 };
 
 function SearchBar({ className }: Props): JSX.Element {
+  const classes = useStyles();
+
   const [showResults, setShowResults] = useState(false);
 
-  const elRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const hideResults = () => setShowResults(false);
+  const unfocusSearch = useCallback(() => {
+    inputRef.current?.blur();
+    setShowResults(false);
+  }, [inputRef, setShowResults]);
 
-  useEffect(() => globalHistory.listen(hideResults), []);
+  // Hide the results every time a navigation happens...
+  useEffect(() => globalHistory.listen(unfocusSearch), [unfocusSearch]);
+  // ...or the user clicks outside
+  useClickOutside(containerRef, unfocusSearch);
 
-  useClickOutside(elRef, hideResults);
+  // Handle global shortcuts like Escape and /
+  useEffect(() => {
+    function handleKeys(e: KeyboardEvent) {
+      if (inputRef.current) {
+        if (document.activeElement == inputRef.current && e.key === "Escape") {
+          e.preventDefault();
+          unfocusSearch();
+        } else if (!document.querySelector("input:is(:focus), textarea:is(:focus)") && e.key === "/") {
+          e.preventDefault();
+          inputRef.current.focus();
+        }
+      }
+    }
+    window.addEventListener("keydown", handleKeys);
+    return () => window.removeEventListener("keydown", handleKeys);
+  }, [inputRef, unfocusSearch]);
 
   const [query, setQuery] = useState("");
 
   const results = useFlexSearch(query);
 
-  const classes = useStyles();
+  const [selectedIndex, setSelectedIndex] = useResultSelection(results.length, showResults);
+
+  // Reset the selected index, every time the query changes.
+  useEffect(() => setSelectedIndex(0), [query, setSelectedIndex]);
+
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (results.length > 0) {
+      await navigate(results[selectedIndex].path);
+    }
+  };
 
   return (
-    <div ref={elRef} className={clsx(classes.container, className)}>
-      <form autoComplete="off">
+    <div className={clsx(classes.container, className)} ref={containerRef}>
+      <form onSubmit={onSubmit} autoComplete="off">
         <OutlinedInput
+          inputRef={inputRef}
           className={clsx(classes.searchField, showResults && classes.searchFieldFocused)}
           fullWidth
-          id="password"
-          name="password"
+          name="search"
           type="search"
           placeholder="Search"
           value={query}
@@ -118,6 +154,9 @@ function SearchBar({ className }: Props): JSX.Element {
           onChange={(_) => {
             setQuery(_.target.value);
             setShowResults(true);
+          }}
+          onFocus={() => {
+            if (query) setShowResults(true);
           }}
           startAdornment={
             <InputAdornment position="start">
@@ -130,10 +169,19 @@ function SearchBar({ className }: Props): JSX.Element {
         <div className={classes.results}>
           {results.length == 0 && <div className={classes.noResults}>No results</div>}
           {results.length > 0 && (
-            <ul>
-              {results.map((result) => (
-                <li key={result.id} className={classes.result}>
-                  <Link to={result.path} className={classes.resultLink}>
+            <ul role="listbox">
+              {results.map((result, index) => (
+                <li
+                  key={result.id}
+                  className={classes.result}
+                  onMouseOver={() => setSelectedIndex(index)}
+                  role="option"
+                  aria-selected={index === selectedIndex}
+                >
+                  <Link
+                    to={result.path}
+                    className={clsx([classes.resultLink, { [classes.resultLinkActive]: index === selectedIndex }])}
+                  >
                     <h2 className={classes.resultTitle}>{result.title}</h2>
                     <p className={classes.resultExcerpt}>{result.excerpt}</p>
                   </Link>
