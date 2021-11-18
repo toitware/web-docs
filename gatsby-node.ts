@@ -162,7 +162,6 @@ async function createSearchNode({
   createNodeId: CreatePagesArgs["createNodeId"];
 }) {
   const documentConfig = {
-    id: "Document id",
     store: ["path", "title", "excerpt"],
     index: [
       {
@@ -206,7 +205,23 @@ async function createSearchNode({
 
   // Exporting the index into a serializable store.
   const store: { [key: string]: unknown } = {};
-  await index.export((key, data) => (store[key] = data));
+  const exportFinished = new Promise<void>((resolve) => {
+    // Unfortunately the FlexSearch export API is not great. You provide
+    // callbacks for each export but you don't know beforehand how often it's
+    // going to be called and don't get access to a list of promises to handle
+    // this properly.
+    //
+    // https://github.com/nextapps-de/flexsearch/issues/274
+    //
+    // I realised that the "store" key was always last, so I just built a
+    // Promise myself that I resolve as soon as the callback for "store" is
+    // invoked. I really hope that this gets fixed in a future version.
+    void index.export((key, data) => {
+      store[key] = data;
+      if (key == "store") resolve();
+    });
+  });
+  await exportFinished;
 
   const content = JSON.stringify(store);
   const contentDigest = crypto.createHash("md5").update(content).digest("hex");
