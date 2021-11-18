@@ -6,8 +6,8 @@ import React, { FormEvent, useCallback, useEffect, useRef, useState } from "reac
 import { FiSearch } from "react-icons/fi";
 import useClickOutside from "../../hooks/use_click_outside";
 import useFlexSearch from "../../hooks/use_flex_search";
+import useLocationQuery from "../../hooks/use_location_query";
 import useResultSelection from "../../hooks/use_result_selection";
-import { goldenSecondary } from "../../theme";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -71,8 +71,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
   },
   resultLinkActive: {
-    background: goldenSecondary.string(),
-    color: "black",
+    background: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
   },
   resultTitle: {
     margin: 0,
@@ -87,6 +87,8 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
   className?: string;
 };
+
+const NO_SELECTION = -1;
 
 function SearchBar({ className }: Props): JSX.Element {
   const classes = useStyles();
@@ -124,19 +126,21 @@ function SearchBar({ className }: Props): JSX.Element {
     return () => window.removeEventListener("keydown", handleKeys);
   }, [inputRef, unfocusSearch]);
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(useLocationQuery());
 
   const results = useFlexSearch(query);
 
   const [selectedIndex, setSelectedIndex] = useResultSelection(results.length, showResults);
 
   // Reset the selected index, every time the query changes.
-  useEffect(() => setSelectedIndex(0), [query, setSelectedIndex]);
+  useEffect(() => setSelectedIndex(NO_SELECTION), [query, setSelectedIndex]);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (results.length > 0) {
+    if (results.length > 0 && selectedIndex >= 0) {
       await navigate(results[selectedIndex].path);
+    } else {
+      await navigate(`/search?q=${encodeURIComponent(query)}`);
     }
   };
 

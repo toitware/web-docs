@@ -37,6 +37,7 @@ export const useFlexSearch = (query: string): SearchResultDocument[] => {
   // Import the search index asynchronously.
   const [indexImported, setIndexImported] = useState(false);
   useEffect(() => {
+    setIndexImported(false);
     const index = JSON.parse(indexJSON) as { [key: string]: unknown };
 
     void (async () => {

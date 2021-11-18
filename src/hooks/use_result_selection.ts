@@ -21,7 +21,7 @@ export function useResultSelection(
   resultCount: number,
   showResults: boolean
 ): [number, React.Dispatch<React.SetStateAction<number>>] {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const currentSearchContext = {
     selectedIndex: selectedIndex,
