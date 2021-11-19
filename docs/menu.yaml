@@ -62,7 +62,7 @@ items:
         path: /platform/console
       #    - name: Projects
       #      path: /platform/projects
-      - name: Devices
+      - name: Device
         path: /platform/devices
         children:
           - name: Provisioning
