@@ -1,4 +1,4 @@
-# Device fleet
+# Fleet management
 
 You can organize your devices by renaming them so they share an identical prefix.
 
@@ -20,21 +20,21 @@ Prefixes are case-insensitive.
 Update the firmware on several devices in one command with the Toit CLI command:
 
 ```shell
-toit fleet -p name-prefix update
+toit fleet -p prefix update
 ```
 
-where `name-prefix` is replaced with the prefix.
+where `prefix` is replaced with the device prefix.
 
 ## Deploy apps on multiple devices
 
 Deploy a Toit app on several devices in one command:
 
 ```shell
-toit fleet -p name-prefix deploy job.yaml
+toit fleet -p prefix deploy job.yaml
 ```
 
 or deploy two Toit apps in one command with:
 
 ```shell
-toit fleet -p name-prefix deploy job1.yaml job2.yaml
+toit fleet -p prefix deploy job1.yaml job2.yaml
 ```

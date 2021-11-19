@@ -1,12 +1,12 @@
 # Toit console
 
-The Toit console is the dashboard for the Toit cloud, which offers various tools to upgrade your devices, monitor your device fleet health, view your daily data usage and much more.
+The Toit console is the dashboard for the Toit cloud, which offers various tools to upgrade your devices, monitor your device fleet health, view your daily data usage, and much more.
 
 ## Devices
 
-The Devices page lists all devices that are available in your project.
+The Devices view lists all devices that are available in your Toit project.
 
-The page lists:
+The view lists:
 
 - The device name.
 
@@ -18,10 +18,6 @@ The page lists:
 
 - The health status of the device.
 
-You can sort devices by clicking on the column headers.
-
-The **Search** field allows to search for devices by name, device ID, hardware ID, or firmware version.
-
 <Note>
 
 A warning sign next to the firmware version means that the installed firmware on the device has been removed from the Toit cloud and is therefore not available anymore.
@@ -30,9 +26,13 @@ If so, update the device firmware to the latest version.
 
 </Note>
 
+From here you can also add new devices, claim an existing (already provisioned) device, or start a Toit device simulator.
+
+The **Search** field allows to search for devices by name, device ID, hardware ID, or firmware version.
+
 ## Fleet health
 
-The fleet health page collects the device status for all devices in your project.
+The fleet health view collects the device status for all devices in your project.
 
 At the top, devices are represented by different colors based on their current health: green for a device that behaves as expected, and red otherwise.
 The tooltip shows the name of the device and the list of pending actions or issues for that device.
@@ -55,12 +55,12 @@ The playground uses the latest firmware version available in the Toit cloud.
 
 ## Serial
 
-This pages let's you communicate with your ESP32 via the Web Serial API. The serial communication is only for initial hardware provisioning or
-debugging via the serial port. Read more [here](./webserial).
+This view let's you communicate with your ESP32 via the Web Serial API. The serial communication is only for initial hardware provisioning or
+debugging via the serial port.
 
 ## Project
 
-The Project page is for managing and viewing the various top-level information of your Toit project, such as
+The Project view is for managing and viewing the various top-level information of your Toit project, such as
 
 - **Details** is used to enter the project owner information and payment methods.
 
@@ -82,16 +82,16 @@ Toit accepts payment information in a PCI compliant manner. All sensitive data, 
 
 All sensitive payment data is securely transmitted to Stripe without being stored in the Toit cloud.
 
-We serve our payment pages in the Toit console securely using Transport Layer Security (TLS) so that they make use of HTTPS.
+We serve our payment view in the Toit console securely using Transport Layer Security (TLS) so that they make use of HTTPS.
 
 </Note>
 
 ## System
 
-The System page displays various graphs showing information about Logs and PubSub ingestion in the system.
+The System view displays various graphs showing information about Logs and PubSub ingestion in the system.
 
 ## Data
 
-The Data page allows to create PubSub, Logs, and System metrics subscriptions. Existing subscription are listed on the page and can be deleted with the bin icon.
+The Data view allows to create PubSub, Logs, and System metrics subscriptions. Existing subscription are listed on the view and can be deleted with the bin icon.
 Select a subscription from the list to visualize the unacknowledged message count and the oldest unacknowledged message age for the chosen time interval.
 Check the [API](../../../apis) documentation to learn how to acknowledge messages using the CLI.
