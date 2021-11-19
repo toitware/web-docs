@@ -2,14 +2,14 @@ import vscode_deploy from "../../_images/vscode_deploy.png";
 
 # Deploying
 
-A Toit application is made of a **toit file** containing the code that will be executed, saved as `.toit`, along with a **YAML file** containing the app specification that describes when and how often the application must run, saved as `.yaml` or `.yml`.
+A Toit application is made of a **toit file** containing the program that will be executed, saved as `.toit`, along with a **YAML file** containing the app specification that describes when and how often the application must run, saved as `.yaml` or `.yml`.
 
 Toit apps can be deployed on a device using the Toit CLI or directly in VSCode with the Toit language extension.
 
 <Tabs>
 <Tab label="VSCode">
 
-If you have installed the VSCode Toit extension, you should have a Toit logo in the left-hand menu in VSCode. Clicking this logo will bring up a list of your devices. 
+If you have installed the VSCode Toit extension, you should have a Toit logo in the left-hand menu in VSCode. Clicking this logo will bring up a list of your devices.
 To install your Toit app, press the double-play symbol next to your device name.
 
 If your app specification file is open in VSCode, the app will be deployed immediately. If not, you will be asked to specify where your yaml file is located.
@@ -17,7 +17,6 @@ If your app specification file is open in VSCode, the app will be deployed immed
 <img src={vscode_deploy} alt="Screenshot VSCode deploy button" />
 
 Any output from your Toit program will be printed to the Output window in VSCode.
-
 
 </Tab>
 <Tab label="CLI">
@@ -28,7 +27,7 @@ In order to deploy a Toit app, you specify which device to run it on, and which 
 toit device -d MyDevice deploy MyToitApp.yaml
 ```
 
-Any print statements in your Toit code will published in the Logs tab for that particular device in the Toit console.
+Any print statements in your Toit program will published in the Logs tab for that particular device in the Toit console.
 
 </Tab>
 </Tabs>

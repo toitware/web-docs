@@ -56,12 +56,12 @@ items:
     path: /platform
     icon: platform
     children:
-  #    - name: Overview
-  #      path: /platform/concepts
+      #    - name: Overview
+      #      path: /platform/concepts
       - name: Console
         path: /platform/console
-  #    - name: Projects
-  #      path: /platform/projects
+      #    - name: Projects
+      #      path: /platform/projects
       - name: Devices
         path: /platform/devices
         children:
@@ -69,10 +69,10 @@ items:
             path: /platform/devices/provision
           - name: Claiming
             path: /platform/devices/claim
-          - name: Device management
+          - name: Management
             path: /platform/devices/devicemanagement
-          - name: Device configuration
-            path: /platform/devices/deviceconfig  
+          - name: Configuration
+            path: /platform/devices/deviceconfig
           - name: Fleet management
             path: /platform/devices/fleet
       - name: Apps
@@ -84,8 +84,8 @@ items:
             path: /platform/apps/appspec
           - name: Deploying
             path: /platform/apps/installingapp
-      - name: Data
-        path: /platform/data
+    #  - name: Data
+    #    path: /platform/data
   - name: Firmware
     path: /firmware
     icon: firmware
