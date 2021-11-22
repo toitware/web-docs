@@ -6,7 +6,7 @@ import useFlexSearch from "../hooks/use_flex_search";
 import useLocationQuery from "../hooks/use_location_query";
 
 const Content = styled.div`
-  width: 46rem;
+  width: 36rem;
   max-width: 100%;
   padding: 2rem;
 `;
@@ -15,14 +15,17 @@ const Title = styled.h1`
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 3rem;
+  border-bottom: 2px solid ${({ theme }) => theme.palette.text.primary};
+  margin-bottom: 2rem;
 `;
 
 const Result = styled(Link)`
   display: block;
   padding: 1.5rem 1.5rem;
-  border-radius: 5px;
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
   color: ${({ theme }) => theme.palette.text.primary};
+  border-radius: 5px;
   &:hover {
     background: ${({ theme }) => theme.palette.primary.main};
     color: ${({ theme }) => theme.palette.primary.contrastText};
@@ -49,14 +52,16 @@ export function SearchPage(): JSX.Element {
       <Title>
         <FiSearch /> {query}
       </Title>
-      {results.length > 0 &&
-        results.map((result) => (
-          <Result key={result.id} to={result.path}>
-            <ResultTitle>{result.title}</ResultTitle>
-            <ResultExcerpt>{result.excerpt}</ResultExcerpt>
-          </Result>
-        ))}
-      {results.length === 0 && <NoResults>No matches found.</NoResults>}
+      <div>
+        {results.length > 0 &&
+          results.map((result) => (
+            <Result key={result.id} to={result.path}>
+              <ResultTitle>{result.title}</ResultTitle>
+              <ResultExcerpt>{result.excerpt}</ResultExcerpt>
+            </Result>
+          ))}
+        {results.length === 0 && <NoResults>No matches found.</NoResults>}
+      </div>
     </Content>
   );
 }
