@@ -7,7 +7,7 @@ When a device has been claimed, it belongs to a Toit project. Only users that ha
 Usually, devices are claimed automatically as part of the initial [provisioning](../provision) step.
 If the device wasn't able to connect via WiFi to the Toit cloud during provisioning, then the device needs to be claimed manually when the device is able to go online via WiFi.
 
-## Get ESP32 online
+## Get device online
 
 The ESP32 must be connected to the internet via WiFi before you can claim it into your Toit project. Start by ensuring that the correct WiFi credentials were provided during the setup process.
 
@@ -41,7 +41,7 @@ where you replace `hardware-id` with the actual hardware ID of your device. For 
 toit device claim 384a9843-cdb8-4dc6-970a-030fb8148068
 ```
 
-Get the hardware ID using the Toit CLI, by connecting the ESP32 to a computer with a USB cable, and execute the following command in a terminal window:
+You can get the hardware ID using the Toit CLI, by connecting the ESP32 to a computer with a USB cable, and execute the following command in a terminal window:
 
 ```shell
 toit serial info -o yaml
