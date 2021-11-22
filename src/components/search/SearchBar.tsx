@@ -116,7 +116,10 @@ function SearchBar({ className }: Props): JSX.Element {
         if (document.activeElement == inputRef.current && e.key === "Escape") {
           e.preventDefault();
           unfocusSearch();
-        } else if (!document.querySelector("input:is(:focus), textarea:is(:focus)") && e.key === "/") {
+        } else if (
+          !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) &&
+          e.key === "/"
+        ) {
           e.preventDefault();
           inputRef.current.focus();
         }
