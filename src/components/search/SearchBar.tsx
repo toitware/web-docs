@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     height: "2rem",
     top: "-1rem",
     right: 0,
-    width: "15rem",
+    width: "16rem",
     maxWidth: "calc(100vw - 7rem)",
     transition: "all 200ms ease-in-out",
     background: "rgba(255, 255, 255, 0.1)",
