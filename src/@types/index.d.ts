@@ -17,7 +17,7 @@ declare module "react-use-flexsearch" {
 }
 
 declare module "*/docs/menu.yaml" {
-  export interface MenuItem {
+  export type MenuItem = {
     name: string; // The text that should appear in the menu.
     path: string; // The path in the URL, with a leading slash (/).
     children?: MenuItem[];
@@ -32,9 +32,11 @@ declare module "*/docs/menu.yaml" {
       | "getstarted"
       | "support"
       | "tutorials";
-  }
-  const content: {
+  };
+  export type Menu = {
     items: MenuItem[];
   };
+
+  const content: Menu;
   export default content;
 }
