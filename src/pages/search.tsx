@@ -34,6 +34,11 @@ const ResultTitle = styled.h3`
 const ResultExcerpt = styled.p`
   margin: 0;
 `;
+const NoResults = styled.div`
+  padding: 3rem 0;
+  font-size: 1.25rem;
+  text-align: center;
+`;
 
 export function SearchPage(): JSX.Element {
   const query = useLocationQuery();
@@ -44,12 +49,14 @@ export function SearchPage(): JSX.Element {
       <Title>
         <FiSearch /> {query}
       </Title>
-      {results.map((result) => (
-        <Result key={result.id} to={result.path}>
-          <ResultTitle>{result.title}</ResultTitle>
-          <ResultExcerpt>{result.excerpt}</ResultExcerpt>
-        </Result>
-      ))}
+      {results.length > 0 &&
+        results.map((result) => (
+          <Result key={result.id} to={result.path}>
+            <ResultTitle>{result.title}</ResultTitle>
+            <ResultExcerpt>{result.excerpt}</ResultExcerpt>
+          </Result>
+        ))}
+      {results.length === 0 && <NoResults>No matches found.</NoResults>}
     </Content>
   );
 }
