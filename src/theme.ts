@@ -92,6 +92,7 @@ export function createTheme({
       return color.mix(background, ratio);
     }
   }
+
   // The exact opposite of lighten().
   function darken(color: Color, ratio = 0.2) {
     if (type == "light") {
