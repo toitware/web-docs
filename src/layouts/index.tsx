@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import { ThemeProvider } from "@mui/material/styles";
 import CookieConsent from "@toitware/cookie-consent";
 import Color from "color";
 import * as React from "react";
@@ -9,7 +10,6 @@ import useDarkMode from "../hooks/use_dark_mode";
 import { darkTheme, lightTheme } from "../theme";
 import Header from "./Header";
 import { TableOfContents } from "./TableOfContents";
-import ThemeProvider from "./ThemeProvider";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {

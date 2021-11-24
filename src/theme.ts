@@ -1,4 +1,5 @@
-import { createTheme as createMuiTheme, PaletteType, responsiveFontSizes, Theme } from "@material-ui/core";
+import type { PaletteMode } from "@mui/material";
+import { createTheme as createMuiTheme, responsiveFontSizes, Theme } from "@mui/material/styles";
 import Color from "color";
 
 const defaultSpacing = 8;
@@ -24,7 +25,7 @@ export const secondaryRed = Color.hsl(0, 100, 70);
 
 // The different themes used throughout the website.
 export const pinkWhiteTheme = createTheme({
-  type: "dark",
+  mode: "dark",
   background: primaryRed,
   text: Color("white"),
   errorColor: primaryBlue,
@@ -37,7 +38,7 @@ export const whiteBlueTheme = createTheme({
   text: Color("black"),
 });
 export const blueWhiteTheme = createTheme({
-  type: "dark",
+  mode: "dark",
   background: Color("black"),
   text: Color("white"),
   primary: golden,
@@ -50,7 +51,7 @@ export const lightTheme = primaryTheme;
 export const darkTheme = blueWhiteTheme;
 
 type CreateThemeParameters = {
-  type?: PaletteType;
+  mode?: PaletteMode;
   background: Color;
   text: Color;
   primary?: Color;
@@ -62,7 +63,7 @@ type CreateThemeParameters = {
 };
 
 export function createTheme({
-  type = "light",
+  mode = "light",
   background,
   text,
   errorColor = primaryRed,
@@ -86,7 +87,7 @@ export function createTheme({
   // blend it with the background, it will simply get closer to that color which
   // normally is what you want.
   function lighten(color: Color, ratio = 0.2): Color {
-    if (type == "dark") {
+    if (mode == "dark") {
       return color.lighten(ratio);
     } else {
       return color.mix(background, ratio);
@@ -94,7 +95,7 @@ export function createTheme({
   }
   // The exact opposite of lighten().
   function darken(color: Color, ratio = 0.2) {
-    if (type == "light") {
+    if (mode == "light") {
       return color.darken(ratio);
     } else {
       return color.mix(background, ratio);
@@ -102,14 +103,14 @@ export function createTheme({
   }
 
   function increaseContrast(color: Color) {
-    return type == "light" ? darken(color, 0.6) : lighten(color, 0.6);
+    return mode == "light" ? darken(color, 0.6) : lighten(color, 0.6);
   }
 
   return responsiveFontSizes(
     createMuiTheme({
       spacing: spacing,
       palette: {
-        type: type,
+        mode: mode,
         primary: {
           main: primary.string(),
           light: lighten(primary).string(),
@@ -132,7 +133,6 @@ export function createTheme({
           primary: text.string(),
           secondary: text.alpha(0.7).string(),
           disabled: text.alpha(0.5).string(),
-          hint: text.alpha(0.5).string(),
         },
       },
       typography: {
