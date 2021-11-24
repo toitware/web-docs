@@ -1,7 +1,7 @@
-import { makeStyles } from "@material-ui/core";
+import { styled } from "@mui/material/styles";
 import * as React from "react";
 
-const useStyles = makeStyles((theme) => ({
+const Root = styled("div")(({ theme }) => ({
   root: {
     width: "46rem",
     maxWidth: "100%",
@@ -51,12 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Body: React.FC = ({ children }) => {
-  const classes = useStyles();
-  return (
-    <div id="content" className={classes.root}>
-      {children}
-    </div>
-  );
+  return <Root id="content">{children}</Root>;
 };
 
 export default Body;
