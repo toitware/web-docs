@@ -15,6 +15,7 @@ redirects:
   "/tutorials/ble/basic": "/tutorials/ble"
   "/apis/api": "/apis"
   "/language/language": "/language"
+  "/language/language/": "/language"
   "/hardware/peripherals": "/peripherals"
   "/hardware/firmware": "/firmware"
   "/hardware/peripherals/spi": "/peripherals/spi"
