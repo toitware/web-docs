@@ -15,17 +15,14 @@ const Title = styled.h1`
   display: flex;
   align-items: center;
   gap: 1rem;
-  border-bottom: 2px solid ${({ theme }) => theme.palette.text.primary};
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 `;
 
 const Result = styled(Link)`
   display: block;
   padding: 1.5rem 1.5rem;
-  margin-left: -1.5rem;
-  margin-right: -1.5rem;
-  color: ${({ theme }) => theme.palette.text.primary};
   border-radius: 5px;
+  color: ${({ theme }) => theme.palette.text.primary};
   &:hover {
     background: ${({ theme }) => theme.palette.primary.main};
     color: ${({ theme }) => theme.palette.primary.contrastText};
@@ -52,16 +49,14 @@ export function SearchPage(): JSX.Element {
       <Title>
         <FiSearch /> {query}
       </Title>
-      <div>
-        {results.length > 0 &&
-          results.map((result) => (
-            <Result key={result.id} to={result.path}>
-              <ResultTitle>{result.title}</ResultTitle>
-              <ResultExcerpt>{result.excerpt}</ResultExcerpt>
-            </Result>
-          ))}
-        {results.length === 0 && <NoResults>No matches found.</NoResults>}
-      </div>
+      {results.length > 0 &&
+        results.map((result) => (
+          <Result key={result.id} to={result.path}>
+            <ResultTitle>{result.title}</ResultTitle>
+            <ResultExcerpt>{result.excerpt}</ResultExcerpt>
+          </Result>
+        ))}
+      {results.length === 0 && <NoResults>No matches found.</NoResults>}
     </Content>
   );
 }
