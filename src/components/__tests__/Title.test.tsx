@@ -1,6 +1,3 @@
-/**
- * @jest-environment jsdom
- */
 import "@testing-library/jest-dom"; // Provides jest dom matchers
 import { render, screen } from "@testing-library/react";
 import { StableClassNames } from "@toitware/testing-utils";
