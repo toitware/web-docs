@@ -5,8 +5,8 @@ Minutes](https://www.ruby-lang.org/en/documentation/quickstart/). It makes the
 assumption that you already have [Toit installed](../../getstarted/installation)
 on your machine.
 
-Toit is an [object-oriented](../objects-constructors-inheritance-interfaces)
-programming language for the internet of things. The Toit language has the following desirable properties:
+Toit is an [open source](https://github.com/toitlang/toit), [object-oriented](./objects-constructors-inheritance-interfaces)
+programming language for the Internet of Things. The Toit language has the following desirable properties:
 
 - Modern, simple, and approachable
 - High-level and object-oriented
@@ -41,7 +41,7 @@ you add to your programs are significant.
 
 Once the program ran, it printed `Hello World!` in your terminal. This is
 because the only statement in `hello.toit` is a method call, where you invoke
-the `print` method with a single argument, which is the [string](../strings) to
+the `print` method with a single argument, which is the [string](./strings) to
 be printed (in this case to the terminal). If you wanted to output more than
 one line from your program, you could update it to:
 
@@ -105,7 +105,7 @@ Hello Kasper!
 ## Inserting strings in strings
 
 What’s the `$name` bit? That’s Toit's way of inserting something into a string.
-It is called [_string interpolation_](../strings#string-interpolation).
+It is called [_string interpolation_](./strings#string-interpolation).
 The bit after the `$` is turned into a string (if it isn’t one already) and
 then substituted into the outer string at that point. You can also use this to
 make sure that someone’s name is properly trimmed so leading and trailing
@@ -175,7 +175,7 @@ indented lines, so the constructor has no statements in it:
 ```
 
 This is a
-[constructor](../objects-constructors-inheritance-interfaces#constructors)
+[constructor](./objects-constructors-inheritance-interfaces#constructors)
 and it defines how you can construct objects from the class. It says the class
 `Greeter` takes a single argument (`name`), but the `.` prefix to the `.name`
 parameter actually tells us that the name is immediately stored as a field on
@@ -306,7 +306,7 @@ class MegaGreeter:
     names.add name
 ```
 
-So MegaGreeter objects have a [list](../listsetmap) of `names`. The `names`
+So MegaGreeter objects have a [list](./listsetmap) of `names`. The `names`
 field is initialized to the empty list (`[]`). The body of the `MegaGreeter`
 constructor adds the given `name` argument to the end of the list of names.
 Notice that this is different than using a `.name` parameter that automatically
@@ -449,7 +449,7 @@ It is common to refer to such nested structure as _block structure_.
 
 Let’s return to the `MegaGreeter` example and take a look at another place
 where constructs are block structured. In the `say_hi` method, we want to call
-`print` for every single name in the `names` [list](../listsetmap). We can do
+`print` for every single name in the `names` [list](./listsetmap). We can do
 this by calling `names.do` and provide the list of statements we want to run
 for each element using block structure:
 
@@ -465,8 +465,8 @@ for each element using block structure:
 
 Here the statement is on a single line, so there is no need to use indentation.
 When using `names.do`, a method available on all
-[collections](../listsetmap), the [special variable
-`it`](../blocks#block-arguments) contains the individual elements from the list in
+[collections](./listsetmap), the [special variable
+`it`](./blocks#block-arguments) contains the individual elements from the list in
 turn. If there are 5 elements in the `names` list, we will call `print` 5 times
 producing 5 separate lines of output.
 
@@ -579,14 +579,14 @@ class. (We already saw `main`, which is a top level function with a special
 name.)
 
 The `fib` function is recursive, calling itself, and also makes use of a few
-new features. The [if-statement](../loops#if-statements) is well known from
+new features. The [if-statement](./loops#if-statements) is well known from
 other languages. In Toit it works by taking an expression and conditionally
 evaluating a block. Like other blocks we could have used indentation to group
 multiple lines.
 
 Toit also has the usual array of infix operators, `+`, `-`, `*`, `/`, `%` etc.
 and the relational operators `<`, `<=`, `>`, `>=`, `==` and `!=`. The
-operators have higher [precedence](../syntax#precedence) than function
+operators have higher [precedence](./syntax#precedence) than function
 arguments, so we had to group the calls in parentheses to get the desired
 behavior. The high precedence is what makes the arguments for the recursive
 invocation of `fib` work. We could have spaced it more conventionally and got
@@ -603,7 +603,7 @@ fib n:
 ## Loops
 
 This is a terribly slow way to calculate a Fibonacci number though, and we
-could do it with a simple [loop](../loops#loops):
+could do it with a simple [loop](./loops#loops):
 
 ```
 fib2 n:
@@ -671,7 +671,7 @@ main:
   greeter.say_hi
 ```
 
-Here we use a [hash map](../listsetmap) to store the appropriate title for each
+Here we use a [hash map](./listsetmap) to store the appropriate title for each
 name. The empty map is given by `{:}` and we use `[]` to access the values for
 each key. The empty set is `{}` and we already met the empty list, `[]`. The
 lookup syntax `[]` also works on lists, so instead of the 'do' method we could
@@ -721,7 +721,7 @@ class Integer:
       block.call i
 ```
 
-They are making use of a feature called [blocks](../blocks). These are
+They are making use of a feature called [blocks](./blocks). These are
 snippets of code that can be passed down the stack as arguments to methods and
 functions. At the call site we precede the block with a colon, '`:`', and at
 the function definition we surround the parameter name with square brackets,
@@ -746,7 +746,7 @@ original list, and returns a new list containing only the short words.
 Note that there is no `return` statement in the block. A block will return the
 value of the last statement to the place where it was invoked with
 `block.call`. In this case there is only one statement, which is the
-[boolean](../booleans) expression `it.size <= 5`.
+[boolean](./booleans) expression `it.size <= 5`.
 
 If you use the `return` keyword in a block then it returns from the syntactic
 function or method in which it is written. Usually this will behave as you
