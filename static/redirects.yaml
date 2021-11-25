@@ -21,6 +21,7 @@ redirects:
   "/apis/api": "/apis"
   "/language/language": "/language"
   "/language/language/": "/language"
+  "/language/sdk/sdk/": "/language/sdk"
   "/hardware/peripherals": "/peripherals"
   "/hardware/firmware": "/firmware"
   "/hardware/peripherals/spi": "/peripherals/spi"

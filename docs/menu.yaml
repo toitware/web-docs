@@ -164,8 +164,6 @@ items:
       - name: Toit SDK
         path: /language/sdk
         children:
-          - name: Toit SDK
-            path: /language/sdk/sdk
           - name: Toit standard libraries
             path: /language/sdk/standard-libraries
           - name: Documentation convention
