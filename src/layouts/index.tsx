@@ -63,8 +63,9 @@ export function Layout(props: LayoutProps): JSX.Element {
     document.getElementsByTagName("head")[0].appendChild(s);
   };
 
+  //  <ThemeProvider theme={dark ? darkTheme : lightTheme}>
   return (
-    <ThemeProvider theme={dark ? darkTheme : lightTheme}>
+    <ThemeProvider theme={lightTheme}>
       <CookieConsent show={true} segmentKey={segmentAPIKey || "no-key"} changeConsent={false} />
       <Helmet title={title}></Helmet>
       <Root>{children}</Root>

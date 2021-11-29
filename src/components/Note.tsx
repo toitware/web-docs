@@ -1,53 +1,66 @@
-import { makeStyles, Typography } from "@material-ui/core";
-import { ReactNode } from "react";
+import { styled, css } from "@mui/material/styles";
 import Color from "color";
 import * as React from "react";
-import clsx from "clsx";
+import { ReactNode } from "react";
 import { IoInformationCircle, IoWarning } from "react-icons/io5";
 
-const useStyles = makeStyles((theme) => ({
-  note: {
+const Wrapper = styled("div", {
+  shouldForwardProp: (prop) => prop !== "visible",
+})<{ type?: "info" | "warning" }>(({ theme, type }) => {
+  let borderColorLeft: string;
+
+  switch (type) {
+    case "info":
+      borderColorLeft = theme.palette.primary.main;
+      break;
+    case "warning":
+      borderColorLeft = theme.palette.warning.main;
+      break;
+    default:
+      borderColorLeft = theme.palette.text.primary;
+      break;
+  }
+
+  return {
     border: `1px solid ${Color(theme.palette.text.primary).alpha(0.2).string()}`,
     padding: "0 1.5rem 0 1.5rem",
     borderRadius: "4px",
-    borderLeft: `3px solid ${theme.palette.text.primary}`,
+    borderLeft: `3px solid ${borderColorLeft}`,
     margin: "3rem 0",
-  },
-  noteInfo: {
-    borderLeftColor: theme.palette.primary.main,
-  },
-  noteWarning: {
-    borderLeftColor: theme.palette.warning.main,
-  },
-  title: {
-    marginTop: "1rem",
-    fontWeight: "bold",
-    display: "flex",
-    alignItems: "center",
-  },
-  body: {
-    display: "flex",
-    alignItems: "center",
-  },
-  bodyContent: {
-    // By setting a very small width, and then flex: 1, we allow the content
-    // to grow, without extending over the container.
-    width: "10%",
-    flex: "1",
-  },
-  icon: {
-    flexShrink: 0,
-    width: "1.5rem",
-    height: "1.5rem",
-    marginRight: "1rem",
-  },
-  infoIcon: {
-    color: theme.palette.primary.main,
-  },
-  warningIcon: {
-    color: theme.palette.warning.main,
-  },
-}));
+  };
+});
+
+const Title = styled("div")({
+  marginTop: "1rem",
+  fontWeight: "bold",
+  display: "flex",
+  alignItems: "center",
+});
+const Body = styled("div")({
+  display: "flex",
+  alignItems: "center",
+});
+const BodyContent = styled("div")({
+  // By setting a very small width, and then flex: 1, we allow the content
+  // to grow, without extending over the container.
+  width: "10%",
+  flex: "1",
+});
+
+const iconCss = css({
+  flexShrink: 0,
+  width: "1.5rem",
+  height: "1.5rem",
+  marginRight: "1rem",
+});
+const InfoIcon = styled(IoInformationCircle)`
+  ${iconCss}
+  color: ${({ theme }) => theme.palette.primary.main};
+`;
+const WarningIcon = styled(IoWarning)`
+  ${iconCss}
+  color: ${({ theme }) => theme.palette.warning.main};
+`;
 
 type Props = {
   children: ReactNode;
@@ -56,25 +69,21 @@ type Props = {
 };
 
 export function Note({ children, title, type = "info" }: Props): JSX.Element {
-  const classes = useStyles();
   return (
-    <Typography
-      className={clsx(classes.note, { [classes.noteWarning]: type == "warning", [classes.noteInfo]: type == "info" })}
-      component="div"
-    >
+    <Wrapper type={type}>
       {title && (
-        <div className={classes.title}>
-          {type == "info" && <IoInformationCircle className={clsx(classes.icon, classes.infoIcon)} />}
-          {type == "warning" && <IoWarning className={clsx(classes.icon, classes.warningIcon)} />}
+        <Title>
+          {type == "info" && <InfoIcon />}
+          {type == "warning" && <WarningIcon />}
           {title}
-        </div>
+        </Title>
       )}
-      <div className={classes.body}>
-        {!title && type == "info" && <IoInformationCircle className={clsx(classes.icon, classes.infoIcon)} />}
-        {!title && type == "warning" && <IoWarning className={clsx(classes.icon, classes.warningIcon)} />}
-        <div className={classes.bodyContent}>{children}</div>
-      </div>
-    </Typography>
+      <Body>
+        {!title && type == "info" && <InfoIcon />}
+        {!title && type == "warning" && <WarningIcon />}
+        <BodyContent>{children}</BodyContent>
+      </Body>
+    </Wrapper>
   );
 }
 

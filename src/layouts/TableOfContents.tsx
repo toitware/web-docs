@@ -1,5 +1,4 @@
-import { makeStyles } from "@material-ui/core";
-import clsx from "clsx";
+import { styled } from "@mui/material";
 import { Link } from "gatsby";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
@@ -14,45 +13,32 @@ export type TableOfContentsItem = {
   items?: TableOfContentsItem[];
 };
 
-const useStyles = makeStyles((theme) => ({
-  wrapper: {
-    position: "sticky",
-    top: theme.spacing(18),
-    maxHeight: `calc(100vh - ${theme.spacing(22)}px)`,
-    alignSelf: "flex-start",
-    width: "15rem",
-    borderLeft: `1px solid ${theme.palette.text.primary}`,
-    paddingLeft: "1.5rem",
-    paddingRight: "1rem",
-    overflowY: "auto",
-    "& ul": {
-      listStyle: "none",
-      padding: 0,
-      margin: "-1.5rem 0",
-    },
-    [theme.breakpoints.down("md")]: {
-      display: "none",
-    },
+const Wrapper = styled("nav")(({ theme }) => ({
+  position: "sticky",
+  top: theme.spacing(18),
+  maxHeight: `calc(100vh - ${theme.spacing(22)}px)`,
+  alignSelf: "flex-start",
+  width: "15rem",
+  borderLeft: `1px solid ${theme.palette.text.primary}`,
+  paddingLeft: "1.5rem",
+  paddingRight: "1rem",
+  overflowY: "auto",
+  "& ul": {
+    listStyle: "none",
+    padding: 0,
+    margin: "-1.5rem 0",
   },
-  link: {
-    color: theme.palette.text.primary,
-    fontFamily: theme.typography.fontFamily,
-    margin: "1.5rem 0",
-    display: "block",
-    "&:hover": {
-      color: theme.palette.primary.main,
-    },
+  [theme.breakpoints.down("md")]: {
+    display: "none",
   },
-  link1: {},
-  link2: {
-    paddingLeft: "1rem",
-    fontSize: "0.9375rem",
-  },
-  link3: {
-    paddingLeft: "2rem",
-    fontSize: "0.875rem",
-  },
-  activeLink: {
+}));
+
+const StyledLink = styled(Link)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  fontFamily: theme.typography.fontFamily,
+  margin: "1.5rem 0",
+  display: "block",
+  "&:hover": {
     color: theme.palette.primary.main,
   },
 }));
@@ -89,8 +75,6 @@ function flatten(table: TableOfContentsItem | TableOfContents, list: ContentsEnt
 }
 
 export function TableOfContentsNav({ table, className }: Props): JSX.Element {
-  const classes = useStyles();
-
   const flatTable = useMemo(() => flatten(table), [table]);
 
   const activeItemId = useActiveItemId(flatTable);
@@ -100,25 +84,32 @@ export function TableOfContentsNav({ table, className }: Props): JSX.Element {
   }
 
   return (
-    <nav className={clsx(classes.wrapper, className)}>
+    <Wrapper className={className}>
       <ul>
         {flatTable.map((item) => (
           <li key={item.url}>
-            <Link
-              className={clsx(classes.link, {
-                [classes.activeLink]: item.url == `#${activeItemId}`,
-                [classes.link1]: item.level == 1,
-                [classes.link2]: item.level == 2,
-                [classes.link3]: item.level == 3,
-              })}
+            <StyledLink
+              sx={{
+                ...(item.url === `#${activeItemId}` && {
+                  color: "primary.main",
+                }),
+                ...(item.level === 2 && {
+                  paddingLeft: "1rem",
+                  fontSize: "0.9375rem",
+                }),
+                ...(item.level === 3 && {
+                  paddingLeft: "2rem",
+                  fontSize: "0.875rem",
+                }),
+              }}
               to={item.url}
             >
               {item.title}
-            </Link>
+            </StyledLink>
           </li>
         ))}
       </ul>
-    </nav>
+    </Wrapper>
   );
 }
 

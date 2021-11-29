@@ -1,4 +1,4 @@
-import { Link } from "@material-ui/core";
+import { Link } from "@mui/material";
 import { Link as GatsbyLink } from "gatsby";
 import * as React from "react";
 import { ReactNode } from "react";

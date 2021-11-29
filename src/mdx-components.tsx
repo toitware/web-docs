@@ -2,19 +2,19 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import { Typography } from "@material-ui/core";
-import TableRow from "@material-ui/core/TableRow";
 import { MDXProviderComponentsProp } from "@mdx-js/react";
+import { Typography } from "@mui/material";
+import TableRow from "@mui/material/TableRow";
 import { CodeBlock } from "@toitware/code-block";
 import React from "react";
 import { Box, Boxes } from "./components/Boxes";
 import Code from "./components/Code";
 import { DocsLink } from "./components/DocsLink";
+import Expandable from "./components/Expandable";
 import Note from "./components/Note";
 import { Table, TableBody, TableHead } from "./components/Table";
 import { Tabs } from "./components/Tabs";
 import Title from "./components/Title";
-import Expandable from "./components/Expandable";
 import ZoomableImage from "./components/ZoomableImage";
 
 const P = (props: any) => <Typography paragraph {...props} />;

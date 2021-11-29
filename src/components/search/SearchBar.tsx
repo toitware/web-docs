@@ -1,6 +1,5 @@
-import { InputAdornment, makeStyles, OutlinedInput } from "@material-ui/core";
+import { InputAdornment, OutlinedInput, styled } from "@mui/material";
 import { globalHistory } from "@reach/router";
-import clsx from "clsx";
 import { Link, navigate } from "gatsby";
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
@@ -9,80 +8,81 @@ import useFlexSearch from "../../hooks/use_flex_search";
 import useLocationQuery from "../../hooks/use_location_query";
 import useResultSelection from "../../hooks/use_result_selection";
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    position: "relative",
+const Container = styled("div")`
+  position: relative;
+`;
+
+const StyledInput = styled(OutlinedInput)`
+  position: absolute;
+  height: 2rem;
+  top: -1rem;
+  right: 0;
+  width: 16rem;
+  max-width: calc(100vw - 7rem);
+  transition: all 200ms ease-in-out;
+  background: rgba(255, 255, 255, 0.1);
+
+  &.Mui-focused {
+    width: min(30rem, calc(100vw - 7rem));
+  }
+  &.MuiOutlinedInput-notchedOutline {
+    border: 1px solid ${({ theme }) => theme.palette.text.primary};
+  }
+`;
+
+const Results = styled("div")(({ theme }) => ({
+  zIndex: 100,
+  position: "absolute",
+  top: "1rem",
+  right: "0",
+  background: theme.palette.background.paper,
+  borderRadius: "6px",
+  padding: "0.75rem",
+  boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+  width: "min(30rem, calc(100vw - 7rem))",
+  maxHeight: "80vh",
+  overflowY: "auto",
+  "& ul": {
+    listStyle: "none",
+    padding: "0",
+    margin: "0",
   },
-  results: {
-    zIndex: 100,
-    position: "absolute",
-    top: "1rem",
-    right: "0",
-    background: theme.palette.background.paper,
-    borderRadius: "6px",
-    padding: "0.75rem",
-    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-    width: "min(30rem, calc(100vw - 7rem))",
-    maxHeight: "80vh",
-    overflowY: "auto",
-    "& ul": {
-      listStyle: "none",
-      padding: "0",
-      margin: "0",
-    },
-    fontFamily: theme.typography.fontFamily,
-    color: theme.palette.text.primary,
-    fontSize: "0.875rem",
-  },
-  searchField: {
-    position: "absolute",
-    height: "2rem",
-    top: "-1rem",
-    right: 0,
-    width: "16rem",
-    maxWidth: "calc(100vw - 7rem)",
-    transition: "all 200ms ease-in-out",
-    background: "rgba(255, 255, 255, 0.1)",
-  },
-  searchFieldFocused: {
-    width: "min(30rem, calc(100vw - 7rem))",
-  },
-  searchFieldOutline: {
-    border: `1px solid ${theme.palette.text.primary}`,
-  },
-  noResults: {
-    textAlign: "center",
-    padding: "3rem 0",
-    fontWeight: "bold",
-  },
-  result: {
-    margin: "0.75rem 0",
-    "&:first-of-type": {
-      marginTop: 0,
-    },
-    "&:last-of-type": {
-      marginBottom: 0,
-    },
-  },
-  resultLink: {
-    display: "block",
-    padding: "0.75rem",
-    borderRadius: "4px",
-    color: theme.palette.text.primary,
-  },
-  resultLinkActive: {
-    background: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-  },
-  resultTitle: {
-    margin: 0,
-    fontSize: "0.875rem",
-  },
-  resultExcerpt: {
-    margin: 0,
-    overflow: "ellipse",
-  },
+  fontFamily: theme.typography.fontFamily,
+  color: theme.palette.text.primary,
+  fontSize: "0.875rem",
 }));
+
+const NoResults = styled("div")({
+  textAlign: "center",
+  padding: "3rem 0",
+  fontWeight: "bold",
+});
+
+const Result = styled("li")({
+  margin: "0.75rem 0",
+  "&:first-of-type": {
+    marginTop: 0,
+  },
+  "&:last-of-type": {
+    marginBottom: 0,
+  },
+});
+
+const ResultLink = styled(Link)(({ theme }) => ({
+  display: "block",
+  padding: "0.75rem",
+  borderRadius: "4px",
+  color: theme.palette.text.primary,
+}));
+
+const ResultTitle = styled("h2")({
+  margin: 0,
+  fontSize: "0.875rem",
+});
+const ResultExcerpt = styled("p")({
+  margin: 0,
+  overflow: "ellipse",
+});
 
 type Props = {
   className?: string;
@@ -91,8 +91,6 @@ type Props = {
 const NO_SELECTION = -1;
 
 function SearchBar({ className }: Props): JSX.Element {
-  const classes = useStyles();
-
   const [showResults, setShowResults] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
@@ -150,17 +148,15 @@ function SearchBar({ className }: Props): JSX.Element {
   const placeholderText = isFocused ? "Type your search" : "Search (Press / to focus)";
 
   return (
-    <div className={clsx(classes.container, className)} ref={containerRef}>
+    <Container className={className} ref={containerRef}>
       <form onSubmit={onSubmit} autoComplete="off">
-        <OutlinedInput
+        <StyledInput
           inputRef={inputRef}
-          className={clsx(classes.searchField, showResults && classes.searchFieldFocused)}
           fullWidth
           name="search"
           type="search"
           placeholder={placeholderText}
           value={query}
-          classes={{ notchedOutline: classes.searchFieldOutline, focused: classes.searchFieldFocused }}
           onChange={(_) => {
             setQuery(_.target.value);
             setShowResults(true);
@@ -178,32 +174,36 @@ function SearchBar({ className }: Props): JSX.Element {
         />
       </form>
       {showResults && query != "" && (
-        <div className={classes.results}>
-          {results.length == 0 && <div className={classes.noResults}>No results</div>}
+        <Results>
+          {results.length == 0 && <NoResults>No results</NoResults>}
           {results.length > 0 && (
             <ul role="listbox">
               {results.map((result, index) => (
-                <li
+                <Result
                   key={result.id}
-                  className={classes.result}
                   onMouseOver={() => setSelectedIndex(index)}
                   role="option"
                   aria-selected={index === selectedIndex}
                 >
-                  <Link
+                  <ResultLink
                     to={result.path}
-                    className={clsx([classes.resultLink, { [classes.resultLinkActive]: index === selectedIndex }])}
+                    sx={{
+                      ...(index === selectedIndex && {
+                        bgcolor: "primary.main",
+                        color: "primary.contrastText",
+                      }),
+                    }}
                   >
-                    <h2 className={classes.resultTitle}>{result.title}</h2>
-                    <p className={classes.resultExcerpt}>{result.excerpt}</p>
-                  </Link>
-                </li>
+                    <ResultTitle>{result.title}</ResultTitle>
+                    <ResultExcerpt>{result.excerpt}</ResultExcerpt>
+                  </ResultLink>
+                </Result>
               ))}
             </ul>
           )}
-        </div>
+        </Results>
       )}
-    </div>
+    </Container>
   );
 }
 

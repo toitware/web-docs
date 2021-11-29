@@ -1,15 +1,17 @@
-import { makeStyles } from "@material-ui/core";
+import { styled } from "@mui/system";
 import * as React from "react";
 import { ReactNode, useState } from "react";
 import { FiArrowDown, FiArrowRight } from "react-icons/fi";
 
-const useStyles = makeStyles(() => ({
-  arrowIcon: {
-    marginRight: "0.5rem",
-    position: "relative",
-    top: "0.1em",
-  },
-}));
+const arrowStyle = `
+  margin-right: 0.5rem;
+  position: relative;
+  top: 0.1em;
+`;
+
+const ArrowRight = styled(FiArrowRight)(arrowStyle);
+const ArrowDown = styled(FiArrowDown)(arrowStyle);
+
 type Props = {
   title: string;
   children: ReactNode;
@@ -21,12 +23,11 @@ export function Expandable({ children, title }: Props): JSX.Element {
     e.preventDefault();
     setIsExpanded(!isExpanded);
   }
-  const classes = useStyles();
   return (
     <>
       <a href="#" onClick={toggle}>
-        {!isExpanded && <FiArrowRight className={classes.arrowIcon} />}
-        {isExpanded && <FiArrowDown className={classes.arrowIcon} />}
+        {!isExpanded && <ArrowRight />}
+        {isExpanded && <ArrowDown />}
 
         {title}
       </a>
