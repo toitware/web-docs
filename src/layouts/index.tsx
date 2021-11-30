@@ -65,7 +65,7 @@ export function Layout(props: LayoutProps): JSX.Element {
 
   //  <ThemeProvider theme={dark ? darkTheme : lightTheme}>
   return (
-    <ThemeProvider theme={lightTheme}>
+    <ThemeProvider theme={dark ? darkTheme : lightTheme}>
       <CookieConsent show={true} segmentKey={segmentAPIKey || "no-key"} changeConsent={false} />
       <Helmet title={title}></Helmet>
       <Root>{children}</Root>
