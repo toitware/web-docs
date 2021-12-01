@@ -65,29 +65,30 @@ const Content = styled("div")({
     fontSize: "0.875rem",
   },
 });
-const Image = styled("div")({
-  maxWidth: "3.125rem",
-});
+const Image = styled("div")`
+  max-width: 3.125rem;
+  > img,
+  > svg {
+    max-width: 100%;
+    height: auto;
+  }
+`;
 
 type BoxProps = {
   title?: string;
   to: string;
   children: ReactNode;
-  imageUrl?: string;
+  image?: string | JSX.Element;
 };
 
-export function Box({ title, to, imageUrl, children }: BoxProps): JSX.Element {
+export function Box({ title, to, image, children }: BoxProps): JSX.Element {
   return (
     <DocsLinkStyled href={to}>
       <Wrapper>
         {title && <Title>{title}</Title>}
         {children && <Content>{children}</Content>}
       </Wrapper>
-      {imageUrl && (
-        <Image>
-          <img src={imageUrl} alt="" />
-        </Image>
-      )}
+      {image && <Image>{typeof image === "string" ? <img src={image} alt="" /> : image}</Image>}
     </DocsLinkStyled>
   );
 }
