@@ -1,9 +1,8 @@
-import { styled, ThemeProvider } from "@mui/material/styles";
+import { styled } from "@mui/material";
 import CodeBlock from "@toitware/code-block";
 import * as React from "react";
 import { ReactNode, useRef, useState } from "react";
 import { FiCheck, FiCopy } from "react-icons/fi";
-import { darkTheme } from "../theme";
 
 const Root = styled("div")({
   display: "block",
@@ -83,9 +82,7 @@ export function Code({ className, children }: Props): JSX.Element {
 
   return (
     <Root>
-      <ThemeProvider theme={darkTheme}>
-        <CodeBlockStyled mode={mode} code={sanitizedCode} />
-      </ThemeProvider>
+      <CodeBlockStyled mode={mode} code={sanitizedCode} />
 
       <CopyIcon onClick={copyCode}>
         <FiCopy />
