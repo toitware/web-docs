@@ -1,49 +1,24 @@
-import { makeStyles, Typography } from "@material-ui/core";
-import clsx from "clsx";
+import { styled, Typography } from "@mui/material";
 import Color from "color";
 import * as React from "react";
 import { ReactElement, ReactNode, useState } from "react";
 
-// This style is just added for reference.
-const useStyles = makeStyles((theme) => ({
-  root: {
-    borderRadius: "3px",
-    margin: "3rem 0",
-  },
-  tabs: {
-    display: "flex",
-  },
-  tab: {
-    position: "relative",
-    top: "1px",
-    padding: "0.75rem 1.5rem",
-    display: "block",
-    color: theme.palette.text.primary,
-    border: "1px solid transparent",
-    fontSize: "0.875rem",
-    height: "100%",
-  },
-  tabActive: {
+const Link = styled("a", {
+  shouldForwardProp: (prop) => prop !== "active",
+})<{ active?: boolean }>(({ theme, active = false }) => ({
+  position: "relative",
+  top: "1px",
+  padding: "0.75rem 1.5rem",
+  display: "block",
+  color: theme.palette.text.primary,
+  border: `1px solid transparent`,
+  fontSize: "0.875rem",
+  height: "100%",
+  ...(active && {
     borderColor: Color(theme.palette.text.primary).string(),
     borderBottomColor: theme.palette.background.default,
     color: theme.palette.primary.main,
-  },
-  content: {
-    padding: "1.5rem 2.5rem",
-    border: `1px solid ${Color(theme.palette.text.primary).string()}`,
-    borderTopLeftRadius: 0,
-    // h1 and h2 shouldn't be used in tabs because they break the table of contents
-    "& h1, & h2": {
-      background: "red",
-      color: "white",
-    },
-    "& h1::after, & h2::after": {
-      content: '" -- Don\'t use h1 or h2 in tabs"',
-    },
-  },
-  contentNoPadding: {
-    padding: 0,
-  },
+  }),
 }));
 
 type TabProps = {
@@ -53,8 +28,6 @@ type TabProps = {
 };
 
 function Tab({ label, isActive, onClick }: TabProps): JSX.Element {
-  const classes = useStyles();
-
   const clickHandler: React.MouseEventHandler = (event) => {
     event.preventDefault();
     onClick();
@@ -62,9 +35,9 @@ function Tab({ label, isActive, onClick }: TabProps): JSX.Element {
 
   return (
     <Typography key={label} component="span">
-      <a className={clsx(classes.tab, { [classes.tabActive]: isActive })} href="#" onClick={clickHandler}>
+      <Link active={isActive} href="#" onClick={clickHandler}>
         {label}
-      </a>
+      </Link>
     </Typography>
   );
 }
@@ -78,6 +51,31 @@ type DivProps = {
   label?: string;
   children: ReactNode;
 };
+
+const Root = styled("div")({
+  borderRadius: "3px",
+  margin: "3rem 0",
+});
+
+const TabsNav = styled("nav")({
+  display: "flex",
+});
+
+const Content = styled("div", {
+  shouldForwardProp: (prop) => prop !== "noPadding",
+})<{ noPadding?: boolean }>(({ theme, noPadding = false }) => ({
+  padding: noPadding ? "0" : "1.5rem 2.5rem",
+  border: `1px solid ${Color(theme.palette.text.primary).string()}`,
+  borderTopLeftRadius: 0,
+  // h1 and h2 shouldn't be used in tabs because they break the table of contents
+  "& h1, & h2": {
+    background: "red",
+    color: "white",
+  },
+  "& h1::after, & h2::after": {
+    content: '" -- Don\'t use h1 or h2 in tabs"',
+  },
+}));
 
 /**
  * Component to display a block with tabs.
@@ -98,13 +96,11 @@ type DivProps = {
  *     </Tabs>
  */
 export function Tabs({ children, noPadding = false }: TabsProps): JSX.Element {
-  const classes = useStyles();
-
   const [activeTab, setActiveTab] = useState(children[0].props.label);
 
   return (
-    <div className={classes.root}>
-      <nav className={classes.tabs}>
+    <Root>
+      <TabsNav>
         {children.map((child) => {
           const { label } = child.props;
           return (
@@ -116,18 +112,18 @@ export function Tabs({ children, noPadding = false }: TabsProps): JSX.Element {
             />
           );
         })}
-      </nav>
+      </TabsNav>
 
       {children.map((child) => {
         const { label, children } = child.props;
         if (label != activeTab) return undefined;
         return (
-          <div className={clsx(classes.content, { [classes.contentNoPadding]: noPadding })} key={label}>
+          <Content noPadding={noPadding} key={label}>
             {children}
-          </div>
+          </Content>
         );
       })}
-    </div>
+    </Root>
   );
 }
 

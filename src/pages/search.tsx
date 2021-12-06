@@ -1,17 +1,17 @@
-import styled from "@emotion/styled";
+import { styled } from "@mui/material";
 import { Link } from "gatsby";
 import React from "react";
 import { FiSearch } from "react-icons/fi";
 import useFlexSearch from "../hooks/use_flex_search";
 import useLocationQuery from "../hooks/use_location_query";
 
-const Content = styled.div`
+const Content = styled("div")`
   width: 46rem;
   max-width: 100%;
   padding: 2rem;
 `;
 
-const Title = styled.h1`
+const Title = styled("h1")`
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -31,13 +31,13 @@ const Result = styled(Link)`
     color: ${({ theme }) => theme.palette.primary.contrastText};
   }
 `;
-const ResultTitle = styled.h3`
+const ResultTitle = styled("h3")`
   margin: 0;
 `;
-const ResultExcerpt = styled.p`
+const ResultExcerpt = styled("p")`
   margin: 0;
 `;
-const NoResults = styled.div`
+const NoResults = styled("div")`
   padding: 3rem 0;
   font-size: 1.25rem;
   text-align: center;

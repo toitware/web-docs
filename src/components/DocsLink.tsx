@@ -1,4 +1,4 @@
-import { Link } from "@material-ui/core";
+import { Link } from "@mui/material";
 import { Link as GatsbyLink } from "gatsby";
 import * as React from "react";
 import { ReactNode } from "react";
@@ -18,7 +18,15 @@ export function DocsLink(props: Props): JSX.Element {
 
   if (href.startsWith("http")) {
     return (
-      <Link className={className} target="_blank" rel="noreferrer" variant="body1" color="textSecondary" {...props} />
+      <Link
+        className={className}
+        underline="hover"
+        target="_blank"
+        rel="noreferrer"
+        variant="body1"
+        color="textSecondary"
+        {...props}
+      />
     );
   } else {
     return (

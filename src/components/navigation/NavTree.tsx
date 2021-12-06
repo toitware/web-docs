@@ -1,27 +1,14 @@
-import { makeStyles } from "@material-ui/core";
-import clsx from "clsx";
+import { styled } from "@mui/material";
 import * as React from "react";
-import NavTreeItem from "./NavTreeItem";
 import { MenuItem } from "../../../docs/menu.yaml";
+import NavTreeItem from "./NavTreeItem";
 
-const useStyles = makeStyles((theme) => ({
-  list: {
-    listStyle: "none",
-    padding: 0,
-    margin: 0,
-  },
-  level0: {},
-  level1: {
-    paddingLeft: theme.spacing(2),
-  },
-  level2: {
-    borderLeft: "1px solid rgba(255, 255, 255, 0.5)",
-    paddingLeft: theme.spacing(2),
-  },
-  level3: {
-    paddingLeft: theme.spacing(2),
-  },
-}));
+const List = styled("ul")({
+  listStyle: "none",
+  padding: 0,
+  margin: 0,
+  paddingLeft: "1rem",
+});
 
 type Props = {
   pages: MenuItem[];
@@ -29,21 +16,17 @@ type Props = {
 };
 
 function NavTree({ pages, level = 0 }: Props): JSX.Element {
-  const classes = useStyles();
-
   return (
-    <ul
-      className={clsx(classes.list, {
-        [classes.level0]: level === 0,
-        [classes.level1]: level === 1,
-        [classes.level2]: level === 2,
-        [classes.level3]: level === 3,
-      })}
+    <List
+      sx={{
+        ...(level === 0 && { pl: 0 }),
+        ...(level === 2 && { borderLeft: "1px solid rgba(255, 255, 255, 0.5)" }),
+      }}
     >
       {pages.map((page) => (
         <NavTreeItem key={page.path} page={page} level={level} />
       ))}
-    </ul>
+    </List>
   );
 }
 

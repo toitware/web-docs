@@ -1,39 +1,31 @@
-import { makeStyles } from "@material-ui/core";
-import clsx from "clsx";
+import { styled } from "@mui/material";
 import * as React from "react";
 import { useState } from "react";
 
-const useStyles = makeStyles(() => ({
-  lightbox: {
-    opacity: 0,
-    pointerEvents: "none",
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: "rgba(0, 0, 0, 0.7)",
-    zIndex: 10000,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: "0.75rem",
-    cursor: "zoom-out",
-    transition: "opacity 0.2s ease-in-out",
-  },
-  opened: {
-    opacity: 1,
-    pointerEvents: "all",
-  },
-  image: {
-    cursor: "zoom-in",
-  },
-  zoomedImage: {
-    display: "block",
-    maxWidth: "100%",
-    maxHeight: "100%",
-  },
-}));
+const Lightbox = styled("div")({
+  opacity: 0,
+  pointerEvents: "none",
+  position: "fixed",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: "rgba(0, 0, 0, 0.7)",
+  zIndex: 10000,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "0.75rem",
+  cursor: "zoom-out",
+  transition: "opacity 0.2s ease-in-out",
+});
+
+const ZoomedImage = styled("img")({
+  display: "block",
+  maxWidth: "100%",
+  maxHeight: "100%",
+});
+
 type ImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
 
 /**
@@ -41,14 +33,21 @@ type ImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
  * so that a full screen version appears in a lightbox.
  */
 export function ZoomableImage(props: ImageProps): JSX.Element {
-  const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <img className={classes.image} onClick={() => setIsOpen(!isOpen)} {...props} />
-      <div onClick={() => setIsOpen(false)} className={clsx([classes.lightbox, isOpen && classes.opened])}>
-        <img className={classes.zoomedImage} {...props} />
-      </div>
+      <img style={{ cursor: "zoom-in" }} onClick={() => setIsOpen(!isOpen)} {...props} />
+      <Lightbox
+        onClick={() => setIsOpen(false)}
+        sx={{
+          ...(isOpen && {
+            opacity: 1,
+            pointerEvents: "all",
+          }),
+        }}
+      >
+        <ZoomedImage {...props} />
+      </Lightbox>
     </>
   );
 }

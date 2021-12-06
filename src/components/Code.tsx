@@ -1,61 +1,58 @@
-import { makeStyles, ThemeProvider } from "@material-ui/core";
+import { styled } from "@mui/material";
 import CodeBlock from "@toitware/code-block";
-import clsx from "clsx";
 import * as React from "react";
 import { ReactNode, useRef, useState } from "react";
 import { FiCheck, FiCopy } from "react-icons/fi";
-import { darkTheme } from "../theme";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const Root = styled("div")({
+  display: "block",
+  position: "relative",
+  margin: "1.5rem 0",
+  "& .CodeMirror-sizer": {
+    // I don't know why this is necessary, but otherwise the containers
+    // cant fully scroll to the right.
+    paddingRight: "50px !important",
+  },
+});
+
+const CodeBlockStyled = styled(CodeBlock)({
+  fontSize: "0.875em",
+});
+
+const CopyIcon = styled("a")(({ theme }) => ({
+  display: "block",
+  position: "absolute",
+  width: "1.5rem",
+  height: "1.5rem",
+  padding: "0.25rem",
+  cursor: "pointer",
+  top: 2,
+  right: 2,
+  color: theme.palette.text.primary,
+  borderRadius: "3rem",
+  whiteSpace: "nowrap",
+  zIndex: 10,
+  "&:hover": {
+    color: "white",
+  },
+  "& svg": {
     display: "block",
-    position: "relative",
-    margin: "1.5rem 0",
-    "& .CodeMirror-sizer": {
-      // I don't know why this is necessary, but otherwise the containers
-      // cant fully scroll to the right.
-      paddingRight: "50px !important",
-    },
+    height: "100%",
+    width: "100%",
   },
-  code: {
-    fontSize: "0.875em",
-  },
-  copyIcon: {
-    display: "block",
-    position: "absolute",
-    width: "1.5rem",
-    height: "1.5rem",
-    padding: "0.25rem",
-    cursor: "pointer",
-    top: 2,
-    right: 2,
-    color: theme.palette.text.primary,
-    borderRadius: "3rem",
-    whiteSpace: "nowrap",
-    zIndex: 10,
-    "&:hover": {
-      color: "white",
-    },
-    "& svg": {
-      display: "block",
-      height: "100%",
-      width: "100%",
-    },
-  },
-  copyCheckmark: {
-    position: "absolute",
-    bottom: "0.25rem",
-    right: "-1rem",
-    width: "1rem !important",
-    height: "1rem !important",
-    color: "green",
-    transition: "all 1s linear",
-    opacity: 0,
-  },
-  copyCheckmarkVisible: {
-    opacity: 1,
-    transition: "none",
-  },
+}));
+
+const Checkmark = styled("div", {
+  shouldForwardProp: (prop) => prop !== "visible",
+})<{ visible?: boolean }>(({ visible }) => ({
+  position: "absolute",
+  bottom: "0.25rem",
+  right: "-1rem",
+  width: "1rem !important",
+  height: "1rem !important",
+  color: "green",
+  transition: visible ? "none" : "all 1s linear",
+  opacity: visible ? 1 : 0,
 }));
 
 type Props = {
@@ -63,7 +60,6 @@ type Props = {
   className?: string;
 };
 export function Code({ className, children }: Props): JSX.Element {
-  const classes = useStyles();
   const checkRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
 
@@ -85,18 +81,16 @@ export function Code({ className, children }: Props): JSX.Element {
   const sanitizedCode = code.replace(/\n$/, "");
 
   return (
-    <div className={classes.root}>
-      <ThemeProvider theme={darkTheme}>
-        <CodeBlock mode={mode} className={classes.code} code={sanitizedCode} />
-      </ThemeProvider>
+    <Root>
+      <CodeBlockStyled mode={mode} code={sanitizedCode} />
 
-      <a onClick={copyCode} className={classes.copyIcon}>
+      <CopyIcon onClick={copyCode}>
         <FiCopy />
-      </a>
-      <div ref={checkRef} className={clsx(classes.copyCheckmark, { [classes.copyCheckmarkVisible]: copied })}>
+      </CopyIcon>
+      <Checkmark ref={checkRef} visible={copied}>
         <FiCheck />
-      </div>
-    </div>
+      </Checkmark>
+    </Root>
   );
 }
 

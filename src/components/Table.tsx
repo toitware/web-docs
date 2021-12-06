@@ -1,11 +1,5 @@
-import { Table as MUITable, TableCell, TableContainer, Paper, makeStyles } from "@material-ui/core";
+import { Paper, Table as MUITable, TableCell, TableContainer } from "@mui/material";
 import React from "react";
-
-const useStyles = makeStyles(() => ({
-  tableHead: {
-    fontWeight: 700,
-  },
-}));
 
 type TableProps = {
   children: React.ReactNode;
@@ -20,10 +14,8 @@ export function Table({ children }: TableProps): JSX.Element {
 }
 
 export function TableHead({ children }: TableProps): JSX.Element {
-  const classes = useStyles();
-
   return (
-    <TableCell className={classes.tableHead} variant="head">
+    <TableCell sx={{ fontWeight: 700 }} variant="head">
       {children}
     </TableCell>
   );

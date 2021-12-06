@@ -7,14 +7,16 @@ const matchDark = "(prefers-color-scheme: dark)";
  * changes.
  */
 export const useDarkMode = (): boolean => {
-  const [isDark, setIsDark] = useState(
-    () => (typeof window !== "undefined" && window.matchMedia && window.matchMedia(matchDark).matches) ?? false
-  );
+  // Always default to dark, because that is what is rendered on the server.
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const matcher = window.matchMedia(matchDark);
-
-    const onChange = ({ matches }: MediaQueryListEvent) => setIsDark(matches);
+    setIsDark(matcher.matches);
+    const onChange = ({ matches }: MediaQueryListEvent) => {
+      console.log(`Switching to ${matches ? "dark" : "light"} mode.`);
+      setIsDark(matches);
+    };
     matcher.addEventListener("change", onChange);
     return () => matcher.removeEventListener("change", onChange);
   }, [setIsDark]);
