@@ -10,6 +10,7 @@ import useResultSelection from "../../hooks/use_result_selection";
 
 const Container = styled("div")`
   position: relative;
+  --input-max-width: calc(100vw - 7rem + 0.75rem);
 `;
 
 const StyledInput = styled(OutlinedInput)`
@@ -18,12 +19,12 @@ const StyledInput = styled(OutlinedInput)`
   top: -1rem;
   right: 0;
   width: 16rem;
-  max-width: calc(100vw - 7rem);
+  max-width: var(--input-max-width);
   transition: all 200ms ease-in-out;
   background: rgba(255, 255, 255, 0.1);
 
   &.Mui-focused {
-    width: min(30rem, calc(100vw - 7rem));
+    width: min(30rem, var(--input-max-width));
   }
   &.MuiOutlinedInput-notchedOutline {
     border: 1px solid ${({ theme }) => theme.palette.text.primary};
@@ -39,7 +40,7 @@ const Results = styled("div")(({ theme }) => ({
   borderRadius: "6px",
   padding: "0.75rem",
   boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-  width: "min(30rem, calc(100vw - 7rem))",
+  width: "min(30rem, var(--input-max-width))",
   maxHeight: "80vh",
   overflowY: "auto",
   "& ul": {

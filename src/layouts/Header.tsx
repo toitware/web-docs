@@ -20,7 +20,7 @@ const Container = styled("header")(({ theme }) => ({
   backgroundColor: Color(theme.palette.background.default).alpha(0.7).toString(),
   backdropFilter: "blur(5px)",
   height: "4.5rem",
-  padding: "0rem 2rem",
+  padding: "0rem calc(2rem - 0.75rem) 0 2rem", // Remove the right padding of the navbar button
 }));
 
 const Hamburger = styled(HamburgerMenu)(({ theme }) => ({
