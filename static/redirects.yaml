@@ -16,7 +16,7 @@ redirects:
   "/platform/console/devicemanagement": "/platform/devices/devicemanagement"
   "/platform/deploy": "/platform/apps"
   "/platform/deploy/appspec": "/platform/apps/appspec"
-  "/troubleshoot": "/troubleshoot/support"
+  "/troubleshoot": "/support/troubleshoot"
   "/tutorials/ble/basic": "/tutorials/ble"
   "/apis/api": "/apis"
   "/language/language": "/language"
