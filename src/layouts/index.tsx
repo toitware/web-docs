@@ -89,7 +89,7 @@ const Nav = styled(Navigation)(({ theme }) => ({
   left: "0",
   zIndex: 1000,
 
-  [theme.breakpoints.down("sm")]: {
+  [theme.breakpoints.down("md")]: {
     display: "none",
   },
   "&::-webkit-scrollbar": {
