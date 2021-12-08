@@ -86,15 +86,15 @@ items:
             path: /platform/apps/installingapp
       - name: Data
         path: /platform/data
-        children:
-          - name: Subscriptions
-            path: /platform/data/subscriptions
-          - name: Logs
-            path: /platform/data/logs
-          - name: System metrics
-            path: /platform/data/systemmetrics
-          - name: PubSub
-            path: /platform/data/pubsub
+      #  children:
+      #    - name: Subscriptions
+      #      path: /platform/data/subscriptions
+      #    - name: Logs
+      #      path: /platform/data/logs
+      #    - name: System metrics
+      #      path: /platform/data/systemmetrics
+      #    - name: PubSub
+      #      path: /platform/data/pubsub
   - name: Firmware
     path: /firmware
     icon: firmware
