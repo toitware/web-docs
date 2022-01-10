@@ -31,7 +31,7 @@ See some examples of PubSub communication between apps in the [Tutorials](../../
 <Tabs>
 <Tab label="Console">
 
-Go to the **PubSub** page and click on **Create Subscription**. The topic `cloud:topic-name` is the one defined in the Publisher Toit program. 
+Go to the **PubSub** page and click on **Create Subscription**. The topic `cloud:topic-name` is the one defined in the Publisher Toit program.
 You can provide a name of the subscription, in order to give a description of the topic or in which scenarios it is used.
 
 <img src={PubSubSub} alt="Screenshot of PubSub page on the Toit console" />
@@ -78,6 +78,5 @@ It is also possible to create server-side PubSub subscriptions across multiple t
 For example, create a subscription for the topics `cloud:foo/bar` and `cloud:foo/baz` with
 
 ```txt
-toit pubsub subscription create "cloud:foo/*" <subscription-name>
+toit pubsub subscription create "cloud:foo/**" <subscription-name>
 ```
-
