@@ -1,7 +1,3 @@
----
-order: 7
----
-
 # Control flow in Toit
 
 ## If-statements
@@ -12,6 +8,7 @@ is either a one-liner on the same line, or delimited by indentation:
 
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   i := 42 -->
+
 ```
   if i == 42: print "Found the answer!"
   if i < 100:
@@ -64,6 +61,7 @@ for looping from last to first.
 
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   list := List 30: it -->
+
 ```
   // Loop over all elements in a list:
   list.do: | element |
@@ -83,7 +81,7 @@ At an even higher level, the built-in collections have some
 [functional-style methods](../listsetmap#functional-methods),
 like `any`, `every`, `reduce` and `map` that iterate over collections for you
 
-However, sometimes you have to write your own loops.  The rest of this section
+However, sometimes you have to write your own loops. The rest of this section
 will explain how that works in Toit.
 
 If you simply want to execute a block of code multiple times you can use
@@ -96,6 +94,7 @@ Example of a loop that runs a fixed number of times, given by the `end` integer 
 <!-- HIDDEN CODE   start := 5 -->
 <!-- HIDDEN CODE   end := 10 -->
 <!-- HIDDEN CODE   step := 2 -->
+
 ```
   end.repeat: | i | print i
 ```

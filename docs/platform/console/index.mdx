@@ -1,4 +1,97 @@
----
-order: 10
-title: Toit console
----
+# Toit console
+
+The Toit console is the dashboard for the Toit cloud, which offers various tools to upgrade your devices, monitor your device fleet health, view your daily data usage, and much more.
+
+## Devices
+
+The Devices view lists all devices that are available in your Toit project.
+
+The view lists:
+
+- The device name.
+
+- The firmware version currently installed on the device.
+
+- Date and time of the last time the device was connected to the Toit cloud.
+
+- The device ID
+
+- The health status of the device.
+
+<Note>
+
+A warning sign next to the firmware version means that the installed firmware on the device has been removed from the Toit cloud and is therefore not available anymore.
+
+If so, update the device firmware to the latest version.
+
+</Note>
+
+From here you can also add new devices, claim an existing (already provisioned) device, or start a Toit device simulator.
+
+The **Search** field allows to search for devices by name, device ID, hardware ID, or firmware version.
+
+## Fleet health
+
+The fleet health view collects the device status for all devices in your project.
+
+At the top, devices are represented by different colors based on their current health: green for a device that behaves as expected, and red otherwise.
+The tooltip shows the name of the device and the list of pending actions or issues for that device.
+
+The overall status section accumulates devices based on their health issues - or lack thereof.
+
+<Note>
+
+A device can be counted in more than one category, except for devices in the
+"No issues category" that is exclusive of all others.
+
+</Note>
+
+Click on the "Go to devices" link to see the list of devices filtered according to their status or issue.
+
+## Playground
+
+The Playground is an online text editor where you can write Toit programs. Click **Run online** to execute the code in the Toit cloud.
+The playground uses the latest firmware version available in the Toit cloud.
+
+## Serial
+
+This view let's you communicate with your ESP32 via the Web Serial API. The serial communication is only for initial hardware provisioning or
+debugging via the serial port.
+
+## Project
+
+The Project view is for managing and viewing the various top-level information of your Toit project, such as
+
+- **Details** is used to enter the project owner information and payment methods.
+
+- **Users** lists all users in the project, starting with the current user. Click on **Add user** to add new users to the project by simply entering their email address. A welcome email is sent to the newly created user, with a link to set the password for the new Toit account just created.
+
+- **Firmware** lists all firmware versions available in your project. A pie chart depicts the distribution of the different firmware versions installed on the devices in your project.
+
+- **Data Usage** displays data and graphs that give full transparency on your data usage type (application or system data, such as logs and system metrics), as well as usage history and forecast.
+
+- **Invoices** lists previously paid invoices, if any.
+
+- **API keys** lists the keys that can be used to connect a server application with the Toit API to your devices.
+
+<Note title="Payment and PCI compliance">
+
+Submit your payment information [here](https://console.toit.io/project/details). Read more about the Toit pricing model on [https://toit.io/pricing](https://toit.io/pricing).
+
+Toit accepts payment information in a PCI compliant manner. All sensitive data, like your card data, is collected and handled by [Stripe](https://stripe.com/), which is the payment infrastructure that the Toit platform integrates with.
+
+All sensitive payment data is securely transmitted to Stripe without being stored in the Toit cloud.
+
+We serve our payment view in the Toit console securely using Transport Layer Security (TLS) so that they make use of HTTPS.
+
+</Note>
+
+## System
+
+The System view displays various graphs showing information about Logs and PubSub ingestion in the system.
+
+## Data
+
+The Data view allows to create PubSub, Logs, and System metrics subscriptions. Existing subscription are listed on the view and can be deleted with the bin icon.
+Select a subscription from the list to visualize the unacknowledged message count and the oldest unacknowledged message age for the chosen time interval.
+Check the [API](../../../apis) documentation to learn how to acknowledge messages using the CLI.

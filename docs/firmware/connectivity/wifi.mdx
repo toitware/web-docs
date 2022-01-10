@@ -1,0 +1,61 @@
+# WiFi
+
+The ESP32 has integrated WiFi support, and with the Toit firmware and the Toit cloud, your microcontroller can easily be configured to be connected to the Internet via WiFi.
+
+Using WiFi, your microcontroller can be reached within a large radius, but the power consumption can be high, each time the MCU creates a new connection.
+
+<Note type="warning">
+
+The ESP32 cannot connect to 5GHz WiFi network. Use a 2.4GHz WiFi network instead when connecting.
+
+</Note>
+
+<Tabs>
+<Tab label="Console">
+
+From the [Web Serial](https://console.toit.io/serial) view in the Toit console, you can either provision (or reinstall) the ESP32 with the Toit firmware and provide WiFi connection settings
+when clicking the `Provision` or `Reinstall` buttons, respectively.
+
+If your device has already been flashed with the Toit firmware and is online and successfully connected to the Toit console via WiFi, it's possible to configure the
+device with additional WiFi connections from the `Configuration` tab of the given device in the [Toit console](https://console.toit.io/).
+
+Also, see the [section](../../../platform/console/deviceconfig/#connections)
+about device configuration for more information on how to add additional WiFi connnections to a given device using the Toit console.
+
+</Tab>
+<Tab label="CLI">
+
+Initially provide the WiFi connection settings when provisioning your ESP32 with the Toit firmware. The following CLI command shows how to set the initial WiFi settings
+with the appropriate WiFi connection settings provided (replace `MY_SSID` and `my_password` with the correct WiFi credentials below):
+
+```shell
+toit serial provision -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
+```
+
+If already provisioned, reinstall the ESP32 with the Toit firmware
+and WiFi settings - for example if the initial WiFi credentials were incorrect in the provision command above.
+
+The following CLI command shows how to set the WiFi connection configuration parameters in the `reinstall` command
+(replace `MY_SSID` and `password` with the correct WiFi credentials below):
+
+```shell
+toit serial reinstall -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
+```
+
+If your device has already been flashed with the Toit firmware and is online and successfully connected to the Toit console, it's possible to configure the
+device with additional WiFi connections with the CLI command:
+
+```shell
+toit device config connection -c wifi:SSID1:WiFiPassword1 -c wifi:SSID2:WiFiPassword2
+```
+
+<Note type="warning">
+
+Beware that when using the CLI to configure the WiFi connection settings, you need to type in all connections you want to use, in the order you want them to be tried.
+
+The command above removes all existing WiFi settings, and will only add those provided in the command.
+
+</Note>
+
+</Tab>
+</Tabs>

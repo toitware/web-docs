@@ -1,14 +1,14 @@
----
-order: 6
----
-
-# List, Set and Map in Toit
+# List, ByteArray, Set and Map in Toit
 
 The following classes are included in the core SDK as part of the
 [collections.toit module](https://libs.toit.io/core/collections/library-summary):
 
 `List` provides an ordered and indexed collection which may contain duplicates.
 This is roughly analogous to extendable arrays in other languages.
+
+`ByteArray` is similar to a list for integer elements in the range 0 to 255.
+Byte arrays cannot change size, but see [Buffer](https://libs.toit.io/bytes/class-Buffer)
+which has a `write` method and can be extended.
 
 `Set` provides a collection of unique objects. When iterating over a `Set`, the
 objects are processed in insertion order.
@@ -57,10 +57,11 @@ some similarities to collections.
   methods `first` and `last` that are useful when using them as deduplicating queues or
   FIFOs.
 
-- **Literals**: Lists, Sets and Maps have literals:
+- **Literals**: Lists, ByteArrays, Sets and Maps have literals:
 
 ```
 list := []
+byte_array := #[]
 set := {}
 map := {:}
 ```
@@ -68,8 +69,10 @@ map := {:}
 These are the preferred short cuts for:
 
 <!-- RESET CODE -->
+
 ```
 list := List
+byte_array := ByteArray
 set := Set
 map := Map
 ```
@@ -78,6 +81,7 @@ Literals may also contain values:
 
 ```
 list_with_values := [1, 2, 3]
+byte_array_with_values := #[1, 2, 3]
 set_with_values := {1, 2}
 map_with_values := {
   "key": 499,
@@ -86,16 +90,20 @@ map_with_values := {
 ```
 
 <Note>
+
 Both `Set` and `Map` use hash values to place elements into the underlying data structure.
 This means that all keys must implement the `hash_code` method. The performance of sets and
 maps is best if two different keys have a different hash code (with high probability).
+
 </Note>
 
 <Note type="warning">
+
 Sets and Maps only use the `hash_code` function if their size is big enough. Objects that
 don't implement `hash_code` might thus not yield errors until the collections grow big enough.
 where the chance of two different objects having the same hash code should be
 low.
+
 </Note>
 
 ## Examples of using Map
@@ -105,6 +113,7 @@ Lookup in a map is done with the indexing operator, `[]`:
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   scores := {"":null} -->
 <!-- HIDDEN CODE   team := "" -->
+
 ```
   score := scores[team]
   print "The score for $team is $score"
@@ -119,6 +128,7 @@ The index operator syntax is understood by the string interpolation syntax, so y
 Updating or adding to a map is done with the `[]=` operator:
 
 <!-- HIDDEN CODE title_map := {:} -->
+
 ```
 graduate name/string:
   title_map[name] = "PhD"
@@ -152,6 +162,7 @@ Often there are more succinct ways to achieve the same with variations of the
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class Scoring: -->
 <!-- HIDDEN CODE   scorers / Map ::= {:} -->
+
 ```
   register_goal team/string new_scorer/string -> none:
     // Get the set of goal-scorers for this team,
@@ -246,7 +257,9 @@ csv list/List -> string:
 ```
 
 A more advanced version would handle strings containing quotes:
+
 <!-- RESET CODE -->
+
 ```
 // Creates a comma-separated list of quoted strings,
 // escaping quotes.
@@ -274,6 +287,7 @@ arbitrary expression in a string interpolation, surrounding it with `$(` and
 `)`:
 
 <!-- RESET CODE -->
+
 ```
 // Creates a comma-separated list of quoted strings,
 // escaping quotes.

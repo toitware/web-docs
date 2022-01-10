@@ -1,0 +1,89 @@
+# Ethernet
+
+The ESP32 supports Ethernet in two different ways:
+
+- Using the ESP32 for the MAC layer but with an external chip for the PHY layer, using RMII.
+- Using an external chip for both the MAC and PHY layer, using SPI.
+
+## External PHY chip
+
+A few different chips are supported, as indicated below.
+
+| PHY Chip        | Available since | Argument                             |
+| --------------- | --------------- | ------------------------------------ |
+| IP101           | v1.4.0          | `-p model.ethernet.phy.chip.ip101=1` |
+| LAN8720/LAN8710 | v1.4.0          | `-p ethernet.phy.chip.lan8720=1`     |
+
+To connect to an external PHY chip using RMII, there are some essential configurations to consider depending on the layout.
+
+| Option        | Default      | Argument                            |
+| ------------- | ------------ | ----------------------------------- |
+| PHY address   | Auto detect  | `-p model.ethernet.phy.addr=<addr>` |
+| PHY Reset pin | No reset pin | `-p model.ethernet.phy.reset=<pin>` |
+| RMII MDC pin  | GPIO 23      | `-p model.ethernet.mac.mdc=<pin>`   |
+| RMII MSIO pin | GPIO 18      | `-p model.ethernet.mac.msio=<pin>`  |
+
+In additional to these variable options, there is a set of fixed pins that must be kept unused. That includes GPIO 0, 19, 21, 22, 25, 26 and 27.
+
+<Note type="info">
+
+Only boards with an external reference clock connected to GPIO 0 are supported.
+
+</Note>
+
+### ESP32 Ethernet Kit V1.2
+
+The official [ESP32-Ethernet-Kit](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/hw-reference/esp32/get-started-ethernet-kit.html) has a
+built in IP101 chip.
+
+This particular layout use pin 5 as PHY Reset. The rest are kept as the default. To install Toit on this device, the following arguments can be used.
+
+```shell
+toit serial reinstall \
+  -p ethernet=1 \
+  -p model.ethernet.enabled=1 \
+  -p model.ethernet.mac.chip.esp32=1 \
+  -p model.ethernet.phy.chip.ip101=1 \
+  -p model.ethernet.phy.reset=5
+```
+
+## External MAC chip
+
+When an external MAC chip is used, it's communicated with using a dedicated SPI bus.
+
+A few different chips are supported, as indicated below.
+
+| MAC Chip     | Available since | Argument                             |
+| ------------ | --------------- | ------------------------------------ |
+| WizNet W5500 | v1.4.0          | `-p model.ethernet.mac.chip.w5500=1` |
+
+To connect to an external MAC chip using SPI, there are some essential configurations to consider.
+
+| Option        | Argument                           |
+| ------------- | ---------------------------------- |
+| SPI MOSI      | `-p model.ethernet.mac.mosi=<pin>` |
+| SPI MISO      | `-p model.ethernet.mac.miso=<pin>` |
+| SPI Clock     | `-p model.ethernet.mac.sclk=<pin>` |
+| SPI CS        | `-p model.ethernet.mac.cs=<pin>`   |
+| Interrupt pin | `-p model.ethernet.mac.int=<pin>`  |
+
+### Industrial Shields 10 IOs PLC
+
+The [Industrial Shields 10 IOs ESP32](https://www.industrialshields.com/industrial-controller-based-on-arduino-nano-esp32-board) device has a built in
+WizNet W5500 MAC/PHY chip.
+
+```shell
+toit serial reinstall \
+  -p ethernet=1 \
+  -p model.ethernet.enabled=1 \
+  -p model.ethernet.mac.chip.w5500=1 \
+  -p model.ethernet.mac.sclk=18 \
+  -p model.ethernet.mac.miso=19 \
+  -p model.ethernet.mac.mosi=23 \
+  -p model.ethernet.mac.cs=33 \
+  -p model.ethernet.mac.int=39
+```
+
+## MAC address
+
+The ESP32 comes with an allocated Ethernet MAC address that by default will be used by both internal and external MAC configurations.

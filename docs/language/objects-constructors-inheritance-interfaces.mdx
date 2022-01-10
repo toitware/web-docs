@@ -1,10 +1,6 @@
----
-order: 4
----
+# Classes in Toit
 
-# Objects in Toit
-
-In Toit, everything is an object, including things that may be non-Object
+In Toit, everything is an object, including things that may be non-object
 "primitive types" in other languages. For example, an [integer](../math)
 is an object, and has methods like `abs`:
 
@@ -82,10 +78,11 @@ my_function bar/Bar -> none:
 ```
 
 If we later decide to make the x field private we rename it to have a final
-underscore.  At the same time, we can introduce getters and setters that keep
+underscore. At the same time, we can introduce getters and setters that keep
 our class compatible with the old version:
 
 <!-- RESET CODE -->
+
 ```
 class Bar:
   x_ /int := ? // Private field.
@@ -104,11 +101,13 @@ class Bar:
 
 ## Inheritance
 
-Toit is an object-oriented language.  The inheritance and typing
+Toit is an object-oriented language. The inheritance and typing
 mechanism for classes is similar to the one of Java: Classes can
 extend each other, with subclasses being subtypes in the typing
 system.
+
 <!-- RESET CODE -->
+
 ```
 class Point:
   x /int := 0
@@ -132,10 +131,10 @@ main:
 ### Interfaces
 
 A class can only extend one class, but can implement several
-interfaces.  Like classes, interfaces act as [types](../definitions#type)
+interfaces. Like classes, interfaces act as [types](../definitions#type)
 in Toit's type
 system, but unlike classes, they do not include implementations for
-the non-static methods they declare.  Since a method signature declared in an
+the non-static methods they declare. Since a method signature declared in an
 interface has no implementation, the colon at the end of the first
 line is omitted:
 
@@ -171,10 +170,10 @@ In Toit an interface can have static methods and constructors,
 but the constructors must be [factory constructors](#factory-constructors).
 
 An abstract class has some similarities to a class and to an
-interface.  Like a class, it can have fields and methods that
-its extending classes will inherit.  Like an interface, it can
-have methods without implementations and constructors.  The class and the
-non-static methods must be marked explicitly as abstract.  A class cannot
+interface. Like a class, it can have fields and methods that
+its extending classes will inherit. Like an interface, it can
+have methods without implementations and constructors. The class and the
+non-static methods must be marked explicitly as abstract. A class cannot
 be instantiated (objects of that class cannot be created) unless
 it implements all the required methods from the abstract classes
 it extends:
@@ -216,9 +215,9 @@ main:
 
 ## Constructors
 
-Sometimes it is not enough to specify the initial values for fields.  When there
+Sometimes it is not enough to specify the initial values for fields. When there
 are more complex ways to initialize an object we make use of special functions
-called constructors.  In Toit the constructor has the name `constructor` rather
+called constructors. In Toit the constructor has the name `constructor` rather
 than having the same name as the class:
 
 ```
@@ -236,7 +235,7 @@ class Vector:
 ```
 
 It is rather common that parameters of constructors are copied directly into
-fields of the new object, so there is a shorthand.  By putting a dot (`.`) in
+fields of the new object, so there is a shorthand. By putting a dot (`.`) in
 front of the parameter name, it is copied directly to the field of the same
 name:
 
@@ -259,7 +258,7 @@ The shorthand `.field` parameter has the same type as the field it assigns to.
 ### Named Constructors
 
 By default, constructors have no name and are invoked with
-the name of the class.  For example, the above unnamed constructor for the
+the name of the class. For example, the above unnamed constructor for the
 `Vector` class is invoked using the name `Vector`:
 
 ```
@@ -274,7 +273,7 @@ This is a natural result of the fact that Toit has argument-count
 overloading and argument-name overloading.
 
 However, sometimes it is more helpful to have constructors with different
-names.  For example, the `Vector` class might have a polar constructor:
+names. For example, the `Vector` class might have a polar constructor:
 
 ```
 import math
@@ -302,7 +301,7 @@ main:
 ### Super-constructors
 
 In a class with inheritance you may want to invoke a constructor
-for the class you are extending.  This is done with the `super` keyword:
+for the class you are extending. This is done with the `super` keyword:
 
 ```
 class Color:
@@ -322,14 +321,14 @@ class ColoredVector extends Vector:
 ### Factory constructors
 
 A factory constructor is rather like a static method
-that returns an instance of the class.  Simply placing
+that returns an instance of the class. Simply placing
 a return statement in a constructor makes it into a
 factory constructor.
 
 For example, it may be very common to create a special
-instance of an immutable class.  Since it is immutable,
+instance of an immutable class. Since it is immutable,
 the constructor can save memory by returning the same
-object every time.  Here we have a factory constructor
+object every time. Here we have a factory constructor
 named `origin`.
 
 ```
@@ -349,8 +348,8 @@ class Pair:
 ```
 
 Factory constructors are the only kinds of constructors
-that interfaces can have.  You cannot instantiate an
-interface, so regular constructors are not possible.  An
+that interfaces can have. You cannot instantiate an
+interface, so regular constructors are not possible. An
 example of this is ByteArray, which is actually an
 interface because there are several different implementations.
 The constructors return a "regular" ByteArray:
@@ -363,9 +362,9 @@ The constructors return a "regular" ByteArray:
 ### Advanced constructor topics
 
 Some languages have a different syntax for initializing the
-field variables.  For example, C++ has the
+field variables. For example, C++ has the
 [initializer list](https://en.cppreference.com/w/cpp/language/constructor)
-which can precede the constructor body.  In Dart a similar feature
+which can precede the constructor body. In Dart a similar feature
 is also called [initializer
 lists](https://dart.dev/guides/language/language-tour#constructors).
 Toit uses the same syntax for member initialization
@@ -384,6 +383,7 @@ Implicit uses of `this` also count, for example by invoking a method, or by
 creating a [lambda](../tasks) that captures `this`.
 
 <!-- SKIP CODE -->
+
 ```
 class Point:
   x/float // This must be set during field initialization...
@@ -402,7 +402,7 @@ class Point:
 
 Although the compiler will infer the boundary between field
 initialization and object creation you can always explicitly specify
-it by calling the `super` constructor.  Even classes that don't
+it by calling the `super` constructor. Even classes that don't
 explicitly extend another class extend the `Object` class so
 you can call the `super` constructor with no arguments:
 
@@ -418,7 +418,7 @@ class Foo:
 ```
 
 Before the object is created you can already refer to fields that
-have been assigned.  These field accesses do not count as instance accesses.
+have been assigned. These field accesses do not count as instance accesses.
 Immutable fields do not become immutable before the call to `super`
 in the constructor..
 This still means the fields are immutable all other places than in the

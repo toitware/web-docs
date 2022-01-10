@@ -1,0 +1,121 @@
+# TCP (and TLS)
+
+[MQTT](https://mqtt.org/) is an IoT friendly messaging protocol for publishing and subscribing to a shared MQTT broker from a wide range of devices.
+While Toit's [PubSub](../../../apis/pubsub) implementation has some benefits for seamlessly storing and offloading messages, there may be use cases where
+connecting to an MQTT broker can be beneficial.
+
+For example, if
+
+- You want to send the data to a local machine and not through the internet.
+- Your stack already operates using an existing MQTT broker.
+- You want to quickly evaluate Toit.
+
+Either way, this tutorial shows you how to connect to an MQTT broker using TCP (or TLS).
+
+## Connect
+
+MQTT requires every client to have a unique `CLIENT_ID`. That `ID` is sent when connecting to the broker, and helps the broker to ensure that
+every client will get a copy of the data broadcasted etc.
+
+Next, some brokers require the client to provide a `username` and `password`.
+
+The Toit MQTT client is available from the [`mqtt` package](https://pkg.toit.io/package/github.com%2Ftoitware%2Fmqtt) - in the Toit package registry.
+
+Install the package using the Toi CLI:
+
+```shell
+toit pkg install github.com/toitware/mqtt
+```
+
+and use it by importing it into your application with `import mqtt`
+
+```toit
+import net
+import mqtt
+
+CLIENT_ID ::= "my-client-id"
+HOST      ::= "localhost"
+PORT      ::= 1883
+
+main:
+  socket := net.open.tcp_connect HOST PORT
+  client := mqtt.Client
+    CLIENT_ID
+    mqtt.TcpTransport socket
+
+  // Client is now connected.
+```
+
+## Publish
+
+Simple sensor applications mainly have one purpose; to send sensor data. When sending data, you simply need to specify which topic to publish to, together with the payload.
+
+```toit
+import mqtt
+import encoding.json
+
+publish value/float client/mqtt.Client:
+  topic ::= "my/sensor/data"
+  payload := json.encode {
+    "value": value
+  }
+  client.publish topic payload
+
+```
+
+## Subscribe
+
+Subscribing to data requires two steps. First, you have to set up the callback to handle the incoming messages.
+Second, you need to register to the topics you want to receive data from.
+
+```toit
+import mqtt
+import encoding.json
+
+subscribe client/mqtt.Client:
+  topic ::= "my/sensor/*"
+  client.subscribe topic --qos=1
+
+  client.handle: | topic/string payload/ByteArray |
+    decoded := json.decode payload
+    print "Received value on '$topic': $(decoded["value"])"
+```
+
+## TLS
+
+The `TcpTransport` used so far works with any TCP-compatible socket, including TLS sockets. To upgrade a TCP socket to TLS, you need to perform
+a TLS handshake.
+
+```toit
+import mqtt
+import net
+import tls
+import net.x509
+
+CLIENT_ID ::= "my-client-id"
+HOST      ::= "localhost"
+PORT      ::= 8883
+
+main:
+  socket := net.open.tcp_connect HOST PORT
+
+  tls_socket := tls.Socket.client socket
+    --server_name=HOST
+    --root_certificates=[SERVER_CERT]
+
+  tls_socket.handshake
+
+  client := mqtt.Client
+    CLIENT_ID
+    mqtt.TcpTransport tls_socket
+
+  // Client is now connected.
+
+SERVER_CERT ::= x509.Certificate.parse """
+-----BEGIN CERTIFICATE-----
+
+<- insert server cert ->
+
+-----END CERTIFICATE-----
+"""
+```

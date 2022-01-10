@@ -1,0 +1,77 @@
+# Claim device
+
+## Problems with claiming your device
+
+<Expandable title="Did you setup your ESP32 with Toit firmware, but claiming failed?">
+
+<Tabs>
+<Tab label="YES">
+
+If your device was provisioned with the Toit firmware and WiFi settings, but the automatic claiming step failed, try the following:
+
+- First, get the hardware ID from the [Web serial view](https://console.toit.io/serial), or use the Toit CLI to get the hardware ID by executing the following command in a terminal window:
+
+```shell
+toit serial info -o yaml
+```
+
+- Next, manually claim your device using the Toit CLI, by executing the following command in a terminal window:
+
+```shell
+toit device claim hardware-id
+```
+
+where you replace `hardware-id` with the actual hardware ID of your device. For example:
+
+```shell
+toit device claim 384a9843-cdb8-4dc6-970a-030fb8148068
+```
+
+- If the manual claiming succeeds, your device will be visible in the [list of devices](https://console.toit.io/devices) in the Toit console.
+
+- You can also claim your device manually from the [Web serial view](https://console.toit.io/serial) by clicking the Claim button and paste the hardware ID.
+
+</Tab>
+
+<Tab label="NO">
+
+If you have other problems or issues with getting your ESP32 setup with Toit, please reach out to the Toit engineering team. We are ready to help you get started using the Toit platform.
+We are available via the integrated chat, via [Slack](https://chat.toit.io) or you can write us an email using developers@toit.io.
+
+</Tab>
+</Tabs>
+
+</Expandable>
+
+## Problems with connecting to WiFi before claiming?
+
+<Expandable title="Are you unsure whether your device can get online, before you manually claim the device?">
+
+<Tabs>
+<Tab label="YES">
+
+- Press the `Monitor` button in the [Web serial view](https://console.toit.io/serial) in the Toit console, to see whether the device is trying to connect to the Toit cloud with the WiFi credentials provided.
+
+- Or use the Toit CLI to get the serial debug output:
+
+```shell
+toit serial monitor
+```
+
+- If the device fails or succeeds connecting via WiFi, you can see the status in the serial monitor output.
+
+- If connection via WiFi fails, you must reinstall the Toit firmware and WiFi settings in order to get your device online. Use the `Reinstall` button on the Web serial page.
+
+- Afterwards, use the `Monitor` option again to make sure your device can get online. When it does, click the `Claim` button in the Serial view, in order to claim the device into your Toit project.
+
+</Tab>
+
+<Tab label="NO">
+
+If you have other problems or issues with getting your ESP32 setup with Toit, please reach out to the Toit engineering team. We are ready to help you get started using the Toit platform.
+We are available via the integrated chat, via [Slack](https://chat.toit.io) or you can write us an email using developers@toit.io.
+
+</Tab>
+</Tabs>
+
+</Expandable>

@@ -1,0 +1,53 @@
+# Scanning
+
+To start scanning and for nearby BLE devices, simply call `scan` on the `ble.Device`. The provided block will be called for each scan result:
+
+```toit
+import ble
+
+main:
+  device := ble.Device.default
+
+  device.scan: | remote_device/ble.RemoteDevice |
+    print "Found $remote_device"
+```
+
+Here the scan will run indefinitely.
+
+## Collecting results
+
+A scan can be used to create a list of remote devices that match a criteria, e.g. implement a specific service. A service is identified by a UUID with a select few services
+being assigned by [Bluetooth SIG](https://www.bluetooth.com/specifications/assigned-numbers/). As an example, the 16-bit UUID `0x180F` represents a battery service.
+
+The following example shows how to scan for 3 seconds for the addresses of remote devices that implement a battery service.
+
+```toit
+import ble
+
+BATTERY_SERVICE ::= ble.uuid 0x180F
+SCAN_DURATION   ::= Duration --s=3
+
+main:
+  device := ble.Device.default
+
+  addresses := []
+
+  device.scan --duration=SCAN_DURATION: | remote_device/ble.RemoteDevice |
+    if remote_device.data.service_classes.contains BATTERY_SERVICE:
+      addresses.add remote_device.address
+
+  print addresses
+```
+
+## Example: mobile phone as a BLE device
+
+If you want to discover and find your mobile phone as a BLE device using the above Toit program, you can
+download a mobile app, like nRF Connect.
+
+Download the app on your mobile phone for [iOS](https://apps.apple.com/us/app/nrf-connect-for-mobile/id1054362403) or for
+[Android](https://play.google.com/store/apps/details?id=no.nordicsemi.android.mcp&hl=en).
+
+The nRF Connect app allows your iOS or Android device to advertise as a BLE peripheral,
+as well as discovering nearby peripherals, like your Toit device.
+
+When running the above Toit program for scanning, you will be able to see your mobile phone on the list of discovered BLE devices.

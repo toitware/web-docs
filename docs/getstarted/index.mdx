@@ -1,4 +1,99 @@
----
-order: 0
-title: Get started
----
+import VSCode from "../_images/vscodehello.png";
+
+# Quick start guide
+
+This guide shows how to sign up with Toit, install the Toit firmware on your [ESP32](https://www.espressif.com/en/products/socs/esp32),
+setup your local development environment, and finally how to deploy a Toit app on your ESP32 over-the-air.
+
+## 1. Sign up
+
+At [toit.io](https://toit.io/), click the **Start Now** button to create a free Toit account.
+
+## 2. Get an ESP32
+
+If you already have an ESP32 available, jump to step 3 to continue. Otherwise, you can buy one [here](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990).
+
+## 3. Provision your ESP32
+
+To install the latest Toit firmware on your ESP32, connect the ESP32 with a USB cable to your computer.
+
+Go to the Serial page in the [Toit console](https://console.toit.io/serial) to initially provision your ESP32 with the Toit firmware and WiFi settings -
+note that it only works in Google Chrome and Microsoft Edge browsers.
+
+Having issues? Get help in the [troubleshoot](../../support/troubleshoot) section. (Note! You can also use the [Toit CLI to provision](../../platform/concepts/provision).)
+
+Your device has now been added to your Toit project. Only users with access to the same Toit project can communicate with the device via the Toit cloud.
+
+When your device is online, all device communication will be **over-the-air**.
+
+## 4. Run code
+
+Run Toit code on your device from the Code tab of your device in the [Toit console](https://console.toit.io).
+Find more Toit code examples in [Github](https://github.com/toitware/examples).
+
+## 5. Install Toit
+
+Download and install the Toit development environment [here](./installation).
+
+## 6. Write and deploy a Toit app
+
+You can either **run** a Toit program once on your ESP32 or **deploy** the same Toit program as a long-lived application.
+
+First, create a project folder and save the following Toit code in a file named `hello.toit` using Visual Studio Code.
+
+```
+// Save as hello.toit
+main:
+  print "Hello, World!"
+```
+
+Save the following yaml code in a file named `hello.yaml` and place it in the same folder as the `hello.toit` file from above:
+
+```yaml
+# Save as hello.yaml
+name: "HelloApp"
+entrypoint: hello.toit
+triggers:
+  on_boot: true
+  on_install: true
+```
+
+Deploying a Toit app on your device means that the Toit code in the `toit` file will be executed repeatedly according to the scheduling defined in `hello.yaml`.
+In this case, when the app is installed on the device and if the device reboots.
+
+<Tabs>
+<Tab label="CLI">
+
+Deploy the Toit app named `HelloApp` on your device with the following command. Replace `device-name` with the actual name of your device.
+
+```shell
+toit deploy -d device-name hello.yaml
+```
+
+</Tab>
+<Tab label="VSCode">
+
+Deploy the Toit app named `HelloApp` on your device with the Toit VSCode extension, by pressing the deploy button next to the device:
+
+<img src={VSCode} alt="VSCode" width="100%" />
+
+</Tab>
+</Tabs>
+
+When deploying an app, the device is not required to be online. The app will be installed on the device when it comes online.
+
+### Verify that the app has been deployed
+
+Go to the Apps tab in the [Toit console](https://console.toit.io/) of your device to view the list of deployed apps.
+
+## 7. View the logs from the device
+
+Go to the Logs tab in the [Toit console](https://console.toit.io/) of your device to view the logs from the device.
+
+## 8. Uninstall Toit app
+
+Go to the Apps tab in the [Toit console](https://console.toit.io/) of your device to uninstall the app using the uninstall button.
+
+## 9. What's next?
+
+Congratulations! You are now ready to start developing IoT applications using Toit. Next step, look in the [tutorials](../../tutorials) or dive into the [Toit language guide](../../language).

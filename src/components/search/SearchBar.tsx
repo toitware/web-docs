@@ -1,122 +1,172 @@
-import { InputAdornment, makeStyles, OutlinedInput } from "@material-ui/core";
-import clsx from "clsx";
-import { graphql, Link, useStaticQuery } from "gatsby";
-import React, { useState } from "react";
+import { InputAdornment, OutlinedInput, styled } from "@mui/material";
+import { globalHistory } from "@reach/router";
+import { Link, navigate } from "gatsby";
+import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { StoreItem, useFlexSearch } from "react-use-flexsearch";
+import useClickOutside from "../../hooks/use_click_outside";
+import useFlexSearch from "../../hooks/use_flex_search";
+import useLocationQuery from "../../hooks/use_location_query";
+import useResultSelection from "../../hooks/use_result_selection";
 
-// This style is just added for reference.
-const useStyles = makeStyles((theme) => ({
-  container: {
-    position: "relative",
+const Container = styled("div")`
+  position: relative;
+  --input-max-width: calc(100vw - 7rem + 0.75rem);
+`;
+
+const StyledInput = styled(OutlinedInput)`
+  position: absolute;
+  height: 2rem;
+  top: -1rem;
+  right: 0;
+  width: 16rem;
+  max-width: var(--input-max-width);
+  transition: all 200ms ease-in-out;
+  background: rgba(255, 255, 255, 0.1);
+
+  &.Mui-focused {
+    width: min(30rem, var(--input-max-width));
+  }
+  &.MuiOutlinedInput-notchedOutline {
+    border: 1px solid ${({ theme }) => theme.palette.text.primary};
+  }
+`;
+
+const Results = styled("div")(({ theme }) => ({
+  zIndex: 100,
+  position: "absolute",
+  top: "1rem",
+  right: "0",
+  background: theme.palette.background.paper,
+  borderRadius: "6px",
+  padding: "0.75rem",
+  boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+  width: "min(30rem, var(--input-max-width))",
+  maxHeight: "80vh",
+  overflowY: "auto",
+  "& ul": {
+    listStyle: "none",
+    padding: "0",
+    margin: "0",
   },
-  results: {
-    zIndex: 100,
-    position: "absolute",
-    top: "2.8rem",
-    right: "0",
-    background: theme.palette.background.paper,
-    borderRadius: "6px",
-    padding: "0.75rem",
-    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-    width: "30rem",
-    "& ul": {
-      listStyle: "none",
-      padding: "0",
-      margin: "0",
-    },
-    fontFamily: theme.typography.fontFamily,
-    color: theme.palette.text.primary,
-    fontSize: "0.875rem",
-  },
-  searchField: {
-    position: "absolute",
-    height: "3rem",
-    top: "-1.5rem",
-    right: 0,
-    width: "15rem",
-    transition: "all 200ms ease-in-out",
-    background: "rgba(255, 255, 255, 0.1)",
-    "&.Mui-focused": {
-      width: "30rem",
-    },
-  },
-  noResults: {
-    textAlign: "center",
-    padding: "3rem 0",
-    fontWeight: "bold",
-  },
-  result: {
-    margin: "0.75rem 0",
-    "&:first-of-type": {
-      marginTop: 0,
-    },
-    "&:last-of-type": {
-      marginBottom: 0,
-    },
-  },
-  resultLink: {
-    display: "block",
-    padding: "0.75rem",
-    borderRadius: "4px",
-    color: theme.palette.text.primary,
-    "&:hover": {
-      background: theme.palette.primary.main,
-      color: "white",
-    },
-  },
-  resultTitle: {
-    margin: 0,
-    fontSize: "0.875rem",
-  },
-  resultExcerpt: {
-    margin: 0,
-    overflow: "ellipse",
-  },
+  fontFamily: theme.typography.fontFamily,
+  color: theme.palette.text.primary,
+  fontSize: "0.875rem",
 }));
 
-type GraphType = {
-  localSearchPages: {
-    index: string;
-    store: {
-      [key: string]: StoreItem;
-    };
-  };
-};
+const NoResults = styled("div")({
+  textAlign: "center",
+  padding: "3rem 0",
+  fontWeight: "bold",
+});
+
+const Result = styled("li")({
+  margin: "0.75rem 0",
+  "&:first-of-type": {
+    marginTop: 0,
+  },
+  "&:last-of-type": {
+    marginBottom: 0,
+  },
+});
+
+const ResultLink = styled(Link)(({ theme }) => ({
+  display: "block",
+  padding: "0.75rem",
+  borderRadius: "4px",
+  color: theme.palette.text.primary,
+}));
+
+const ResultTitle = styled("h2")({
+  margin: 0,
+  fontSize: "0.875rem",
+});
+const ResultExcerpt = styled("p")({
+  margin: 0,
+  overflow: "ellipse",
+});
 
 type Props = {
   className?: string;
 };
 
-function SearchBar({ className }: Props): JSX.Element {
-  const [query, setQuery] = useState("");
+const NO_SELECTION = -1;
 
-  const data: GraphType = useStaticQuery(graphql`
-    query LocalSearchQuery {
-      localSearchPages {
-        index
-        store
+function SearchBar({ className }: Props): JSX.Element {
+  const [showResults, setShowResults] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const unfocusSearch = useCallback(() => {
+    inputRef.current?.blur();
+    setShowResults(false);
+  }, [inputRef, setShowResults]);
+
+  // Hide the results every time a navigation happens...
+  useEffect(() => globalHistory.listen(unfocusSearch), [unfocusSearch]);
+  // ...or the user clicks outside
+  useClickOutside(containerRef, unfocusSearch);
+
+  // Handle global shortcuts like Escape and /
+  useEffect(() => {
+    function handleKeys(e: KeyboardEvent) {
+      if (inputRef.current) {
+        if (document.activeElement == inputRef.current && e.key === "Escape") {
+          e.preventDefault();
+          unfocusSearch();
+        } else if (
+          !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) &&
+          e.key === "/"
+        ) {
+          e.preventDefault();
+          inputRef.current.focus();
+        }
       }
     }
-  `);
-  const results = useFlexSearch(query, data.localSearchPages.index, data.localSearchPages.store);
+    window.addEventListener("keydown", handleKeys);
+    return () => window.removeEventListener("keydown", handleKeys);
+  }, [inputRef, unfocusSearch]);
 
-  const classes = useStyles();
+  const [query, setQuery] = useState(useLocationQuery());
+
+  const results = useFlexSearch(query);
+
+  const [selectedIndex, setSelectedIndex] = useResultSelection(results.length, showResults);
+
+  // Reset the selected index, every time the query changes.
+  useEffect(() => setSelectedIndex(NO_SELECTION), [query, setSelectedIndex]);
+
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (results.length > 0 && selectedIndex >= 0) {
+      await navigate(results[selectedIndex].path);
+    } else {
+      await navigate(`/search?q=${encodeURIComponent(query)}`);
+    }
+  };
+
+  const placeholderText = isFocused ? "Type your search" : "Search (Press / to focus)";
 
   return (
-    <div className={clsx(classes.container, className)}>
-      <form autoComplete="off">
-        <OutlinedInput
-          className={classes.searchField}
+    <Container className={className} ref={containerRef}>
+      <form onSubmit={onSubmit} autoComplete="off">
+        <StyledInput
+          inputRef={inputRef}
           fullWidth
-          id="password"
-          name="password"
+          name="search"
           type="search"
-          placeholder="Search"
+          placeholder={placeholderText}
           value={query}
           onChange={(_) => {
             setQuery(_.target.value);
+            setShowResults(true);
           }}
+          onFocus={() => {
+            setIsFocused(true);
+            if (query) setShowResults(true);
+          }}
+          onBlur={() => setIsFocused(false)}
           startAdornment={
             <InputAdornment position="start">
               <FiSearch />
@@ -124,24 +174,37 @@ function SearchBar({ className }: Props): JSX.Element {
           }
         />
       </form>
-      {query != "" && (
-        <div className={classes.results}>
-          {results.length == 0 && <div className={classes.noResults}>No results</div>}
+      {showResults && query != "" && (
+        <Results>
+          {results.length == 0 && <NoResults>No results</NoResults>}
           {results.length > 0 && (
-            <ul>
-              {results.map((result) => (
-                <li key={result.id} className={classes.result}>
-                  <Link to={result.path} className={classes.resultLink}>
-                    <h2 className={classes.resultTitle}>{result.title}</h2>
-                    <p className={classes.resultExcerpt}>{result.excerpt}</p>
-                  </Link>
-                </li>
+            <ul role="listbox">
+              {results.map((result, index) => (
+                <Result
+                  key={result.id}
+                  onMouseOver={() => setSelectedIndex(index)}
+                  role="option"
+                  aria-selected={index === selectedIndex}
+                >
+                  <ResultLink
+                    to={result.path}
+                    sx={{
+                      ...(index === selectedIndex && {
+                        bgcolor: "primary.main",
+                        color: "primary.contrastText",
+                      }),
+                    }}
+                  >
+                    <ResultTitle>{result.title}</ResultTitle>
+                    <ResultExcerpt>{result.excerpt}</ResultExcerpt>
+                  </ResultLink>
+                </Result>
               ))}
             </ul>
           )}
-        </div>
+        </Results>
       )}
-    </div>
+    </Container>
   );
 }
 

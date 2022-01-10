@@ -1,0 +1,44 @@
+# I2C
+
+[I<sup>2</sup>C](https://en.wikipedia.org/wiki/I%C2%B2C) is a serial communication bus able to address multiple devices along the same 2-wire bus.
+
+Toit exposes the peripheral through the [`i2c` library](https://libs.toit.io/i2c/library-summary).
+
+```
+import gpio
+import i2c
+
+main:
+  bus := i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
+```
+
+Each device must have a unique address. The address can be found in the datasheet for the selected peripheral - it's an 7-bit integer.
+
+In case of the Bosch [BME280 sensor](https://cdn.sparkfun.com/assets/e/7/3/b/1/BME280_Datasheet.pdf), the address is `0x76`:
+
+```
+import gpio
+import i2c
+
+main:
+  bus := i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
+
+  device := bus.device 0x76
+```
+
+## Frequency
+
+The default frequency of the I<sup>2</sup>C bus is 400kHz in Toit. This can be changed as an argument to the `i2c.Bus` at construction time with
+
+```
+  i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
+    --frequency=100000
+```
+
+Remember that when changing the frequency, the associated pull-up resistors may have to be changed as well.

@@ -1,0 +1,35 @@
+# SPI
+
+[SPI](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) is a serial communication bus able to address multiple devices along a main 3-wire bus with an additional 1 wire per device.
+
+Toit exposes the peripheral through the [`spi` library](https://libs.toit.io/spi/library-summary).
+
+```
+import gpio
+import spi
+
+main:
+  bus := spi.Bus
+    --miso=gpio.Pin 12
+    --mosi=gpio.Pin 13
+    --clock=gpio.Pin 14
+```
+
+When communicating with a device, a unique chip-select Pin is used to signal when the chip in question is addressed. In addition, it's important to not select a device frequency that exceeds the capabilities of device. The maximum frequency can be found in the datasheet for the selected peripheral.
+
+In case of the Bosch BME280 sensor, the maximum frequency is 10MHz:
+
+```
+import gpio
+import spi
+
+main:
+  bus := spi.Bus
+    --miso=gpio.Pin 12
+    --mosi=gpio.Pin 13
+    --clock=gpio.Pin 14
+
+  device := bus.device
+    --cs=gpio.Pin 15
+    --frequency=10_000_000
+```

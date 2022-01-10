@@ -1,105 +1,32 @@
-import { makeStyles } from "@material-ui/core";
-import { globalHistory } from "@reach/router";
-import clsx from "clsx";
-import { Link } from "gatsby";
+import { styled } from "@mui/material";
 import * as React from "react";
-import { NavPage } from "./Navigation";
+import { MenuItem } from "../../../docs/menu.yaml";
+import NavTreeItem from "./NavTreeItem";
 
-// This style is just added for reference.
-const useStyles = makeStyles((theme) => ({
-  list: {
-    listStyle: "none",
-    padding: 0,
-    margin: 0,
-  },
-  level0: {},
-  level1: {
-    marginBottom: theme.spacing(2),
-  },
-  level2: {
-    paddingLeft: theme.spacing(2),
-  },
-  link: {
-    color: theme.palette.text.primary,
-    fontSize: "0.875rem",
-    fontFamily: theme.typography.fontFamily,
-    display: "block",
-    lineHeight: "1.75rem",
-    opacity: 0.7,
-  },
-  groupTitle: {
-    fontWeight: "bold",
-    opacity: 1,
-    marginTop: theme.spacing(2),
-  },
-  subGroupTitle: {
-    opacity: 1,
-    textTransform: "uppercase",
-    marginTop: "0.5em",
-    fontSize: "0.8em",
-  },
-  activeTitle: {
-    color: theme.palette.getContrastText(theme.palette.background.default),
-  },
-  active: {
-    color: theme.palette.primary.main,
-    opacity: 1,
-  },
-}));
+const List = styled("ul")({
+  listStyle: "none",
+  padding: 0,
+  margin: 0,
+  paddingLeft: "1rem",
+});
 
 type Props = {
-  pages: NavPage[];
+  pages: MenuItem[];
   level?: number;
 };
 
 function NavTree({ pages, level = 0 }: Props): JSX.Element {
-  const classes = useStyles();
-
-  const currentPath = globalHistory.location.pathname;
-
   return (
-    <ul
-      className={clsx(classes.list, {
-        [classes.level0]: level === 0,
-        [classes.level1]: level === 1,
-        [classes.level2]: level === 2,
-      })}
+    <List
+      sx={{
+        ...(level === 0 && { pl: 0 }),
+        ...(level === 2 && { borderLeft: "1px solid rgba(255, 255, 255, 0.5)" }),
+      }}
     >
-      {pages.map((page) => {
-        let to = `/${page.slug}`;
-        if (!to.endsWith("/")) to += "/";
-
-        if (page.subPages === undefined || page.subPages.length === 0) {
-          return (
-            <li key={page.slug}>
-              <Link to={to} className={classes.link} activeClassName={classes.active}>
-                {page.title}
-              </Link>
-              {page.subPages !== undefined && <NavTree pages={page.subPages} level={level + 1} />}
-            </li>
-          );
-        } else {
-          const subPages = [...page.subPages];
-          if (page.showInMenu) {
-            subPages.unshift({ ...page, title: "Overview", subPages: undefined });
-          }
-          return (
-            <li key={page.slug}>
-              <span
-                className={clsx(classes.link, {
-                  [classes.groupTitle]: level === 0,
-                  [classes.subGroupTitle]: level > 0,
-                  [classes.activeTitle]: currentPath.startsWith(to),
-                })}
-              >
-                {page.title}
-              </span>
-              {subPages !== undefined && <NavTree pages={subPages} level={level + 1} />}
-            </li>
-          );
-        }
-      })}
-    </ul>
+      {pages.map((page) => (
+        <NavTreeItem key={page.path} page={page} level={level} />
+      ))}
+    </List>
   );
 }
 

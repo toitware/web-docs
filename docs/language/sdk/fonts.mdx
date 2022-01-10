@@ -1,7 +1,3 @@
----
-order: 4
----
-
 # Toit font basics
 
 This section explains how fonts work when using displays on the Toit SDK.
@@ -21,15 +17,22 @@ languages you wish to support on the display, and which special characters you
 need. For English language text it will be enough to include the `ASCII` block.
 For the accented characters used in Western Europe you will need to add the
 `LATIN_1_SUPPLEMENT` block. See the full list of blocks at
-[Wikipedia](https://en.wikipedia.org/wiki/Unicode_block).
-Not all blocks are available in every font.
+[Wikipedia](https://en.wikipedia.org/wiki/Unicode_block). Toit packages use
+a capitalized version of the official names of the blocks, replacing spaces
+and dashes with undercores. The exception is the "Basic Latin" block, which
+is called `ASCII`. Not all blocks are available in every font.
+
+Right-to-Left writing systems and Abugida writing systems are not currently
+suported.
 
 <Note>
+
 The Toit font display code does not support composable accents, and
 so the characters in the text must be precomposed. Thus the 4-character sequence,
 "A", "h", "e", acute-accent, cannot be displayed, whereas the 3-character
 sequence "A", "h", "é" will display if the correct Unicode block is included in
 the font.
+
 </Note>
 
 ## Example

@@ -1,0 +1,249 @@
+# Imports
+
+Import statements make code from other libraries available in the current
+library. They must be at the top-level and at the top of the file (possibly
+following some comments).
+
+An import always starts with the `import` keyword, followed by identifier
+segments that tell Toit how to find the library. Optionally it can be
+suffixed by customizations:
+
+For example:
+
+```
+import math
+import net.tcp as network
+import encodings.json show encode
+import .other
+```
+
+Depending on whether the identifier segments start with a `.` or not, the
+import is a local or global import. Toit uses a different strategy to
+locate the target file for each of these two strategies.
+
+## Local
+
+For local imports Toit searches for the target library relative to the
+current library.
+
+For example, let's assume we have a file structure as follows:
+
+```text
+.
+├── my_lib
+│   ├── my_lib.toit
+│   ├── other.toit
+│   └── sub
+│       └── sub.toit
+└── sibling
+    ├── sibling2.toit
+    └── sibling.toit
+
+3 directories, 5 files
+```
+
+If we are editing `my_lib.toit` then we can import `other.toit` and
+`sibling.toit` as follows:
+
+```
+// In my_lib.toit.
+import .other
+import .sub.sub
+import ..sibling.sibling
+import ..sibling.sibling2
+```
+
+Note, that `import .sub.sub` and `import ..sibling.sibling` could
+be shortened to `import .sub` and `import ..sibling` respectively.
+(See [folder shortcut](#folder-shortcut) below).
+
+The first `.` indicates that the import is a local import. Further
+dots move up the folder hierarchy.
+
+For locally imported libraries all their top-level elements are
+directly visible inside the importing library without any prefix.
+See [customizations](#customizations) below for ways of changing that.
+
+## Global
+
+Global imports are importing libraries that come from packages or the SDK.
+For example `import math` imports the mathematics library that is shipped
+with the SDK.
+
+The compiler has a mapping from identifier to location. The first
+identifier in the segment list is used to find a folder or file. After that,
+the local and global resolution works the same. That is, a global import
+can dot into sub-folders the same way as for local imports. A common
+use of dotting is for the JSON library which is a sub-folder of encodings:
+
+```
+import encodings.json
+```
+
+Once imported, all global elements of the imported library are available
+through a prefix. By default the prefix is the last identifier of the
+segment list. In the case of the `encodings.json` import above, the prefix
+would thus be `json`, and one could call `json.parse` to call the
+top-level `parse` function of that library ([toitdoc](<https://libs.toit.io/encoding/json/library-summary#parse(1%2C0%2C0%2C)>)).
+
+Note, that global imports also apply the folder shortcut, as
+described [below](#folder-shortcut).
+
+## Folder shortcut
+
+It is very common to have a folder and a toit file with the same name. The
+Toit language thus has a shortcut to avoid repeating the last identifier
+twice: if an import would resolve to a folder, Toit looks for a Toit file
+that has the same name as the last segment.
+
+For example, assume we have the following structure:
+
+```text
+.
+├── main.toit
+└── sub
+    └── sub.toit
+
+1 directory, 2 files
+```
+
+Inside `main.toit` we can import `sub.toit` by writing `import .sub.sub`.
+As discussed, this is repetitive, so instead this can be shortened to:
+`import .sub`.
+
+The same mechanism applies to SDK or package imports. If the resolution
+of an import finds a folder, Toit tries to find a file with the same
+name as the last segment instead.
+
+Say, we want to use the [morse package](https://github.com/toitware/toit-morse).
+When installing this package
+with `toit pkg install github.com/toitware/toit-morse`, the package manager
+downloads the sources and adds a mapping from the package's name `morse` to
+the location it downloaded the sources. Specifically, the mapping points to
+the `src` folder of the package.
+
+Here is the file hierarchy of the `morse` package:
+
+```text
+.
+[...]
+├── src
+│   └── morse.toit
+[...]
+
+3 directories, 14 files
+```
+
+When the Toit language now sees an `import morse` it uses that mapping
+to find the `src` folder of the downloaded sources. Since, the target
+is a folder, Toit now uses the last identifier (here there is just one:
+`morse`) and search for `morse.toit` in that folder.
+
+## Customizations
+
+By default a local import simply makes all top-level elements of the
+imported library visible (without prefix). Similarly, a global import
+provides the top-level elements through a prefix, which is the same
+as the last segment.
+
+In some cases this simple approach is not convenient, and Toit allows to
+customize imports.
+
+A developer can set the prefix of an import with the `as` clause:
+
+```
+import .other as other
+import math as m
+```
+
+The `show` keyword selectively imports the specified top-level elements
+and makes them available without prefix:
+
+```
+import math show sin cos
+import .other show top_level_fun
+```
+
+In the example, we only import the `sin` and `cos` functions from the
+SDK's `math` library and make it available without any prefix.
+
+For the local `.other` import we restrict the import to one single
+identifier: `top_level_fun`.
+
+If we want to access all identifiers of the `math` library without prefix
+we can write `import math show *`. The `show *` clause just removes the
+prefix and treats the global import the same as a local import.
+
+## Export
+
+Libraries can export elements from other libraries. Every exported element
+is visible as if it was a top-level element of the exporting library.
+
+For example:
+
+```
+// In file export_example.toit
+
+import math show cos
+
+export cos
+
+print_hello:
+  print "hello"
+```
+
+When this library is imported, the importee sees two entries: `cos` and
+`print_hello`. For example, let's say this library is imported locally
+as follows:
+
+```
+import .export_example as example
+
+main:
+  example.print_hello
+  print (example.cos 0.0)
+```
+
+Here we import `export_example` with a prefix `example`. This gives access
+to the elements `print_hello` and `cos` on this prefix.
+
+Note that the main Toit file could also just import `math` itself, but there
+are often reasons why that's not as convenient. Most commonly, `export` is
+used to provide a curated subset of a package.
+
+Say we have the following package structure:
+
+```text
+.
+└── src
+    ├── feature1.toit
+    ├── feature2.toit
+    ├── feature3.toit
+    └── my_package.toit
+
+1 directory, 4 files
+```
+
+Then the `my_package.toit` could be written as follows:
+
+```
+// We are the main-entry point for this package.
+// Provide the most common features.
+import .feature1
+import .feature2
+// Don't expose feature3 automatically. Users can
+// import it with `import my_package.feature3` if needed.
+
+// Export all identifiers.
+export *
+```
+
+Similar to `show *`, the `export *` affects all identifiers, and
+thus re-exports all elements that have been imported.
+
+## Privacy
+
+The IDE will not show identifiers that end with `_` if they come from a
+different package. There is no strict enforcement of this privacy
+mechanism, but developers should not use `identifier_` variables of
+libraries that have been imported through a global import.

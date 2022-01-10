@@ -1,7 +1,3 @@
----
-order: 11
----
-
 # Tasks in Toit
 
 ## Introduction
@@ -42,7 +38,7 @@ my_task_1:
     sleep --ms=500
     LED1.set 1
     sleep --ms=500
-    LED2.set 0
+    LED1.set 0
 
 my_task_2:
   while true:
@@ -219,9 +215,11 @@ do_processing:
 ```
 
 <Note type="warning">
+
 In this example we use the Latch class, but we don't inherit from it.
 In general, inheriting from classes from `import monitor` will cause unexpected
 deadlocks in your program and is not recommended.
+
 </Note>
 
 ### Channel

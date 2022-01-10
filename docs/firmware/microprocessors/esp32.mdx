@@ -1,0 +1,65 @@
+# ESP32
+
+## Pin mode
+
+When utility pins are exposed through model parameters, an optional mode may be given as well. Pins have 3 modes available as described below.
+
+| Value | Description                                 | Notes       |
+| ----- | ------------------------------------------- | ----------- |
+| 0     | Configures the pin as active-low            |
+| 1     | Configures the pin as active-high           |
+| 2     | Configures the pin as open-drain active-low | **Default** |
+
+## Supported models
+
+Today, ESP32s come in multiple flavors. Toit supports the _classical_ ESP32 chips running a dual-core on the Xtensa LX6 architecture:
+
+- ESP32-D0WDQ6
+- ESP32-D0WD-V\*
+
+They are embedded in the following official modules:
+
+- ESP32-WROOM-32\*
+- ESP32-WROVER-\*
+
+And most likely any other module with the above mentioned chips, with a minimum of 4 MB flash.
+
+## Unsupported models
+
+This also means that Toit doesn't support the following:
+
+- ESP32-S2 _(Single-core / Xtensa LX7)_
+- ESP32-C3 _(Single-core / RISC-V)_
+- ESP32-S3 _(Xtensa LX7)_
+- ESP32-C6 _(Single-core / RISC-V)_
+
+## Model parameters
+
+The Toit model, called `esp32-4mb`, supports a number of model-specific parameters to control core peripherals.
+
+## Power
+
+In case the core peripherals are behind a secondary power circuit, the `pwr` option can be used to turn it on.
+
+| Name           | Description                                                                                     |
+| -------------- | ----------------------------------------------------------------------------------------------- |
+| model.pwr      | Pin number for the pwr line. Lazily driven active for the duration a core peripheral is needed. |
+| model.pwr.mode | The mode of the `pwr` pin.                                                                      |
+
+## Cellular
+
+Cellular can be enabled using the follow model parameters. When enabled, the Cellular subsystem will use the device's Cellular connectivity settings that can be configured in the Toit Console at runtime.
+
+| Name                      | Description                                                                                                         | Notes        |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------ |
+| model.cellular.enabled    | If set to `1`, loads the Cellular subsystem.                                                                        | **Required** |
+| model.cellular.sara_r4    | If set to `1`, activates the u-blox Sara R4 chip in the Cellular system.                                            |
+| model.cellular.sara_r5    | If set to `1`, activates the u-blox Sara R5 chip in the Cellular system.                                            |
+| model.cellular.pwr        | Pin number for the power-on line. This pin is periodically driven active to request the Cellular module to turn on. | **Required** |
+| model.cellular.pwr.mode   | The mode of the `pwr` pin.                                                                                          |
+| model.cellular.reset      | Pin number for the power-on line. This pin is occasionally driven active if the Cellular module fails to turn on.   |
+| model.cellular.reset.mode | The mode of the `reset` pin.                                                                                        |
+| model.cellular.tx         | Pin number for the UART TX line.                                                                                    | **Required** |
+| model.cellular.rx         | Pin number for the UART RX line.                                                                                    | **Required** |
+| model.cellular.rts        | Pin number for the UART RTS line.                                                                                   |
+| model.cellular.cts        | Pin number for the UART CTS line.                                                                                   |

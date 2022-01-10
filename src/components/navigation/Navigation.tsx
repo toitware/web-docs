@@ -1,89 +1,76 @@
-import { graphql, useStaticQuery } from "gatsby";
+import { styled } from "@mui/material";
 import * as React from "react";
+import { useRef } from "react";
+import { FiArrowLeft } from "react-icons/fi";
+import menu from "../../../docs/menu.yaml";
+import ToitLogo from "../../assets/images/toit-logo.inline.svg";
+import { useAutoScroll } from "../../hooks/use_auto_scroll";
+import { golden } from "../../theme";
 import NavTree from "./NavTree";
-import { sortTree } from "./sort_tree";
 
-export type NavPage = {
-  slug: string;
-  title: string;
-  subPages?: NavPage[];
-  order?: number;
-  showInMenu: boolean;
-};
-
-interface GraphType {
-  allMdx: {
-    nodes: {
-      frontmatter: {
-        order: number | null;
-        path: string;
-        title: string;
-      };
-      slug: string;
-      headings: { value: string }[];
-    }[];
-  };
-}
-
-export function Navigation(): JSX.Element {
-  const data: GraphType = useStaticQuery(graphql`
-    query MyQuery {
-      allMdx(
-        sort: { fields: slug }
-        filter: { fileAbsolutePath: { regex: "//docs//" }, frontmatter: { hide: { ne: true } } }
-      ) {
-        nodes {
-          frontmatter {
-            order
-            path
-            title
-          }
-          slug
-          headings {
-            value
-          }
-          fileAbsolutePath
-        }
-      }
-    }
-  `);
-
-  const pagesTree: NavPage[] = [{ slug: "", title: "Home", order: -100, showInMenu: true }];
-
-  for (const node of data.allMdx.nodes) {
-    const page = {
-      slug: node.slug,
-      title: node.frontmatter.title == "" ? node.headings[0].value : node.frontmatter.title,
-      order: node.frontmatter.order ?? undefined,
-      showInMenu: node.headings.length > 0,
-    };
-
-    const slugParts = node.slug.replace(/\/$/, "").split("/");
-    const parentSubPages = getParentSubpages(pagesTree, slugParts, node.slug);
-    parentSubPages.push(page);
-  }
-
-  sortTree(pagesTree);
-
-  return <NavTree pages={pagesTree} />;
-}
+const Root = styled("nav")({
+  background: "black",
+  color: "white",
+  overflowY: "auto",
+  overflowX: "hidden",
+  margin: 0,
+  padding: "3rem 1.5rem 9rem 3rem",
+});
+const Separator = styled("hr")({
+  border: "none",
+  height: 1,
+  background: "white",
+  margin: "4.5rem 1.5rem 4.5rem 0",
+});
+const Link = styled("a")(({ theme }) => ({
+  color: "white",
+  fontFamily: theme.typography.fontFamily,
+  display: "flex",
+  alignItems: "center",
+  lineHeight: "1.5rem",
+  margin: "0.5rem 0",
+  "& strong": {
+    fontWeight: "normal",
+    color: golden.toString(),
+  },
+}));
+const ArrowLeft = styled(FiArrowLeft)`
+  margin-right: 1rem;
+`;
 
 /**
- * Returns the list of subpages for the parent page. In case this is a root
- * page, the `pages` list is returned.
+ * When using this component, you are in charge of positioning it with
+ * `className`.
  */
-function getParentSubpages(pages: NavPage[], slugParts: string[], fullSlug: string): NavPage[] {
-  if (slugParts.length == 1) {
-    // No more parts to split
-    return pages;
-  } else {
-    const parent = pages.find((page) => page.slug.replace(/\/$/, "").split("/").pop() == slugParts[0]);
-    if (parent === undefined) {
-      throw Error(`No parent found for ${fullSlug}`);
-    }
-    if (parent.subPages === undefined) parent.subPages = [];
-    return getParentSubpages(parent.subPages, slugParts.slice(1), fullSlug);
-  }
+export function Navigation({ className }: { className?: string }): JSX.Element {
+  const navRef = useRef<HTMLElement>(null);
+  useAutoScroll(navRef);
+
+  return (
+    <Root ref={navRef} className={className}>
+      <a href="/">
+        <ToitLogo style={{ marginBottom: "3rem" }} />
+      </a>
+
+      <NavTree pages={menu.items} />
+
+      <Separator />
+
+      <Link href="https://toit.io">
+        <ArrowLeft />{" "}
+        <span>
+          Go to <strong>toit.io</strong>
+        </span>
+      </Link>
+
+      <Link href="https://pkg.toit.io/">
+        <ArrowLeft />{" "}
+        <span>
+          Go to <strong>pkg.toit.io</strong>
+        </span>
+      </Link>
+    </Root>
+  );
 }
 
 export default Navigation;

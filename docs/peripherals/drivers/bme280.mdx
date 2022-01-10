@@ -1,39 +1,36 @@
----
-order: 10
----
-
 import Qwiic from "../../_images/BME280.png";
 
 # Connect sensors
 
 We are using the [BOSCH BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/) as an example of how to connect a sensor to your ESP32.
-The BOSCH BME280 chip is an environment sensor measuring temperature, humidity and pressure.
+The BOSCH BME280 chip is an environmental sensor measuring temperature, humidity and pressure.
 
 ## Setup
 
-The sensor supports both I2C and SPI connection mode. This guide will focus on the SparkFun BME280 breakout board connected using a Qwiic cable.
+The sensor supports both I<sup>2</sup>C and SPI connection mode. This guide will focus on the SparkFun BME280 breakout board connected using a Qwiic cable.
 
 <Note>
 
-If you connect a different BME280 sensor breakout board, you may have to place additional pull-up resistors on the I2C wires.
+If you connect a different BME280 sensor breakout board, you may have to place additional pull-up resistors on the I<sup>2</sup>C wires.
 
 </Note>
 
-Connect the Qwiic cable to the BME280 breakout board and connect the `red` wire to 3.3V (`3V3`) and the `black` wire to ground.
+Connect the Qwiic cable to the BME280 breakout board and connect the **red** wire to 3.3V (`3V3`) and the **black** wire to ground (GND).
 
-The remaining two wires are I2C SDA (`blue`) and I2C SCL (`yellow`). While any GPIO pin of the ESP32 can facilitate an I2C setup we're going to pick _pin 21 and 22_ respectively through this guide.
+The remaining two wires are I<sup>2</sup>C SDA (**blue**) and I<sup>2</sup>C SCL (**yellow**).
+While almost any GPIO pin of the ESP32 can facilitate an I<sup>2</sup>C setup we are going to pick **pin 21** and **pin 22**, respectively, throughout this guide.
 
-<img src={Qwiic} alt="BME280 connect" />
+<img src={Qwiic} alt="BME280" width="100%" />
 
-A detailed description of adding sensors using the Qwiic cable can be found [here](../gpio/#adding-sensors-with-qwiic-cables).
+A detailed description of adding sensors using the Qwiic cable can be found [here](../qwiic).
 
-## Code
+## I2C bus
 
-First we're going to set up the I2C bus so we can connect the device:
+First we're going to set up the I<sup>2</sup>C bus so we can connect the device:
 
 ```
 import gpio
-import serial.protocols.i2c as i2c
+import i2c
 
 main:
   bus := i2c.Bus
@@ -41,7 +38,8 @@ main:
     --scl=gpio.Pin 22
 ```
 
-With the bus configured, we can specify how to address the BME280 device on the bus. From the SparkFun BME280 breakout documentation we can see that the default configured address is `0x77`:
+With the bus configured, we can specify how to address the BME280 device on the bus.
+From the SparkFun BME280 breakout documentation we can see that the default configured address is `0x77`:
 
 ```
   device := bus.device 0x77
@@ -49,64 +47,68 @@ With the bus configured, we can specify how to address the BME280 device on the 
 
 The device returned is of type `serial.Device`.
 
+## Driver
+
 With the device configured we can take a look at the driver.
-The driver is available at `drivers.bme280` and as all other [drivers](https://libs.toit.io/drivers/library-summary) available, takes a `serial.Device` as argument - perfect!
+The driver is available as a package from [pkg.toit.io](https://pkg.toit.io/package/github.com%2Ftoitware%2Fbme280-driver@v1.0.0).
+
+The driver takes a `serial.Device` as argument - perfect!
 
 <!-- SKIP CODE -->
+
 ```
-import drivers.bme280
+import bme280
 
 // ...
 
-bme := drivers.Bme280 device
+driver := bme280.Driver device
 ```
 
 <Note>
-Configuring and SPI Bus and Device will also provide a `serial.Device`. The driver thus works seamlessly between I2C and SPI setups.
+
+Configuring an SPI Bus and Device will also provide a `serial.Device`. The driver thus works seamlessly between I<sup>2</sup>C and SPI setups.
+
 </Note>
 
 The driver will take care of all the communication with the BME280 sensor and provides a high-level API for reading out the relevant data:
 
 <!-- SKIP CODE -->
-```
-  bme.on
-  print "Temperature: $bme.read_temperature C"
-  print "Humidity: $bme.read_humidity %"
-  print "Pressure: $bme.read_pressure Pa"
-  bme.off
-```
 
-That will print out something along the lines of
-
-```txt
-$ toit run -d demo-device bme280.toit
-2021-01-20T09:30:07.678192Z: <process initiated>
-Temperature: 22.350000000000001421 C
-Humidity: 45.2626953125 %
-Pressure: 98641.3359375 Pa
-2021-01-20T09:30:07.858870Z: <process terminated - exit code: 0>
+```
+  print "Temperature: $driver.read_temperature C"
+  print "Humidity: $driver.read_humidity %"
+  print "Pressure: $driver.read_pressure Pa"
 ```
 
-## Full example
+## Test it on an ESP32
+
+In the [Weather Station tutorial](../../../tutorials/starter/weatherstation), you can learn how to run this Toit
+program on the ESP32 or deploy it as a long-lived application, where a specification file determines the execution intervals.
+
+The full code can be seen below:
 
 <!-- RESET CODE -->
+
 ```
+/**
+Program measuring temperature, relative humidity, and atmospheric pressure
+  with a BME280.
+*/
+
 import gpio
-import serial.protocols.i2c as i2c
-import drivers.bme280
+import i2c
+import bme280
 
 main:
   bus := i2c.Bus
     --sda=gpio.Pin 21
     --scl=gpio.Pin 22
 
-  device := bus.device 0x77
+  device := bus.device bme280.I2C_ADDRESS_ALT
 
-  bme := drivers.Bme280 device
+  driver := bme280.Driver device
 
-  bme.on
-  print "Temperature: $bme.read_temperature C"
-  print "Humidity: $bme.read_humidity %"
-  print "Pressure: $bme.read_pressure Pa"
-  bme.off
+  print "Temperature: $driver.read_temperature C"
+  print "Humidity: $driver.read_humidity %"
+  print "Pressure: $driver.read_pressure Pa"
 ```

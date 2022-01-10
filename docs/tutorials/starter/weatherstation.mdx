@@ -1,0 +1,190 @@
+import Qwiic from "../../_images/BME280.png";
+
+# Weather station
+
+In this tutorial we are using an ESP32 with the Bosch [BME280 sensor](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf); an environmental sensor measuring temperature, the relative humidity, and the atmospheric pressure.
+
+This example illustrates the difference between running a Toit program once on an ESP32 and deploying the same program as a long-lived app by using an app specification file.
+
+The code examples shown in this tutorial are also available [here](https://github.com/toitware/bme280_post/tree/main/weather-station).
+
+## Connect the sensor
+
+<img src={Qwiic} alt="BME280" width="100%" />
+
+Follow the steps [here](../../../peripherals/drivers/bme280) to connect the BME280 sensor with your ESP32 using a Qwiic cable.
+
+## Install package
+
+If you haven't installed the Toit CLI and the Visual Studio Code language extension for Toit yet,
+follow this [guide](../../../getstarted/installation) before proceeding with the tutorial.
+
+In order to get data from the sensor we make use of the BME280 driver available as a **package** from
+[pkg.toit.io](https://pkg.toit.io/package/github.com%2Ftoitware%2Fbme280-driver).
+
+Open Visual Studio Code, and create a new file. Paste the following Toit program into the file and save the file as: `weather_station.toit`:
+
+```
+/**
+Program measuring temperature, relative humidity, and atmospheric pressure
+  with a BME280.
+*/
+
+import gpio
+import i2c
+import bme280
+
+main:
+  bus := i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
+
+  device := bus.device bme280.I2C_ADDRESS_ALT
+
+  driver := bme280.Driver device
+
+  print "Temperature: $driver.read_temperature C"
+  print "Humidity: $driver.read_humidity %"
+  print "Pressure: $driver.read_pressure Pa"
+```
+
+Then, open a terminal window in VSCode and execute the following commands in order to install the BME280 driver package locally:
+
+```shell
+toit pkg init
+toit pkg install github.com/toitware/bme280-driver
+```
+
+## Run Toit program
+
+If you want to know more about what is happening in each step in the Toit program above, see [here](../../../peripherals/drivers/bme280#i2cbus).
+
+<Tabs>
+<Tab label="Console">
+
+Open the [Toit console](https://console.toit.io), find your ESP32 in the list of devices, copy and paste the program above into the **Code tab**
+your online ESP32 with the BME280 sensor connected, press the **Run** button and go to the **Logs** tab of the device to see the measured temperature, humidity
+and pressure values.
+
+</Tab>
+<Tab label="CLI">
+
+To run the program once on the ESP32, execute the CLI command
+
+```shell
+toit run weather_station.toit
+```
+
+If you haven't set your default device in the CLI, add `-d device-name` to
+the run command, where `device-name` is the name of your ESP32.
+
+```shell
+$ toit run weather_station.toit
+2021-06-23T12:54:58.131899Z: <process initiated>
+Temperature: 25.769999999999999574 C
+Humidity: 42.111328125 %
+Pressure: 101686.515625 Pa
+2021-06-23T12:54:58.431812Z: <process terminated - exit code: 0>
+```
+
+</Tab>
+</Tabs>
+
+Running a Toit program in this way means that it will be uninstalled from the device once the program has terminated.
+
+## Deploy app
+
+We can use the same Toit program to repeatedly measure the temperature,
+humidity, and pressure every 30 seconds by deploying it on the ESP32 using the
+following app specification file:
+
+```yaml
+# filename: weather_station.yaml
+
+# This app specification file executes the 'Weather Station' app on install
+# and subsequently every 30 seconds.
+
+name: Weather Station
+entrypoint: weather_station.toit
+triggers:
+  on_install: true
+  on_interval: 30s
+```
+
+Save the content of the above yaml specification into a file named `weather_station.yaml` located in the same directory as the `weather_station.toit` file from the previous
+step.
+
+Deploy the **Weather Station** app on your ESP32 with the CLI command
+
+```shell
+toit deploy weather_station.yaml
+```
+
+If you haven't set your default device in the CLI, add `-d device-name` to
+the deploy command, where `device-name` is the name of your ESP32.
+
+<Note>
+
+The device is not required to be online when the **Weather Station** app is deployed.
+When the device comes online, the app will be installed on the device and start
+it's scheduled execution.
+
+</Note>
+
+## View logs
+
+The device log will show the three measurements every 30 seconds after the program
+has been installed on the device.
+
+<Tabs>
+<Tab label="Console">
+
+View the device log in the [Toit console](https://console.toit.io) in the **Logs** tab of the device.
+
+</Tab>
+<Tab label="CLI">
+
+View the device log using the Toit CLI which shows logs from 15 minutes ago and trailing:
+
+```shell
+toit device logs -f 15m
+```
+
+</Tab>
+</Tabs>
+
+## Uninstall app
+
+View all installed apps (or waiting to be installed) on your device from the
+**Apps** tab in the [Toit console](https://console.toit.io).
+
+<Tabs>
+<Tab label="Console">
+
+To uninstall an app, click on the **Uninstall** button in the **Apps** tab of the device.
+
+</Tab>
+<Tab label="CLI">
+
+To uninstall an app, run
+
+```shell
+toit device ps
+```
+
+to get the list of installed apps on your device.
+
+Note the app ID or the app name, and replace it in the command:
+
+```shell
+toit device uninstall <app-ID or app-name>
+```
+
+For example,
+
+```shell
+toit device uninstall "Weather Station"
+```
+
+</Tab>
+</Tabs>

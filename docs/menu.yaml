@@ -1,0 +1,214 @@
+items:
+  - name: Home
+    path: /
+    icon: home
+  # - name: Example
+  #   path: /example/path
+  #   href: http://external-resource
+  - name: Get started
+    path: /getstarted
+    icon: getstarted
+    children:
+      - name: Installation
+        path: /getstarted/installation
+        children:
+          - name: Toit for Windows
+            path: /getstarted/installation/windows
+          - name: Toit for macOS
+            path: /getstarted/installation/macos
+          - name: Toit for Linux
+            path: /getstarted/installation/linux
+  - name: Tutorials
+    path: /tutorials
+    icon: tutorials
+    children:
+      - name: Starter tutorials
+        path: /tutorials/starter
+        children:
+          - name: Log the date and time
+            path: /tutorials/starter
+          - name: Weather station
+            path: /tutorials/starter/weatherstation
+      - name: BLE tutorials
+        path: /tutorials/ble
+        children:
+          - name: Basic
+            path: /tutorials/ble
+          - name: Scanning
+            path: /tutorials/ble/scanning
+          - name: Advertising
+            path: /tutorials/ble/advertising
+          - name: Client
+            path: /tutorials/ble/client
+      - name: PubSub tutorials
+        path: /tutorials/pubsub
+        children:
+          - name: Communicate within a device
+            path: /tutorials/pubsub
+          - name: Communicate through the cloud
+            path: /tutorials/pubsub/pubsubext
+      - name: MQTT tutorial
+        path: /tutorials/mqtt
+        children:
+          - name: TCP (and TLS)
+            path: /tutorials/mqtt
+  - name: Platform
+    path: /platform
+    icon: platform
+    children:
+      #    - name: Overview
+      #      path: /platform/concepts
+      - name: Console
+        path: /platform/console
+      #    - name: Projects
+      #      path: /platform/projects
+      - name: Device
+        path: /platform/devices
+        children:
+          - name: Provisioning
+            path: /platform/devices/provision
+          - name: Claiming
+            path: /platform/devices/claim
+          - name: Management
+            path: /platform/devices/devicemanagement
+          - name: Configuration
+            path: /platform/devices/deviceconfig
+          - name: Fleet management
+            path: /platform/devices/fleet
+      - name: Apps
+        path: /platform/apps
+        children:
+          - name: Running programs
+            path: /platform/apps/runprogram
+          - name: Specification
+            path: /platform/apps/appspec
+          - name: Deploying
+            path: /platform/apps/installingapp
+      - name: Data
+        path: /platform/data
+      #  children:
+      #    - name: Subscriptions
+      #      path: /platform/data/subscriptions
+      #    - name: Logs
+      #      path: /platform/data/logs
+      #    - name: System metrics
+      #      path: /platform/data/systemmetrics
+      #    - name: PubSub
+      #      path: /platform/data/pubsub
+  - name: Firmware
+    path: /firmware
+    icon: firmware
+    children:
+      - name: Prerequisites
+        path: /firmware/prerequisites
+      - name: Microprocessors
+        path: /firmware/microprocessors/esp32
+        children:
+          - name: ESP32
+            path: /firmware/microprocessors/esp32
+      - name: Connectivity
+        path: /firmware/connectivity
+        children:
+          - name: WiFi
+            path: /firmware/connectivity/wifi
+          - name: Cellular
+            path: /firmware/connectivity/cellular
+          - name: Ethernet
+            path: /firmware/connectivity/ethernet
+  - name: Peripherals
+    path: /peripherals
+    icon: peripherals
+    children:
+      - name: GPIO
+        path: /peripherals/gpio
+      - name: I2C
+        path: /peripherals/i2c
+      - name: SPI
+        path: /peripherals/spi
+      - name: Drivers
+        path: /peripherals/drivers/driverslist
+        children:
+          - name: List of drivers
+            path: /peripherals/drivers/driverslist
+          - name: Connect sensors
+            path: /peripherals/drivers/bme280
+          - name: Qwiic
+            path: /peripherals/drivers/qwiic
+          - name: How to write a driver
+            path: /peripherals/drivers/sparkfun_joystick
+  - name: Language
+    path: /language
+    icon: language
+    children:
+      - name: Common conversions
+        path: /language/typeconversion
+      - name: Toit definitions
+        path: /language/definitions
+      - name: Language comparison
+        path: /language/toitversus
+      - name: Toit style guide
+        path: /language/style
+      - name: Toit syntax fundamentals
+        path: /language/syntax
+      - name: Imports
+        path: /language/imports
+      - name: Classes in Toit
+        path: /language/objects-constructors-inheritance-interfaces
+      - name: Toit strings
+        path: /language/strings
+      - name: Toit blocks
+        path: /language/blocks
+      - name: List, ByteArray, Set and Map in Toit
+        path: /language/listsetmap
+      - name: Control flow in Toit
+        path: /language/loops
+      - name: Booleans
+        path: /language/booleans
+      - name: Mathematics in Toit
+        path: /language/math
+      - name: Tasks in Toit
+        path: /language/tasks
+      - name: Exception handling in Toit
+        path: /language/exceptions
+      - name: Toit SDK
+        path: /language/sdk
+        children:
+          - name: Toit standard libraries
+            path: /language/sdk/standard-libraries
+          - name: Documentation convention
+            path: /language/sdk/toitdoc
+          - name: Display
+            path: /language/sdk/display
+          - name: Toit font basics
+            path: /language/sdk/fonts
+          - name: Bit blit in Toit
+            path: /language/sdk/blit
+      - name: Toit packages
+        path: /language/package
+        children:
+          - name: Concepts around packages
+            path: /language/package/pkgconcepts
+          - name: Package quick start
+            path: /language/package/pkgguide
+          - name: Package tutorial
+            path: /language/package/pkgtutorial
+  - name: Cloud APIs
+    path: /apis
+    icon: apis
+    children:
+      - name: PubSub
+        path: /apis/pubsub
+  - name: Support
+    path: /support/troubleshoot
+    icon: support
+    children:
+      - name: Serial connect
+        path: /support/troubleshoot/serialtroubleshoot
+      - name: WiFi credentials
+        path: /support/troubleshoot/wifitroubleshoot
+      - name: ESP32 setup
+        path: /support/troubleshoot/setuptroubleshoot
+      - name: Claim device
+        path: /support/troubleshoot/claimtroubleshoot
+      - name: VSCode extension
+        path: /support/troubleshoot/vscodetroubleshoot

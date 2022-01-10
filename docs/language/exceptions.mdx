@@ -1,7 +1,3 @@
----
-order: 12
----
-
 # Exception handling in Toit
 
 ## Try and finally
@@ -47,16 +43,16 @@ Catch will return the thrown object, or `null` if no object was thrown.
 Catch takes two optional arguments
 
 - The `--trace` argument is a boolean or a block that evaluates to a boolean.
-It controls whether the caught exception is reported in the console. By default
-the exception is not reported. The `trace` block is passed an argument that is
-the thrown object.
+  It controls whether the caught exception is reported in the console. By default
+  the exception is not reported. The `trace` block is passed an argument that is
+  the thrown object.
 
 - The `--unwind` argument takes a boolean or a block that evaluates to a
-boolean. It determines whether the execution stack continues to unwind after
-the catch. By default `unwind` is `false`. If the block evaluates to `true`
-then the exception will continue to unwind the call stack as if the catch were
-not present. The `unwind` block is passed the thrown object as an argument,
-which it can use to determine whether to unwind.
+  boolean. It determines whether the execution stack continues to unwind after
+  the catch. By default `unwind` is `false`. If the block evaluates to `true`
+  then the exception will continue to unwind the call stack as if the catch were
+  not present. The `unwind` block is passed the thrown object as an argument,
+  which it can use to determine whether to unwind.
 
 ```
 my_function:

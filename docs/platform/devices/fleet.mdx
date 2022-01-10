@@ -1,0 +1,47 @@
+# Fleet management
+
+You can organize your devices by renaming them so they share an identical prefix. For example, devices with names
+
+`Temp1`, `Temp2` and `Temp3`
+
+are seen as a fleet of devices in the Toit CLI by using the
+prefix `-p temp` as in:
+
+```shell
+toit fleet -p temp
+```
+
+Prefixes are case-insensitive.
+
+## Update firmware on multiple devices
+
+Update the the Toit firmware on several devices in one command with the Toit CLI command:
+
+```shell
+toit fleet -p prefix update
+```
+
+where `prefix` is replaced with the device name prefix.
+
+## Deploy apps on multiple devices
+
+Deploy a Toit app on several devices in one command:
+
+```shell
+toit fleet -p prefix deploy job.yaml
+```
+
+or deploy two Toit apps on a fleet of devices in one command with:
+
+```shell
+toit fleet -p prefix deploy job1.yaml job2.yaml
+```
+
+where `prefix` is replaced with the device name prefix.
+
+<Note type="info" title="Offline devices">
+
+When updating the Toit firmware of a fleet of devices, or when deploying apps, the devices in the fleet do not need to be online.
+The firmware update, or app deployment, will automatically begin the next time the devices go online.
+
+</Note>

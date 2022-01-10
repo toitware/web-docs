@@ -1,0 +1,67 @@
+# WiFi credentials
+
+## Problems with WiFi connection
+
+<Expandable title="Do you have problems getting your ESP32 online with WiFi?">
+
+<Tabs>
+<Tab label="YES">
+
+- The ESP32 cannot connect to 5GHz WiFi network, so be sure to use the WiFi that is on 2.4GHz.
+
+- Make sure that you have typed the correct WiFi SSID and password in the provisioning step. If you are unsure, you can use the `Monitor` button in the
+  [Toit console](https://console.toit.io/serial), and check the serial output of your ESP32 in order to see whether the device connects to the internet or fails trying.
+
+- You can configure your device with the WiFi details again using the `Reinstall` button in the [Toit console](https://console.toit.io/serial).
+
+- When your device can get online via WiFi (verify with the `Monitor` button), you must claim your device into your Toit project by using the `Claim` button on the [devices page](https://console.toit.io/devices). Read more [here](../claimtroubleshoot).
+
+- If you are using an open WiFi with no password, use the Toit CLI when reinstalling or provisioning your ESP32 in order to provide an empty string as the password to the command, as in:
+
+```shell
+toit serial reinstall -p wifi.ssid="MY_SSID" -p wifi.password=""
+```
+
+</Tab>
+
+<Tab label="NO">
+
+If you have other problems or issues with getting your ESP32 setup with Toit, please reach out to the Toit engineering team. We are ready to help you get started using the Toit platform.
+We are available via the integrated chat, via [Slack](https://chat.toit.io) or you can write us an email using developers@toit.io.
+
+</Tab>
+
+</Tabs>
+
+</Expandable>
+
+## Problems with an unreachable device
+
+<Expandable title="Do you have an unreachable device?">
+
+If your ESP32 is misconfigured in any way, for example if it does not have valid WiFi connection settings, reinstall the ESP32 with the Toit firmware
+and WiFi settings via a serial connection, by connecting it with a USB cable to your computer.
+
+<Tabs>
+<Tab label="Console">
+
+In the [Web Serial](https://console.toit.io/serial) page in the Toit console, press the Reinstall button and provide the WiFi credentials for the WiFi currently available.
+
+</Tab>
+
+<Tab label="CLI">
+
+Run the `toit serial reinstall` CLI command
+with the appropriate WiFi connection settings provided (replace `MY_SSID` and `my_password` with the correct WiFi credentials):
+
+```shell
+
+toit serial reinstall -p wifi.ssid="MY_SSID" -p wifi.password="my_password"
+
+```
+
+</Tab>
+</Tabs>
+This will reinstall the Toit firmware and settings via the serial port without changing its hardware certificate or hardware ID.
+
+</Expandable>
