@@ -51,8 +51,10 @@ some similarities to collections.
   objects in a `List` because duplicates are allowed.
   `Set` does not allow null elements, and `Map` does not allow null keys.
 
-- **Indexing**: Although sets and lists are both insertion-ordered it is not possible to
-  access an arbitrary entry in the set with its insertion order. The entries must be
+- **Indexing**: Lists are designed to allow access to any element by its index.
+  Sets and maps don't have this ability. Although sets and maps are both
+  insertion-ordered it is not possible to access an arbitrary entry in them
+  with its insertion order. The entries must be
   accessed by lookup or by iterating over all entries. However, Set and Map both have
   methods `first` and `last` that are useful when using them as deduplicating queues or
   FIFOs.
