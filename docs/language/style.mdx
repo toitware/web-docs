@@ -8,7 +8,9 @@ convention](../sdk/toitdoc) section.
 
 ## Whitespace and indentation
 
-We use two spaces, never tabs, to indent Toit:
+Indentation in Toit is always with spaces. Tabs are not allowed.
+
+We use two spaces for statements.
 
 ```
 j := 10
@@ -19,7 +21,28 @@ main:
     i = i + 1
 ```
 
-If indenting because lines are too long, use four spaces:
+When parameters are indented, they should be intented by four spaces:
+
+```
+fun_with_many_params
+    param1 /int
+    param2 /string
+    param3 /Lambda:
+  return ...  // Code is again intended by 2.
+```
+
+Arguments are intended by four spaces, unless they are the body of a block or lambda:
+
+```
+main:
+  fun_with_many_params
+      1
+      "string arg"::
+    // Body of lambda is only intended by 2.
+    it + 1
+```
+
+The same applies for operators or other reasons when a line gets too long:
 
 ```
 my_function x/num y/num -> num:
@@ -89,8 +112,8 @@ case you should add parentheses or newlines.
   my_func x + 1 x - 1      // Hard to read.
   my_func (x + 1) (x - 1)  // Easier to read.
   my_func                  // Nice uncluttered look with newlines.
-    x + 1
-    x - 1
+      x + 1
+      x - 1
 ```
 
 Between a line and an end-of-line comment there should be at least two spaces.
