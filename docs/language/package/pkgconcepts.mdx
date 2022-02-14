@@ -20,8 +20,8 @@ The `package.lock` file should be shared with other developers of the program an
 
 <Note>
 
-A version control checkout of a package may have a tests subdirectory and/or an
-examples directory.  Although they are colocated with the package source they
+A version control checkout of a package may have a `tests` subdirectory and/or an
+`examples` directory.  Although they are colocated with the package source they
 should be thought of as programs, not packages.  Since those directories
 contain programs they will normally also have `package.lock` files, which
 specify the exact versions of other packages that tests and examples run with.
@@ -50,9 +50,19 @@ TPM supports "local" packages where the package is referenced through a path. Th
 This feature is useful for unpublished (versions of) packages. For example, when developing a program and a package, it can be necessary to change the package and program at the same time. Until the package can be published again, one would use a local package.
 
 For example, if you wanted to use a local version of the [font-clock package](https://github.com/toitware/toit-font-clock)
-you could clone it from Github, then edit your `package.yaml` file from:
+you could clone it from Github, then update your your `package.yaml` and `package.lock` files with:
 
+```shell
+toit.pkg install --local --name=font_clock ../../toit-font-clock
 ```
+or
+```shell
+toit pkg install --local --name=font_clock ../../toit-font-clock
+```
+
+This would update your `package.lock` file and change your `package.yaml` file from:
+
+```yaml
 dependencies:
   font_clock:
     url: github.com/toitware/toit-font-clock
@@ -60,14 +70,23 @@ dependencies:
 ```
 to
 
-```
+```yaml
 dependencies:
   font_clock:
     path: ../../toit-font-clock
 ```
 
-After editing the `package.yaml` file, run `toit pkg install` or `toit.pkg install` to
-update the `package.lock` file.
+If you edit the `package.yaml` file directly, run
+
+```shell
+toit pkg install
+```
+or
+```shell
+toit.pkg install
+```
+
+to update the `package.lock` file.
 
 Another use for local packages with relative paths is for the examples and
 tests subdirectory of version control checkout of a package.  See for an
