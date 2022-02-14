@@ -6,15 +6,28 @@ This section provides a more detailed description of the concepts that are used 
 
 Package programs are Toit projects that are not intended to be used by other projects. As of 2021-02-07 they are not supposed to be shared through the package management system, either.
 
-When a program uses a package, that dependency is registered in the program's lock file `package.lock`. This is where the mapping from `prefix` to package is stored. Programs have concrete dependencies. All their dependent packages are resolved to a specific version. This version is written in the lock file.
+When a program uses a package, that dependency is registered in the program's lock file `package.lock`. This is where the mapping from `prefix` to package is stored. Programs have concrete dependencies. All their dependent packages are resolved to a specific version, not a range of versions. These versions are written in the lock file.
 
-When a developer calls `toit pkg install` they always get the same packages. A team of developers working on the same project will thus work with the exact same versions.
+When a developer calls `toit pkg install` or `toit.pkg install` they always get the same packages. A team of developers working on the same project will thus work with the exact same versions.
 
 Lock files must be located at the root of the project. Certain commands (like `pkg install`) automatically create a lock file if one doesn't exist yet. Be careful, as the lock-file is created in the current directory, which might not be the root directory.
 
 <Note>
 
-The `package.lock` file should be shared with other developers of the program and should therefore be checked into the Version Control System.
+The `package.lock` file should be shared with other developers of the program and should therefore be checked into the version control system.
+
+</Note>
+
+<Note>
+
+A version control checkout of a package may have a `tests` subdirectory and/or an
+`examples` directory.  Although they are colocated with the package source they
+should be thought of as programs, not packages.  Since those directories
+contain programs they will normally also have `package.lock` files, which
+specify the exact versions of other packages that tests and examples run with.
+
+The package itself is normally accessed from the examples subdirectory
+as a [local package](#local-package), using the path `..`.
 
 </Note>
 
@@ -35,6 +48,51 @@ Published packages can be discovered by other developers through registries whic
 TPM supports "local" packages where the package is referenced through a path. That path can be absolute or relative.
 
 This feature is useful for unpublished (versions of) packages. For example, when developing a program and a package, it can be necessary to change the package and program at the same time. Until the package can be published again, one would use a local package.
+
+For example, if you wanted to use a local version of the [font-clock package](https://github.com/toitware/toit-font-clock)
+you could clone it from Github, then update your your `package.yaml` and `package.lock` files with:
+
+```shell
+toit.pkg install --local --name=font_clock ../../toit-font-clock
+```
+or
+```shell
+toit pkg install --local --name=font_clock ../../toit-font-clock
+```
+
+This would update your `package.lock` file and change your `package.yaml` file from:
+
+```yaml
+dependencies:
+  font_clock:
+    url: github.com/toitware/toit-font-clock
+    version: ^1.2.0
+```
+to
+
+```yaml
+dependencies:
+  font_clock:
+    path: ../../toit-font-clock
+```
+
+If you edit the `package.yaml` file directly, run
+
+```shell
+toit pkg install
+```
+or
+```shell
+toit.pkg install
+```
+
+to update the `package.lock` file.
+
+Another use for local packages with relative paths is for the examples and
+tests subdirectory of version control checkout of a package.  See for an
+example [the examples directory of the Morse code git repo](https://github.com/toitware/toit-morse/blob/main/examples).
+The `package.lock` file there specifies only one dependency: The local checkout
+of the Morse code package code in the parent directory, `..`.
 
 <Note>
 
@@ -110,7 +168,7 @@ A registry collects descriptions of available packages. Conceptually it's a data
 
 Most of the time, developers only work with the public [github.com/toitware/registry](https://github.com/toitware/registry) registry. However, TPM supports multiple registries. Companies are free to create their own private registries and use them instead of, or in addition to the public Toit registry.
 
-Similar to packages, registries also exist in two variants: Git and local registries. Git registries are added to TPM with a Git-URL, and can be synchronized with `toit pkg sync` (see the [quick start](../pkgguide) section for more).
+Similar to packages, registries also exist in two variants: Git and local registries. Git registries are added to TPM with a Git-URL, and can be synchronized with `toit pkg sync` or `toit.pkg sync` (see the [quick start](../pkgguide) section for more).
 Local registries are just pointers to a path that contains descriptions.
 
 ## Description
