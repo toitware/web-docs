@@ -53,10 +53,12 @@ For example, if you wanted to use a local version of the [font-clock package](ht
 you could clone it from Github, then update your your `package.yaml` and `package.lock` files with:
 
 ```shell
+toit.pkg remove font_clock
 toit.pkg install --local --name=font_clock ../../toit-font-clock
 ```
 or
 ```shell
+toit pkg remove font_clock
 toit pkg install --local --name=font_clock ../../toit-font-clock
 ```
 
