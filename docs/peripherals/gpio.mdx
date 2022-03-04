@@ -140,3 +140,51 @@ used, it can be enabled like this:
 If a Pin is configured as input with pull-up/pull-down, it automatically disables the pull-up/pull-down if it is reconfigured to output mode - and enables it again when reconfigured back to input.
 
 </Note>
+
+## ADC
+
+The ADC (analog-to-digital converter) can be used by importing `gpio.adc`:
+
+For example:
+
+```
+import gpio
+import gpio.adc show Adc
+
+main:
+  adc := Adc (gpio.Pin 34)
+  print adc.get
+  adc.close
+```
+
+Note that on the ESP32, only the ADC1 (pins 32-39) are supported. The ADC2 has too many
+restrictions (cannot be used when WiFi is active, and some of the pins are strapping pins),
+and is therefore disabled.
+
+## PWM
+
+The PWM (pulse width modulation) peripheral is in `pgio.pwm`.
+
+One generally starts by allocating a `Pwm` object with a certain frequency. Multiple pins
+can then use that object to create their own `PwmChannel` for which they can modify the
+pulse width.
+
+Example:
+
+```
+import gpio
+import gpio.pwm
+
+main:
+  led := gpio.Pin 5
+  generator := pwm.Pwm --frequency=400
+  channel := generator.start led
+  duty_percent := 0
+  step := 1
+  while true:
+    channel.set_duty_factor duty_percent/100.0
+    duty_percent += step
+    if duty_percent == 0 or duty_percent == 100:
+      step = -step
+    sleep --ms=10
+```
