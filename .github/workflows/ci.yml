@@ -29,10 +29,6 @@ jobs:
         run: |
           yarn lint
 
-      - name: Update can-i-use
-        run: |
-          npx browserslist --update-db
-
       - name: Test
         if: env.RUN_TESTS == 'true'
         run: |
