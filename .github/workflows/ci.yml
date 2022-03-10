@@ -52,7 +52,7 @@ jobs:
 
       - name: Prepare artifacts
         run: |
-          tar c -zf $VERSION.tgz -C build/ .
+          tar c -zf $VERSION.tgz -C public/ .
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
