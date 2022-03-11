@@ -10,7 +10,7 @@
     "clean": "gatsby clean",
     "lint": "eslint '**/*.{js,ts,tsx}' --max-warnings=0",
     "test": "jest",
-    "test:ci": "jest --ci --coverage  --coverageDirectory=coverage"
+    "test:ci": "jest --ci --coverage --coverageDirectory=coverage"
   },
   "eslintConfig": {
     "extends": "react-app"
