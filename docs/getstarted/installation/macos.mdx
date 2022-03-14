@@ -18,17 +18,22 @@ Watch the [installation video](https://www.youtube.com/watch?v=uGQPGNEH_sU&ab_ch
 
 ### Add Toit to PATH
 
-To make sure you can run the Toit CLI in a terminal window from any directory, add the Toit executable to your PATH environment variable
-by editing the shell configuration script.
+To make sure you can run the Toit CLI in a terminal window from any directory, add the
+Toit executable to your PATH environment variable by editing the shell configuration script.
+For the zsh you can update the PATH in .zprofile or .zhsrc. For bash in .profile or .bashrc.
 
-Depending on the shell you use: edit either the `.zshrc` file or the `.bashrc` file.
+For example, if you put `toit` into your `Applications` folder, and your shell is `zsh`, then
+run
+```shell
+echo 'export PATH=/Applications:$PATH' >> ~/.zshrc;
+```
 
-For example, if you use `bash` and if you chose to put the `toit` executable into the `Applications` folder,
-execute the following command in a terminal window:
-
+If your shell is bash, then execute:
 ```shell
 echo 'export PATH=/Applications:$PATH' >> ~/.bashrc;
 ```
+
+You can determine your shell by running `echo $SHELL`.
 
 ### Check installation
 
