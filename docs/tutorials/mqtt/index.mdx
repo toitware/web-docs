@@ -1,23 +1,10 @@
 # TCP (and TLS)
 
 [MQTT](https://mqtt.org/) is an IoT friendly messaging protocol for publishing and subscribing to a shared MQTT broker from a wide range of devices.
-While Toit's [PubSub](../../../apis/pubsub) implementation has some benefits for seamlessly storing and offloading messages, there may be use cases where
-connecting to an MQTT broker can be beneficial.
 
-For example, if
-
-- You want to send the data to a local machine and not through the internet.
-- Your stack already operates using an existing MQTT broker.
-- You want to quickly evaluate Toit.
-
-Either way, this tutorial shows you how to connect to an MQTT broker using TCP (or TLS).
+This tutorial shows you how to connect to an MQTT broker using TCP (or TLS).
 
 ## Connect
-
-MQTT requires every client to have a unique `CLIENT_ID`. That `ID` is sent when connecting to the broker, and helps the broker to ensure that
-every client will get a copy of the data broadcasted etc.
-
-Next, some brokers require the client to provide a `username` and `password`.
 
 The Toit MQTT client is available from the [`mqtt` package](https://pkg.toit.io/package/github.com%2Ftoitware%2Fmqtt) - in the Toit package registry.
 
@@ -27,95 +14,154 @@ Install the package using the Toi CLI:
 toit pkg install github.com/toitware/mqtt
 ```
 
-and use it by importing it into your application with `import mqtt`
+and use it by importing it into your application with `import mqtt`.
+
+MQTT requires every client to have a unique `CLIENT_ID`. That ID is sent when connecting to the broker, and identifies a session on the broker.
+It is used to reliable transmit packets that require acknowlegments (QoS=1).
 
 ```toit
 import net
 import mqtt
 
-CLIENT_ID ::= "my-client-id"
-HOST      ::= "localhost"
-PORT      ::= 1883
+// Include a random number, as we are sharing test.mosquitto.org with other users.
+CLIENT_ID ::= "my-client-id-$(random)"
+HOST      ::= "test.mosquitto.org"
 
 main:
-  socket := net.open.tcp_connect HOST PORT
-  client := mqtt.Client
-    CLIENT_ID
-    mqtt.TcpTransport socket
+  network := net.open
+  transport := mqtt.TcpTransport network --host=HOST
+  client := mqtt.Client --transport=transport
+  client.start --client_id=CLIENT_ID
 
   // Client is now connected.
 ```
+
+Some brokers require the client to provide a `username` and `password`. These can be passed to the client during the
+`start` call in an `options` object:
+
+```
+  options := mqtt.SessionOptions
+      --client_id=CLIENT_ID
+      --username=MY_USERNAME
+      --password=MY_PASSWORD
+  client.start --options=options
+```
+See the [documentation](https://pkg.toit.io/github.com/toitware/mqtt@2.0.1/docs/mqtt/library-summary) or
+[examples](https://github.com/toitware/mqtt/tree/main/examples) of the MQTT library for more information.
 
 ## Publish
 
 Simple sensor applications mainly have one purpose; to send sensor data. When sending data, you simply need to specify which topic to publish to, together with the payload.
 
+A publish function could look similar to the following:
+
 ```toit
 import mqtt
 import encoding.json
 
-publish value/float client/mqtt.Client:
-  topic ::= "my/sensor/data"
+TOPIC ::= "my/topic"
+
+publish client/mqtt.Client value/float:
   payload := json.encode {
     "value": value
   }
-  client.publish topic payload
+  client.publish TOPIC payload
 
 ```
 
+Note that the payload must be a byte array. If your data is a string, simply call `.to_byte_array` on it.
+
 ## Subscribe
 
-Subscribing to data requires two steps. First, you have to set up the callback to handle the incoming messages.
-Second, you need to register to the topics you want to receive data from.
+Subscribing to data requires two informations: the topic (or filter) to subscribe to, and the callback that should be called
+when a message arrives.
 
+For example:
 ```toit
 import mqtt
 import encoding.json
 
-subscribe client/mqtt.Client:
-  topic ::= "my/sensor/*"
-  client.subscribe topic --qos=1
+TOPIC ::= "my/topic"
 
-  client.handle: | topic/string payload/ByteArray |
+subscribe client/mqtt.Client:
+  client.subscribe TOPIC:: | topic/string payload/ByteArray |
     decoded := json.decode payload
     print "Received value on '$topic': $(decoded["value"])"
 ```
 
+Here, we decode the incoming payload with the JSON decoder. If the data payload should just be interpreted as a
+string, you can simply call `payload.to_string` instead.
+
+Since MQTT clients can have a session on the server, we could receive packets for previously subscribed topics
+as soon as the client connects. If the `subscribe` function wasn't called yet, then the callback wouldn't be
+invoked for these early messages. To avoid losing packets, the client can also be configured with routes at
+construction time:
+
+```
+main:
+  network := net.open
+  transport := mqtt.TcpTransport.tls network --host=HOST
+      --root_certificates=[ certificate_roots.ISRG_ROOT_X1 ]
+  routes := {
+    TOPIC: :: | topic/string payload/ByteArray |
+      decoded := json.decode payload
+      print "Received value on '$topic': $(decoded["value"])"
+  }
+  client := mqtt.Client --transport=transport --routes=routes
+  client.start --client_id=CLIENT_ID
+  // Client is now connected and subscribed to the given routes.
+```
+
 ## TLS
 
-The `TcpTransport` used so far works with any TCP-compatible socket, including TLS sockets. To upgrade a TCP socket to TLS, you need to perform
-a TLS handshake.
+The `TcpTransport` mentioned above can also be used to connect to secure servers.
+
 
 ```toit
 import mqtt
 import net
-import tls
 import net.x509
 
-CLIENT_ID ::= "my-client-id"
-HOST      ::= "localhost"
-PORT      ::= 8883
+// Include a random number, as we are sharing test.mosquitto.org with other users.
+CLIENT_ID ::= "my-client-id-$(random)"
+HOST      ::= "test.mosquitto.org"
 
 main:
-  socket := net.open.tcp_connect HOST PORT
-
-  tls_socket := tls.Socket.client socket
-    --server_name=HOST
-    --root_certificates=[SERVER_CERT]
-
-  tls_socket.handshake
-
-  client := mqtt.Client
-    CLIENT_ID
-    mqtt.TcpTransport tls_socket
-
+   network := net.open
+  transport := mqtt.TcpTransport.tls network --host=HOST
+      --root_certificates=[ CERTIFICATE ]
+  client := mqtt.Client --transport=transport
+  client.start --client_id=CLIENT_ID
   // Client is now connected.
 
-SERVER_CERT ::= x509.Certificate.parse """
+CERTIFICATE ::= x509.Certificate.parse """
 -----BEGIN CERTIFICATE-----
-
-<- insert server cert ->
-
+MIIEAzCCAuugAwIBAgIUBY1hlCGvdj4NhBXkZ/uLUZNILAwwDQYJKoZIhvcNAQEL
+BQAwgZAxCzAJBgNVBAYTAkdCMRcwFQYDVQQIDA5Vbml0ZWQgS2luZ2RvbTEOMAwG
+A1UEBwwFRGVyYnkxEjAQBgNVBAoMCU1vc3F1aXR0bzELMAkGA1UECwwCQ0ExFjAU
+BgNVBAMMDW1vc3F1aXR0by5vcmcxHzAdBgkqhkiG9w0BCQEWEHJvZ2VyQGF0Y2hv
+by5vcmcwHhcNMjAwNjA5MTEwNjM5WhcNMzAwNjA3MTEwNjM5WjCBkDELMAkGA1UE
+BhMCR0IxFzAVBgNVBAgMDlVuaXRlZCBLaW5nZG9tMQ4wDAYDVQQHDAVEZXJieTES
+MBAGA1UECgwJTW9zcXVpdHRvMQswCQYDVQQLDAJDQTEWMBQGA1UEAwwNbW9zcXVp
+dHRvLm9yZzEfMB0GCSqGSIb3DQEJARYQcm9nZXJAYXRjaG9vLm9yZzCCASIwDQYJ
+KoZIhvcNAQEBBQADggEPADCCAQoCggEBAME0HKmIzfTOwkKLT3THHe+ObdizamPg
+UZmD64Tf3zJdNeYGYn4CEXbyP6fy3tWc8S2boW6dzrH8SdFf9uo320GJA9B7U1FW
+Te3xda/Lm3JFfaHjkWw7jBwcauQZjpGINHapHRlpiCZsquAthOgxW9SgDgYlGzEA
+s06pkEFiMw+qDfLo/sxFKB6vQlFekMeCymjLCbNwPJyqyhFmPWwio/PDMruBTzPH
+3cioBnrJWKXc3OjXdLGFJOfj7pP0j/dr2LH72eSvv3PQQFl90CZPFhrCUcRHSSxo
+E6yjGOdnz7f6PveLIB574kQORwt8ePn0yidrTC1ictikED3nHYhMUOUCAwEAAaNT
+MFEwHQYDVR0OBBYEFPVV6xBUFPiGKDyo5V3+Hbh4N9YSMB8GA1UdIwQYMBaAFPVV
+6xBUFPiGKDyo5V3+Hbh4N9YSMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQEL
+BQADggEBAGa9kS21N70ThM6/Hj9D7mbVxKLBjVWe2TPsGfbl3rEDfZ+OKRZ2j6AC
+6r7jb4TZO3dzF2p6dgbrlU71Y/4K0TdzIjRj3cQ3KSm41JvUQ0hZ/c04iGDg/xWf
++pp58nfPAYwuerruPNWmlStWAXf0UTqRtg4hQDWBuUFDJTuWuuBvEXudz74eh/wK
+sMwfu1HFvjy5Z0iMDU8PUDepjVolOCue9ashlS4EB5IECdSR2TItnAIiIwimx839
+LdUdRudafMu5T5Xma182OC0/u/xRlEm+tvKGGmfFcN0piqVl8OrSPBgIlb+1IKJE
+m/XriWr/Cq4h/JfB7NTsezVslgkBaoU=
 -----END CERTIFICATE-----
 """
 ```
+
+The certificate was provided by the test.mosquitto.org page. Frequently, users don't need to
+copy in certificates, though, and can just use the
+[certificate_roots package](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-cert-roots).
