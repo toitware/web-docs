@@ -17,7 +17,7 @@ toit pkg install github.com/toitware/mqtt
 and use it by importing it into your application with `import mqtt`.
 
 MQTT requires every client to have a unique `CLIENT_ID`. That ID is sent when connecting to the broker, and identifies a session on the broker.
-It is used to reliable transmit packets that require acknowlegments (QoS=1).
+It is used to reliably transmit packets that require acknowledgements (QoS=1).
 
 ```toit
 import net
