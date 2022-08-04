@@ -4,7 +4,7 @@ This section explains how fonts work when using displays on the Toit SDK.
 
 ## Introduction
 
-There is a selection of freely usable fonts available with the Toit SDK.
+There is a selection of freely usable fonts available in packages.
 
 The fonts are in the form of bitmaps, rather than scalable fonts. For some
 fonts that were originally scalable, a selection of pixel sizes have been created ahead of time.
@@ -37,9 +37,12 @@ the font.
 
 ## Example
 
+In the following example we assume the `font_x11_adobe` package has
+been installed in your project.
+
 ```
 // Import the font and size that you need, and give it a name.
-import font.x11_100dpi.sans.sans_14_bold as s14b
+import font_x11_adobe.sans_14_bold as s14b
 
 // Other imports we need.
 import font show Font
@@ -73,7 +76,7 @@ my_fish_adding_function:
 
 The fonts are arranged according to their origin.
 
-### x11_100dpi fonts
+### Fonts from X11
 
 These are taken from the X11 Windowing system commonly used with
 Linux. They have been hand-optimized for low-resolution screens
@@ -82,73 +85,98 @@ to the naked eye.
 
 #### sans
 
+This font is from the `font_x11_adobe` package.  It is a modified
+version of the Adobe font named "Helvetica".  "Helvetica" is a trademark
+of Monotype Imaging Inc.
+
 A clean sans-serif variable-width font,
 available in sizes 6, 8, 10, 12, 14, 18, and 24. The styles are default,
 oblique, bold and bold_oblique. For example the default style is found
-with `import font.x11_100dpi.sans.sans_14` and the bold style can be
-found with `import font.x11_100dpi.sans.sans_14_bold`. Coverage includes
+with `import font_x11_adobe.sans_14` and the bold style can be
+found with `import font_x11_adobe.sans_14_bold`. Coverage includes
 mainly Latin letters, including accented variants.
 See the [copyright message](../adobe_copyright).
 
 #### book
 
+This font is from the `font_x11_adobe` package.  It is a modified
+version of the Adobe font named "New Century Schoolbook".
+"New Century Schoolbook" is a trademark of Monotype GmbH.
+
 A serif variable-width font,
 available in sizes 6, 8, 10, 12, 14, 18, and 24. The styles are default,
 italic, bold and bold_italic. For example the default style is found
-with `import font.x11_100dpi.book.book_14` and the bold style can be
-found with `import font.x11_100dpi.book.book_14_bold`. Coverage includes
+with `import font_x11_adobe.book_14` and the bold style can be
+found with `import font_x11_adobe.book_14_bold`. Coverage includes
 mainly Latin letters, including accented variants.
 See the [copyright message](../adobe_copyright).
 
 #### serif
 
+This font is from the `font_x11_adobe` package.  It is a modified
+version of the Adobe font named "Times New Roman".
+"Times New Roman" is a trademark of The Monotype Corporation.
+
 A serif variable-width font,
 available in sizes 6, 8, 10, 12, 14, 18, and 24. The styles are default,
 italic, bold and bold_italic. For example the default style is found
-with `import font.x11_100dpi.serif.serif_14` and the bold style can be
-found with `import font.x11_100dpi.serif.serif_14_bold`. Coverage includes
+with `import font_x11_adobe.serif_14` and the bold style can be
+found with `import font_x11_adobe.serif_14_bold`. Coverage includes
 mainly Latin and Greek letters, including accented variants.
 See the [copyright message](../adobe_copyright).
 
 #### typewriter
 
+This font is from the `font_x11_adobe` package.  It is a modified
+version of the Adobe font named "Courier".
+
 A serif fixed-width font,
 available in sizes 6, 8, 10, 12, 14, 18, and 24. The styles are default,
 oblique, bold and bold_oblique. For example the default style is found
-with `import font.x11_100dpi.typewriter.typewriter_14` and the bold style can be
-found with `import font.x11_100dpi.typewriter.typewriter_14_bold`. Coverage includes
+with `import font_x11_adobe.typewriter_14` and the bold style can be
+found with `import font_x11_adobe.typewriter_14_bold`. Coverage includes
 mainly Latin letters, including accented variants.
 See the [copyright message](../adobe_copyright).
 
 #### clear
 
+This font is from the `font_clear` package.  It is a modified
+version of the Bigelow and Holmes font named "Lucida Bright".
+"Lucida" is a trademark of Bigelow and Holmes, Inc.
+
 A serif variable-width font,
 available in sizes 8, 10, 12, 14, 18, 19, and 24. The styles are default,
 italic, bold and bold_italic. For example the default style is found
-with `import font.x11_100dpi.clear.clear_14` and the bold style can be
-found with `import font.x11_100dpi.clear.clear_14_bold`. Coverage includes
+with `import font_clear.clear_14` and the bold style can be
+found with `import font_clear.clear_14_bold`. Coverage includes
 mainly Latin letters, including accented variants.
 See the [copyright message](../bigelow_and_holmes_copyright).
 
 #### clear_sans
 
+This font is from the `font_clear` package.  It is a modified
+version of the Bigelow and Holmes font named "Lucida Sans".
+"Lucida" is a trademark of Bigelow and Holmes, Inc.
+
 A sans-serif variable-width font,
 available in sizes 8, 10, 12, 14, 18, 19, and 24. The styles are default,
 italic, bold and bold_italic. For example the default style is found
-with `import font.x11_100dpi.clear_sans.clear_sans_14` and the bold style can be
-found with `import font.x11_100dpi.clear_sans.clear_sans_14_bold`. Coverage includes
+with `import font_clear.clear_sans_14` and the bold style can be
+found with `import font_clear.clear_sans_14_bold`. Coverage includes
 mainly Latin letters, including accented variants.
 See the [copyright message](../bigelow_and_holmes_copyright).
 
 #### Clearly-U
+
+This font is from the `font_clearly_u` package.
 
 A sans-serif variable-width font,
 available only in size 12. The styles are default and autobold, where
 the autobold variant has been generated automatically by Toit, so it
 can be a little crude-looking.
 For example the default style is found
-with `import font.x11_100dpi.clearly_u.clearly_u_12` and the bold style can be
-found with `import font.x11_100dpi.clearly_u.clearly_u_12_autobold`.
+with `import font_clearly_u.clearly_u_12` and the bold style can be
+found with `import font_clearly_u.clearly_u_12_autobold`.
 It has
 good coverage of left-to-right alphabets, including Roman, Greek, Cyrillic,
 Armenian, Georgian, Ge'ez (Ethiopic), Cherokee, Unified Canadian Aboriginal,
@@ -157,18 +185,20 @@ See the [copyright message](../nmsu_copyright)
 
 ### Matthew Welch
 
-The font designer Matthew Welch has designed some freely available fonts
-of which we have chosen one for inclusion.
+The font designer Matthew Welch has designed some freely available fonts,
+one of which we have chosen for inclusion.
 
 #### tiny
+
+This font is from the `font_tiny` package.
 
 The tiny font has a normal height of only 4 pixels, plus one pixel for
 descenders. Toit also provides a modified version of this font to
 expand digits into the
 descender area, which makes them 5 pixels high, and slightly more readable.
 It covers only the ASCII area and so has no accented or non-English
-characters. Use with `import font.matthew_welch.tiny` or
-`import font.matthew_welch.tiny_bigger_digits`.
+characters. Use with `import font_tiny.tiny` or
+`import font_tiny.tiny_bigger_digits`.
 See the [copyright message](../matthew_welch_copyright).
 
 ### Google
@@ -181,6 +211,8 @@ been included in the version available here.
 
 #### Roboto
 
+This font is from the `roboto` package.
+
 This is a scalable sans-serif font used on Android phones among other places.
 The bitmap versions here have been automatically generated, and
 can be a little rough around the edges, especially on low resolution
@@ -189,7 +221,7 @@ bitmap fonts. The styles are thin, light, regular, medium, bold, and black.
 Each style is also available in an italic variant. Sizes are 10,
 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, and 36.
 For example the regular style is found
-with `import font.google.roboto.roboto_14_regular` and the italic style can be
-found with `import font.google.roboto.roboto_14_regular_italic`.
+with `import roboto.roboto_14_regular` and the italic style can be
+found with `import roboto.roboto_14_regular_italic`.
 Roboto has good coverage of Roman, Greek, and Cyrillic alphabets.
 See the [copyright message](../apache_font_license).

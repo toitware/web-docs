@@ -119,12 +119,16 @@ created from other contexts using the `with` method:
 
 ## Using additional fonts
 
-Import specific fonts from `font.x11_100dpi` with:
+More fonts are available in the packages `font_x11_adobe`,
+`font_clear`, `font_clearly_u`, and `font_tiny` packages.
+
+Once you have installed the package in your project,
+import specific fonts from `font_x11_adobe` with:
 
 ```
 import font show *
-import font.x11_100dpi.sans.sans_10_bold
-import font.x11_100dpi.sans.sans_24_bold
+import font_x11_adobe.sans_10_bold
+import font_x11_adobe.sans_24_bold
 import pixel_display.texture show*
 import pixel_display.two_color show WHITE BLACK
 import pixel_display show TwoColorPixelDisplay
@@ -190,7 +194,7 @@ local time to update a digital clock on the same display.
 ```
 import encoding.json
 import font show *
-import font.x11_100dpi.sans.sans_14_bold
+import font_x11_adobe.sans_14_bold
 import monitor show Mutex
 import pubsub
 
