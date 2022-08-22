@@ -32,7 +32,7 @@ items:
       - name: BLE tutorials
         path: /tutorials/ble
         children:
-          - name: Basic
+          - name: Basics
             path: /tutorials/ble
           - name: Scanning
             path: /tutorials/ble/scanning
