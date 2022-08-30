@@ -117,10 +117,17 @@ name as the last segment instead.
 
 Say, we want to use the [morse package](https://github.com/toitware/toit-morse).
 When installing this package
-with `toit pkg install github.com/toitware/toit-morse`, the package manager
+with `jag pkg install github.com/toitware/toit-morse`,
+(or with `toit.pkg ...` or with `toit pkg...`) the package manager
 downloads the sources and adds a mapping from the package's name `morse` to
 the location it downloaded the sources. Specifically, the mapping points to
 the `src` folder of the package.
+
+<Note>
+If you are using the commercially licensed `toit.io` product you should use
+`toit pkg` (with a space) to install packages.  If you are using the
+standalone open Toit tools, you should use `toit.pkg` (with a dot).
+</Note>
 
 Here is the file hierarchy of the `morse` package:
 

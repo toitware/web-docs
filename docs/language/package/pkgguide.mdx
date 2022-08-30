@@ -2,19 +2,68 @@
 
 This section provides instructions on how to use the Toit package manager (henceforth TPM) for common operations. See [Packages](../../package) for the full documentation.
 
-<Note>
-
-Some Toit installations use the program `toit.pkg` instead of `toit pkg`.  If you
-have one of these installations you will need to substitute the correct command in
-the examples below.
-
-</Note>
-
 ## Installing a package
 
 You might need to add a registry as the first thing, before you can proceed with installing a package (see [below](#adding-a-registry)).
 
 The following CLI commands update the local registry, search for a package, and then install it.
+
+<Tabs>
+<Tab label="Jaguar">
+
+```shell
+jag pkg sync          # Synchronize the installed registries.
+jag pkg search morse  # Search for a package "morse".
+jag pkg install morse # Install package "morse".
+```
+
+It is important to execute these commands in the correct folder. Ideally,
+they should be run in the root of the project that needs the package.
+
+Note that the example and test folder generally are considered to be
+separate projects as they might have different dependencies than the package
+itself. We recommend to open the example or test folder in separate instances
+of the IDE.
+
+<Note title="Unique names">
+
+The installation of "morse" only works if the name is unambiguous. If there are multiple "morse" packages, then one has to use the URL. It is possible to omit leading segments if that makes the package unique:
+
+```shell
+jag pkg install github.com/toitware/toit-morse
+jag pkg install toitware/toit-morse  # Probably already unique.
+```
+
+</Note>
+</Tab>
+<Tab label="toitlang.org">
+
+```shell
+toit.pkg sync          # Synchronize the installed registries.
+toit.pkg search morse  # Search for a package "morse".
+toit.pkg install morse # Install package "morse".
+```
+
+It is important to execute these commands in the correct folder. Ideally,
+they should be run in the root of the project that needs the package.
+
+Note that the example and test folder generally are considered to be
+separate projects as they might have different dependencies than the package
+itself. We recommend to open the example or test folder in separate instances
+of the IDE.
+
+<Note title="Unique names">
+
+The installation of "morse" only works if the name is unambiguous. If there are multiple "morse" packages, then one has to use the URL. It is possible to omit leading segments if that makes the package unique:
+
+```shell
+toit.pkg install github.com/toitware/toit-morse
+toit.pkg install toitware/toit-morse  # Probably already unique.
+```
+
+</Note>
+</Tab>
+<Tab label="toit.io">
 
 ```shell
 toit pkg sync          # Synchronize the installed registries.
@@ -40,10 +89,55 @@ toit pkg install toitware/toit-morse  # Probably already unique.
 ```
 
 </Note>
+</Tab>
+</Tabs>
 
 ## Adding a Registry
 
 Before being able to install any package, one must have a registry installed. Newer versions of the `toit` CLI do this automatically, but it never hurts to check:
+
+<Tabs>
+<Tab label="Jaguar">
+
+See which registries are installed:
+
+```shell
+jag pkg registry list
+```
+
+You should have one or more registries:
+
+```txt
+toit: github.com/toitware/registry (git)
+```
+
+If not, add a registry; for example the Toit registry:
+
+```shell
+jag pkg registry add toit github.com/toitware/registry
+```
+</Tab>
+<Tab label="toitlang.org">
+
+See which registries are installed:
+
+```shell
+toit.pkg registry list
+```
+
+You should have one or more registries:
+
+```txt
+toit: github.com/toitware/registry (git)
+```
+
+If not, add a registry; for example the Toit registry:
+
+```shell
+toit.pkg registry add toit github.com/toitware/registry
+```
+</Tab>
+<Tab label="toit.io">
 
 See which registries are installed:
 
@@ -62,6 +156,8 @@ If not, add a registry; for example the Toit registry:
 ```shell
 toit pkg registry add toit github.com/toitware/registry
 ```
+</Tab>
+</Tabs>
 
 ## Creating a Package
 
