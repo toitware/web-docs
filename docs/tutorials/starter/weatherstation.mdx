@@ -50,16 +50,66 @@ main:
 
 Then, open a terminal window in VSCode and execute the following commands in order to install the BME280 driver package locally:
 
+<Tabs>
+<Tab label="Jaguar">
+
+```shell
+jag pkg init
+jag pkg install github.com/toitware/bme280-driver
+```
+</Tab>
+<Tab label="toitlang.org">
+
+```shell
+toit.pkg init
+toit.pkg install github.com/toitware/bme280-driver
+```
+</Tab>
+<Tab label="toit.io">
+
 ```shell
 toit pkg init
 toit pkg install github.com/toitware/bme280-driver
 ```
+</Tab>
+</Tabs>
 
 ## Run Toit program
 
 If you want to know more about what is happening in each step in the Toit program above, see [here](../../../peripherals/drivers/bme280#i2cbus).
 
 <Tabs>
+<Tab label="Jaguar">
+To run the program once on the ESP32, execute the CLI command
+
+```shell
+jag run weather_station.toit
+```
+
+If you haven't set your default device in the CLI, you can set it
+with the command `jag scan`.  (Your workstation and your device must
+be on the same WiFi network.)
+
+Alternatively, you can add `-d device-name` to
+the run command, where `device-name` is the name of your ESP32.
+
+```shell
+$ jag run weather_station.toit
+Running 'weather_station.toit' on 'mydevice' ...
+Success: Sent 37KB code to 'mydevice'
+```
+
+You can see the program's output on the USB/serial port using
+`jag monitor`:
+
+```
+[jaguar] INFO: program 7a3d83f9-837c-589d-a6e4-8f95ecb3cab4 started
+Temperature: 25.769999999999999574 C
+Humidity: 42.111328125 %
+Pressure: 101686.515625 Pa
+[jaguar] INFO: program 7a3d83f9-837c-589d-a6e4-8f95ecb3cab4 stopped
+```
+</Tab>
 <Tab label="Console">
 
 Open the [Toit console](https://console.toit.io), find your ESP32 in the list of devices, copy and paste the program above into the **Code tab**
@@ -67,7 +117,7 @@ your online ESP32 with the BME280 sensor connected, press the **Run** button and
 and pressure values.
 
 </Tab>
-<Tab label="CLI">
+<Tab label="toit.io CLI">
 
 To run the program once on the ESP32, execute the CLI command
 
@@ -93,6 +143,10 @@ Pressure: 101686.515625 Pa
 Running a Toit program in this way means that it will be uninstalled from the device once the program has terminated.
 
 ## Deploy app
+
+<Note>
+Deploying is not yet available with Jaguar, stay tuned.
+</Note>
 
 We can use the same Toit program to repeatedly measure the temperature,
 humidity, and pressure every 30 seconds by deploying it on the ESP32 using the

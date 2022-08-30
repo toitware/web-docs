@@ -15,8 +15,38 @@ main:
 ```
 
 <Tabs>
-<Tab label="Console">
+<Tab label="Jaguar CLI">
 
+Save the above Toit program in a file named `time.toit`, and run the command
+
+```shell
+$ jag run time.toit
+Running 'time.toit' on 'mydevice' ...
+Success: Sent 37KB code to 'mydevice'
+```
+
+This runs the `time.toit` program on your default device. If you have
+more than one device and haven't defined a default device yet, you can
+use the `-d` option to specify on which device the program should run.
+
+To see the output of the program you need to monitor the serial line, which
+you can do in a different terminal window with the `jag monitor` command.
+
+The output in the `jag monitor` will look like
+
+```
+[jaguar] INFO: program 7a3d83f9-837c-589d-a6e4-8f95ecb3cab4 started
+Time: 00:00
+Date: 1970-01-01
+[jaguar] INFO: program 7a3d83f9-837c-589d-a6e4-8f95ecb3cab4 stopped
+```
+
+The reason you see this date from the 1970s is that the system time
+has not been updated on your device yet.
+[Here](https://github.com/toitlang/pkg-ntp/blob/master/examples/settime.toit)
+is a small program that can be run after power-up to fix that.
+</Tab>
+<Tab label="Console">
 Copy and paste the Toit program above into the Code tab of an online device,
 press the **Run on device** button and go to the Logs tab of
 the device to see the logged date and time that is sent from the device to the
@@ -29,8 +59,7 @@ applications.
 <img src={LogsTab} alt="The logs tab on the Toit console" />
 
 </Tab>
-<Tab label="CLI">
-
+<Tab label="CLI from toit.io">
 Save the above Toit program in a file named `time.toit`, and run the command
 
 ```shell

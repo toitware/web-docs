@@ -8,9 +8,12 @@ package which adds support for morse code. We have uploaded this version to
 
 <Note>
 
-Some Toit installations use the program `toit.pkg` instead of `toit pkg`.  If you
-have one of these installations you will need to substitute the correct command in
-the examples below.
+Depending on how you installed your Toit SDK you may need to use slightly
+different commands.  You can pick the correct tab for the examples below,
+depending on whether you installed
+the [Jaguar](https://github.com/toitlang/jaguar) tool,
+the standalone [toitlang.org](https://github.com/toitlang/toit) SDK,
+or the commerically licensed [toit.io](https://toit.io/) SDK.
 
 </Note>
 
@@ -291,6 +294,41 @@ main:
 Since this example uses the morse package, we need to install the package first. Instead of
 relying on the uploaded package (which would be a bit circular), we use the package locally:
 
+<Tabs>
+<Tab label="Jaguar">
+
+```shell
+# In the examples directory:
+jag pkg init
+jag pkg install --local --name=morse_tutorial ..
+```
+
+This creates a `package.lock` file mapping the prefix "morse_tutorial" to the package at location `..`.
+
+<Note>
+
+We use `jag pkg init` to ensure that the `package.lock` file is created in the current directory. If we just used `jag pkg install`, we would risk adding a new dependency to our package and not to the example.
+
+</Note>
+</Tab>
+<Tab label="Toit open SDK">
+
+```shell
+# In the examples directory:
+toit.pkg init
+toit.pkg install --local --name=morse_tutorial ..
+```
+
+This creates a `package.lock` file mapping the prefix "morse_tutorial" to the package at location `..`.
+
+<Note>
+
+We use `toit.pkg init` to ensure that the `package.lock` file is created in the current directory. If we just used `toit.pkg install`, we would risk adding a new dependency to our package and not to the example.
+
+</Note>
+</Tab>
+<Tab label="toit.io">
+
 ```shell
 # In the examples directory:
 toit pkg init
@@ -304,6 +342,8 @@ This creates a `package.lock` file mapping the prefix "morse_tutorial" to the pa
 We use `toit pkg init` to ensure that the `package.lock` file is created in the current directory. If we just used `toit pkg install`, we would risk adding a new dependency to our package and not to the example.
 
 </Note>
+</Tab>
+</Tabs>
 
 ### Tests
 
@@ -328,6 +368,37 @@ main:
 
 Similarly to the examples, it's necessary to install the local package to be able to use it first:
 
+<Tabs>
+<Tab label="Jaguar">
+
+```shell
+# In the test directory:
+jag pkg init
+jag pkg install --local --name=morse_tutorial ..
+```
+
+The test should then execute successfully by running it locally:
+
+```shell
+jag run -d host morse_test.toit
+```
+</Tab>
+<Tab label="toitlang.org">
+
+```shell
+# In the test directory:
+toit.pkg init
+toit.pkg install --local --name=morse_tutorial ..
+```
+
+The test should then execute successfully by running it locally:
+
+```shell
+toit.run morse_test.toit
+```
+</Tab>
+<Tab label="toit.io">
+
 ```shell
 # In the test directory:
 toit pkg init
@@ -339,6 +410,8 @@ The test should then execute successfully by running it locally:
 ```shell
 toit run --no-device morse_test.toit
 ```
+</Tab>
+</Tabs>
 
 ### Changelog
 
@@ -404,4 +477,17 @@ the package name, or
 As the last step we need to inform a registry about the existence of the (new
 version of the) package. For the Toit package registry, publish your package [here](https://pkg.toit.io/publish).
 
+<Tabs>
+<Tab label="Jaguar">
+
+Once published successfully, the registry will distribute a description of the package so that anyone can start using the package with a simple `jag pkg install`.
+</Tab>
+<Tab label="toitlang.org">
+
+Once published successfully, the registry will distribute a description of the package so that anyone can start using the package with a simple `toit.pkg install`.
+</Tab>
+<Tab label="toit.io">
+
 Once published successfully, the registry will distribute a description of the package so that anyone can start using the package with a simple `toit pkg install`.
+</Tab>
+</Tabs>

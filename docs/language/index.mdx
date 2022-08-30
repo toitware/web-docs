@@ -28,6 +28,35 @@ main:
 
 you can run it from the command line like this:
 
+<Tabs>
+<Tab label="Jaguar">
+
+```txt
+$ jag run -d host hello.toit
+Hello World!
+```
+
+What just happened? The `jag` command line tool read your source code
+(`hello.toit`) and started running it from the `main` method that you defined.
+The `main` method consists of all the indented statements just below the method
+declaration line `main:`. Toit is indentation-based like Python, so the spaces
+you add to your programs are significant.
+</Tab>
+<Tab label="toitlang.org">
+
+```txt
+$ toit.run hello.toit
+Hello World!
+```
+
+What just happened? The `toit.run` command line tool read your source code
+(`hello.toit`) and started running it from the `main` method that you defined.
+The `main` method consists of all the indented statements just below the method
+declaration line `main:`. Toit is indentation-based like Python, so the spaces
+you add to your programs are significant.
+</Tab>
+<Tab label="toit.io">
+
 ```txt
 $ toit run --no-device hello.toit
 Hello World!
@@ -38,6 +67,8 @@ What just happened? The `toit` command line tool read your source code
 The `main` method consists of all the indented statements just below the method
 declaration line `main:`. Toit is indentation-based like Python, so the spaces
 you add to your programs are significant.
+</Tab>
+</Tabs>
 
 Once the program ran, it printed `Hello World!` in your terminal. This is
 because the only statement in `hello.toit` is a method call, where you invoke
@@ -53,11 +84,32 @@ main:
 
 When you run the updated program, you will see two lines of output:
 
+<Tabs>
+<Tab label="Jaguar">
+
+```txt
+$ jag run -d host hello.toit
+Hello World!
+Hello World!
+```
+</Tab>
+<Tab label="toitlang.org">
+
+```txt
+$ toit.run hello.toit
+Hello World!
+Hello World!
+```
+</Tab>
+<Tab label="toit.io">
+
 ```txt
 $ toit run --no-device hello.toit
 Hello World!
 Hello World!
 ```
+</Tab>
+</Tabs>
 
 ## Defining a function
 
@@ -96,11 +148,32 @@ main:
 
 and it works!
 
+<Tabs>
+<Tab label="Jaguar">
+
+```txt
+$ jag run -d host hello.toit
+Hello Lars!
+Hello Kasper!
+```
+</Tab>
+<Tab label="toitlang.org">
+
+```txt
+$ toit.run hello.toit
+Hello Lars!
+Hello Kasper!
+```
+</Tab>
+<Tab label="toit.io">
+
 ```txt
 $ toit run --no-device hello.toit
 Hello Lars!
 Hello Kasper!
 ```
+</Tab>
+</Tabs>
 
 ## Inserting strings in strings
 
@@ -139,11 +212,32 @@ main:
 
 and get the following output:
 
+<Tabs>
+<Tab label="Jaguar">
+
+```txt
+$ jag run -d host hello.toit
+Hello World!
+Hello Kasper!
+```
+</Tab>
+<Tab label="toitlang.org">
+
+```txt
+$ toit.run hello.toit
+Hello World!
+Hello Kasper!
+```
+</Tab>
+<Tab label="toit.io">
+
 ```txt
 $ toit run --no-device hello.toit
 Hello World!
 Hello Kasper!
 ```
+</Tab>
+</Tabs>
 
 ## Evolving into a greeter
 
@@ -205,11 +299,32 @@ We create an object simply by mentioning the constructor, `Greeter`. The
 greeter object remembers the name and uses it for the two separate greetings.
 If we run this, we get the following output:
 
+<Tabs>
+<Tab label="Jaguar">
+
+```txt
+$ jag run -d host hello.toit
+Hi Helena!
+Bye Helena, come back soon.
+```
+</Tab>
+<Tab label="toitlang.org">
+
+```txt
+$ toit.run hello.toit
+Hi Helena!
+Bye Helena, come back soon.
+```
+</Tab>
+<Tab label="toit.io">
+
 ```txt
 $ toit run --no-device hello.toit
 Hi Helena!
 Bye Helena, come back soon.
 ```
+</Tab>
+</Tabs>
 
 If you want to get the name from a greeter, you can ask a greeter by calling the `name` method on it:
 
@@ -322,10 +437,29 @@ main:
 
 will lead to this output:
 
+<Tabs>
+<Tab label="Jaguar">
+
+```txt
+$ jag run -d host hello.toit
+The names are [World]
+```
+</Tab>
+<Tab label="toitlang.org">
+
+```txt
+$ toit.run hello.toit
+The names are [World]
+```
+</Tab>
+<Tab label="toit.io">
+
 ```txt
 $ toit run --no-device hello.toit
 The names are [World]
 ```
+</Tab>
+</Tabs>
 
 We can now go ahead and add greeter methods that show all the names:
 
@@ -360,6 +494,35 @@ main:
 
 If you run this, you’ll get this output:
 
+<Tabs>
+<Tab label="Jaguar">
+
+```txt
+$ jag run -d host hello.toit
+Hello World!
+Bye World, come back soon.
+Hello World!
+Hello Lars!
+Hello Kasper!
+Hello Rikke!
+Bye World, Lars, Kasper, Rikke, come back soon.
+```
+</Tab>
+<Tab label="toitlang.org">
+
+```txt
+$ toit.run hello.toit
+Hello World!
+Bye World, come back soon.
+Hello World!
+Hello Lars!
+Hello Kasper!
+Hello Rikke!
+Bye World, Lars, Kasper, Rikke, come back soon.
+```
+</Tab>
+<Tab label="toit.io">
+
 ```txt
 $ toit run --no-device hello.toit
 Hello World!
@@ -370,6 +533,8 @@ Hello Kasper!
 Hello Rikke!
 Bye World, Lars, Kasper, Rikke, come back soon.
 ```
+</Tab>
+</Tabs>
 
 Let’s dive into the new constructs in the next sections.
 
