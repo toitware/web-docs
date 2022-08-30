@@ -9,5 +9,5 @@ require("ts-node").register();
 module.exports = require("./gatsby-config.ts");
 
 flags: {
-  THE_FLAG: false
+  THE_FLAG: false;
 }
