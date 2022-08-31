@@ -56,10 +56,24 @@ export function Navigation({ className }: { className?: string }): JSX.Element {
 
       <Separator />
 
-      <Link href="https://toit.io">
+      <Link href="https://toitlang.org/">
         <ArrowLeft />{" "}
         <span>
-          Go to <strong>toit.io</strong>
+          Go to <strong>toitlang.org</strong>
+        </span>
+      </Link>
+
+      <Link href="https://github.com/toitlang">
+        <ArrowLeft />{" "}
+        <span>
+          Go to <strong>GitHub</strong>
+        </span>
+      </Link>
+
+      <Link href="https://chat.toit.io/">
+        <ArrowLeft />{" "}
+        <span>
+          Go to <strong>Discord chat</strong>
         </span>
       </Link>
 
