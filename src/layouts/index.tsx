@@ -4,7 +4,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import CookieConsent from "@toitware/cookie-consent";
 import Color from "color";
 import * as React from "react";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { Helmet } from "react-helmet";
 import Navigation from "../components/navigation/Navigation";
 import useDarkMode from "../hooks/use_dark_mode";
@@ -50,18 +50,6 @@ export function Layout(props: LayoutProps): JSX.Element {
       segmentAPIKey = segmentKeyDOM.getAttribute("content") || segmentAPIKey;
     }
   }
-  useEffect(() => {
-    setupCrispChat();
-  }, []);
-
-  const setupCrispChat = () => {
-    window.$crisp = [];
-    window.CRISP_WEBSITE_ID = "d7358065-35d6-43ee-bcd9-608d223d7aab";
-    const s = document.createElement("script");
-    s.src = "https://client.crisp.chat/l.js";
-    s.async = true;
-    document.getElementsByTagName("head")[0].appendChild(s);
-  };
 
   return (
     <ThemeProvider theme={dark ? darkTheme : lightTheme}>
