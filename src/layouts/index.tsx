@@ -4,7 +4,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import CookieConsent from "@toitware/cookie-consent";
 import Color from "color";
 import * as React from "react";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { Helmet } from "react-helmet";
 import Navigation from "../components/navigation/Navigation";
 import useDarkMode from "../hooks/use_dark_mode";
