@@ -413,9 +413,11 @@ main:
   print "Life, the Universe and $(%c 42)."
   // %o writes in octal:
   print "The VAX answer: $(%03o 42)." // >> The VAX answer: 052.
+  // %b writes in binary:
+  print "The year 2010: $(%b 2010)." // >> The year 2010: 11111011010.
 ```
 
-For other bases than 8, 10, and 16, see
+For other bases than 2, 8, 10, and 16, see
 [stringify](<https://libs.toit.io/core/numbers/class-int#stringify(1%2C0%2C0%2C)>).
 
 The full set of formatting options includes left-padding,
