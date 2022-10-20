@@ -8,10 +8,10 @@ This tutorial shows you how to connect to an MQTT broker using TCP (or TLS).
 
 The Toit MQTT client is available from the [`mqtt` package](https://pkg.toit.io/package/github.com%2Ftoitware%2Fmqtt) - in the Toit package registry.
 
-Install the package using the Toi CLI:
+Install the package using the Jaguar:
 
 ```shell
-toit pkg install github.com/toitware/mqtt
+jag pkg install github.com/toitware/mqtt
 ```
 
 and use it by importing it into your application with `import mqtt`.
@@ -120,7 +120,7 @@ that we need root certificatse which are then used to authenticate the server.
 Here, we are using the certificate-roots package which can be installed with
 
 ``` shell
-toit pkg install github.com/toitware/toit-cert-roots
+jag pkg install github.com/toitware/toit-cert-roots
 ```
 
 In other cases, the certificate might be given by the server and should be pasted into
