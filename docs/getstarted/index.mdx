@@ -60,7 +60,9 @@ the [Toit SDK](https://github.com/toitlang/toit) and an ESP32 image.
 
 ## 3. Flash
 
-Connect your ESP32 to a serial port and run `jag flash`.
+Connect your ESP32 to a USB port and run `jag flash`.
+
+(On Linux this may fail with a [permissions issue](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establish-serial-connection.html#adding-user-to-dialout-on-linux).)
 
 Having issues? Get help in the [troubleshoot](../../support/troubleshoot) section, or contact us in
 our [Discord channel](https://discord.gg/Q7Y9VQ5nh2) channel. We have some experience with flashing,
@@ -80,7 +82,8 @@ main:
 
 Run it with `jag run hello.toit`.
 
-At this stage you won't see anything, as the output is emitted to the serial output.
+At this stage you won't see anything, as the output is emitted to the serial output
+(normally connected to your computer via USB).
 
 Use `jag monitor --attach` to start listening to the serial output. The `--attach` flag
 is to make sure we don't reboot the device.
