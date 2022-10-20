@@ -11,13 +11,6 @@ items:
     children:
       - name: Installation
         path: /getstarted/installation
-        children:
-          - name: Toit for Windows
-            path: /getstarted/installation/windows
-          - name: Toit for macOS
-            path: /getstarted/installation/macos
-          - name: Toit for Linux
-            path: /getstarted/installation/linux
   - name: Tutorials
     path: /tutorials
     icon: tutorials
