@@ -5,95 +5,103 @@ import VSCode from "../_images/vscodehello.png";
 This guide shows how to sign up with Toit, install the Toit firmware on your [ESP32](https://www.espressif.com/en/products/socs/esp32),
 setup your local development environment, and finally how to deploy a Toit app on your ESP32 over-the-air.
 
-## 1. Sign up
+## 1. Get an ESP32
 
-At [toit.io](https://toit.io/), click the **Start Now** button to create a free Toit account.
+If you already have an ESP32 available, jump to step 2 to continue. Otherwise, you can buy one at [digikey](https://www.digikey.com), or
+any other electronics distributor. Any board that contains a standard ESP32 chip (like the WROOM or WROVER) should be fine.
+If you have doubts, don't hesitate to ask for guidance on our [Discord](https://discord.com/embed/invite/Q7Y9VQ5nh2) channel.
 
-## 2. Get an ESP32
+## 2. Install Jaguar
 
-If you already have an ESP32 available, jump to step 3 to continue. Otherwise, you can buy one [here](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990).
+The following describes how to install a precompiled version of Jaguar,
+including a prebuilt ROM image that is suitable for most ESP32s.  If you need to
+build from source, see the instructions at [Github](https://github.com/toitlang/jaguar/).
 
-## 3. Provision your ESP32
-
-To install the latest Toit firmware on your ESP32, connect the ESP32 with a USB cable to your computer.
-
-Go to the Serial page in the [Toit console](https://console.toit.io/serial) to initially provision your ESP32 with the Toit firmware and WiFi settings -
-note that it only works in Google Chrome and Microsoft Edge browsers.
-
-Having issues? Get help in the [troubleshoot](../../support/troubleshoot) section. (Note! You can also use the [Toit CLI to provision](../../platform/concepts/provision).)
-
-Your device has now been added to your Toit project. Only users with access to the same Toit project can communicate with the device via the Toit cloud.
-
-When your device is online, all device communication will be **over-the-air**.
-
-## 4. Run code
-
-Run Toit code on your device from the Code tab of your device in the [Toit console](https://console.toit.io).
-Find more Toit code examples in [Github](https://github.com/toitware/examples).
-
-## 5. Install Toit
-
-Download and install the Toit development environment [here](./installation).
-
-## 6. Write and deploy a Toit app
-
-You can either **run** a Toit program once on your ESP32 or **deploy** the same Toit program as a long-lived application.
-
-First, create a project folder and save the following Toit code in a file named `hello.toit` using Visual Studio Code.
-
-```
-// Save as hello.toit
-main:
-  print "Hello, World!"
-```
-
-Save the following yaml code in a file named `hello.yaml` and place it in the same folder as the `hello.toit` file from above:
-
-```yaml
-# Save as hello.yaml
-name: "HelloApp"
-entrypoint: hello.toit
-triggers:
-  on_boot: true
-  on_install: true
-```
-
-Deploying a Toit app on your device means that the Toit code in the `toit` file will be executed repeatedly according to the scheduling defined in `hello.yaml`.
-In this case, when the app is installed on the device and if the device reboots.
 
 <Tabs>
-<Tab label="CLI">
+<Tab label="Windows">
 
-Deploy the Toit app named `HelloApp` on your device with the following command. Replace `device-name` with the actual name of your device.
-
+On Windows 10+ simply open powershell, and run:
 ```shell
-toit deploy -d device-name hello.yaml
+winget install --id=Toit.Jaguar -e
 ```
 
+For older Windows versions, download and install Jaguar from
+[here](https://github.com/toitlang/jaguar/releases/latest/download/jag_installer.exe).
+
 </Tab>
-<Tab label="VSCode">
+<Tab label="macOS">
 
-Deploy the Toit app named `HelloApp` on your device with the Toit VSCode extension, by pressing the deploy button next to the device:
+You can use [Homebrew](https://brew.sh/) to install Jaguar as follows:
+```shell
+brew install toitlang/toit/jag
+```
 
-<img src={VSCode} alt="VSCode" width="100%" />
+Or you can download and install Jaguar manually from
+[here](https://github.com/toitlang/jaguar/releases/latest/download/jag.dmg).
+
+</Tab>
+
+<Tab label="Linux">
+
+On Archlinux there is an AUR package, which can be installed with:
+
+```shell
+yay install jaguar-bin
+```
+
+A precompiled binary can be downloaded [here](https://github.com/toitlang/jaguar/releases/latest/download/jag_linux.tgz).
 
 </Tab>
 </Tabs>
 
-When deploying an app, the device is not required to be online. The app will be installed on the device when it comes online.
+Run the command `jag setup` after installation to finish the setup of Jaguar. This step downloads
+the [Toit SDK](https://github.com/toitlang/toit) and an ESP32 image.
 
-### Verify that the app has been deployed
+## 3. Flash
 
-Go to the Apps tab in the [Toit console](https://console.toit.io/) of your device to view the list of deployed apps.
+Connect your ESP32 to a serial port and run `jag flash`.
 
-## 7. View the logs from the device
+Having issues? Get help in the [troubleshoot](../../support/troubleshoot) section, or contact us in
+our [Discord channel](https://discord.gg/Q7Y9VQ5nh2) channel. We have some experience with flashing,
+and are happy to help.
 
-Go to the Logs tab in the [Toit console](https://console.toit.io/) of your device to view the logs from the device.
+## 4. Run code
 
-## 8. Uninstall Toit app
+Create a file `hello.toit` with the following content:
 
-Go to the Apps tab in the [Toit console](https://console.toit.io/) of your device to uninstall the app using the uninstall button.
+```
+// Save as hello.toit
+main:
+  while true:
+    print "Hello, World!"
+    sleep --ms=3000
+```
 
-## 9. What's next?
+Run it with `jag run hello.toit`.
+
+At this stage you won't see anything, as the output is emitted to the serial output.
+
+Use `jag monitor --attach` to start listening to the serial output. The `--attach` flag
+is to make sure we don't reboot the device.
+
+You should start seeing the "Hello, World!" messages printed out.
+
+## 5. Install a container
+
+With `jag run` a program is only run once, and disappears when the device is rebooted.
+
+Use `jag container install hello hello.toit` to install the program as a container. After this the
+program will be rerun every time the device reboots.
+
+## 6. Install Visual Studio Code
+
+Toit comes with a [Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=toit.toit),
+which significantly improves development of Toit code.
+
+Install [Visual Studio Code](https://code.visualstudio.com/) first. Then open the extensions menu and search for
+"Toit".
+
+## 7. What's next?
 
 Congratulations! You are now ready to start developing IoT applications using Toit. Next step, look in the [tutorials](../../tutorials) or dive into the [Toit language guide](../../language).
