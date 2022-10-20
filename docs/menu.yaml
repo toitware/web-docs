@@ -8,9 +8,6 @@ items:
   - name: Get started
     path: /getstarted
     icon: getstarted
-    children:
-      - name: Installation
-        path: /getstarted/installation
   - name: Tutorials
     path: /tutorials
     icon: tutorials
