@@ -4,8 +4,6 @@ import Qwiic from "../../_images/BME280.png";
 
 In this tutorial we are using an ESP32 with the Bosch [BME280 sensor](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf); an environmental sensor measuring temperature, the relative humidity, and the atmospheric pressure.
 
-This example illustrates the difference between running a Toit program once on an ESP32 and deploying the same program as a long-lived app by using an app specification file.
-
 The code examples shown in this tutorial are also available [here](https://github.com/toitware/bme280_post/tree/main/weather-station).
 
 ## Connect the sensor
@@ -15,9 +13,6 @@ The code examples shown in this tutorial are also available [here](https://githu
 Follow the steps [here](../../../peripherals/drivers/bme280) to connect the BME280 sensor with your ESP32 using a Qwiic cable.
 
 ## Install package
-
-If you haven't installed the Toit CLI and the Visual Studio Code language extension for Toit yet,
-follow this [guide](../../../getstarted/installation) before proceeding with the tutorial.
 
 In order to get data from the sensor we make use of the BME280 driver available as a **package** from
 [pkg.toit.io](https://pkg.toit.io/package/github.com%2Ftoitware%2Fbme280-driver).
@@ -50,36 +45,15 @@ main:
 
 Then, open a terminal window in VSCode and execute the following commands in order to install the BME280 driver package locally:
 
-<Tabs>
-<Tab label="Jaguar">
-
 ```shell
 jag pkg init
 jag pkg install github.com/toitware/bme280-driver
 ```
-</Tab>
-<Tab label="toitlang.org">
-
-```shell
-toit.pkg init
-toit.pkg install github.com/toitware/bme280-driver
-```
-</Tab>
-<Tab label="toit.io">
-
-```shell
-toit pkg init
-toit pkg install github.com/toitware/bme280-driver
-```
-</Tab>
-</Tabs>
 
 ## Run Toit program
 
 If you want to know more about what is happening in each step in the Toit program above, see [here](../../../peripherals/drivers/bme280#i2cbus).
 
-<Tabs>
-<Tab label="Jaguar">
 To run the program once on the ESP32, execute the CLI command
 
 ```shell
@@ -109,136 +83,111 @@ Humidity: 42.111328125 %
 Pressure: 101686.515625 Pa
 [jaguar] INFO: program 7a3d83f9-837c-589d-a6e4-8f95ecb3cab4 stopped
 ```
-</Tab>
-<Tab label="Console">
-
-Open the [Toit console](https://console.toit.io), find your ESP32 in the list of devices, copy and paste the program above into the **Code tab**
-your online ESP32 with the BME280 sensor connected, press the **Run** button and go to the **Logs** tab of the device to see the measured temperature, humidity
-and pressure values.
-
-</Tab>
-<Tab label="toit.io CLI">
-
-To run the program once on the ESP32, execute the CLI command
-
-```shell
-toit run weather_station.toit
-```
-
-If you haven't set your default device in the CLI, add `-d device-name` to
-the run command, where `device-name` is the name of your ESP32.
-
-```shell
-$ toit run weather_station.toit
-2021-06-23T12:54:58.131899Z: <process initiated>
-Temperature: 25.769999999999999574 C
-Humidity: 42.111328125 %
-Pressure: 101686.515625 Pa
-2021-06-23T12:54:58.431812Z: <process terminated - exit code: 0>
-```
-
-</Tab>
-</Tabs>
 
 Running a Toit program in this way means that it will be uninstalled from the device once the program has terminated.
 
 ## Deploy app
 
-<Note>
-Deploying is not yet available with Jaguar, stay tuned.
-</Note>
+If we want the program to survive reboots, we have to install it as a container.
 
-We can use the same Toit program to repeatedly measure the temperature,
-humidity, and pressure every 30 seconds by deploying it on the ESP32 using the
-following app specification file:
-
-```yaml
-# filename: weather_station.yaml
-
-# This app specification file executes the 'Weather Station' app on install
-# and subsequently every 30 seconds.
-
-name: Weather Station
-entrypoint: weather_station.toit
-triggers:
-  on_install: true
-  on_interval: 30s
-```
-
-Save the content of the above yaml specification into a file named `weather_station.yaml` located in the same directory as the `weather_station.toit` file from the previous
-step.
-
-Deploy the **Weather Station** app on your ESP32 with the CLI command
-
+Deploy the application as follows:
 ```shell
-toit deploy weather_station.yaml
+jag container install weather weather_station.toit
 ```
 
-If you haven't set your default device in the CLI, add `-d device-name` to
-the deploy command, where `device-name` is the name of your ESP32.
+Doing so will install the application so that it is automatically started whenever the
+ESP32 boots.
 
-<Note>
+At the current state this isn't very useful, as the program stops after one iteration.
 
-The device is not required to be online when the **Weather Station** app is deployed.
-When the device comes online, the app will be installed on the device and start
-it's scheduled execution.
+We have two options to fix this:
+1. Use an infinite loop inside the program, that sleeps, or
+2. Go into deep sleep and wake up after a few seconds. Waking up from
+  deep sleep counts as rebooting, and will thus cause the container to
+  be restarted.
 
-</Note>
+### Infinite loop
+Change your program to:
+```toit
+/**
+Program measuring temperature, relative humidity, and atmospheric pressure
+  with a BME280.
+*/
 
-## View logs
+import gpio
+import i2c
+import bme280
 
-The device log will show the three measurements every 30 seconds after the program
-has been installed on the device.
+main:
+  bus := i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
 
-<Tabs>
-<Tab label="Console">
+  device := bus.device bme280.I2C_ADDRESS_ALT
 
-View the device log in the [Toit console](https://console.toit.io) in the **Logs** tab of the device.
+  driver := bme280.Driver device
 
-</Tab>
-<Tab label="CLI">
-
-View the device log using the Toit CLI which shows logs from 15 minutes ago and trailing:
-
-```shell
-toit device logs -f 15m
+  while true:
+    print "Temperature: $driver.read_temperature C"
+    print "Humidity: $driver.read_humidity %"
+    print "Pressure: $driver.read_pressure Pa"
+    sleep --ms=5000
 ```
 
-</Tab>
-</Tabs>
+Deploy the new version with `jag container install weather weather_station.toit` to
+replace the old version.
 
-## Uninstall app
+With this small modification, the program now runs continuously and outputs the
+measured values every 5 seconds.
 
-View all installed apps (or waiting to be installed) on your device from the
-**Apps** tab in the [Toit console](https://console.toit.io).
 
-<Tabs>
-<Tab label="Console">
+### Deep sleep
 
-To uninstall an app, click on the **Uninstall** button in the **Apps** tab of the device.
-
-</Tab>
-<Tab label="CLI">
-
-To uninstall an app, run
-
-```shell
-toit device ps
+We first need to import ESP32 specific functions by adding the `esp32` import:
+```toit
+import esp32
 ```
 
-to get the list of installed apps on your device.
+This provides the `deep_sleep` function which immediately puts the ESP32 into deep
+sleep. We need to be a bit careful with this function, though. If we call
+deep sleep too early, then the Jaguar service on the ESP32 won't have the time
+to connect to the WiFi and receive new commands. While you use Jaguar
+for development, it is a good idea to add a few seconds of delay before calling
+deep sleep. This way, Jaguar can start up and receive commands before your
+program shuts down the ESP32.
 
-Note the app ID or the app name, and replace it in the command:
+If you forget the timeout or set it too low, then you can always use the
+`jag flash` command to recover your ESP32.
 
-```shell
-toit device uninstall <app-ID or app-name>
+Here is the updated version of our program that uses deep sleep:
+```toit
+/**
+Program measuring temperature, relative humidity, and atmospheric pressure
+  with a BME280.
+*/
+
+import gpio
+import i2c
+import bme280
+import esp32
+
+main:
+  bus := i2c.Bus
+    --sda=gpio.Pin 21
+    --scl=gpio.Pin 22
+
+  device := bus.device bme280.I2C_ADDRESS_ALT
+
+  driver := bme280.Driver device
+
+  print "Temperature: $driver.read_temperature C"
+  print "Humidity: $driver.read_humidity %"
+  print "Pressure: $driver.read_pressure Pa"
+  sleep --ms=5000  // Give Jaguar time to receive commands.
+  esp32.deep_sleep (Duration --s=10)
 ```
 
-For example,
+Deploy the new version with `jag container install weather weather_station.toit` to
+replace the old version.
 
-```shell
-toit device uninstall "Weather Station"
-```
-
-</Tab>
-</Tabs>
+When using `jag monitor` you should see new measurements every 15 seconds.
