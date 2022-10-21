@@ -1,6 +1,7 @@
 # This is our custom implementation for 301 redirects in our webserver.
 redirects:
   "/getstarted/details/troubleshoot": "/troubleshoot/serialtroubleshoot"
+  "/getstarted/installation": "/getstarted"
   "/platform/tutorials/ble/advertising": "/tutorials/ble/advertising"
   "/getstarted/quick_start": "/getstarted"
   "/platform/deploy/runordeploy": "/platform/apps"
