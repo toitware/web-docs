@@ -30,81 +30,11 @@ items:
             path: /tutorials/ble/advertising
           - name: Client
             path: /tutorials/ble/client
-      - name: PubSub tutorials
-        path: /tutorials/pubsub
-        children:
-          - name: Communicate within a device
-            path: /tutorials/pubsub
-          - name: Communicate through the cloud
-            path: /tutorials/pubsub/pubsubext
       - name: MQTT tutorial
         path: /tutorials/mqtt
         children:
           - name: TCP (and TLS)
             path: /tutorials/mqtt
-  - name: Platform
-    path: /platform
-    icon: platform
-    children:
-      #    - name: Overview
-      #      path: /platform/concepts
-      - name: Console
-        path: /platform/console
-      #    - name: Projects
-      #      path: /platform/projects
-      - name: Device
-        path: /platform/devices
-        children:
-          - name: Provisioning
-            path: /platform/devices/provision
-          - name: Claiming
-            path: /platform/devices/claim
-          - name: Management
-            path: /platform/devices/devicemanagement
-          - name: Configuration
-            path: /platform/devices/deviceconfig
-          - name: Fleet management
-            path: /platform/devices/fleet
-      - name: Apps
-        path: /platform/apps
-        children:
-          - name: Running programs
-            path: /platform/apps/runprogram
-          - name: Specification
-            path: /platform/apps/appspec
-          - name: Deploying
-            path: /platform/apps/installingapp
-      - name: Data
-        path: /platform/data
-      #  children:
-      #    - name: Subscriptions
-      #      path: /platform/data/subscriptions
-      #    - name: Logs
-      #      path: /platform/data/logs
-      #    - name: System metrics
-      #      path: /platform/data/systemmetrics
-      #    - name: PubSub
-      #      path: /platform/data/pubsub
-  - name: Firmware
-    path: /firmware
-    icon: firmware
-    children:
-      - name: Prerequisites
-        path: /firmware/prerequisites
-      - name: Microprocessors
-        path: /firmware/microprocessors/esp32
-        children:
-          - name: ESP32
-            path: /firmware/microprocessors/esp32
-      - name: Connectivity
-        path: /firmware/connectivity
-        children:
-          - name: WiFi
-            path: /firmware/connectivity/wifi
-          - name: Cellular
-            path: /firmware/connectivity/cellular
-          - name: Ethernet
-            path: /firmware/connectivity/ethernet
   - name: Peripherals
     path: /peripherals
     icon: peripherals
@@ -182,12 +112,6 @@ items:
             path: /language/package/pkgguide
           - name: Package tutorial
             path: /language/package/pkgtutorial
-  - name: Cloud APIs
-    path: /apis
-    icon: apis
-    children:
-      - name: PubSub
-        path: /apis/pubsub
   - name: Support
     path: /support/troubleshoot
     icon: support
