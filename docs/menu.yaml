@@ -46,10 +46,8 @@ items:
       - name: SPI
         path: /peripherals/spi
       - name: Drivers
-        path: /peripherals/drivers/driverslist
+        path: /peripherals/drivers/bme280
         children:
-          - name: List of drivers
-            path: /peripherals/drivers/driverslist
           - name: Connect sensors
             path: /peripherals/drivers/bme280
           - name: Qwiic
