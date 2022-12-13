@@ -1,0 +1,12 @@
+The documentation (text in the docs folder) is licensed under CC Attribution 4.0 International (CC BY 4.0) [1].
+See LICENSE_CC4.
+
+Code samples inside the documentation are licensed under BSD0 [2].
+See LICENSE_BSD0.
+
+Code that is used to serve the documentation (React code in src, ...) is licensed under LGPL 2.1 [3].
+See LICENSE_LGPL.
+
+[1] https://creativecommons.org/licenses/by/4.0/
+[2] https://spdx.org/licenses/BSD-0-Clause.html
+[3] https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
