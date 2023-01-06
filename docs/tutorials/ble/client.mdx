@@ -9,27 +9,27 @@ In order for a BLE device to establish a connection to a remote device, the devi
 
 ```toit
 import ble
-import uuid
 
-// Find the address with the service.
-find_with_service device/ble.Device service/uuid.Uuid -> ble.Address:
-  device.scan: | remote_device/ble.RemoteDevice |
-    if remote_device.data.service_classes.contains service:
-      return remote_device.address
+SCAN_DURATION ::= Duration --s=3
+
+find_with_service central/ble.Central service/ble.BleUuid:
+  central.scan --duration=SCAN_DURATION: | device/ble.RemoteScannedDevice |
+    if device.data.service_classes.contains service:
+        return device.address
   throw "no device found"
 ```
 
 With the address available, the connection can be established. In the following example, we use the `find_with_service` function to find a remote device with a battery service and establish a connection to that device.
 
 ```toit
-import ble
-
-BATTERY_SERVICE ::= ble.uuid 0x180F
+BATTERY_SERVICE ::= ble.uuid "180F"
 
 main:
-  device := ble.Device.default
-  address := find_with_service device BATTERY_SERVICE
-  client := device.connect address
+  adapter := ble.Adapter
+  central := adapter.central
+
+  address := find_with_service central BATTERY_SERVICE
+  remote_device := central.connect address
 ```
 
 ## Reading service characteristics
@@ -39,18 +39,34 @@ With the client in place, the battery service can be accessed. The battery servi
 ```toit
 import ble
 
-BATTERY_SERVICE ::= ble.uuid 0x180F
-BATTERY_LEVEL   ::= ble.uuid 0x2A19
+BATTERY_SERVICE ::= ble.BleUuid "180F"
+BATTERY_LEVEL   ::= ble.BleUuid "2A19"
+
+SCAN_DURATION   ::= Duration --s=3
+
+find_with_service central/ble.Central service/ble.BleUuid:
+  central.scan --duration=SCAN_DURATION: | device/ble.RemoteScannedDevice |
+    if device.data.service_classes.contains service:
+        return device.address
+  throw "no device found"
 
 main:
-  device := ble.Device.default
+  adapter := ble.Adapter
+  central := adapter.central
 
-  address := find_with_service device BATTERY_SERVICE
-  client := device.connect address
-  service := client.read_service BATTERY_SERVICE
-  value := service.read_value BATTERY_LEVEL
+  address := find_with_service central BATTERY_SERVICE
+  remote_device := central.connect address
+  // Discover the battery service.
+  services := remote_device.discover_services [BATTERY_SERVICE]
+  battery_service/ble.RemoteService := services.first
 
-  // The battery level is a single-byte characteristic, between 0 and 100.
+  // Discover the battery level characteristic.
+  characteristics := battery_service.discover_characteristics [BATTERY_LEVEL]
+  battery_level_characteristic/ble.RemoteCharacteristic := characteristics.first
+
+  // Read the battery level which is a value between 0 and 100.
+  value := battery_level_characteristic.read
   battery_level := value[0]
-  print "Battery level of $address: $battery_level"
+
+  print "Battery level of $address: $battery_level%"
 ```
