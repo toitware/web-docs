@@ -19,9 +19,13 @@ find_with_service central/ble.Central service/ble.BleUuid:
   throw "no device found"
 ```
 
-With the address available, the connection can be established. In the following example, we use the `find_with_service` function to find a remote device with a battery service and establish a connection to that device.
+With the address available, the connection can be established. In the following example, we use the `find_with_service` function to find a remote device with an advertised battery service and establish a connection to that device. Note that the device might also support services that are not explicitly advertised.
 
 ```toit
+// The battery service is defined in the Bluetooth specification.
+// Devices that implement the battery service should (but don't
+// need to) advertise it.
+// For custom services use a full 128-bit UUID.
 BATTERY_SERVICE ::= ble.uuid "180F"
 
 main:
