@@ -6,12 +6,14 @@ A BLE device can advertise itself for other devices to see it. So in the base fo
 import ble
 
 main:
-  device := ble.Device.default
+  adapter := ble.Adapter
+  peripheral := adapter.peripheral
 
-  advertiser := device.advertise
-  advertiser.start
+  data := ble.AdvertisementData
 
-  advertiser.wait_for_done
+  peripheral.start_advertise data
+  sleep --ms=10000
+  peripheral.stop_advertise
 ```
 
 ## Name
@@ -22,16 +24,15 @@ Sometimes it can be beneficial to advertise the name of the BLE device. That can
 import ble
 
 main:
-  device := ble.Device.default
+  adapter := ble.Adapter
+  peripheral := adapter.peripheral
 
   data := ble.AdvertisementData
-    --name="Toit device"
+      --name="Toit device"
 
-  advertiser := device.advertise
-  advertiser.set_data data
-  advertiser.start
-
-  advertiser.wait_for_done
+  peripheral.start_advertise data
+  sleep --ms=10000
+  peripheral.stop_advertise
 ```
 
 The name is included in all advertisements, so power and bandwidth is saved by omitting it.
@@ -43,19 +44,19 @@ To signal what services the device implements, service classes can be added to t
 ```toit
 import ble
 
-BATTERY_SERVICE ::= ble.uuid 0x180F
+BATTERY_SERVICE ::= ble.BleUuid "180F"
 
 main:
-  device := ble.Device.default
+  adapter := ble.Adapter
+  peripheral := adapter.peripheral
 
   data := ble.AdvertisementData
-    --service_classes=[BATTERY_SERVICE]
+      --name="Toit device"
+      --service_classes=[BATTERY_SERVICE]
 
-  advertiser := device.advertise
-  advertiser.set_data data
-  advertiser.start
-
-  advertiser.wait_for_done
+  peripheral.start_advertise data
+  sleep --ms=10000
+  peripheral.stop_advertise
 ```
 
 <Note type="info">
@@ -70,22 +71,23 @@ The manufacturer data field is a custom payload that can be sent with an adverti
 
 For example, the manufacturer data field can be used to periodically broadcast a sensor value, e.g. the temperature or the GPS location, to make it available to all nearby devices.
 
-In the following example, the values between 0 and 255 are broadcasted incrementally with a new value every 5 seconds.
+In the following example, the manufacturer data is simply set to 'toit'.
 
 ```toit
 import ble
 
-INTERVAL ::= Duration --s=1
+BATTERY_SERVICE ::= ble.BleUuid "180F"
 
 main:
-  device := ble.Device.default
+  adapter := ble.Adapter
+  peripheral := adapter.peripheral
 
-  advertiser := device.advertise
-  advertiser.start --interval=INTERVAL
+  data := ble.AdvertisementData
+      --name="Toit device"
+      --service_classes=[BATTERY_SERVICE]
+      --manufacturer_data=#[0xFF, 0xFF, 't', 'o', 'i', 't']
 
-  256.repeat:
-    data := ble.AdvertisementData
-      --manufacturer_data=#[0xFF, 0xFF, it]
-    advertiser.set_data data
-    sleep INTERVAL
+  peripheral.start_advertise data
+  sleep --ms=1000000
+  peripheral.stop_advertise
 ```

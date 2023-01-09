@@ -1,15 +1,17 @@
 # Scanning
 
-To start scanning and for nearby BLE devices, simply call `scan` on the `ble.Device`. The provided block will be called for each scan result:
+To start scanning for nearby BLE devices, simply call `scan` on the adapter's
+central. The provided block will be called for each scan result:
 
 ```toit
 import ble
 
 main:
-  device := ble.Device.default
+  adapter := ble.Adapter
+  central := adapter.central
 
-  device.scan: | remote_device/ble.RemoteDevice |
-    print "Found $remote_device"
+  central.scan: | device/ble.RemoteScannedDevice |
+    print "Found $device"
 ```
 
 Here the scan will run indefinitely.
@@ -24,17 +26,18 @@ The following example shows how to scan for 3 seconds for the addresses of remot
 ```toit
 import ble
 
-BATTERY_SERVICE ::= ble.uuid 0x180F
+BATTERY_SERVICE ::= ble.BleUuid "180F"
 SCAN_DURATION   ::= Duration --s=3
 
 main:
-  device := ble.Device.default
+  adapter := ble.Adapter
+  central := adapter.central
 
   addresses := []
 
-  device.scan --duration=SCAN_DURATION: | remote_device/ble.RemoteDevice |
-    if remote_device.data.service_classes.contains BATTERY_SERVICE:
-      addresses.add remote_device.address
+  central.scan --duration=SCAN_DURATION: | device/ble.RemoteScannedDevice |
+    if device.data.service_classes.contains BATTERY_SERVICE:
+      addresses.add device.address
 
   print addresses
 ```
