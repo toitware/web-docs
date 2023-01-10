@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
 
@@ -60,14 +60,14 @@ jobs:
           echo $VERSION
           echo $VERSION > VERSION
           echo VERSION=$VERSION >> $GITHUB_ENV
-          echo "::set-output name=version::$VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Prepare artifacts
         run: |
           tar c -zf $VERSION.$ARTIFACT_EXTENSION -C $BUILD_DIR/ .
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build
           retention-days: 2
@@ -86,7 +86,7 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: build
 
