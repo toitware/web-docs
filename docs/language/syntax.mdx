@@ -542,16 +542,21 @@ following pairs are equivalent:
 <!-- HIDDEN CODE my_function2 x y z from to base level top size: -->
 
 ```
+  // Test that x is in the range [0, y).
   if 0 <= x < y:
     // ...
   if 0 <= x and x < y:
     // ...
 
+  // Test that 'from' and 'to' are in the range [0, size),
+  // and that 'from' is less than or equal to 'to'.
   if 0 <= from <= to < size:
     // ...
   if 0 <= from and from <= to and to < size:
     // ...
 
+  // Test that 'base' is equal to 0, and that 'level' is in the
+  // range [0, top).
   if 0 == base <= level < top:
     // ...
   if 0 == base and base <= level and level < top:
