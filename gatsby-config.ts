@@ -1,5 +1,5 @@
 export const siteMetadata = {
-  title: "Toit Documentation",
+  title: "Toit documentation",
   siteUrl: "https://docs.toit.io",
   // Put common data you want to reuse in the site here.
 };

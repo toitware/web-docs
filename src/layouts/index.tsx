@@ -38,7 +38,7 @@ interface LayoutProps {
 export function Layout(props: LayoutProps): JSX.Element {
   const { children } = props;
 
-  const title = "Toit Documentation";
+  const title = "Toit documentation";
 
   const dark = useDarkMode();
   let segmentAPIKey = process.env.GATSBY_SEGMENT_WRITE_KEY;
