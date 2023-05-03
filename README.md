@@ -23,7 +23,7 @@ Here's a short summary of what you need to do:
    1. Name it appropriately (I suggest something like: `<your machine name> GitHub npm registry`)
    2. Check `write:packages` and `read:packages`
 2. Copy the token
-3. Add the token to your `~/.npmrc`:  
+3. Add the token to your `~/.npmrc`:
    `echo "//npm.pkg.github.com/:_authToken=YOUR_TOKEN" >> ~/.npmrc`
 
 ## Linting and imports in VS Code
@@ -37,7 +37,7 @@ Here's a short summary of what you need to do:
           "source.organizeImports",
         ],
 
-  Be careful with `source.organizeImports` however since that can drastically reduce performance in vscode.
+  Be careful with `source.organizeImports` however since that can drastically reduce performance in VS Code.
 
 ## Useful developer tools
 
@@ -52,10 +52,10 @@ In the project directory, you can run:
 
 ### `yarn develop`
 
-Runs the app in the development mode.  
+Runs the app in the development mode.
 Open [http://localhost:8000](http://localhost:8000) to view it in the browser.
 
-The page will reload if you make edits.  
+The page will reload if you make edits.
 You will also see any lint errors in the console.
 
 If you want to be able to access the development server from other computers,
