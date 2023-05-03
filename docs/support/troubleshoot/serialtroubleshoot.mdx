@@ -40,13 +40,13 @@ Start by connecting your ESP32 with a USB cable to your computer.
 List the serial ports currently in use on your computer by running the following command with the Jaguar CLI in a terminal window:
 
 ``` sh
-jag ports
+jag port --list
 ```
 
 For example, if exactly one serial port, called `COM3`, is currently in use, the output of the command will look like this
 
 ``` txt
-$ jag ports
+$ jag port --list
 COM3
 ```
 
