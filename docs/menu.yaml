@@ -8,18 +8,28 @@ items:
   - name: Get started
     path: /getstarted
     icon: getstarted
+    children:
+      - name: Run on your device
+        path: /getstarted/device
+      - name: Manage your fleet
+        path: /getstarted/fleet
+        children:
+          - name: Commands
+            path: /getstarted/fleet/commands
+          - name: Pods
+            path: /getstarted/fleet/pods
   - name: Tutorials
     path: /tutorials
     icon: tutorials
     children:
-      - name: Starter tutorials
+      - name: Basics
         path: /tutorials/starter
         children:
           - name: Log the date and time
             path: /tutorials/starter
           - name: Weather station
             path: /tutorials/starter/weatherstation
-      - name: BLE tutorials
+      - name: BLE
         path: /tutorials/ble
         children:
           - name: Basics
@@ -30,7 +40,7 @@ items:
             path: /tutorials/ble/advertising
           - name: Client
             path: /tutorials/ble/client
-      - name: MQTT tutorial
+      - name: MQTT
         path: /tutorials/mqtt
         children:
           - name: TCP (and TLS)
@@ -60,48 +70,48 @@ items:
     children:
       - name: Common conversions
         path: /language/typeconversion
-      - name: Toit definitions
+      - name: Definitions
         path: /language/definitions
       - name: Language comparison
         path: /language/toitversus
-      - name: Toit style guide
+      - name: Style guide
         path: /language/style
-      - name: Toit syntax fundamentals
+      - name: Syntax fundamentals
         path: /language/syntax
       - name: Imports
         path: /language/imports
-      - name: Classes in Toit
+      - name: Classes
         path: /language/objects-constructors-inheritance-interfaces
-      - name: Toit strings
+      - name: Strings
         path: /language/strings
-      - name: Toit blocks
+      - name: Blocks
         path: /language/blocks
-      - name: List, ByteArray, Set and Map in Toit
+      - name: Lists, byte arrays, sets and maps
         path: /language/listsetmap
-      - name: Control flow in Toit
+      - name: Control flow
         path: /language/loops
       - name: Booleans
         path: /language/booleans
-      - name: Mathematics in Toit
+      - name: Mathematics
         path: /language/math
-      - name: Tasks in Toit
+      - name: Tasks
         path: /language/tasks
-      - name: Exception handling in Toit
+      - name: Exception handling
         path: /language/exceptions
-      - name: Toit SDK
+      - name: SDK
         path: /language/sdk
         children:
-          - name: Toit standard libraries
+          - name: Standard libraries
             path: /language/sdk/standard-libraries
           - name: Documentation convention
             path: /language/sdk/toitdoc
           - name: Display
             path: /language/sdk/display
-          - name: Toit font basics
+          - name: Font basics
             path: /language/sdk/fonts
-          - name: Bit blit in Toit
+          - name: Bit blit
             path: /language/sdk/blit
-      - name: Toit packages
+      - name: Packages
         path: /language/package
         children:
           - name: Concepts around packages

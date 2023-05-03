@@ -1,0 +1,91 @@
+# Pods
+
+Artemis allows you to build and distribute pods (as in a pod of whales or pea pod).
+A pod is a group of containers, with shared storage and network resources, and a
+description of how to run the containers. Pods are built from declarative specifications
+and they form the basis of Artemis' synchronization mechanisms.
+
+
+## Specifications
+
+You can find an example pod specification file in
+[specification.json](https://github.com/toitware/artemis-releases/blob/main/examples/specification.json).
+It is in JSON format and looks similar to this:
+
+```
+{
+  "version": 1,
+  "sdk-version": "v2.0.0-alpha.79",
+  "artemis-version": "v0.5.2",
+  "max-offline": "0s",
+  "connections": [
+    {
+      "type": "wifi",
+      "ssid": "YOUR WIFI SSID",
+      "password": "YOUR WIFI PASSWORD"
+    }
+  ],
+  "containers": {
+    "hello": {
+      "entrypoint": "hello.toit"
+    },
+    "solar": {
+      "entrypoint": "examples/solar_example.toit",
+      "git": "https://github.com/toitware/toit-solar-position.git",
+      "branch": "v0.0.3"
+    }
+  }
+}
+```
+
+The three version entries are for the specification format (always `1` for now) and the
+SDK and Artemis versions. Be aware that not all combinations of those are supported and
+use `artemis sdk list` to see the valid combinations.
+
+The `max-offline` entry is optional and defaults to 0s. Use it to control for how
+long your device is allowed to stay offline.
+
+The `connections` section contains a prioritized list of ways to connect to the
+Internet. You can have multiple `wifi` entries and Artemis will attempt to
+connect to them in the specified order.
+
+It is also possible to have `cellular` entries in `connections`, but for that to
+work you'll need to have a cellular driver installed as one of your containers.
+You can find a few drivers in the [cellular package](https://github.com/toitware/cellular).
+
+The `containers` section contains named entries for the containers
+you want on your device. The containers that are built from source
+code have an `entrypoint` that refers to the file that has the
+`main` method. You can optionally pull the source code directly
+from git using `git` and `branch`.
+
+If your container is a driver or provides services for other
+containers, you probably want to start it on boot and let it
+run until no other container runs. For that to work, you can
+make it a background container that is automatically terminated
+when the device goes to sleep like this:
+
+```
+"containers": {
+  "cellular": {
+    "entrypoint": "src/modules/sequans/monarch.toit",
+    "git": "https://github.com/toitware/cellular.git",
+    "branch": "v2.0.2",
+    "background": true,
+    "critical": true
+  }
+}
+```
+
+The `critical` flag makes the container run continuously. If you want your container
+to run periodically, you can specify interval triggers in the `containers` section
+like this:
+
+```
+"containers": {
+  "measure": {
+    "entrypoint": "measure.toit",
+    "triggers": [ { "interval": "20s" } ]
+  }
+}
+```

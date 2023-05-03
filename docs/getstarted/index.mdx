@@ -1,110 +1,61 @@
-import VSCode from "../_images/vscodehello.png";
+import Architecture from "../_images/architecture.png";
 
 # Get started
 
-This guide shows how to install Toit, flash the Toit firmware on your [ESP32](https://www.espressif.com/en/products/socs/esp32),
-setup your local development environment, and finally deploy a Toit app on your ESP32 over-the-air.
+Toit is a modern high-level language designed specifically for microcontrollers. It is [open source](https://github.com/toitlang/toit) and the
+language implementation consists of the compiler, virtual machine, and standard libraries that together enable Toit programs to run on an ESP32.
 
-## 1. Get an ESP32
+Toit is optimized for live reloading on your microcontroller. Your code runs incrementally as you write it and you get instant feedback. Push
+changes over your local WiFi in two seconds and reserve your USB cable for charging your phone. You iterate quickly, learn fast, and build
+better things.
 
-If you already have an ESP32 available, jump to step 2 to continue. Otherwise, you can buy one at [digikey](https://www.digikey.com), or
-any other electronics distributor. Any board that contains a standard ESP32 chip (like the WROOM or WROVER) should be fine.
-If you have doubts, don't hesitate to ask for guidance on our [Discord channel](https://chat.toit.io/).
+<Note>
 
-## 2. Install Jaguar
+Impatient? [Get started now](device) and have your code running on your device in 5 minutes!
 
-The following describes how to install a precompiled version of Jaguar,
-including a prebuilt ROM image that is suitable for most ESP32s.  If you need to
-build from source, see the instructions at [Github](https://github.com/toitlang/jaguar/).
+</Note>
 
+## Architecture
 
-<Tabs>
-<Tab label="Windows">
+Toit uses virtual machine technology to support running multiple containers on your device. The containers are developed and maintained
+independently from each other and the virtual machine provides the capabilities for safely running your platform-independent applications,
+services, and drivers side-by-side.
 
-On Windows 10+ simply open powershell, and run:
-```shell
-winget install --id=Toit.Jaguar -e
-```
+<img src={Architecture} alt="Architecture of Toit" />
 
-For older Windows versions, download and install Jaguar from
-[here](https://github.com/toitlang/jaguar/releases/latest/download/jag_installer.exe).
+This architecture provides a lot of flexibility and it allows you to customize the functionality of your devices by choosing the
+right services and containers to run instead of re-compiling and re-linking.
 
-</Tab>
-<Tab label="macOS">
+## Development
 
-You can use [Homebrew](https://brew.sh/) to install Jaguar as follows:
-```shell
-brew install toitlang/toit/jag
-```
+Toit comes with pre-packaged development support that makes experimenting and learning by running code on your device
+easy. You change your code in your editor, update it on your device, and restart it all within seconds. No need to flash over serial,
+reboot your device, or wait for it to reconnect to your network. It only takes a few minutes to [get started](device).
 
-Or you can download and install Jaguar manually from
-[here](https://github.com/toitlang/jaguar/releases/latest/download/jag.dmg).
+Under the covers, the development support is provided by [Jaguar](https://github.com/toitlang/jaguar) &mdash; a small, open-source Toit
+service that runs in a container on your ESP32. It uses the capabilities of the Toit virtual machine to let you update and restart
+your code through an HTTP server that runs on the device and is accessed via local WiFi. Jaguar is completely optional and it intended
+to be used during development only, so it is typically left out on devices in production.
 
-</Tab>
+## Deployment
 
-<Tab label="Linux">
+When you are ready to run your devices in production, you can rely on the Toit virtual machine's support for over-the-air (OTA) firmware
+updates. You choose when and where to download the updates from and the updates can bundle any number of containers, so all your applications
+and services can be kept up-to-date through the OTA mechanism. [Jaguar](https://github.com/toitlang/jaguar) is an excellent
+[source of inspiration](https://github.com/toitlang/jaguar/blob/36252dc369979062713b0807b5eca309e12a9784/src/jaguar.toit#L303) for how to
+use the OTA support from your own applications.
 
-On Archlinux there is an AUR package, which can be installed with:
+If you're looking for a more managed solution for your fleet of devices, Toit offers premium, pre-packaged deployment support
+through the [Artemis](fleet). Artemis is a fleet management infrastructure that connects your devices to the cloud and
+makes it possible to seamlessly update the firmware, containers, and configurations that run on your devices. It is free for
+up to ten devices and built to scale.
 
-```shell
-yay install jaguar-bin
-```
+<Note>
 
-A precompiled binary can be downloaded [here](https://github.com/toitlang/jaguar/releases/latest/download/jag_linux.tgz).
+[Get started with Artemis today](fleet) and manage your devices with ease through the cloud.
 
-</Tab>
-</Tabs>
+</Note>
 
-Run the command `jag setup` after installation to finish the setup of Jaguar. This step downloads
-the [Toit SDK](https://github.com/toitlang/toit) and an ESP32 image.
-
-## 3. Flash
-
-Connect your ESP32 to a USB port and run `jag flash`.
-
-(On Linux this may fail with a [permissions issue](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establish-serial-connection.html#adding-user-to-dialout-on-linux).)
-
-Having issues? Get help in the [troubleshoot](../../support/troubleshoot) section, or contact us in
-our [Discord channel](https://chat.toit.io/). We have some experience with flashing devices,
-and are happy to help.
-
-## 4. Run code
-
-Create a file `hello.toit` with the following content:
-
-```
-// Save as hello.toit
-main:
-  while true:
-    print "Hello, World!"
-    sleep --ms=3000
-```
-
-Run it with `jag run hello.toit`.
-
-At this stage you won't see anything, as the output is emitted to the serial output
-(normally connected to your computer via USB).
-
-Use `jag monitor --attach` to start listening to the serial output. The `--attach` flag
-is to make sure we don't reboot the device.
-
-You should start seeing the "Hello, World!" messages printed out.
-
-## 5. Install a container
-
-With `jag run` a program is only run once, and disappears when the device is rebooted.
-
-Use `jag container install hello hello.toit` to install the program as a container. After this the
-program will be rerun every time the device reboots.
-
-## 6. Install Visual Studio Code
-
-Toit comes with a [Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=toit.toit),
-which significantly improves development of Toit code.
-
-Install [Visual Studio Code](https://code.visualstudio.com/) first. Then open the extensions menu and search for
-"Toit".
-
-## 7. What's next?
-
-Congratulations! You are now ready to start developing IoT applications using Toit. Next step, look in the [tutorials](../../tutorials) or dive into the [Toit language guide](../../language).
+Artemis is the combination of an on-device service that communicates with a broker in the cloud &mdash; and the developer tooling to help
+orchestrate the devices. Hosting your own broker is possible and encouraged, so all your data and code remains under your control. Since
+Artemis runs in its own container on your devices, it is easy to add Artemis to already deployed devices and remove it again later.
