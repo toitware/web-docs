@@ -132,5 +132,5 @@ items:
         path: /support/troubleshoot/setuptroubleshoot
       - name: Claim device
         path: /support/troubleshoot/claimtroubleshoot
-      - name: VSCode extension
+      - name: VS Code extension
         path: /support/troubleshoot/vscodetroubleshoot
