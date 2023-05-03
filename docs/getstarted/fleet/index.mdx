@@ -20,7 +20,7 @@ You can download it from here:
 <Tabs>
 <Tab label="Windows">
 
-Download [`artemis`](https://github.com/toitware/artemis-releases/releases/latest/download/artemis-windows.zip) (only as an archive).
+Download [`artemis`](https://github.com/toitware/artemis-releases/releases/latest/download/artemis-windows.zip).
 
 </Tab>
 <Tab label="macOS">
@@ -31,8 +31,7 @@ Download [`artemis`](https://github.com/toitware/artemis-releases/releases/lates
 </Tab>
 <Tab label="Linux">
 
-Download [`artemis`](https://github.com/toitware/artemis-releases/releases/latest/download/artemis-linux.tar.gz)
-  (only as an archive).
+Download [`artemis`](https://github.com/toitware/artemis-releases/releases/latest/download/artemis-linux.tar.gz).
 
 </Tab>
 </Tabs>
@@ -82,7 +81,7 @@ The `artemis org show` command shows you your organization ID, which is a [UUID]
 Once you create a new organization it is automatically set as default. You can switch to a different organization with
 `artemis org default YOUR-ORG-ID`, or by passing the organization id to the commands that need one.
 
-You can add other users join your organization with `artemis org members add THEIR-USER-ID`. The
+You can add other users to your organization with `artemis org members add THEIR-USER-ID`. The
 user you want to add can find THEIR-USER-ID with `artemis profile show`.
 
 If you want to, you can also change the name in your profile with:
@@ -206,19 +205,20 @@ the behavior of a device by adding new functionality (drivers or applications)
 or by changing configurations.
 
 Such incremental changes are great for development; especially as they are faster
-to get onto the device and do not even require restarting the device.
+to get onto the device and do not even require restarting the device. However,
+these changes are lost at the next firmware upgrade.
 
 ### Controlling synchronization
 
-It is very common to want to control how often a device connects to the cloud
-and synchronizes.
+Devices managed by Artemis need to connect to the cloud to receive updated information.
+The frequency at which they synchronize can be configured by the user.
 
 Devices that connect frequently or all the time are easy
 to interact with and manage, but they spend a lot of power on staying connected
-all the time. The device specification in `specification.json` does not specify
+all the time. The pod specification in the example `specification.json` does not specify
 how often to connect, so Artemis assumes that you want an interactive device.
 
-If you want to allow your device to not stay connected all the time, you can
+If you don't need your device to stay connected all the time, you can
 give it a 'max-offline' setting. This tells the Artemis service that it is
 okay to be offline for 5m, 1h30m, or 24h without necessarily connecting to the
 Internet.
