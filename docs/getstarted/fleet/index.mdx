@@ -6,7 +6,7 @@ the firmware, containers, and configurations that run on your devices. It is fre
 up to ten devices and built to scale.
 
 Artemis is the combination of an on-device service that communicates with a broker
-in the cloud - and the developer tooling to help orchestrate the devices. It is
+in the cloud &mdash; and the developer tooling to help orchestrate the devices. It is
 possible to host your own broker, so all your data and code remains under your
 control.
 
@@ -42,7 +42,6 @@ somewhere on your `PATH`. The same applies when you extract the `artemis` binary
 file.
 
 The Artemis command line tool is a standalone executable written in Toit. Use `artemis help` for usage help.
-help.
 
 ## Signing up and logging in
 
@@ -53,13 +52,13 @@ signup will be triggered automatically.
 For email-based authentication sign up with:
 
 ``` sh
-artemis auth signup --email=myname@example.com --password=some_password
+artemis auth signup --email=myname@example.com --password=PASSWORD
 ```
 
 Then, after having confirmed the email address, log in with:
 
 ``` sh
-artemis auth login --email=myname@example.com --password=some_password
+artemis auth login --email=myname@example.com --password=PASSWORD
 ```
 
 Usually, signing up by OAuth is more convenient, but email-based authentication is often useful
@@ -331,3 +330,6 @@ run:
 ``` sh
 artemis fleet update
 ```
+
+This makes it easy to upgrade your containers, the Artemis service,
+and even the Toit SDK and its associated virtual machine.
