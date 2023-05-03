@@ -35,7 +35,6 @@ DEFAULT_OUTPUT ::= "snippet.toit"
 THINGS_THAT_WONT_RUN_ON_SERVER ::= [
   "import gpio",
   "import pixel_display",
-  "import pubsub",
 ]
 
 main args -> none:

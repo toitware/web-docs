@@ -63,36 +63,9 @@ toit.pkg install toitware/toit-morse  # Probably already unique.
 
 </Note>
 </Tab>
-<Tab label="toit.io">
-
-```shell
-toit pkg sync          # Synchronize the installed registries.
-toit pkg search morse  # Search for a package "morse".
-toit pkg install morse # Install package "morse".
-```
-
-It is important to execute these commands in the correct folder. Ideally,
-they should be run in the root of the project that needs the package.
-
-Note that the example and test folder generally are considered to be
-separate projects as they might have different dependencies than the package
-itself. We recommend to open the example or test folder in separate instances
-of the IDE.
-
-<Note title="Unique names">
-
-The installation of "morse" only works if the name is unambiguous. If there are multiple "morse" packages, then one has to use the URL. It is possible to omit leading segments if that makes the package unique:
-
-```shell
-toit pkg install github.com/toitware/toit-morse
-toit pkg install toitware/toit-morse  # Probably already unique.
-```
-
-</Note>
-</Tab>
 </Tabs>
 
-## Adding a Registry
+## Adding a registry
 
 Before being able to install any package, one must have a registry installed. Newer versions of the `toit` CLI do this automatically, but it never hurts to check:
 
@@ -137,29 +110,9 @@ If not, add a registry; for example the Toit registry:
 toit.pkg registry add toit github.com/toitware/registry
 ```
 </Tab>
-<Tab label="toit.io">
-
-See which registries are installed:
-
-```shell
-toit pkg registry list
-```
-
-You should have one or more registries:
-
-```txt
-toit: github.com/toitware/registry (git)
-```
-
-If not, add a registry; for example the Toit registry:
-
-```shell
-toit pkg registry add toit github.com/toitware/registry
-```
-</Tab>
 </Tabs>
 
-## Creating a Package
+## Creating a package
 
 Create a new Git repository (for example `github.com/toitware/toit-morse`).
 

@@ -2,13 +2,13 @@
 
 This section provides a more detailed description of the concepts that are used in TPM.
 
-## Program and Lock File
+## Program and lock file
 
 Package programs are Toit projects that are not intended to be used by other projects. As of 2021-02-07 they are not supposed to be shared through the package management system, either.
 
 When a program uses a package, that dependency is registered in the program's lock file `package.lock`. This is where the mapping from `prefix` to package is stored. Programs have concrete dependencies. All their dependent packages are resolved to a specific version, not a range of versions. These versions are written in the lock file.
 
-When a developer calls `toit pkg install`, `toit.pkg install` or `jag pkg install` they always get the same packages. A team of developers working on the same project will thus work with the exact same versions.
+When a developer calls `jag pkg install` or `toit.pkg install` they always get the same packages. A team of developers working on the same project will thus work with the exact same versions.
 
 Lock files must be located at the root of the project. Certain commands (like `pkg install`) automatically create a lock file if one doesn't exist yet. Be careful, as the lock-file is created in the current directory, which might not be the root directory.
 
@@ -43,7 +43,7 @@ Typically, dependencies are marked with `^x.y.z` which is a shorthand for `>=x.y
 
 Published packages can be discovered by other developers through registries which collect descriptions of known packages (see the [Registry](#registry) section).
 
-### Local Package
+### Local package
 
 TPM supports "local" packages where the package is referenced through a path. That path can be absolute or relative.
 
@@ -65,13 +65,6 @@ jag pkg install --local --name=font_clock ../../toit-font-clock
 ```shell
 toit.pkg remove font_clock
 toit.pkg install --local --name=font_clock ../../toit-font-clock
-```
-</Tab>
-<Tab label="toit.io">
-
-```shell
-toit pkg remove font_clock
-toit pkg install --local --name=font_clock ../../toit-font-clock
 ```
 </Tab>
 </Tabs>
@@ -105,12 +98,6 @@ jag pkg install
 
 ```shell
 toit.pkg install
-```
-</Tab>
-<Tab label="toit.io">
-
-```shell
-toit pkg install
 ```
 </Tab>
 </Tabs>
@@ -153,7 +140,7 @@ dependencies:
 
 As can be seen, almost all entries of the specification file can be inferred by looking at the repository in which the package is located. If a package doesn't have any dependency it is thus completely OK to have an empty specification file.
 
-## Multiple Packages with Different Versions
+## Multiple packages with different versions
 
 Toit supports multiple versions of the same package as (transitive) dependencies. This is similar in spirit to Go's packaging convention where incompatible packages often change their name by adding the version number to it.
 In Toit, the name of a package stays the same, but fundamentally Toit treats packages with two different incompatible versions (according to semver) as if they had a different name.
@@ -168,7 +155,7 @@ It can sometimes be confusing why two types are not compatible. Indeed, the type
 
 Supporting multiple versions of packages also has implications on semantic versioning (see below).
 
-## Semantic Versioning
+## Semantic versioning
 
 TPM uses [semantic versioning](http://semver.org) to determine whether packages are compatible to each other, or not. Roughly speaking, two packages are compatible if their major version is the same.
 
@@ -197,7 +184,7 @@ A registry collects descriptions of available packages. Conceptually it's a data
 
 Most of the time, developers only work with the public [github.com/toitware/registry](https://github.com/toitware/registry) registry. However, TPM supports multiple registries. Companies are free to create their own private registries and use them instead of, or in addition to the public Toit registry.
 
-Similar to packages, registries also exist in two variants: Git and local registries. Git registries are added to TPM with a Git-URL, and can be synchronized with `jag pkg sync` or `toit pkg sync` (see the [quick start](../pkgguide) section for more).
+Similar to packages, registries also exist in two variants: Git and local registries. Git registries are added to TPM with a Git-URL, and can be synchronized with `jag pkg sync` or `toit.pkg sync` (see the [quick start](../pkgguide) section for more).
 Local registries are just pointers to a path that contains descriptions.
 
 ## Description

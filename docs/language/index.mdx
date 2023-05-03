@@ -2,7 +2,7 @@
 
 This quick-start guide is inspired by [Ruby in Twenty
 Minutes](https://www.ruby-lang.org/en/documentation/quickstart/). It makes the
-assumption that you have [Jaguar installed](../../getstarted)
+assumption that you have [Jaguar installed](../../getstarted/device)
 on your machine.
 
 Toit is an [open source](https://github.com/toitlang/toit), [object-oriented](./objects-constructors-inheritance-interfaces)
@@ -17,9 +17,8 @@ Now, let's get started with some programming!
 
 ## Hello, World
 
-The Toit CLI offers support for running small programs in the Toit cloud
-directly from the command line. If you put the following code in a file called
-`hello.toit`
+The Toit SDK and Jaguar CLI both support running small programs directly from the command line.
+If you put the following code in a file called `hello.toit`:
 
 ```
 main:
@@ -55,19 +54,6 @@ The `main` method consists of all the indented statements just below the method
 declaration line `main:`. Toit is indentation-based like Python, so the spaces
 you add to your programs are significant.
 </Tab>
-<Tab label="toit.io">
-
-```txt
-$ toit run --no-device hello.toit
-Hello World!
-```
-
-What just happened? The `toit` command line tool read your source code
-(`hello.toit`) and started running it from the `main` method that you defined.
-The `main` method consists of all the indented statements just below the method
-declaration line `main:`. Toit is indentation-based like Python, so the spaces
-you add to your programs are significant.
-</Tab>
 </Tabs>
 
 Once the program ran, it printed `Hello World!` in your terminal. This is
@@ -97,14 +83,6 @@ Hello World!
 
 ```txt
 $ toit.run hello.toit
-Hello World!
-Hello World!
-```
-</Tab>
-<Tab label="toit.io">
-
-```txt
-$ toit run --no-device hello.toit
 Hello World!
 Hello World!
 ```
@@ -165,14 +143,6 @@ Hello Lars!
 Hello Kasper!
 ```
 </Tab>
-<Tab label="toit.io">
-
-```txt
-$ toit run --no-device hello.toit
-Hello Lars!
-Hello Kasper!
-```
-</Tab>
 </Tabs>
 
 ## Inserting strings in strings
@@ -225,14 +195,6 @@ Hello Kasper!
 
 ```txt
 $ toit.run hello.toit
-Hello World!
-Hello Kasper!
-```
-</Tab>
-<Tab label="toit.io">
-
-```txt
-$ toit run --no-device hello.toit
 Hello World!
 Hello Kasper!
 ```
@@ -312,14 +274,6 @@ Bye Helena, come back soon.
 
 ```txt
 $ toit.run hello.toit
-Hi Helena!
-Bye Helena, come back soon.
-```
-</Tab>
-<Tab label="toit.io">
-
-```txt
-$ toit run --no-device hello.toit
 Hi Helena!
 Bye Helena, come back soon.
 ```
@@ -452,13 +406,6 @@ $ toit.run hello.toit
 The names are [World]
 ```
 </Tab>
-<Tab label="toit.io">
-
-```txt
-$ toit run --no-device hello.toit
-The names are [World]
-```
-</Tab>
 </Tabs>
 
 We can now go ahead and add greeter methods that show all the names:
@@ -512,19 +459,6 @@ Bye World, Lars, Kasper, Rikke, come back soon.
 
 ```txt
 $ toit.run hello.toit
-Hello World!
-Bye World, come back soon.
-Hello World!
-Hello Lars!
-Hello Kasper!
-Hello Rikke!
-Bye World, Lars, Kasper, Rikke, come back soon.
-```
-</Tab>
-<Tab label="toit.io">
-
-```txt
-$ toit run --no-device hello.toit
 Hello World!
 Bye World, come back soon.
 Hello World!
