@@ -10,10 +10,8 @@ package which adds support for morse code. We have uploaded this version to
 
 Depending on how you installed your Toit SDK you may need to use slightly
 different commands.  You can pick the correct tab for the examples below,
-depending on whether you installed
-the [Jaguar](https://github.com/toitlang/jaguar) tool,
-the standalone [toitlang.org](https://github.com/toitlang/toit) SDK,
-or the commerically licensed [toit.io](https://toit.io/) SDK.
+depending on whether you installed the [Jaguar](https://github.com/toitlang/jaguar) tool or
+the standalone [toitlang.org](https://github.com/toitlang/toit) SDK.
 
 </Note>
 
@@ -327,22 +325,6 @@ We use `toit.pkg init` to ensure that the `package.lock` file is created in the 
 
 </Note>
 </Tab>
-<Tab label="toit.io">
-
-```shell
-# In the examples directory:
-toit pkg init
-toit pkg install --local --name=morse_tutorial ..
-```
-
-This creates a `package.lock` file mapping the prefix "morse_tutorial" to the package at location `..`.
-
-<Note>
-
-We use `toit pkg init` to ensure that the `package.lock` file is created in the current directory. If we just used `toit pkg install`, we would risk adding a new dependency to our package and not to the example.
-
-</Note>
-</Tab>
 </Tabs>
 
 ### Tests
@@ -397,20 +379,6 @@ The test should then execute successfully by running it locally:
 toit.run morse_test.toit
 ```
 </Tab>
-<Tab label="toit.io">
-
-```shell
-# In the test directory:
-toit pkg init
-toit pkg install --local --name=morse_tutorial ..
-```
-
-The test should then execute successfully by running it locally:
-
-```shell
-toit run --no-device morse_test.toit
-```
-</Tab>
 </Tabs>
 
 ### Changelog
@@ -460,7 +428,7 @@ dependencies:
 
 When starting from an application, you can find the dependency information in its `package.lock` file.
 
-## Tag and Upload
+## Tag and upload
 
 As one of the last steps we need to tag the sources with a version.
 Version numbers follow [semantic versioning](https://semver.org), and the corresponding
@@ -485,9 +453,5 @@ Once published successfully, the registry will distribute a description of the p
 <Tab label="toitlang.org">
 
 Once published successfully, the registry will distribute a description of the package so that anyone can start using the package with a simple `toit.pkg install`.
-</Tab>
-<Tab label="toit.io">
-
-Once published successfully, the registry will distribute a description of the package so that anyone can start using the package with a simple `toit pkg install`.
 </Tab>
 </Tabs>

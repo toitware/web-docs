@@ -42,9 +42,6 @@ items:
             path: /tutorials/ble/client
       - name: MQTT
         path: /tutorials/mqtt
-        children:
-          - name: TCP (and TLS)
-            path: /tutorials/mqtt
   - name: Peripherals
     path: /peripherals
     icon: peripherals
@@ -56,12 +53,14 @@ items:
       - name: SPI
         path: /peripherals/spi
       - name: Drivers
-        path: /peripherals/drivers/bme280
+        path: /peripherals/drivers
         children:
           - name: Connect sensors
             path: /peripherals/drivers/bme280
-          - name: Qwiic
+          - name: Use Qwiic cables
             path: /peripherals/drivers/qwiic
+          - name: Bitwise operations
+            path: /peripherals/drivers/bitmask
           - name: How to write a driver
             path: /peripherals/drivers/sparkfun_joystick
   - name: Language
@@ -121,16 +120,12 @@ items:
           - name: Package tutorial
             path: /language/package/pkgtutorial
   - name: Support
-    path: /support/troubleshoot
+    path: /support
     icon: support
     children:
       - name: Serial connect
         path: /support/troubleshoot/serialtroubleshoot
-      - name: WiFi credentials
-        path: /support/troubleshoot/wifitroubleshoot
-      - name: ESP32 setup
+      - name: Firmware flashing
         path: /support/troubleshoot/setuptroubleshoot
-      - name: Claim device
-        path: /support/troubleshoot/claimtroubleshoot
       - name: VS Code extension
         path: /support/troubleshoot/vscodetroubleshoot

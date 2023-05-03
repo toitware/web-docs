@@ -3,7 +3,7 @@ import WeatherExample from "../../_images/display-example.png";
 # Display
 
 The Toit SDK includes support for writing text and printing icons on displays.
-We highlight in this section the basic functions of display use. You can also learn more about the different fonts available in the SDK by reading [Toit font basics](../fonts).
+We highlight in this section the basic functions of display use. You can also learn more about the different fonts available in the SDK by studying the [font basics](../fonts).
 
 These examples assume you have installed the [pixel_display](https://github.com/toitware/toit-pixel-display) package into
 your project. See the [Packages quick start guide](../../package/pkgguide)
@@ -170,7 +170,7 @@ All [Material Design](https://materialdesignicons.com/) icons are available for 
 
 ```
 import pixel_display show TwoColorPixelDisplay
-// Use "toit pkg install pictogrammers_icons" to get this package.
+// Use "jag pkg install pictogrammers_icons" to get this package.
 import pictogrammers_icons.size_48 as icons
 
 import .get_display  // Import file in current project, see above.
@@ -186,7 +186,7 @@ main:
 
 In order to update the display we can build up a scene, then create a loop
 that updates the scene as new data arrives. Here is a bigger example that
-subscribes to a pubsub stream for its weather information, and uses the
+subscribes to an MQTT topic for its weather information, and uses the
 local time to update a digital clock on the same display.
 
 <img src={WeatherExample} alt="Weather station example screenshot" />
@@ -196,7 +196,8 @@ import encoding.json
 import font show *
 import font_x11_adobe.sans_14_bold
 import monitor show Mutex
-import pubsub
+import mqtt
+import net
 
 import pictogrammers_icons.size_48 as icons
 
@@ -221,7 +222,7 @@ WMO_4501_ICONS ::= [
   icons.WEATHER_LIGHTNING,
 ]
 
-// We don't want separate threads updating the display at the
+// We don't want separate tasks updating the display at the
 // same time, so this mutex is used to ensure the tasks only
 // have access one at a time.
 display_mutex := Mutex
@@ -278,8 +279,11 @@ main:
   task:: weather_task icon_texture temperature_texture
 
 weather_task weather_icon/IconTexture temperature_texture/TextTexture:
-  pubsub.subscribe "weather" --auto_acknowledge: | message |
-    map := json.decode message.payload
+  transport := mqtt.TcpTransport net.open --host="127.0.0.1"
+  client := mqtt.Client --transport=transport
+  client.start --client_id="toit-client-id"
+  client.subscribe "weather":: | topic/string payload/ByteArray |
+    map := json.decode payload
     code := map["wmo_4501"]
     temp := map["temperature_c"]
     display_mutex.do:

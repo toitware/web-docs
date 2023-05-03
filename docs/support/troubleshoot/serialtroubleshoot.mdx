@@ -26,43 +26,6 @@ Install the driver, _reboot your computer_ and you are ready to talk to your ESP
 
 </Expandable>
 
-## Problems using the Web serial
-
-<Expandable title="Are you trying to connect using the Web serial page in the Toit console?">
-
-<Tabs>
-<Tab label="YES">
-
-- Try a different serial port on your computer
-
-- If you are on Windows, try to update Windows and/or your browser, if any updates are available.
-
-- Try to disconnect all other serial connections, if any, from your computer, to be sure to only have the ESP32 connected to your computer as the only one
-
-- Be sure to use the correct type of USB cable to connect with when provisioning your ESP32, in other words a cable for both data and power, and not only for power usage
-
-</Tab>
-<Tab label="NO">
-
-If you are using the Toit CLI:
-
-- Run the `toit serial ports` CLI command to detect the correct serial port to use
-
-- Try using a different serial port on your computer
-
-- Try to disconnect all other serial connections, if any, from your computer, to be sure to only have the ESP32 connected to your computer as the only one
-
-- Remember to close the browser window if you have tried to create a serial connection in the browser via https://console.toit.io/serial first
-
-- If you are on Linux, make sure you are in the `dialout` group as explained [here](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establish-serial-connection.html#adding-user-to-dialout-on-linux)
-
-- Be sure to use the correct type of USB cable to connect with when provisioning your ESP32, in other words a cable for both data and power, and not only for power usage
-
-</Tab>
-</Tabs>
-
-</Expandable>
-
 ## Problems with the serial port
 
 <Expandable title="Do you have problems with detecting a serial port on your computer?">
@@ -70,43 +33,37 @@ If you are using the Toit CLI:
 <Tabs>
 <Tab label="YES">
 
-The Toit CLI offers commands to help you connect your ESP32 via a serial connection.
+The Jaguar CLI offers commands to help you connect your ESP32 via a serial connection.
 
 Start by connecting your ESP32 with a USB cable to your computer.
 
-List the serial ports currently in use on your computer by running the following command with the Toit CLI in a terminal window:
+List the serial ports currently in use on your computer by running the following command with the Jaguar CLI in a terminal window:
 
-```shell
-toit serial ports
+``` sh
+jag ports
 ```
 
 For example, if exactly one serial port, called `COM3`, is currently in use, the output of the command will look like this
 
-```txt
-$ toit serial ports
+``` txt
+$ jag ports
 COM3
 ```
 
-You can monitor the serial output of the ESP32 with the command
+You can monitor the serial output of the ESP32 with the command:
 
-```shell
-toit serial monitor
+``` sh
+jag monitor
 ```
 
-The `monitor` command can be stopped by `Ctrl+c`
-
-If you have already initially provisioned your ESP32, run the following CLI command to read the hardware information via serial output:
-
-```shell
-toit serial info
-```
+The monitoring can be stopped by `Ctrl+C`.
 
 </Tab>
 <Tab label="NO">
 
 If you have other problems or issues with getting your ESP32 setup with Toit, please reach out to the Toit engineering team. We are ready to help you get started using the Toit platform.
 
-The Toit community has a [Discord server](https://chat.toit.io) where you can drop in and ask questions.
+The Toit community has a [Discord chat](https://chat.toit.io) where you can drop in and ask questions.
 
 </Tab>
 </Tabs>

@@ -91,7 +91,7 @@ described [below](#folder-shortcut).
 
 ## Folder shortcut
 
-It is very common to have a folder and a toit file with the same name. The
+It is very common to have a folder and a Toit file with the same name. The
 Toit language thus has a shortcut to avoid repeating the last identifier
 twice: if an import would resolve to a folder, Toit looks for a Toit file
 that has the same name as the last segment.
@@ -118,14 +118,14 @@ name as the last segment instead.
 Say, we want to use the [morse package](https://github.com/toitware/toit-morse).
 When installing this package
 with `jag pkg install github.com/toitware/toit-morse`,
-(or with `toit.pkg ...` or with `toit pkg...`) the package manager
+(or with `toit.pkg ...`) the package manager
 downloads the sources and adds a mapping from the package's name `morse` to
 the location it downloaded the sources. Specifically, the mapping points to
 the `src` folder of the package.
 
 <Note>
-If you are using the commercially licensed `toit.io` product you should use
-`toit pkg` (with a space) to install packages.  If you are using the
+If you are using Jaguar, you should use
+`jag pkg` (with a space) to install packages.  If you are using the
 standalone open source Toit SDK, you should use `toit.pkg` (with a dot).
 </Note>
 
