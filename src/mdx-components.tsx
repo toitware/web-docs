@@ -27,6 +27,12 @@ const H6 = (props: any) => <Typography variant="h6" {...props} />;
 
 const Pre = (props: any) => <>{props.children}</>;
 
+const NonZoomableImage = (props: any) => (
+  <>
+    <img {...props} />
+  </>
+);
+
 export const components: MDXProviderComponentsProp = {
   p: P,
   h1: H1,
@@ -56,4 +62,5 @@ export const shorthands = {
   Boxes,
   Box,
   Expandable,
+  NonZoomableImage,
 };
