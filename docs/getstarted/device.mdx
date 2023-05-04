@@ -9,7 +9,7 @@ setup your local development environment, and finally deploy a Toit application 
 It uses the open-source Jaguar service to enable live reloading when developing for the ESP32. You
 can watch a short video that shows how you can experience Jaguar on your ESP32 in two minutes:
 
-[<img src={JaguarVideo} alt="Video presentation of Jaguar" />](https://youtu.be/cU7zr6_YBbQ)
+[<NonZoomableImage src={JaguarVideo} alt="Video presentation of Jaguar" />](https://youtu.be/cU7zr6_YBbQ)
 
 Ready to try this yourself?
 
@@ -28,7 +28,7 @@ with command line tooling to make it easy to tinker with Toit code on your devic
 
 The following describes how to install a precompiled version of Jaguar,
 including a prebuilt firmware image that is suitable for most ESP32s.  If you need to
-build from source, see the instructions at [GitHub](https://github.com/toitlang/jaguar).
+build from source, see the instructions at [GitHub](https://github.com/toitlang/jaguar#building-it-yourself).
 
 <Tabs>
 <Tab label="Windows">
@@ -70,6 +70,9 @@ Or download the precompiled binary from [here](https://github.com/toitlang/jagua
 Run the command `jag setup` after installation to finish the setup of Jaguar. This step downloads
 the [Toit SDK](https://github.com/toitlang/toit) and the suitable firmware images.
 
+``` sh
+jag setup
+```
 
 ## 3. Flash your device
 
@@ -116,7 +119,6 @@ With the scanning complete, you're ready to run your first Toit program on your 
 ESP32 device. Create a file `hello.toit` with the following content:
 
 ```
-// Save as hello.toit
 main:
   while true:
     print "Hello, World!"
@@ -166,7 +168,7 @@ jag container list
 
 This results in a list that shows the container image ids and the associated names.
 
-```
+``` txt
 $ jag container list
 85c64060-ffbd-5e04-a0dd-252d5bbf4a32: hello
 4e9a12bc-7f07-5118-9f04-8ad2bbe476d1: jaguar
