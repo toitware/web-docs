@@ -108,21 +108,22 @@ an empty fleet in a suitable directory. Go to the directory and run:
 artemis fleet init
 ```
 
-This creates three files: `fleet.json`, `devices.json`, and `specification.json`.
+This creates three files: `fleet.json`, `devices.json`, and `my-pod.json`.
 The `fleet.json` file holds some metadata and the list of devices in `devices.json`
-is empty. The `specification.json` file is the most interesting to get started.
+is empty. The `my-pod.json` file is the most interesting to get started.
 
 Artemis lets you describe the functionality and configuration of your devices
-in version control friendly [specification files](pods#specifications).
-Let's start with the simplest possible specification by putting the
-following content into the `specification.json` file:
+in [pods](pods), which is a group of containers and the configuration
+of the environment they need to run in. Pods can be specified through version control friendly
+[specification files](pods#specifications), so let's start with the simplest
+possible specification by putting the following content into the `my-pod.json` file:
 
 ```
 {
   "version": 1,
-  "sdk-version": "v2.0.0-alpha.79",
-  "artemis-version": "v0.5.2",
-  "max-offline": "0s",
+  "name": "my-pod",
+  "sdk-version": "v2.0.0-alpha.82",
+  "artemis-version": "v0.6.0",
   "connections": [
     {
       "type": "wifi",
@@ -135,14 +136,42 @@ following content into the `specification.json` file:
 }
 ```
 
-The specification file (`specification.json`) fully specifies what Artemis
-puts on a device in your fleet when it is flashed. Technically, the specification
-describes an [Artemis pod](pods) which is a group of containers and the configuration
-of the environment they need to run in. You can find more details
-on the content of the pod specification files [here](pods#specifications).
+If you fill in your WiFi credentials, you have a working specification for a pod
+named `my-pod`. To make the pod available to your fleet, you will need to upload
+it to your broker:
+
+``` sh
+artemis pod upload my-pod.json
+```
+
+This uploads `my-pod` and gives is a few useful tags, so we can find it later. The
+fleet has a `default` group of devices and in the `fleet.json` file, we can specify
+that the group uses `my-pod@latest` as its pod. Whenever we upload a pod, its `latest`
+tag is automatically updated, so it can be convenient to just refer to that from
+the group:
+
+```
+{
+  ...
+  "groups": {
+    "default": {
+      "pod": "my-pod@latest"
+    }
+  }
+}
+```
+
+<Note>
+
+Instead of using the convenient `latest` tag, it is often preferable to use tags that do not
+change in the `fleet.json` file. This makes it possible to reproduce and reason about the
+fleet state at any revision of the `fleet.json` file. So instead of using `my-pod@latest`,
+you can use a stable tag like `my-pod@v1.0.2` or `my-pod@20230515175710:broad-method`.
+
+</Note>
 
 To get your functionality onto your device, you flash a device with firmware
-derived from the above specification by running:
+`my-pod@latest` by running:
 
 ``` sh
 artemis serial flash --port /dev/ttyUSB0
@@ -215,7 +244,7 @@ The frequency at which they synchronize can be configured by the user.
 
 Devices that connect frequently or all the time are easy
 to interact with and manage, but they spend a lot of power on staying connected
-all the time. The pod specification in the example `specification.json` does not specify
+all the time. The pod specification in the example `my-pod.json` does not specify
 how often to connect, so Artemis assumes that you want an interactive device.
 
 If you don't need your device to stay connected all the time, you can
@@ -309,12 +338,13 @@ updates are pushed to the broker in a compressed form and picked up by the
 device.
 
 Similar to `artemis serial flash`, the over-the-air update command also
-takes a specification file, so the common workflow is to change your
-specification files to reflect the state you want your devices in, and
-then update them to that through:
+uses pods, so the common workflow is to change your pod specification file
+to reflect the state you want your device in, and then update it to
+that through:
 
 ``` sh
-artemis device update --specification specification.json
+artemis pod upload my-pod.json
+artemis device update my-pod@latest
 ```
 
 You can specify which device to update using a device-id flag (`-d`), but most
@@ -323,13 +353,23 @@ during flashing, or that can be set with `artemis device default`.
 
 ## Updating the entire fleet
 
-If you've modified the `specification.json` file and you want your
+If you've modified the `my-pod.json` file and you want your
 entire fleet of devices to update to reflect the changes, you can
 run:
+
+``` sh
+artemis pod upload my-pod.json
+```
+
+If your `fleet.json` uses `my-pod@latest`, you can ask the fleet
+to update using:
 
 ``` sh
 artemis fleet update
 ```
 
-This makes it easy to upgrade your containers, the Artemis service,
-and even the Toit SDK and its associated virtual machine.
+If you changed the pod reference in `fleet.json` to use a stable tag, then
+you need to update that before you run `artemis fleet update`. Because your
+pods encapsulate the fully configured firmware, this makes
+it easy to upgrade your containers, the Artemis service, and even the Toit SDK
+and its associated virtual machine.
