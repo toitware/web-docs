@@ -1,0 +1,44 @@
+# Device groups
+
+Artemis allows you to organize your devices in groups. Each group has an
+associated remote pod reference. This allows Artemis to determine which
+pod a device is supposed to run.
+
+Device groups are defined in the `fleet.json` file:
+
+```
+{
+  ...
+  "groups": {
+    "office": {
+      "pod": "esp32-wifi@v1.0.3"
+    },
+    "solar-farm-fr-nce": {
+      "pod": "esp32s3-cellular@v1.0.3"
+    }
+  }
+}
+```
+
+When flashing a device, you can decide which group the device belongs
+to by using the `--group` argument:
+
+``` sh
+artemis serial flash --port /dev/ttyUSB0 --group office
+```
+
+From this point forward, the device knows which group it belongs to
+so if the pod of its group is changed, Artemis will push an update
+to the device when requested to update the fleet:
+
+``` sh
+artemis fleet update
+```
+
+## Homogenous fleets
+
+If the `fleet.json` file contains a group named `default`, it is used
+for any device where you do not specify its group when you flash it.
+
+This is convenient for small homogenous fleets where not having to
+worry about groups at all simplifies things.

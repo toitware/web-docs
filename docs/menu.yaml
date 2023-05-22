@@ -16,6 +16,8 @@ items:
         children:
           - name: Commands
             path: /getstarted/fleet/commands
+          - name: Device groups
+            path: /getstarted/fleet/groups
           - name: Pods
             path: /getstarted/fleet/pods
   - name: Tutorials
