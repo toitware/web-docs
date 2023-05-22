@@ -1,7 +1,7 @@
 # Pods
 
 Artemis allows you to build and distribute pods (as in a pod of whales or pea pod).
-A pod is a group of containers, with shared storage and network resources, and a
+A pod is a set of containers, with shared storage and network resources, and a
 description of how to run the containers. Pods are built from declarative specifications
 and they form the basis of Artemis' synchronization mechanisms.
 
@@ -45,7 +45,7 @@ artemis pod upload my-pod.pod --tag v1.0.2
 ```
 
 You can upload multiple pods at the same time, so if you have more than one
-group that run your code in different configurations, it is straightforward
+device group that run your code in different configurations, it is straightforward
 to give them the same tag:
 
 ``` sh
@@ -69,7 +69,7 @@ Such pod references are used when updating or flashing a single device:
 artemis device update my-pod@v1.0.3
 ```
 
-or more commonly indirectly through the groups in the `fleet.json` file:
+or more commonly indirectly through the [groups](/getstarted/fleet/groups) in the `fleet.json` file:
 
 ```
 {

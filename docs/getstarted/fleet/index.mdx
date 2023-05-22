@@ -113,7 +113,7 @@ The `fleet.json` file holds some metadata and the list of devices in `devices.js
 is empty. The `my-pod.json` file is the most interesting to get started.
 
 Artemis lets you describe the functionality and configuration of your devices
-in [pods](pods), which is a group of containers and the configuration
+in [pods](pods), which is a set of containers and the configuration
 of the environment they need to run in. Pods can be specified through version control friendly
 [specification files](pods#specifications), so let's start with the simplest
 possible specification by putting the following content into the `my-pod.json` file:
@@ -145,7 +145,7 @@ artemis pod upload my-pod.json
 ```
 
 This uploads `my-pod` and gives is a few useful tags, so we can find it later. The
-fleet has a `default` group of devices and in the `fleet.json` file, we can specify
+fleet has a `default` [group of devices](/getstarted/fleet/groups) and in the `fleet.json` file, we can specify
 that the group uses `my-pod@latest` as its pod. Whenever we upload a pod, its `latest`
 tag is automatically updated, so it can be convenient to just refer to that from
 the group:
