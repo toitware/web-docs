@@ -10,10 +10,10 @@ Device groups are defined in the `fleet.json` file:
 {
   ...
   "groups": {
-    "wifi": {
+    "office": {
       "pod": "esp32-wifi@v1.0.3"
     },
-    "cellular": {
+    "solar-farm-fr-nce": {
       "pod": "esp32s3-cellular@v1.0.3"
     }
   }
@@ -24,7 +24,7 @@ When flashing a device, you can decide which group the device belongs
 to by using the `--group` argument:
 
 ``` sh
-artemis serial flash --port /dev/ttyUSB0 --group wifi
+artemis serial flash --port /dev/ttyUSB0 --group office
 ```
 
 From this point forward, the device knows which group it belongs to
