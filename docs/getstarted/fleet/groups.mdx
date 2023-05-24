@@ -47,7 +47,7 @@ worry about groups at all simplifies things.
 
 ## Creating groups
 
-To create a new group, you can use the
+To create a new group, you can edit the `fleet.json` file or simply use:
 
 ``` sh
 artemis fleet group create solar-farm-dk-aar
@@ -60,7 +60,8 @@ by passing a `--pod` argument like:
 artemis fleet group create solar-farm-dk-aar --pod esp32s3-cellular@v1.0.3
 ```
 
-or you can use an existing group as a template:
+It is also possible to use an existing group as a template. In this case,
+the settings for the existing group are copied to the new group:
 
 ``` sh
 artemis fleet group create solar-farm-dk-aar --template solar-farm-fr-nce
