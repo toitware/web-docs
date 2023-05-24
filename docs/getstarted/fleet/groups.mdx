@@ -35,10 +35,73 @@ to the device when requested to update the fleet:
 artemis fleet update
 ```
 
-## Homogenous fleets
+<Note>
 
 If the `fleet.json` file contains a group named `default`, it is used
 for any device where you do not specify its group when you flash it.
 
 This is convenient for small homogenous fleets where not having to
 worry about groups at all simplifies things.
+
+</Note>
+
+## Creating groups
+
+To create a new group, you can use the
+
+``` sh
+artemis fleet group create solar-farm-dk-aar
+```
+
+You can optionally specify the pod this should be based on
+by passing a `--pod` argument like:
+
+``` sh
+artemis fleet group create solar-farm-dk-aar --pod esp32s3-cellular@v1.0.3
+```
+
+or you can use an existing group as a template:
+
+``` sh
+artemis fleet group create solar-farm-dk-aar --template solar-farm-fr-nce
+```
+
+## Deploying to groups
+
+The most common operation on groups is to update the pod they are based
+on to prepare for deploying changes to your fleet:
+
+``` sh
+artemis fleet group update --pod esp32s3-cellular@v1.0.4 solar-farm-fr-nce
+```
+
+You can also just update the tag and in that case it often makes sense
+to do it for multiple groups at the same time:
+
+``` sh
+artemis fleet group update --tag v1.0.4 office solar-farm-fr-nce
+```
+
+Once you've updated the pod references in your groups, you can use:
+
+``` sh
+artemis fleet update
+```
+
+to deploy the changes to your devices.
+
+## Renaming and merging groups
+
+Renaming a group is as simple as updating its name:
+
+``` sh
+artemis fleet group update solar-farm-dk-aar --name solar-farm-dk-cph
+```
+
+To merge two groups, you can move all devices from one group into the
+other and remove the empty one:
+
+``` sh
+artemis fleet group move --group solar-farm-dk-aar --to solar-farm-dk-cph
+artemis fleet group remove solar-farm-dk-aar
+```
