@@ -53,14 +53,15 @@ To create a new group, you can edit the `fleet.json` file or simply use:
 artemis fleet group create solar-farm-dk-aar
 ```
 
-You can optionally specify the pod this should be based on
-by passing a `--pod` argument like:
+This creates a new group based on the same pod as the `default` group.
+You can optionally specify the pod for the new group by passing
+a `--pod` argument like this:
 
 ``` sh
 artemis fleet group create solar-farm-dk-aar --pod esp32s3-cellular@v1.0.3
 ```
 
-It is also possible to use an existing group as a template. In this case,
+It is also possible to use a non-default group as a template. In this case,
 the settings for the existing group are copied to the new group:
 
 ``` sh
