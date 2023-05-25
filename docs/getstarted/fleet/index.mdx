@@ -351,25 +351,29 @@ You can specify which device to update using a device-id flag (`-d`), but most
 of the time you just use the default ID that was either set
 during flashing, or that can be set with `artemis device default`.
 
-## Updating the entire fleet
+## Rolling out changes to a fleet
 
-If you've modified the `my-pod.json` file and you want your
-entire fleet of devices to update to reflect the changes, you can
-run:
+If you've modified the `my-pod.json` file and you want to make the changes available
+to your fleet of devices, you can upload the latest version of your pod using:
 
 ``` sh
 artemis pod upload my-pod.json
 ```
 
 If your `fleet.json` uses `my-pod@latest`, you can ask the fleet
-to update using:
+to roll out the changes to your devices using:
 
 ``` sh
-artemis fleet update
+artemis fleet roll-out
 ```
 
 If you changed the pod reference in `fleet.json` to use a stable tag, then
-you need to update that before you run `artemis fleet update`. Because your
-pods encapsulate the fully configured firmware, this makes
+you need to update that before you run `artemis fleet roll-out`:
+
+``` sh
+artemis fleet group update --tag v1.0.3
+```
+
+Because your pods encapsulate the fully configured firmware, this makes
 it easy to upgrade your containers, the Artemis service, and even the Toit SDK
 and its associated virtual machine.

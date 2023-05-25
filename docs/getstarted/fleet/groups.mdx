@@ -29,10 +29,10 @@ artemis serial flash --port /dev/ttyUSB0 --group office
 
 From this point forward, the device knows which group it belongs to
 so if the pod of its group is changed, Artemis will push an update
-to the device when requested to update the fleet:
+to the device when requested to roll out the changes to the fleet:
 
 ``` sh
-artemis fleet update
+artemis fleet roll-out
 ```
 
 <Note>
@@ -87,10 +87,10 @@ artemis fleet group update --tag v1.0.4 office solar-farm-fr-nce
 Once you've updated the pod references in your groups, you can use:
 
 ``` sh
-artemis fleet update
+artemis fleet roll-out
 ```
 
-to deploy the changes to your devices.
+to roll out the changes to your devices.
 
 ## Renaming and merging groups
 
