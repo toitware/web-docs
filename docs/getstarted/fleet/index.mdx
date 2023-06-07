@@ -44,11 +44,15 @@ The Artemis command line tool is a standalone executable written in Toit. Use `a
 
 ## Signing up and logging in
 
-All users must be authenticated. For OAuth-based authentication you can just
-log into Artemis with `artemis auth login`. During the first time, a
-signup will be triggered automatically.
+All users must be authenticated.
 
-For email-based authentication sign up with:
+For OAuth-based authentication you can just sign up and log into Artemis as follows:
+
+``` sh
+artemis auth login
+```
+
+Alternatively, for email-based authentication, sign up with:
 
 ``` sh
 artemis auth signup --email=myname@example.com --password=PASSWORD
