@@ -1,17 +1,42 @@
+import BluetoothLogo from "../_images/bluetooth_logo.svg";
+
 # Tutorials
 
-A complete tutorial, guiding users from installation to running many common sensors (such as
-the DHT11 temperature sensor, or the SSD1306 display) can be found
-[here](https://docs.google.com/document/d/1K-TYea7jbYfj2ecMUmr0T0zd4JDpk5lo0mJNOLPUrhc/edit).
+<Boxes>
+<Box title="Print date and time" to="starter">
+Write a simple Toit program that prints the date and time on your device.
+</Box>
 
-This section contains additional tutorials to get started with running Toit code on your device.
+<Box title="Weather station" to="starter/weatherstation">
+Using a BME280 print the temperature in regular intervals.
+</Box>
 
-The first tutorial will show you a simple Toit program that [logs the date and time](starter) on your device.
+<Box title="MQTT" to="mqtt">
+Send data to an MQTT broker.
+</Box>
+</Boxes>
 
-Next, we will show how to use deep sleep to go run a program regularly. The
-[weather station](starter/weatherstation) tutorial runs every few seconds to log the temperature.
+## BLE
+<Boxes>
+<Box title="BLE" to="ble">
+<img
+  src={BluetoothLogo}
+  alt="Bluetooth logo"
+/>
 
-An [MQTT](mqtt) tutorial demonstrates how to communicate with MQTT brokers.
+Introduction to BLE.
+</Box>
 
-Finally, we have tutorials on how to use [Bluetooth Low-Energy communication](ble) with Toit on your ESP32 device.
+<Box title="Advertise" to="ble/advertising">
+Advertise data over BLE.
+</Box>
 
+<Box title="Scan" to="ble/scanning">
+Scan for nearby BLE devices.
+</Box>
+
+<Box title="Client" to="ble/client">
+Connect to a BLE device.
+</Box>
+
+</Boxes>
