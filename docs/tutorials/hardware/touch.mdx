@@ -1,0 +1,110 @@
+# Touch
+This tutorial will show how to configure and use the ESP32 touch sensors.
+
+The ESP32 touch sensor detects variations in capacitance on the GPIO pins,
+thus detecting touch or proximity.
+
+## Requirements
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+While not necessary, we recommend to have done the digital GPIO tutorials
+[LED](../led) and [Button](../button) before this one.
+
+## Setup
+The ESP32 has 10 pins that can be used as touch sensors: 0, 2, 4, 12-15, 27,
+32-33. In this tutorial we will use pin 32.
+
+Simply connect a male-male (jumper) wire to pin 32, and leave the other end
+unconnected. We will use the unconnected end as a touch sensor.
+
+## Code
+
+Create a new file `touch.toit` and start `jag watch touch.toit` to
+run the program whenever you save.
+
+```toit
+import gpio
+import gpio.touch as gpio
+
+main:
+  pin := gpio.Pin 32
+  touch := gpio.Touch pin
+
+  while true:
+    print (touch.read --raw)
+    sleep --ms=500
+```
+
+This program will print the raw value of the touch sensor every 500ms.
+Typically, the raw value will be around 1000-1200 when the wire is
+left untouched and decreases to around 200 when touched with a finger.
+
+Take a value that is in the seen range (for example 800) and use
+it in the following program as threshold.
+
+```toit
+import gpio
+import gpio.touch as gpio
+
+main:
+  pin := gpio.Pin 32
+  touch := gpio.Touch pin
+
+  touch.threshold = 800
+
+  while true:
+    is_touched := touch.get
+    print (is_touched ? "touched" : "not touched")
+    sleep --ms=500
+```
+The program will now print `touched` when the wire is touched and
+`not touched` when it is not touched. Compared to just looking at the
+raw value, there isn't a huge advantage in using the `threshold`
+in this example. However, the same `threshold` is also used when
+a touch pin is used to wake up from [deep sleep](../deepsleep).
+
+Often the calibration value (here 800) will be determined during
+production and stored in the device's flash memory. You can also
+do this calibration dynamically:
+
+```
+import gpio
+import gpio.touch as gpio
+
+ITERATIONS := 100
+
+calibrate touch/gpio.Touch:
+  sum := 0
+  ITERATIONS.repeat:
+    sum += touch.read --raw
+
+  // Use 4/5th of the average as cutoff.
+  threshold := (sum * 4) / (5 * ITERATIONS)
+  print "Threshold: $threshold"
+  touch.threshold = threshold
+
+main:
+  pin := gpio.Pin 32
+  touch := gpio.Touch pin
+
+  calibrate touch
+
+  while true:
+    is_touched := touch.get
+    print (is_touched ? "touched" : "not touched")
+    sleep --ms=500
+```
+It's important that the wire is not touched during the calibration
+phase.
+
+<Note>
+
+The Toit implementation of the touch sensor currently requires active polling.
+See https://github.com/toitlang/toit/issues/1682.
+
+</Note>
