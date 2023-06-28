@@ -1,1 +1,136 @@
-TBD.
+# Deep sleep
+This tutorial will show how to put an ESP32 into deep sleep, and how
+to wake it up again.
+
+<Note>
+
+If you are using [Toit's fleet management](../../getstarted/fleet), then
+you don't need to worry about deep sleep. Artemis (the installed
+container of the fleet management system) automatically puts the device
+into deep sleep when it is not running any programs.
+
+</Note>
+
+The ESP32 touch sensor detects variations in capacitance on the GPIO pins,
+thus detecting touch or proximity.
+
+## Requirements
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+While not necessary, we recommend to have done the [LED](../led),
+[Button](../button) and [Touch button](../touch) tutorials before this one.
+
+## Putting to sleep
+The ESP32 can be put into deep sleep by calling the `deep_sleep` method of
+the [`esp32`](https://libs.toit.io/esp32/library-summary) library. This method
+takes a single argument, which is the duration of the sleep.
+
+Write the following `sleep.toit` program and run it with Jaguar.
+
+```toit
+import esp32
+
+main:
+  esp32.deep_sleep (Duration --s=2)
+```
+This program will let the ESP32 sleep for 2 seconds, and then wake up again.
+
+<Note type="warning">
+
+If a program is installed as a [container](../../containers/containers)
+and starts at boot, then an early `deep_sleep` call could make the
+device unresponsive.
+
+If your are using Jaguar for development, but Jaguar doesn't have the time
+to start before the device goes back to sleep then you can't update the
+program anymore. In this case you have to flash the device again.
+
+You can avoid this by either ensuring that the device is awake for
+a certain time, or by not going to sleep if a certain pin is
+pulled low.
+
+For example:
+
+```toit
+import gpio
+import esp32
+
+main:
+  sleep_pin := gpio.Pin --input 33 --pull_up
+  if sleep_pin.get != 0:
+    // Not pulled low. Go to sleep.
+    esp32.deep_sleep (Duration --s=2)
+```
+
+This way you always have a way to recover from such a scenario.
+
+</Note>
+
+## Wake up from external pin
+The ESP32 can be woken up from deep sleep if certain pins are low or high.
+
+### Setup
+Connect pin 32 to ground (optionally with a 330Ω resistor in between).
+
+### Code
+Edit your `sleep.toit` program to the following:
+
+```toit
+import esp32
+
+main:
+  // Enable wakeup if pin 32 goes high.
+  pin_mask := 1 << 32
+  on_any_high := true
+  esp32.enable_external_wakeup pin_mask on_any_high
+  esp32.deep_sleep (Duration --m=3)
+```
+
+Run it, and then remove the connection between pin 32 and ground. Without
+any pull-down resistor the pin is floating and thus measures mostly random
+values. You are likely to see the ESP32 wake up almost immediately. If not,
+try touching the pin with your finger or even connecting the pin to 3V3.
+
+If you have a [button](../button) (especially the ones with integrated
+pull-down resistors) you can also use it to wake up the ESP32.
+
+## Wake up from touch
+The ESP32 can also be woken up with the touch sensor.
+
+### Setup
+Connect a male-male jumper wire to pin 32. Keep one end of the wire
+free. We will use this end as touch button.
+
+### Code
+Edit your `sleep.toit` program to the following and run it with Jaguar.
+If necessary change the threshold value. See the [Touch button](../touch)
+tutorial for more information about the touch sensor.
+
+```toit
+import esp32
+import gpio
+import gpio.touch as gpio
+
+main:
+  pin := gpio.Pin 32
+  touch := gpio.Touch pin
+  touch.threshold = 800
+  esp32.enable_touchpad_wakeup
+  esp32.deep_sleep (Duration --m=3)
+```
+
+The ESP32 will go to sleep for three minutes, or wake up if it
+registers a touch on pin 32.
+
+## Power consumption
+When the ESP32 is in deep sleep it only consumes about 10µA. However,
+this assumes that no other components are drawing any power. There is
+a significant difference between different ESP32 boards.
+
+For example the FireBeetle ESP32 uses only 10µA when in deep sleep, the
+Olimex ESP32-DevKit-LiPo around 65µA, and the ESP32-DevKitC up to 9mA.
