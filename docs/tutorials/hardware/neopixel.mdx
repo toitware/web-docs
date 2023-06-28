@@ -1,0 +1,147 @@
+import NeopixelDiagram from "../../_images/hw_ff_neopixel.png";
+import NeopixelSchematics from "../../_images/hw_ff_neopixel_schem.png";
+
+# Neopixel
+
+Neopixels are Adafruit's brand for WS2812 indivually-addressable RGB color pixel
+strips. In this tutorial we will use the term Neopixel to refer to any WS2812
+compatible LED strip (including the SK6812, which have an additional white LED, and
+thus an existing color byte for each LED).
+
+Neopixels are connected in series. Each LED has a data input pin (DI) and a data
+output pin (DO). The DO pin of the first LED is connected to the DI pin of the second
+LED, and so on. The DO pin of the last LED is not connected to anything.
+
+When the first LED receives a signal on its DI pin, it will read the first 24 bits
+(or 32 bits for SK6812) of the signal and then pass the rest on to the next LED.
+The first 24 bits are interpreted as three 8-bit color values: red, green and blue
+(and white for SK6812). The LED will then light up with the specified color, and
+pass the rest of the signal on to the next LED.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+## Setup
+
+Connect the LED strip as follows:
+- Connect the 5V/power pin of the LED strip to the 5V pin of the ESP32. The
+  5V pin of the ESP32 is often marked as VIN, since that's the 5V input that
+  is provided by the USB connector.
+- Connect the GND pin of the LED strip to the GND pin of the ESP32.
+- Connect pin 13 of the ESP32 to the DI pin of the LED strip.
+
+<img
+  src={NeopixelDiagram}
+  alt="Wiring diagram for a Neopixel LED strip"
+/>
+
+<img
+  src={NeopixelSchematics}
+  alt="Schematics for a Neopixel LED strip"
+/>
+
+## Packages
+
+The driver for pixel strips is not part of the standard Toit distribution,
+but must be downloaded as package. See the [packages](../../setup/packages)
+tutorial for details.
+
+We are using the [pixel_strip](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-pixel-strip)
+package. To install it, run the following command in your project directory:
+
+```bash
+jag pkg install github.com/toitware/toit-pixel-strip@v0.3
+```
+
+<Note>
+You can probably just write 'jag pkg install pixel_strip', but the full ID together
+with the version is more explicit, and will make sure you get the right package.
+</Note>
+
+## Code
+
+Open a new file and save it as `neopixel.toit`,and watch it with Jaguar.
+
+Insert the following program:
+
+```toit
+import gpio
+import pixel_strip show PixelStrip
+
+PIXELS ::= 12
+
+main:
+  pin := gpio.Pin 13
+  strip := PixelStrip.uart PIXELS --pin=pin
+
+  r := ByteArray PIXELS
+  g := ByteArray PIXELS
+  b := ByteArray PIXELS
+
+  current := 0
+  while true:
+    // Decrease intensity of all LEDs.
+    PIXELS.repeat:
+      r[it] = r[it] / 3
+      g[it] = g[it] / 3
+      b[it] = b[it] / 3
+
+    // Set the current LED to full brightness.
+    r[current] = 255
+    g[current] = 255
+    b[current] = 255
+
+    // Show the current configuration.
+    strip.output r g b
+
+    // Sleep.
+    sleep --ms=70
+
+    // Prepare for the next round.
+    current = (current + 1) % PIXELS
+```
+
+We are using the Uart version of the pixel-strip class. This means that the
+package uses the ESP32's UART peripheral to implement the WS2812 protocol.
+Since the UART functionality is well optimized the Toit program can continue
+running while the LEDs are updated. In our case there are only 12 LEDs, and
+communicating with them doesn't take a long time, but when a pixel string
+has 300 LEDs or more, it's crucial that the hardware does most of the work.
+
+We allocate three byte arrays. Each has PIXELS (set to 12) elements, and can
+be used to set the red, green or blue color-components respectively.
+Initially each byte is set to 0.
+
+We then start an infinite loop (`while true`). Inside it we first decrease
+the existing values by a factor of 3. In the very first iteration all values
+are 0 and therefore nothing happens, but in later iterations this will
+dim all lights.
+
+Then we set the current LED to full brightness.
+
+Finally, we send the new values to the strip, and wait 70ms.
+
+Before the next iteration we move to the next LED.
+
+## Exercises
+
+The LED ring can draw a lot of power if many LEDs are at full brightness. This
+can lead to brownouts where the ESP32 doesn't get enough power and
+reboots/shuts down.
+
+If this happens for [installed containers](../../containers/containers), Jaguar
+might be unable to change the installed program, leading to a boot-loop.
+In this case just unplug the power for the LEDs and install a program that
+uses less power.
+
+- Change the speed of the cycling LED.
+- Change the color of the cycling LED. Google for RGB values to find some interesting colors.
+- Instead of dimming the existing values equally, divide the individual color
+  components differently. For example /2 for red, /3 for green and /4 for blue.
+- Show a color wheel. Search for "RGB color wheel".
+- Turn that wheel.

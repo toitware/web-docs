@@ -1,7 +1,244 @@
 import BluetoothLogo from "../_images/bluetooth_logo.svg";
+import SetupIde from "../_images/setup_ide.png";
+import HelloWorld from "../_images/hello_world.png";
+import Packages from "../_images/packages.svg";
+import HwLed from "../_images/hw_led.jpg";
+import HwLeds from "../_images/hw_leds.jpg";
+import HwButton from "../_images/hw_button.jpg";
+import PwmWiki from "../_images/pwm.png";
+import Servo from "../_images/hw_servo.jpg";
+import Buzzer from "../_images/hw_buzzer.jpg";
+import Binary from "../_images/hw_binary.jpg";
+import I2c from "../_images/i2c_logo.svg";
+import Bme280 from "../_images/hw_bme280.jpg";
+import Ssd1360 from "../_images/hw_ssd1306.jpg";
+import Neopixel from "../_images/hw_neopixel.jpg";
+import Adc from "../_images/adc_symbol.svg";
+import Potentiometer from "../_images/hw_potentiometer.jpg";
+import Dht11 from "../_images/hw_dht11.jpg";
+import Ds18b20 from "../_images/hw_ds18b20.jpg";
+import Ultra from "../_images/hw_ultra.jpg";
+import Http from "../_images/http_logo.svg";
 
 # Tutorials
 
+## Setup
+<Boxes>
+<Box title="IDE" to="setup/ide">
+<img
+  src={SetupIde}
+  alt="Icon-like screenshot of installing the Toit extension in Visual Studio Code."
+/>
+
+Set up Visual Studio Code and Jaguar for local development.
+</Box>
+
+<Box title="Hello world" to="setup/firstprogram">
+<img
+  src={HelloWorld}
+  alt="Screenshot of source code for a tiny hello-world program."
+/>
+
+Write a simple program that runs "hello world" on your device.
+</Box>
+
+<Box title="Packages" to="setup/packages">
+<img
+  src={Packages}
+  alt="Toit's logo for packages."
+/>
+
+A description of Toit's package system.
+</Box>
+</Boxes>
+
+## Hardware
+
+### Pins
+
+#### Output
+<Boxes>
+
+<Box title="LED" to="hardware/led">
+<img
+  src={HwLed}
+  alt="A picture of an LED."
+/>
+
+Make an LED blink.
+</Box>
+
+<Box title="LEDs" to="hardware/leds">
+<img
+  src={HwLeds}
+  alt="A picture of many LEDs."
+/>
+
+Use multiple LEDs.
+</Box>
+
+</Boxes>
+
+#### Pulse Width Modulation
+
+<Boxes>
+
+<Box title="Fading LED" to="hardware/pwm_led">
+<img
+  src={PwmWiki}
+  alt="A picture of a PWM signal."
+/>
+
+Use PWM to fade an LED.
+</Box>
+
+<Box title="Servo" to="hardware/pwm_servo">
+<img
+  src={Servo}
+  alt="A picture of servo motor."
+/>
+
+Use PWM to control a servo motor.
+</Box>
+
+<Box title="Buzzer" to="hardware/pwm_buzzer">
+<img
+  src={Buzzer}
+  alt="A picture of a buzzer."
+/>
+
+Use PWM to control a buzzer.
+</Box>
+
+</Boxes>
+
+#### Input
+<Boxes>
+<Box title="Button" to="hardware/button">
+<img
+  src={HwButton}
+  alt="A picture of a button."
+/>
+
+Use a button.
+</Box>
+
+<Box title="Binary sensors" to="hardware/binary">
+<img
+  src={Binary}
+  alt="A picture of binary sensors."
+/>
+
+Use binary sensors.
+</Box>
+
+<Box title="Analog to Digital Converter" to="hardware/adc">
+<img
+  src={Adc}
+  alt="The symbol for an Analog to Digital Converter."
+/>
+
+Use an Analog to Digital Converter (ADC).
+</Box>
+
+<Box title="Potentiometer" to="hardware/potentiometer">
+<img
+  src={Potentiometer}
+  alt="Photo of a potentiometer."
+/>
+
+Use a potentiometer with an ADC.
+</Box>
+
+</Boxes>
+
+### I2C
+
+<Boxes>
+<Box title="I2C Introduction" to="hardware/i2c">
+
+<img
+  src={I2c}
+  alt="I2C logo."
+/>
+
+An introduction to I2C.
+</Box>
+
+<Box title="BME280" to="hardware/bme280">
+<img
+  src={Bme280}
+  alt="A picture of a BME280 sensor."
+/>
+
+Measure temperature, humidity, and pressure with a BME280 sensor.
+</Box>
+
+<Box title="SSD1306" to="hardware/ssd1306">
+<img
+  src={Ssd1360}
+  alt="A picture of a SSD1306 display."
+/>
+
+Pixel graphics on an SSD1306 display.
+</Box>
+
+</Boxes>
+
+### Misc
+
+<Boxes>
+<Box title="Neopixel" to="hardware/neopixel">
+<img
+  src={Neopixel}
+  alt="A picture of a neopixel ring."
+/>
+
+Use a neopixel LED strip/ring.
+</Box>
+
+<Box title="DHT11" to="hardware/dht11">
+<img
+  src={Dht11}
+  alt="A picture of a DHT11 sensor."
+/>
+
+Use a DHT11 sensor to measure temperature and humidity.
+</Box>
+
+<Box title="DS18B20" to="hardware/ds18b20">
+<img
+  src={Ds18b20}
+  alt="A picture of a DS18B20 sensor."
+/>
+
+Use a DS18B20 sensor to measure the temperature.
+</Box>
+
+<Box title="HC-SR04" to="hardware/ultra">
+<img
+  src={Ultra}
+  alt="A picture of an HC-SR04 ultrasonic distance sensor."
+/>
+
+Measure distance with an HC-SR04 ultrasonic distance sensor.
+</Box>
+</Boxes>
+
+### Network
+
+<Boxes>
+<Box title="HTTP" to="network/http">
+<img
+  src={Http}
+  alt="HTTP logo."
+/>
+
+Connect to the internet with HTTP.
+</Box>
+</Boxes>
+
+## Starter projects
 <Boxes>
 <Box title="Print date and time" to="starter">
 Write a simple Toit program that prints the date and time on your device.

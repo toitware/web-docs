@@ -1,0 +1,267 @@
+import Ssd1306Diagram from "../../_images/hw_ff_ssd1306.png";
+import Ssd1306Schematics from "../../_images/hw_ff_ssd1306_schem.png";
+import Makerfabs from "../../_images/hw_makerfabs.jpg";
+
+# OLED Display
+The SSD1306 OLED display is a cheap and popular display. It is, for
+example, the display that is used on the Makerfabs ESP32 board.
+
+In this tutorial we will write text on it, and draw some icons.
+
+## Prerequisites
+This tutorial assumes that you have done the [i2c](../i2c) tutorial.
+
+We recommend to have read the [packages](../../setup/packages) tutorial,
+since we are going to use a package for the SSD1306 driver.
+
+## Setup
+
+Connect the display to the ESP32 board as follows:
+- VCC/VIN to 3V3
+- GND to GND
+- SCL to pin 25
+- SDA to pin 26
+
+Many boards that have an SSD1306 display integrated (like
+the [Makerfabs MaESP Oled](https://www.makerfabs.com/makepython-esp32.html) or
+the Wemos Lolin) have the
+display connected to pins 4 (SDA) and 5 (SCL). If you use one of these
+boards you have to change the code below to use these pins.
+
+<img
+  src={Makerfabs}
+  alt="Makerfabs ESP32 board with integrated SSD1306 display"
+/>
+
+The Heltec boards with integrated displays, use the following pins:
+- v2: SDA=4, SCL=15
+- v3: SDA=17, SCL=18
+
+Note that we use the Adafruit 128x32 display in the following diagrams. The
+connections are the same for 128x64 displays.
+
+<img
+  src={Ssd1306Diagram}
+  alt="Wiring diagram for an SSD1306 display"
+/>
+
+<img
+  src={Ssd1306Schematics}
+  alt="Schematics for an SSD1306 display"
+/>
+
+## Packages
+The driver for the SSD1306 is not part of the standard Toit distribution,
+but must be downloaded as package. See the [packages](../../setup/packages)
+tutorial for details.
+
+We are using the [ssd1306](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-ssd1306@v1)
+package. To install it, run the following command in your project directory:
+
+```bash
+jag pkg install github.com/toitware/toit-ssd1306@v1
+```
+
+<Note>
+You can probably just write 'jag pkg install ssd1306', but the full ID together
+with the version is more explicit, and will make sure you get the right package.
+</Note>
+
+Similarly, install the
+[pixel-display package](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-pixel-display@v1)
+to provide convenience methods to draw on the display:
+
+```bash
+jag pkg install toitware/toit-pixel-display@v1
+```
+
+For information about how to use the display libraries,
+see the [display documentation](../../../language/sdk/display).
+
+In this tutorial, we are just going to show a few examples.
+
+## Text
+Start a `ssd1306_text.toit` program and watch it with Jaguar.
+
+Enter the following program:
+
+```toit
+import font show *
+import gpio
+import i2c
+import pixel_display show *
+import pixel_display.two_color show *
+import ssd1306 show *
+
+current_date:
+  now := Time.now.local
+  return "$now.year-$(%02d now.month)-$(%02d now.day)"
+
+current_time:
+  now := Time.now.local
+  return "$(%02d now.h):$(%02d now.m):$(%02d now.s)"
+
+main:
+  sda := gpio.Pin 26
+  scl := gpio.Pin 25
+  frequency := 400_000
+
+  bus := i2c.Bus --sda=sda --scl=scl --frequency=frequency
+
+  devices := bus.scan
+  if not devices.contains Ssd1306.I2C_ADDRESS:
+    throw "No SSD1306 display found"
+
+  driver := Ssd1306.i2c (bus.device Ssd1306.I2C_ADDRESS)
+  display := TwoColorPixelDisplay driver
+  display.background = BLACK
+
+  sans := Font.get "sans10"
+  sans_context := display.context
+      --landscape
+      --font=sans
+      --color=WHITE
+  display.text sans_context 30 20 "Toit"
+  date := display.text sans_context 30 40 ""
+  time_text := display.text sans_context 30 60 ""
+  while true:
+    date.text = current_date
+    time_text.text = current_time
+    display.draw
+    sleep --ms=250
+```
+
+As a first step we create an i2c bus object with:
+`i2c.Bus --sda=sda --scl=scl --frequency=frequency`.
+This calls the constructor of the `Bus` class, passing in the named arguments.
+The display supports the "fast" mode of i2c which is why we can set the
+frequency to 400KHz (and not just 100KHz). The code would work the
+same way with 100KHz.
+
+We then instantiate a `Ssd1306` object by calling its i2c constructor.
+As argument it receives the i2c device with ID `Ssd1306.I2C_ADDRESS`.
+The value of `Ssd1306.I2C_ADDRESS` is equal to 60, thus
+identifying the display on the bus.
+
+With the driver object we can then build a display object which
+gives us some useful methods to operate the display. We can set
+the background color to BLACK, and then use the WHITE constant
+to write later.
+
+Writing text is done by first finding a font (here `sans10`) and
+then creating a context with it. The context can then be used for
+the text function of the display.
+
+Note that operations on the display don't immediately interact
+with the physical display but build up a drawing queue/graph instead.
+Only with `display.draw` is the content constructed and sent to the
+physical display.
+
+This has two major advantages. We can reuse the graph and simply
+update the parts that change. In our example we have a while-true
+loop that just updates the objects we received from the `display.text`
+calls. We could also call `move_to` on the object to move it
+somewhere.
+
+See the documentation of the
+TextTexture [here](https://pkg.toit.io/github.com/toitware/toit-pixel-display@1.6.0/docs/pixel_display/two_color/class-TextTexture)
+
+The program writes 3 lines:
+- `Toit`,
+- the date in ISO 8601 format, and
+- the time.
+
+#### Time
+By default the device starts with a time set to 1970. You can use the
+[ntp package](https://pkg.toit.io/package/github.com%2Ftoitlang%2Fpkg-ntp@v1.0.0)
+to synchronize the device's time.
+
+See this [example](https://github.com/toitlang/pkg-ntp/blob/master/examples/settime.toit).
+
+## Icons
+As the name implies, it is possible to draw individual pixels onto a
+display. However, in many cases, icons are completely sufficient.
+
+Toit provides a package with icons from the [Pictogrammers](https://pictogrammers.com/)
+project. To use them, install the
+[pictogrammers_icons](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-icons-pictogrammers@v1):
+
+```shell
+jag pkg install github.com/toitware/toit-icons-pictogrammers@v1
+```
+
+Start a new file and save it as display_icon.toit. Use `jag watch` to
+run it whenever it is saved.
+
+Enter the following code into the new file:
+
+```toit
+import pictogrammers_icons.size_48 as icons
+import gpio
+import i2c
+import pixel_display show *
+import pixel_display.two_color show *
+import ssd1306 show *
+
+get_display -> TwoColorPixelDisplay:
+  sda := gpio.Pin 26
+  scl := gpio.Pin 25
+  frequency := 400_000
+
+  bus := i2c.Bus --sda=sda --scl=scl --frequency=frequency
+
+  devices := bus.scan
+  if not devices.contains Ssd1306.I2C_ADDRESS:
+    throw "No SSD1306 display found"
+
+  device = bus.device Ssd1306.I2C_ADDRESS
+  driver := Ssd1306.i2c device
+  return TwoColorPixelDisplay driver
+
+main:
+  display := get_display
+  display.background = BLACK
+
+  context := display.context --landscape --color=WHITE
+  icon := display.icon context 0 50 icons.HUMAN_SCOOTER
+  while true:
+    80.repeat:
+      icon.move_to it 50
+      display.draw
+      sleep --ms=1
+    sleep --ms=2_000
+```
+
+The code starts again by creating the display. This time we moved
+the display-creation code into its own function
+(`get_display` which returns a `TwoColorPixelDisplay`).
+
+If your display is only a 32-line display you need to add the
+argument `--height=32` to the driver creation. In some cases
+you also need to play with the following arguments:
+- `--flip`, to flip the display vertically,
+- `--inverse`, to invert black and white,
+- `--layout=XXX` where `XXX` is one of `LAYOUT_SEQUENTIAL`,
+  `LAYOUT_SEQUENTIAL_SWITCHED`, `LAYOUT_ALTERNATED`, or
+  `LAYOUT_ALTERNATED_SWITCHED`.
+
+As before we create a context, which we can use to add the
+icon to the drawing queue. Inside the loop the
+position is updated before every draw. This makes the icon move
+from left to right over the display.
+
+You can browse the icons at: https://materialdesignicons.com/.
+
+Often, devices are used for temperature measurements, in which
+case icons that start with `icons.WEATHER_` are interesting. Use
+the completion to see which icons exist.
+
+## Exercises
+As long as the connections were done correctly you can't damage your
+hardware by changing your program.
+
+- Change the text.
+- Fix the device's internal time before showing anything on the display.
+  See the [ntp package](https://pkg.toit.io/package/github.com%2Ftoitlang%2Fpkg-ntp@v1)
+  and the corresponding [example](https://github.com/toitlang/pkg-ntp/blob/master/examples/settime.toit).
+- Invert the colors, so that the background is white and the text is black.

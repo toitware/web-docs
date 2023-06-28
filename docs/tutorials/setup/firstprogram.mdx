@@ -1,0 +1,91 @@
+import HelloJagRun from "../../_images/hello_jag_run.png";
+import HelloJagWatch from "../../_images/hello_jag_watch.png";
+
+# Hello world
+
+This tutorial shows how to create a simple "Hello world" application and
+how to run it on a Jaguar-enabled device.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../ide).
+
+## Creating the project
+While not strictly necessary we recommend starting new projects in a separate
+folder. Toit stores [package](../packages) information in a hidden folder
+and it is easier to keep track of things if you have one folder per project. We
+are not going to use packages in this tutorial yet, but it's a good habit to
+get into.
+
+Once you have created a new folder (say `hello`) open it in vscode:
+File -> Open Folder.
+
+## The code
+In your project folder create a new file called `hello.toit` and add the
+following code:
+
+```toit
+main:
+  print "Hello world"
+```
+
+Make sure to save it (or change the vscode `files.autoSave` setting to
+`onFocusChange`).
+
+Spaces are important in Toit, so make sure that the `print` line is indented
+compared to the `main:` line. Generally, we write nested things with two more
+spaces of indentation. If your vscode insists on using tabs or four spaces
+consider changing the following settings:
+- `editor.tabSize` to 2, or change `editor.indentSize` to 2.
+- `editor.insertSpaces` to true
+- `editor.detectIndentation` to false
+
+## Running the code
+We are now ready to run the code. As described in the [IDE tutorial](../ide)
+we typically have two terminals open: one where we interact with the device,
+and one where we monitor the output of the device. In this setup, run
+`jag run hello.toit` in the first terminal.
+
+<img
+  src={HelloJagRun}
+  alt="Screenshot of running the hello world program"
+/>
+
+Within a fraction of a second Jaguar compiled the program and ran it on the
+device. The terminal monitoring the serial port shows the output of the
+program.
+
+Let's change the program to emit a different output:
+
+```toit
+main:
+  print "hi everyone"
+```
+
+Save it and run `jag run hello.toit` again. The new output should be
+visible on the monitor terminal.
+
+## Watching a Toit file
+Jaguar has a nice functionality that automatically runs applications as soon
+as they are saved: `jag watch <file>` watches a file for changes and
+immediately runs it as soon as a new version has been saved.
+
+Run `jag watch hello.toit` in the first terminal. Then change the program
+and save it. Without having to execute `jag run` again the new version should
+be running on the device.
+
+<img
+  src={HelloJagWatch}
+  alt="Screenshot of Jaguar watching the hello world program"
+/>
+
+Use ctrl+c to stop the watching. You will want to do this when you are done,
+or when you want to watch a different file.
+
+## Next steps
+Congratulations! You have successfully created and run your first Toit
+application.
+
+You can now move on to the [package tutorial](../packages)
+to learn how Toit packages work, or directly jump to the
+[LED tutorial](../../hardware/led) to learn how to blink an LED.

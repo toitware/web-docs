@@ -1,0 +1,158 @@
+import UltraDiagram from "../../_images/hw_ff_ultra.png";
+import UltraSchematics from "../../_images/hw_ff_ultra_schem.png";
+
+# HC-SR04 - ultrasonic distance sensor
+The HC-SR04 is a popular ultrasonic distance sensor. It is cheap and easy to
+use. The sensor has on speaker and one microphone. The speaker sends out a
+ultrasonic pulse and the microphone listens for the echo. The time between
+sending the pulse and receiving the echo can be used to calculate the distance.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+We recommend that you have finished the [LED tutorial](../led) before
+starting this tutorial.
+
+## Setup
+
+Connect the HC-SR04 as follows:
+- VCC to 5V/VIN.
+- GND to GND.
+- TRIG to pin 33.
+- ECHO to an LED and then to pin 33. The anode (long leg) of the LED should be
+  connected to the ECHO pin and the cathode (short leg) to pin 33.
+
+The HC-SR04 is designed to run on 5V (and is known to be flaky at lower
+voltages). The ESP32 (usually) has a 5V output (often labeled as VIN),
+but the ESP32 is not 5V tolerant on its inputs (depending on who you ask).
+This means that you should not connect the ECHO pin directly to the ESP32.
+Instead, we connect the ECHO pin to an LED and then to the ESP32. LEDs have
+a forward voltage drop of around 2V, so the voltage on the ECHO pin will
+be around 3V, which is safe for the ESP32. See the
+[ADC tutorial](../adc#led-voltage-drop) for a setup where we measure the
+LED voltage drop.
+
+If you have an HC-SR04+ module, then you can connect the VCC to 3V3 instead
+and connect the ECHO pin directly to the ESP32. The "+" version of the
+HC-SR04 is designed to run on 3.3V. (Note that the "+" is not printed
+on the front of the module, but only on the back.)
+
+<img
+  src={UltraDiagram}
+  alt="HC-SR04 wiring diagram"
+/>
+
+<img
+  src={UltraSchematics}
+  alt="HC-SR04 schematics"
+/>
+
+## Measuring by hand
+Conceptually, the HC-SR04 works as follows: after receiving a pulse on
+the TRIG pin (of ~10us), it sends out an ultrasonic pulse. At that moment
+it sets the ECHO pin high and waits for an echo. The moment it receives
+the echo, it sets the ECHO pin low again. The time between the ECHO pin going
+high and low thus corresponds to the time it took for the ultrasonic pulse
+to travel to the object and back. This time can be used to calculate the
+distance to the object.
+
+Here is a simple program that measures the distance to an object and prints
+it to the console.
+
+Save it as `ultra.toit` and watch it with Jaguar.
+
+```toit
+import gpio
+
+TRIGGER ::= 33
+ECHO ::= 32
+
+measure_distance trigger echo:
+  trigger_start := Time.monotonic_us
+  trigger.set 1
+  while Time.monotonic_us < trigger_start + 10:
+    // Do nothing while waiting for the 10us.
+  trigger.set 0
+
+  while echo.get != 1: null
+  echo_start := Time.monotonic_us
+  while echo.get == 1: null
+  echo_end := Time.monotonic_us
+  diff := echo_end - echo_start
+  return diff / 58
+
+main:
+  trigger := gpio.Pin TRIGGER --output
+  echo := gpio.Pin ECHO --input
+  while true:
+    print "measured $(measure_distance trigger echo)cm"
+    sleep --ms=500
+```
+
+The measure_distance function does all the work:
+- Set the trigger to 1 for at least 10μs.
+- Wait for the echo pin to go high.
+- Measure the duration of the echo-pin pulse.
+- Convert the duration in microseconds to centimeters.
+
+### Exercises
+As long as the connections were done correctly it is difficult
+to damage your hardware by changing your program. Just make sure
+that the ECHO pin is always an input pin.
+
+- Given that the speed of sound is 343m/s, explain the constant
+  58 to convert from measured microseconds to centimeters.
+- Repeat the measurement multiple times and average it, to get a
+  more accurate distance.
+- Find a material that absorbs ultrasonic waves and is thus
+  "invisible" to the sensor.
+- What's the furthest distance the sensor is able to detect?
+
+## Measuring using the hardware
+Measuring the length of the echo pulse in Toit works but it is
+a bit brittle. Toit is not designed to be a real-time language,
+and with all the capabilities of the ESP32 chip, it's rarely
+necessary to do real-time work. Case in point, there is a
+great ESP32 peripheral "RMT" (Remote Control Transceiver) that
+can do the time measurement in hardware for us.
+
+The published [hc_sr04](https://pkg.toit.io/package/github.com%2Flask%2Ftoit-hc-sr04@v2) package uses the hardware and
+is thus more precise and uses less CPU.
+
+Install the package as usual with `jag pkg install`:
+```
+jag pkg install github.com/lask/toit-hc-sr04@v2
+```
+
+See the [package tutorial](../../setup/packages) for more information
+about packages.
+
+We can now simplify the code:
+
+``` toit
+import gpio
+import hc_sr04
+
+TRIGGER ::= 33
+ECHO ::= 32
+
+main:
+  trigger := gpio.Pin TRIGGER
+  echo := gpio.Pin ECHO
+  sensor := hc_sr04.Driver --echo=echo --trigger=trigger
+
+  while true:
+    distance := sensor.read_distance
+    print "measured $distance mm"
+    sleep --ms=500
+```
+
+Measuring the echo pulse is now done in hardware and the
+resulting values should be much more precise. The measurements
+are also unaffected by other containers that could use the
+CPU.

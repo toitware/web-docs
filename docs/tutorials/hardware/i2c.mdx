@@ -1,0 +1,82 @@
+# I2C Bus
+In this tutorial we are going to introduce the I2C bus and how to use it with Toit.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+While not necessary, we recommend to have a look at the [LED](../led)
+tutorial to get familiar with the basics of using the GPIO pins.
+
+## Introduction
+
+I2C is a serial communication bus that is widely used in electronics. It
+consists of a data line (SDA) and a serial clock line (SCL). Multiple devices
+(sensors, or more complex devices like OLED displays) can be connected
+to the same bus.
+
+Each device reacts to a hardware device ID. This ID is typically hard-wired
+and can not be changed dynamically. Many sensors have a way to physically
+modify the hardware to select a different "alt" ID. For example,
+the [BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/)
+sensor has a solder jumper that can be used to select between two different
+addresses.
+
+The I2C's clock runs at a certain frequency. Originally, this frequency was
+capped at 100kHz, but was then extended to 400kHz in "fast" mode. Not all
+hardware supports the fast mode.
+
+The I2C bus is a controller-target bus. This means that there is one controller
+device that controls the bus. This device is typically a microcontroller, but
+can also be a more powerful device like a Raspberry Pi. The controller
+initiates all communication on the bus. The target devices can not initiate
+communication on their own.
+
+On the ESP32 the default pins for the I2C bus are pin 21 for SDA and pin 22
+for SCL, but these can be rerouted to other pins. In our example we will use
+pin 25 for SCL and pin 26 for SDA.
+
+## Code
+Without knowing which devices are connected to the I2C bus, it is not possible
+to communicate with them. There is not standardized protocol to interface
+with I2C devices. However, it is possible to scan for devices on the bus,
+and to list their addresses.
+
+Write an `i2c.toit` file and watch it with Jaguar:
+
+```toit
+import gpio
+import i2c
+
+main:
+  scl := gpio.Pin 25
+  sda := gpio.Pin 26
+  frequency := 100_000
+
+  bus := i2c.Bus --sda=sda --scl=scl --frequency=frequency
+
+  devices := bus.scan
+  devices.do: print it
+```
+
+This program will scan the I2C bus and print the addresses of all devices
+that are found.
+
+You can look through Adafruit's
+[i2c-addresses list](https://learn.adafruit.com/i2c-addresses/the-list)
+to find out what the addresses mean.
+
+Since I2C addresses are typically written in hexadecimal format, you
+might want to change the last line of the program to the following:
+```toit
+  devices.do: print "0x$(%02x it)"
+```
+
+This will use a [string interpolation](../../language/strings#string-interpolation)
+with the
+[2-digit hexadecimal format](https://libs.toit.io/core/class-string#format(2%2C0%2C0%2C))
+to print the addresses.

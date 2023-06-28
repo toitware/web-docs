@@ -1,0 +1,136 @@
+# Packages
+
+The Toit framework comes with lots of convenience methods, but much more
+functionality is available in packages. Packages are Toit libraries that
+are publicly available and can be used by anyone. They are published on the
+Toit package registry.
+
+Go to https://pkg.toit.io/packages to see all available packages. A lot of
+them are drivers for sensors (like the
+[bme280](https://pkg.toit.io/package/github.com%2Ftoitware%2Fbme280-driver)
+package), but other packages contain code that is useful on its own. For
+example, the
+[solar_position](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-solar-position)
+package calculates the sunrise and sunset times for a given place and date on Earth.
+
+## Initializing a project
+Before using packages, it is recommended to initialize a project first. Toit
+will do this automatically when installing the first package, but we
+recommend to explicitly initialize a folder as a project root.
+
+Move into the folder where you want to create your project and run the
+following command:
+
+```shell
+jag pkg init
+```
+
+This creates a `package.yaml` and `package.lock` file. Usually, you will
+not need to edit these files manually, but it is good to know what they
+are for.
+
+The `package.yaml` file is used to specify which packages are needed for
+the project. The `package.lock` file is used to record which versions of
+the packages have been installed. Both files should be committed to your
+source-code management system (usually git).
+
+## Installing new packages
+Packages can be installed with the `jag pkg install` command. For example,
+to install the `ntp` package one can write:
+
+```shell
+jag pkg install ntp
+```
+
+One can also install packages using their name (like `ntp` here), but this
+only works as long as the name isn't ambiguous. Since different developers
+can contribute packages, there is no guarantee that package names remain
+unique.
+
+The most stable way to install a package is to use the full package ID,
+together with the requested major version:
+
+```shell
+jag pkg install github.com/toitlang/pkg-ntp@1
+```
+
+This will install the latest version of the `pkg-ntp` package that is
+compatible with version 1 of the package. Usually, we use the short
+version when installing packages by hand, but use a more qualified
+version in tutorials or documentation. This way we can make sure that
+the code will still work when a new version of the package is released,
+or when a new package with the same name is released.
+
+### Installing project packages
+When a project uses packages, each user needs to install the packages
+locally. This is done by running `jag pkg install` in the project root.
+This will install all packages that are listed in the `package.lock` file
+thus making sure that all users use the same versions of the packages.
+
+### Updating packages
+A project continues using the same versions of the packages (fixed
+in the `package.lock` file) until the `jag pkg update` command is
+run. This command will update the `package.lock` file to use the latest
+compatible versions of the packages.
+
+## Using packages
+Once a package has been installed, it can be imported by writing
+`import PACKAGE_NAME`. For the `ntp` package that would be
+`import ntp`.
+
+### Selecting a library
+When importing a package with the package name (like `import ntp`), Toit
+automatically selects the `PACKAGE_NAME.toit` library (`ntp.toit`) of
+that package.
+
+If a package has multiple libraries, or if it doesn't have a
+`PACKAGE_NAME.toit` library, then one needs to select the correct library
+by adding a dot followed by the library that is needed. For example, the
+[host](https://pkg.toit.io/package/github.com%2Ftoitlang%2Fpkg-host@v1)
+package has no `host.toit` library, but one could use the `directory.toit`
+as follows:
+
+```toit
+import host.directory
+```
+
+Most packages have a nice entry-point so you rarely need to worry about this.
+
+## Project root
+Toit packages are installed per project, wherea  project is a folder that
+contains a `package.yaml`/`package.lock` file.
+
+Package commands assume that the current working directory is the project
+root. If that's not the case, you can specify the project root with the
+`--project-root` flag.
+
+For example, to install the `ntp` package in the current directory, run:
+
+```shell
+jag pkg install ntp
+```
+
+However, to install the `ntp` package in the `my_project` directory, run:
+
+```shell
+jag pkg install ntp --project-root=my_project
+```
+
+## The .packages folder
+When installing a package, Jaguar creates a .packages folder in your
+project and stores the downloaded code there. This folder should not
+be committed to your source-code management system.
+
+
+Alternatively, one can make sure that a package is installed in the right
+place, by telling Jaguar where the project root is located:
+```shell
+jag pkg install toitlang/pkg-ntp@1 --project-root=PATH_TO_PROJECT
+```
+
+In our examples and tutorials we recommend to just open a folder with
+vscode, and then to run Jaguar commands in one of its terminals. Vscode
+automatically moves the shell to the right place, thus avoiding the need
+to specify the project root.
+
+The command to install all packages is simply jag pkg install. This takes the package.yaml/lock files and downloads the same packages again.

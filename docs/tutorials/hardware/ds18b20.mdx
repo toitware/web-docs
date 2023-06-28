@@ -1,0 +1,100 @@
+import Ds18b20Diagram from "../../_images/hw_ff_ds18b20.png";
+import Ds18b20Schematics from "../../_images/hw_ff_ds18b20_schem.png";
+
+# DS18B20
+The DS18B20 is a cheap temperature sensor. Similar to the
+[DHT11](../dht11) it only needs one wire (in addition to VCC and GND)
+for communication. In fact, the used
+[1-wire protocol](https://en.wikipedia.org/wiki/1-Wire) even has a mode
+where the VCC line isn't needed. In that "parasitic" mode the sensor
+is powered by the DQ line. However, in this tutorial we are going to
+power the sensor via VCC (as this is how most sensors are packaged).
+
+The 1-wire protocol is standardized and used by different sensors that
+are usually cheap and don't need much power. See,
+for example,
+[Maxim's 1-wire products](https://www.maximintegrated.com/en/products/ibutton-one-wire/one-wire.html).
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+## Setup
+
+Connect the DS18B20 sensor as follows:
+- Connect the sensor's VCC/+ pin to the ESP32's 3.3V pin.
+- Connect the sensor's GND/- pin to the ESP32's GND pin.
+- Connect the sensor's DATA/OUT/S pin to pin 32.
+
+There are many different variants of the DS18B20 modules and they don't
+always have the same pin-out. Be sure to check the pin-out of your module
+before connecting it.
+
+<img
+  src={Ds18b20Diagram}
+  alt="Ds18b20 wiring diagram"
+/>
+
+<img
+  src={Ds18b20Schematics}
+  alt="Ds18b20 wiring schematics"
+/>
+
+## Packages
+
+The driver for the DS18B20 is not part of the standard Toit distribution,
+but must be downloaded as package. See the [packages](../../setup/packages)
+tutorial for details.
+
+We are using the [ds18b20](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-ds18b20@v1)
+package. To install it, run the following command in your project directory:
+
+```bash
+jag pkg install github.com/toitware/toit-ds18b20@1
+```
+
+The DS18B20 sensor uses the 1-wire protocol, so we need to install
+a package for that as well. We are using the
+[1-wire](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-1-wire@v1)
+package. To install it, run the following command in your project directory:
+
+```bash
+jag pkg install github.com/toitware/toit-1-wire@1
+```
+
+<Note>
+You can probably just write 'jag pkg install ds18b20' and
+'jag pkg install one_wire', but the full ID together
+with the version is more explicit, and will make sure you get the right packages.
+</Note>
+
+## Code
+Write the following `ds18b20.toit` file and watch it with Jaguar.
+
+``` toit
+import ds18b20
+import one_wire
+import gpio
+
+GPIO_PIN_NUM ::=  32
+
+main:
+  pin := gpio.Pin GPIO_PIN_NUM
+  ow := one_wire.Protocol pin
+  driver := ds18b20.Driver ow
+
+  (Duration --ms=500).periodic:
+    print "Temperature: $(%.2f driver.read_temperature) C"
+```
+
+Exercises
+As long as the connections were done correctly you can't damage your
+hardware by changing your program.
+
+- Connect an additional LED (don't forget the resistor) and turn it on
+  when the temperature reaches a certain threshold.
+- Show the current temperature on a [display](../ssd1306).
