@@ -5,3 +5,4 @@ import "@fontsource/roboto/300.css";
 
 import "@toitware/code-block/dist/styles.js";
 import "./src/assets/css/typography.css";
+import "./src/assets/css/code.css";
