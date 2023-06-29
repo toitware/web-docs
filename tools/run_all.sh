@@ -8,7 +8,7 @@ do
   # bitmask needs a complete rewrite or perhaps deletion.
   # exceptions is hard to check because it throws.
   # toitdoc is hard to check because it uses quadruple backticks to escape triple backticks
-  if [ $name != "../docs/sensors/drivers/bitmask.mdx" -a \
+  if [ $name != "../docs/language/bitmask.mdx" -a \
        $name != "../docs/language/exceptions.mdx" -a \
        $name != "../docs/sdk/toitdoc.mdx" ]
   then
