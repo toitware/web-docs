@@ -1,0 +1,187 @@
+import VscodeTerminal from "../../_images/setup_vscode_terminal.png";
+import VscodeExtension from "../../_images/setup_vscode_extension.png";
+import VscodeToitExtension from "../../_images/setup_vscode_toit_extension.png";
+import JagPort from "../../_images/setup_jag_port.png";
+import JagWiFi from "../../_images/setup_jag_wifi.png";
+import JagFlash from "../../_images/setup_jag_flash.png";
+import JagMonitor from "../../_images/setup_jag_monitor.png";
+import JagScan from "../../_images/setup_jag_scan.png";
+import VscodeSplitTerminals from "../../_images/setup_split_terminals.png";
+
+# Setting up the IDE
+This tutorial guides the reader through the installation process. It is an
+extended version of the [Get Started](../getstarted) documentation.
+
+Start by installing [Visual Studio Code](https://code.visualstudio.com/download)
+(henceforth "vscode").
+
+Then install [Jaguar (Releases)](https://github.com/toitlang/jaguar/releases).
+
+<Tabs>
+<Tab label="Windows">
+
+On Windows 10+ simply open powershell, and run:
+```shell
+winget install --id=Toit.Jaguar -e
+```
+
+For older Windows versions, download and install Jaguar from
+[here](https://github.com/toitlang/jaguar/releases/latest/download/jag_installer.exe).
+
+</Tab>
+<Tab label="macOS">
+
+You can use [Homebrew](https://brew.sh/) to install Jaguar as follows:
+```shell
+brew install toitlang/toit/jag
+```
+
+Or you can download and install Jaguar manually from
+[here](https://github.com/toitlang/jaguar/releases/latest/download/jag.dmg).
+
+</Tab>
+
+<Tab label="Linux">
+
+On Archlinux there is an AUR package, which can be installed with:
+
+```shell
+yay install jaguar-bin
+```
+
+Or download the precompiled binary from [here](https://github.com/toitlang/jaguar/releases/latest/download/jag_linux.tgz).
+
+</Tab>
+</Tabs>
+
+Visual Studio Code has an integrated terminal.
+<img
+  src={VscodeTerminal}
+  alt="Screenshot of where to find the menu entry to create a vscode Terminal"
+/>
+
+Whenever we ask you to run a command, use this terminal. To do that
+simply open a new terminal (or use an existing one) and type the command
+there.
+
+Run the following command in a terminal:
+``` bash
+jag setup
+```
+
+If this step is skipped the extension will remind you later.
+
+### Install the Toit extension
+In vscode click on the gear icon and then "extensions".
+
+<img
+  src={VscodeExtension}
+  alt="Screenshot of where to find the extensions button"
+/>
+
+Search for Toit and install the extension.
+
+<img
+  src={VscodeToitExtension}
+  alt="Screenshot of the Toit extension page"
+/>
+
+
+## Open a folder
+When working in Toit we recommend to use separate folders for different
+projects. Vscode has the notion of "opened folder" which is used by
+the Toit extension to know where to put files and whether files are related.
+
+After opening a folder, vscode also automatically opens terminals in that folder,
+which is often a requirement when running commands (specifically package
+commands).
+
+Click on "Open Folder" and go into a (probably fresh) folder.
+
+When you open a new terminal you should now see the name of the
+folder (although this depends on your operating system).
+
+## Prepare a device
+Plug in your ESP32, and, in a terminal, run the following command:
+
+``` bash
+jag flash
+```
+
+Select the USB port the device is connected to. If no correct serial port shows up, have
+a look at our [trouble-shooting page](../../../support/troubleshoot/serialtroubleshoot)
+or follow the guide on Espressif's page to
+[establish a serial connection with the ESP32](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establish-serial-connection.html).
+
+<img
+  src={JagPort}
+  alt="Screenshot of the jag flash command asking for a port"
+/>
+
+Then enter the WiFi credentials of the network you want to connect to.
+
+<img
+  src={JagWiFi}
+  alt="Screenshot of the jag flash command asking for WiFi credentials"
+/>
+
+As soon as the credentials are submitted, the flashing process starts.
+
+<img
+  src={JagFlash}
+  alt="Screenshot of the jag flash command flashing the device"
+/>
+
+When the flashing is done, run `jag monitor` to verify that the device is
+connecting correctly to the WiFi:
+
+<img
+  src={JagMonitor}
+  alt="Screenshot of the jag monitor command showing the output of the device"
+/>
+
+The `jag monitor` will run until stopped with `ctrl+c`, or when the device is
+physically disconnected.
+
+Running jag monitor has two effects:
+* it reboots the device (unless used with `--attach`), and
+* it shows the output of programs.
+
+During development it's convenient to always have a terminal monitoring
+the output of the device. A common setup thus consists of having two
+terminals open at the same time. One to interact with the device
+and one to monitor the output. Vscode's "split terminal" comes in handy
+for this.
+
+<img
+  src={VscodeSplitTerminals}
+  alt="Screenshot of vscode with two terminals"
+/>
+
+### Selecting a device
+Jaguar has the notion of a "default device". This is the device that is used
+when no device is specified. If you have multiple devices, or just want to
+set the default one, you can select a device by running `jag scan`.
+
+<img
+  src={JagScan}
+  alt="Screenshot of the jag scan command"
+/>
+
+Note: Jaguar uses UDP broadcast messages to find all ESP32 devices. This means
+that the desktop and the ESP32 need to be in the same network for this to work.
+
+If `jag scan` can't find your device, you can also help `jag` by providing the
+IP address of the device. This is done by running `jag scan <ip-address>`. The
+IP address can be found in the output of `jag monitor`. For example:
+
+``` bash
+jag scan 192.168.86.25
+```
+
+Your development environment is now ready to use. You can start writing
+programs in Toit and run them on your device.
+
+## Next steps
+Have a look at the [first programs](../firstprogram) tutorial to learn how to
+write a Toit program and run it on the device.

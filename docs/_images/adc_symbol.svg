@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="380" height="120">
+<path d="M20 60 Q26 40 32 60 Q38 80 44 60" stroke="black" fill="none"/>
+<path d="M74 60 L130 10 275 10 275 107 130 107 74 60 Z" fill="#E8EFF9" stroke="#000" stroke-width="2px"/>
+<line x1="54" y1="60" x2="74" y2="60" style="stroke:black;stroke-width:2"/>
+<line x1="275" y1="60" x2="295" y2="60" style="stroke:black;stroke-width:2"/>
+<polyline points="305,60 315,60 315,45 325,45 325,60 335,60 335,45 346,45 345,60 355,60 355,45 365,45" style="stroke:black;fill:none"/>
+<text x="95" y="65" style="font-family:Arial;font-size:20px;font-weight:bold">IN</text>
+<text x="145" y="65" style="font-family:Arial;font-size:28px;font-weight:bold">ADC</text>
+<text x="230" y="65" style="font-family:Arial;font-size:20px;font-weight:bold">OUT</text>
+</svg>

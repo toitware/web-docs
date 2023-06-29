@@ -1,0 +1,105 @@
+import HttpCertificateScreen from "../../_images/http_certificate.png";
+
+# HTTP
+The ESP32 comes with integrated WiFi and Bluetooth. In this tutorial
+we are going to take advantage of the WiFi and do an HTTP GET request
+to get interesting facts.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+Note that you can do this tutorial without a device. In that case,
+you need to use the `-d host` option whenever you invoke
+`jag run`. The program will then run on your computer instead of on
+a device.
+
+## Packages
+The HTTP functionality is not part of the core libraries and must be
+imported as a package. See the [packages](../../setup/packages)
+tutorial for details.
+
+We are using the [http](https://pkg.toit.io/package/github.com%2Ftoitlang%2Fpkg-http@v2)
+package. To install it, run the following command:
+
+``` shell
+jag pkg install github.com/toitlang/pkg-http@v2
+```
+
+We will also use the
+[certificate-roots](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-cert-roots@v1)
+package:
+
+``` shell
+jag pkg install github.com/toitware/toit-cert-roots@v1
+```
+
+## Code
+
+Start a new Toit program `http_get.toit` and watch it with Jaguar.
+
+``` toit
+import http
+import net
+import certificate_roots
+import encoding.json
+
+URL ::= "uselessfacts.jsph.pl"
+PATH ::= "/random.json?language=en"
+CERTIFICATE ::= certificate_roots.ISRG_ROOT_X1
+
+main:
+  network := net.open
+  client := http.Client.tls network
+      --root_certificates=[CERTIFICATE]
+
+  request := client.get URL PATH
+  decoded := json.decode_stream request.body
+  print decoded["text"]
+```
+
+Doing an HTTP GET is straightforward and consists of calling
+`get` on an HTTP client object.
+
+However, things are complicated by two facts:
+- we need to use the HTTPS connection, and
+- the returned data is given as a byte-array and must be decoded.
+
+In order to verify the authenticity of the https server we need
+to have the certificate of the authenticity that signed the server's
+own certificate. In the case of https://uselessfacts.jsph.pl the root
+authority is "ISRG Root X1". This information can be extracted by
+looking at the site's certificate in Chrome:
+
+<img
+  src={HttpCertificateScreen}
+  alt="Certificate information in Chrome"
+/>
+
+The `certificate_roots` package is maintained by Toitware and contains
+some of the most common roots. The included roots are the ones that are
+shipped with Mozilla's Firefox and should thus be safe to use.
+
+Decoding the given data as JSON is straightforward with the `decode_stream`
+functionality of the `json` library (imported with `encoding.json`).
+The server is supposed to return an array of exactly one string item.
+As such the output of this program could look something like:
+```
+[jaguar] INFO: starting program 6a63204c-1c98-519d-bdaa-90e52b491fb4
+Until 1994, world maps and globes sold in Albania only had Albania on them.
+```
+
+## Exercises
+It's almost impossible to damage the ESP32 without connecting
+hardware to it.
+
+- Fetch different interesting data. The repository
+  https://github.com/public-apis-dev/public-apis has lots of public
+  services that could be used for this purpose.
+- Show the data on a [display](../../hardware/sd1306).
+- Use a [button](../../hardware/button) to fetch a new fact every
+  time the button is pressed.

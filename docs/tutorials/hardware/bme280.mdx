@@ -1,0 +1,95 @@
+import Bme280Diagram from "../../_images/hw_ff_bme280.png";
+import Bme280Schematics from "../../_images/hw_ff_bme280_schem.png";
+
+# BME280 - temperature, humidity and pressure sensor
+In this tutorial we are going to meausure temperature, humidity and
+pressure using the BME280 sensor.
+
+## Prerequisites
+This tutorial assumes that you have done the [i2c](../i2c) tutorial.
+
+We recommend to have read the [packages](../../setup/packages) tutorial,
+since we are going to use a package for the BME280 driver.
+
+## Setup
+
+Connect the BME280 to the ESP32 as follows:
+- VCC to 3V3
+- GND to GND
+- SCL to pin 25 (yellow on sparkfun boards)
+- SDA to pin 26 (blue on sparkfun boards)
+
+<img
+  src={Bme280Diagram}
+  alt="Wiring diagram for a BME280 sensor"
+/>
+
+<img
+  src={Bme280Schematics}
+  alt="Schematics for a BME280 sensor"
+/>
+
+Make sure the device is found by executing the list program
+from the [i2c](../i2c) tutorial. It should print one of the
+BME280 I2C addresses: 0x76 (118) or 0x77 (119).
+
+## Packages
+The driver for the BME280 is not part of the standard Toit distribution,
+but must be downloaded as package. See the [packages](../../setup/packages)
+tutorial for details.
+
+We are using the [bme280](https://pkg.toit.io/package/github.com%2Ftoitware%2Fbme280-driver@v1)
+package. To install it, run the following command in your project directory:
+
+```bash
+jag pkg install github.com/toitware/bme280-driver@v1
+```
+
+<Note>
+
+You can probably just write `jag pkg install bme280`, but the full ID together
+with the version is more explicit, and will make sure you get the right package.
+
+</Note>
+
+## Code
+Create a new file `bme280.toit` and start `jag watch bme280.toit` to run
+the program whenever you save.
+
+```toit
+import gpio
+import i2c
+import bme280
+
+main:
+  bus := i2c.Bus
+    --sda=gpio.Pin 26
+    --scl=gpio.Pin 25
+
+  // Use 'I2C_ADDRESS' if your device has address 0x76 (118).
+  // Use 'I2C_ADDRESS_ALT' if your device has address 0x77 (119).
+  device := bus.device bme280.I2C_ADDRESS
+
+  driver := bme280.Driver device
+
+  print "$driver.read_temperature C"
+  print "$driver.read_pressure Pa"
+  print "$driver.read_humidity %"
+
+  driver.close
+  bus.close
+```
+
+The program first instantiates an I2C bus object, which it uses to
+get a handle to the device with the BME280 address. It then passes
+this device to the BME280 driver. At that point the driver
+configures the sensor.
+
+When `read_temperature`, `read_pressure` and `read_huminity`
+is called, the driver then requests the corresponding values
+from the device. There is some computation to convert the
+raw values to human understandable values, but that's hidden
+by the driver.
+
+Note that this program uses
+[string interpolation](../../../language/strings#string-interpolation).
