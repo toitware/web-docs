@@ -2,7 +2,6 @@ import NeopixelDiagram from "../../_images/hw_ff_neopixel.png";
 import NeopixelSchematics from "../../_images/hw_ff_neopixel_schem.png";
 
 # Neopixel
-
 Neopixels are Adafruit's brand for WS2812 indivually-addressable RGB color pixel
 strips. In this tutorial we will use the term Neopixel to refer to any WS2812
 compatible LED strip (including the SK6812, which have an additional white LED, and
@@ -27,7 +26,6 @@ you are familiar with running Toit programs on it.
 If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
 
 ## Setup
-
 Connect the LED strip as follows:
 - Connect the 5V/power pin of the LED strip to the 5V pin of the ESP32. The
   5V pin of the ESP32 is often marked as VIN, since that's the 5V input that
@@ -46,7 +44,6 @@ Connect the LED strip as follows:
 />
 
 ## Packages
-
 The driver for pixel strips is not part of the standard Toit distribution,
 but must be downloaded as package. See the [packages](../../setup/packages)
 tutorial for details.
@@ -66,7 +63,6 @@ with the version is more explicit, and will make sure you get the right package.
 </Note>
 
 ## Code
-
 Open a new file and save it as `neopixel.toit`,and watch it with Jaguar.
 
 Insert the following program:
@@ -131,7 +127,6 @@ Finally, we send the new values to the strip, and wait 70ms.
 Before the next iteration we move to the next LED.
 
 ## Exercises
-
 The LED ring can draw a lot of power if many LEDs are at full brightness. This
 can lead to brownouts where the ESP32 doesn't get enough power and
 reboots/shuts down.
