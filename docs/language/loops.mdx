@@ -142,7 +142,7 @@ Similarly you can use the `continue` statement to skip the rest of a loop and go
 main:
   sum := 0
   for i := 0; i < 10; i++:
-    log sum
+    print sum
     if sum >= 10: continue
     // This line is skipped if sum is already >= 10.
     sum += i
@@ -157,7 +157,7 @@ to the continue statement, to indicate which loop you wish to continue.
 main:
   sum := 0
   10.repeat:
-    log sum
+    print sum
     if sum > 10:
       continue.repeat  // Skip the rest of the block.
     sum += it

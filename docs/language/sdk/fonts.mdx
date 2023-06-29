@@ -40,13 +40,13 @@ the font.
 In the following example we assume the `font_x11_adobe` package has
 been installed in your project.
 
+<!-- HIDDEN CODE import pixel_display show TwoColorPixelDisplay -->
 ```
 // Import the font and size that you need, and give it a name.
 import font_x11_adobe.sans_14_bold as s14b
 
 // Other imports we need.
 import font show Font
-import pixel_display show TwoColorPixelDisplay
 
 // Select the Unicode blocks you need from the font. In this
 // case we have the coverage needed for Western Europe, plus
@@ -54,8 +54,9 @@ import pixel_display show TwoColorPixelDisplay
 // call our subset of the font sans_10_bold.
 sans_14_bold ::= Font [s14b.ASCII, s14b.LATIN_1_SUPPLEMENT, s14b.CURRENCY_SYMBOLS]
 
-// For this example the display is black-and-white, and is called "eink"
-display ::= TwoColorPixelDisplay "eink"
+// For this example we assume there exists a function `get_display` that
+// creates a TwoColorPixelDisplay.
+display ::= get_display
 
 // Create a graphics context that uses this font. Whenever we
 // add a text texture to a display using this context, the given
@@ -71,6 +72,8 @@ my_fish_adding_function:
   // Update the display with the latest addition.
   display.draw
 ```
+<!-- HIDDEN CODE get_display -> TwoColorPixelDisplay?: return null -->
+
 
 ## Available Fonts
 

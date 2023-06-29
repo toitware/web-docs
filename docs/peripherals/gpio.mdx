@@ -36,7 +36,7 @@ To configure a GPIO pin in output mode, either do it initially:
 or later (independent of previous mode):
 
 ```
-  pin.config --output         // Reconfigure for output mode.
+  pin.configure --output         // Reconfigure for output mode.
 ```
 
 If a GPIO pin is configured for `output` mode, `Pin.set` can be used to either drive the pin voltage high (1) or low (0).
@@ -51,7 +51,7 @@ If a GPIO pin is configured for `output` mode, `Pin.set` can be used to either d
 GPIO pins also supports output mode as [open-drain](https://en.wikipedia.org/wiki/Open_collector). To configure the GPIO Pin as open-drain output do the following:
 
 ```
-  pin.config --output --open_drain
+  pin.configure --output --open_drain
 ```
 
 In open-drain output mode, when setting the pin high, the pin will go into open-drain mode. That means the pin is not being pulled in any direction (floating).
@@ -110,7 +110,7 @@ To configure a GPIO pin in input mode, either do it initially:
 or later (independent of previous mode):
 
 ```
-  pin.config --input         // Reconfigure for input mode.
+  pin.configure --input         // Reconfigure for input mode.
 ```
 
 ### Waiting for state change
