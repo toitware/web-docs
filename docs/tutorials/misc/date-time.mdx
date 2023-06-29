@@ -1,0 +1,160 @@
+# Date, time and NTP
+This tutorial shows how to use the date and time functionality of Toit.
+It also shows how to use the Network Time Protocol (NTP) to get the
+current time from a time server.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+Note that you can do parts of this tutorial without a device. In that case,
+you need to use the `-d host` option whenever you invoke
+`jag run`. The program will then run on your computer instead of on
+a device.
+
+## Date and time
+The Toit language has a built-in
+[`Time`](https://libs.toit.io/core/time/class-Time) class that represents
+a point in time. It is used to represent both dates and times.
+
+On its own, it does not have any notion of time zones or calendars. For that,
+you need a [`TimeInfo`](https://libs.toit.io/core/time/class-TimeInfo)
+instance that presents the time in the desired view. The `Time` class has two
+getters that return a `TimeInfo` instance:
+- [`Time.local`](https://libs.toit.io/core/time/class-Time#local(0%2C0%2C0%2C))
+  returns the time in the local time zone.
+- [`Time.utc`](https://libs.toit.io/core/time/class-Time#utc(0%2C0%2C0%2C))
+  returns the time in UTC.
+
+Write the following `time.toit` program and run it with Jaguar.
+
+```
+main:
+  now := Time.now
+  utc := now.utc
+  print "UTC: $utc"
+  print utc.to_iso8601_string
+  local := now.local
+  print "Local: $local"
+  print "local time: $(%02d local.h):$(%02d local.m):$(%02d local.s)"
+```
+
+This example shows how to get the current time and print it in UTC and
+in the local time zone. Note that the `TimeInfo` class stringifies to
+the `ISO 8601` format by default. When this is the desired string format
+we recommend to use the `to_iso8601_string` method instead, as it is
+more explicit and guaranteed not to change in the future.
+
+The program also shows how to access the fields of a `TimeInfo`
+instance. It prints them individual components of the time with
+two digits, padding with zeros if necessary. See
+[string interpolation](../../language/strings#string-interpolation) for
+details.
+
+The most important fields of the `TimeInfo` class are:
+- `year`: year
+- `month`: month of the year (1-12)
+- `day`: day of the month (1-31)
+- `weekday`: day of the week (1-7, 1 is Monday)
+- `h`: hour (0-23)
+- `m`: minute (0-59)
+- `s`: second (0-59, could be 60 for leap seconds)
+
+## Timezones
+The core libraries provide a way to change the Time zone.
+The [`set_timezone`](https://libs.toit.io/core/time/library-summary#set_timezone(1%2C0%2C0%2C))
+function takes a time zone description in Posix TZ format and applies it.
+
+On the desktop calling this function only changes the time zone of the currently
+running program. On the device the new time zone is stored in the system and
+affects all programs.
+
+Example:
+
+```
+main:
+  set_timezone "CET-1CEST,M3.5.0,M10.5.0/3"  // Central European Timezone (as of 2022).
+  print Time.now.local
+```
+
+The time zone string is in the
+[Posix TZ format](https://developer.ibm.com/articles/au-aix-posix/). Fortunately,
+there are many online resources that list the time zones in this format, or
+users on Posix systems can just look at the last line of the output of the
+corresponding zoneinfo file:
+
+``` shell
+tail -n1 /usr/share/zoneinfo/Europe/Copenhagen
+```
+
+Here are a few common TZ strings:
+- `CET-1CEST,M3.5.0,M10.5.0/3`: Central European Time
+- `GMT0BST,M3.5.0/1,M10.5.0`: British Time
+- `EST5EDT,M3.2.0,M11.1.0`: Eastern Time
+- `PST8PDT,M3.2.0,M11.1.0`: Pacific Time
+- `<+03>-3`: Turkish Time (no daylight saving time)
+- `CST-8`: China Standard Time (no daylight saving time)
+- `<+04>-4`: Dubai Time (no daylight saving time)
+- `JST-9`: Japan Standard Time (no daylight saving time)
+- `AEST-10AEDT,M10.1.0,M4.1.0/3`: Australian Eastern Time
+
+## NTP
+The Network Time Protocol (NTP) is a protocol for synchronizing the clocks
+of computers over a network.
+
+### Package
+The NTP functionality is not part of the core libraries and must be
+imported as a package. See the [packages](../../setup/packages)
+tutorial for details.
+
+We are using the [ntp](https://pkg.toit.io/package/github.com%2Ftoitlang%2Fpkg-ntp@v1)
+package. To install it, run the following command:
+
+``` shell
+jag pkg install github.com/toitlang/pkg-ntp@v1
+```
+
+<Note>
+
+You can probably just write `jag pkg install ntp`, but the full ID together
+with the version is more explicit, and will make sure you get the right package.
+
+</Note>
+
+### Code
+The following code shows how to use the NTP package to get the current time
+from an NTP server, and how to update the system clock with the time from
+the server:
+
+```
+import ntp
+import esp32 show adjust_real_time_clock
+
+main:
+  now := Time.now
+  if now < (Time.from_string "2022-01-10T00:00:00Z"):
+    result ::= ntp.synchronize
+    if result:
+      adjust_real_time_clock result.adjustment
+      print "Set time to $Time.now by adjusting $result.adjustment"
+    else:
+      print "ntp: synchronization request failed"
+  else:
+    print "We already know the time is $now"
+```
+
+This program first checks whether the current time is believable or not.
+If it isn't it fetches the current time from an NTP server and updates
+the system clock with the new time.
+
+Note that a production system should keep track of when the time was last
+updated, and periodically synchronize to avoid clock drift.
+
+Often, this (or a similar program, that also incorporates the time
+zone setting) is run during boot. See the
+[container tutorial](../../containers/containers)
+for details on how to do that.
