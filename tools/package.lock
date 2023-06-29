@@ -7,6 +7,7 @@ prefixes:
   host: pkg-host
   morse: toit-morse
   mqtt: mqtt
+  ntp: pkg-ntp
   pictogrammers_icons: toit-icons-pictogrammers
   pixel_display: toit-pixel-display
   ssd1306: toit-ssd1306
@@ -31,6 +32,10 @@ packages:
     url: github.com/toitlang/pkg-host
     version: 1.9.0
     hash: 76e4dc5328a5c3739e97f65ed196d05058071359
+  pkg-ntp:
+    url: github.com/toitlang/pkg-ntp
+    version: 1.0.0
+    hash: 1c3cc4a4819f459393f00efc576f66f838665719
   toit-cert-roots:
     url: github.com/toitware/toit-cert-roots
     version: 1.5.0

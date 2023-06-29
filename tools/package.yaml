@@ -1,0 +1,34 @@
+dependencies:
+  bme280:
+    url: github.com/toitware/bme280-driver
+    version: ^1.0.0
+  certificate_roots:
+    url: github.com/toitware/toit-cert-roots
+    version: ^1.5.0
+  cli:
+    url: github.com/toitlang/pkg-cli
+    version: ^1.2.0
+  font_x11_adobe:
+    url: github.com/toitlang/pkg-font-x11-adobe
+    version: ^0.1.0
+  host:
+    url: github.com/toitlang/pkg-host
+    version: ^1.9.0
+  morse:
+    url: github.com/toitware/toit-morse
+    version: ^1.0.2
+  mqtt:
+    url: github.com/toitware/mqtt
+    version: ^2.2.0
+  ntp:
+    url: github.com/toitlang/pkg-ntp
+    version: ^1.0.0
+  pictogrammers_icons:
+    url: github.com/toitware/toit-icons-pictogrammers
+    version: ^1.0.0
+  pixel_display:
+    url: github.com/toitware/toit-pixel-display
+    version: ^1.6.0
+  ssd1306:
+    url: github.com/toitware/toit-ssd1306
+    version: ^1.6.0
