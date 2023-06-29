@@ -11,9 +11,6 @@ into deep sleep when it is not running any programs.
 
 </Note>
 
-The ESP32 touch sensor detects variations in capacitance on the GPIO pins,
-thus detecting touch or proximity.
-
 ## Requirements
 We assume that you have set up your development environment as described
 in [the IDE tutorial](../../setup/ide).
@@ -129,8 +126,8 @@ registers a touch on pin 32.
 
 ## Power consumption
 When the ESP32 is in deep sleep it only consumes about 10µA. However,
-this assumes that no other components are drawing any power. There is
-a significant difference between different ESP32 boards.
+this assumes that no other components are drawing any power. There are
+significant differences between different ESP32 boards.
 
 For example the FireBeetle ESP32 uses only 10µA when in deep sleep, the
 Olimex ESP32-DevKit-LiPo around 65µA, and the ESP32-DevKitC up to 9mA.
