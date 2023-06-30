@@ -38,6 +38,7 @@ THINGS_THAT_WONT_RUN_ON_SERVER ::= [
   "import pixel_display",
   "import mqtt",
   "import ble",
+  "import esp32",
 ]
 
 main args -> none:

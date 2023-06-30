@@ -28,7 +28,8 @@ main:
   if not devices.contains Ssd1306.I2C_ADDRESS:
     throw "No SSD1306 display found"
 
-  driver := Ssd1306.i2c (bus.device Ssd1306.I2C_ADDRESS)
+  device := bus.device Ssd1306.I2C_ADDRESS
+  driver := Ssd1306.i2c device
   display := TwoColorPixelDisplay driver
   display.background = BLACK
 
