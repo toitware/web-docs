@@ -26,6 +26,10 @@ import Time from "../_images/time.svg";
 # Tutorials
 
 ## Setup
+This section covers the essential setups you need to get started. From
+setting up your development environment to writing your first program
+and understanding Toit's package system.
+
 <Boxes>
 <Box title="IDE" to="setup/ide">
 <img
@@ -56,10 +60,14 @@ A description of Toit's package system.
 </Boxes>
 
 ## Hardware
+This section explores various hardware aspects. From controlling output
+pins to using the I2C bus or BLE, it provides a comprehensive understanding
+of interfacing with different hardware components.
 
 ### Pins
-
 #### Output
+Tutorials on controlling output devices, such as LEDs.
+
 <Boxes>
 
 <Box title="LED" to="hardware/led">
@@ -83,6 +91,10 @@ Use multiple LEDs.
 </Boxes>
 
 #### Pulse Width Modulation
+Pulse Width Modulation (PWM) is a technique for controlling
+the average power delivered by an electrical signal. By
+averaging the output over time, the result is an analog signal that can be
+used to control devices such as motors, LEDs, and buzzers.
 
 <Boxes>
 
@@ -116,6 +128,8 @@ Use PWM to control a buzzer.
 </Boxes>
 
 #### Input
+Tutorials on using pins as input.
+
 <Boxes>
 <Box title="Button" to="hardware/button">
 <img
@@ -160,6 +174,8 @@ Use a potentiometer with an ADC.
 </Boxes>
 
 ### I2C
+This section provides an introduction to I2C and guides you through using
+it with different sensors and devices.
 
 <Boxes>
 <Box title="I2C Introduction" to="hardware/i2c">
@@ -192,19 +208,11 @@ Pixel graphics on an SSD1306 display.
 
 </Boxes>
 
-### Miscellaneous
+### Miscellaneous hardware components
+Tutorials on how to use a variety of other hardware components
+you may find useful in your projects.
 
 <Boxes>
-
-<Box title="Deep sleep" to="hardware/deepsleep">
-<img
-  src={Sleep}
-  alt="Three 'Z's, indicating sleep."
-  width="50%"
-/>
-
-Use deep sleep to save power.
-</Box>
 
 <Box title="Neopixel" to="hardware/neopixel">
 <img
@@ -244,20 +252,27 @@ Measure distance with an HC-SR04 ultrasonic distance sensor.
 
 </Boxes>
 
-### Network
+### Power
+Learn how power management works and save precious battery life.
 
 <Boxes>
-<Box title="HTTP" to="network/http">
+<Box title="Deep sleep" to="hardware/deepsleep">
 <img
-  src={Http}
-  alt="HTTP logo."
+  src={Sleep}
+  alt="Three 'Z's, indicating sleep."
+  width="50%"
 />
 
-Connect to the internet with HTTP.
+Use deep sleep to save power.
 </Box>
 </Boxes>
 
 ### BLE
+Learn the basics of Bluetooth Low Energy (BLE).
+
+The following tutorials teach you how to advertise data, scan for
+nearby devices, and connect to a BLE device.
+
 <Boxes>
 <Box title="BLE" to="ble">
 <img
@@ -282,7 +297,29 @@ Connect to a BLE device.
 
 </Boxes>
 
+## Network
+Get to know about how to use the network capabilities of your device.
+
+<Boxes>
+<Box title="HTTP" to="network/http">
+<img
+  src={Http}
+  alt="HTTP logo."
+/>
+
+Connect to the internet with HTTP.
+</Box>
+
+<Box title="MQTT" to="mqtt">
+Send data to an MQTT broker.
+</Box>
+
+</Boxes>
+
 ## Common tasks
+Learn how to carry out common tasks such as
+working with dates and times, and synchronizing the time with an NTP server.
+
 <Boxes>
 <Box title="Date, time, and NTP" to="misc/date-time">
 <img
@@ -302,6 +339,8 @@ dates and times.
 </Boxes>
 
 ## Starter projects
+A few simple projects to get you started.
+
 <Boxes>
 <Box title="Print date and time" to="starter">
 Write a simple Toit program that prints the date and time on your device.
@@ -311,7 +350,4 @@ Write a simple Toit program that prints the date and time on your device.
 Use a BME280 to print the temperature at regular intervals.
 </Box>
 
-<Box title="MQTT" to="mqtt">
-Send data to an MQTT broker.
-</Box>
 </Boxes>
