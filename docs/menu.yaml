@@ -61,8 +61,6 @@ items:
             path: /peripherals/drivers/bme280
           - name: Use Qwiic cables
             path: /peripherals/drivers/qwiic
-          - name: Bitwise operations
-            path: /peripherals/drivers/bitmask
           - name: How to write a driver
             path: /peripherals/drivers/sparkfun_joystick
   - name: Language
@@ -95,6 +93,8 @@ items:
         path: /language/booleans
       - name: Mathematics
         path: /language/math
+      - name: Bitwise operations
+        path: /language/bitmask
       - name: Tasks
         path: /language/tasks
       - name: Exception handling
