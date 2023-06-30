@@ -23,27 +23,6 @@ items:
   - name: Tutorials
     path: /tutorials
     icon: tutorials
-    children:
-      - name: Basics
-        path: /tutorials/starter
-        children:
-          - name: Log the date and time
-            path: /tutorials/starter
-          - name: Weather station
-            path: /tutorials/starter/weatherstation
-      - name: BLE
-        path: /tutorials/ble
-        children:
-          - name: Basics
-            path: /tutorials/ble
-          - name: Scanning
-            path: /tutorials/ble/scanning
-          - name: Advertising
-            path: /tutorials/ble/advertising
-          - name: Client
-            path: /tutorials/ble/client
-      - name: MQTT
-        path: /tutorials/mqtt
   - name: Peripherals
     path: /peripherals
     icon: peripherals
