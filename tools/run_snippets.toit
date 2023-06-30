@@ -39,6 +39,7 @@ THINGS_THAT_WONT_RUN_ON_SERVER ::= [
   "import mqtt",
   "import ble",
   "import esp32",
+  "import system.containers",
 ]
 
 main args -> none:

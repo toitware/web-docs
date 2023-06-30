@@ -1,0 +1,99 @@
+# Manage containers with the Toit SDK
+In this tutorial we will create a container and bundle it
+with a firmware envelope. We will then flash the envelope to a device.
+
+## Requirements
+This tutorial requires the Toit SDK. It can be installed on
+Archlinux with `yay -S toit` (in which case the SDK can be found in
+`/opt/toit-sdk`). Alternatively, the SDK can be downloaded from the
+[Toit releases page](https://github.com/toitlang/toit/releases), or
+[build from source](https://github.com/toitlang/toit). When building
+locally, the SDK is located at `build/host/sdk`.
+
+This tutorial assumes that Toit's firmware tool is
+available as `firmware`. This tool can be found in the SDK
+at `$SDK/tools/firmware`.
+
+It also assumes that a Toit firmware envelope is available as
+`firmware.envelope`. In a local build it is located at
+`build/esp32/firmware.envelope`. Each Toit release also has
+a corresponding firmware envelope available for download
+(for example `firmware-esp32.gz`).
+
+Finally, it assumes that the Toit compiler is available as `toit.compile`.
+This tool can be found in the SDK at `$SDK/bin/toit.compile`.
+
+## Instructions
+
+Start by building a snapshot of the program you want to install.
+
+``` shell
+toit.compile -w hello.snapshot hello.toit
+```
+
+Then add the snapshot to a firmware envelope.
+``` shell
+# By using '-o' we don't modify the envelope but create a new one.
+firmware -e firmware.envelope -o hello.envelope container install hello hello.snapshot
+```
+
+The created envelope can be flashed to a device using the `flash` command.
+``` shell
+firmware -e hello.envelope flash --port /dev/ttyUSB0 --baud 921600
+```
+
+When the device boots up, it will run the installed container.
+
+If you want to install the container, but not run it at boot, you can use the
+`--trigger none` flag when installing the container. You will then need
+to start the [container manually](#starting-containers).
+
+
+## Library
+The `system.containers` library provides a way to list, and start
+containers.
+
+### Listing containers
+Here is an example of how to list the installed containers.
+
+``` toit
+import system.containers
+
+main:
+  images := containers.images
+  images.do: | image/containers.ContainerImage |
+    print "$image.id - $image.name"
+```
+
+<Note>
+
+You can also run this program with Jaguar. In that case you should
+see the "Jaguar" container, and then an unnamed container. The
+unnamed container is this program that is temporarily installed
+when calling `jag run` or `jag watch`.
+
+Also note that Jaguar doesn't set names when installing containers.
+
+</Note>
+
+### Starting containers
+As a next step we can start other containers with `start`.
+
+``` toit
+import system.containers
+
+main:
+  images := containers.images
+  current_id := containers.current
+  images.do: | image/containers.ContainerImage |
+    print "$image.id - $image.name"
+    if image.name != "jaguar" and image.id != current_id:
+      print "Starting"
+      container := containers.start image.id
+      status := container.wait
+      print "Container exited with status $status"
+```
+
+Here we start all containers except the Jaguar container, and the
+container that is currently running. We then wait for the container
+to exit, and print the exit status.

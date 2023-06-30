@@ -1,0 +1,45 @@
+import Architecture from "../../_images/architecture.png";
+
+# Containers
+Toit uses virtual machine technology to support running multiple
+containers on your device. The containers are developed and
+maintained independently from each other and the virtual machine
+provides the capabilities for safely running your platform-independent
+applications, services, and drivers side-by-side.
+
+<img
+  src={Architecture}
+  alt="Toit Architecture"
+/>
+
+Containers can be installed dynamically, in which case a program
+on the device downloads the container and installs it. Installing
+containers this way does not require a firmware update. In fact,
+the container can be started without even rebooting the device.
+[Jaguar](https://github.com/toitlang/jaguar), Toit's development
+tool, uses this method to install containers, and provide rapid
+development cycles.
+
+<Note>
+
+Containers must be compiled with the same SDK version as the firmware.
+
+</Note>
+
+Alternatively, containers can be installed statically, where they
+are bundled together with a firmware. These bundles are called
+envelopes and are an integral part of Toit's firmware process.
+
+When flashing a device, Toit's tools take a firmware envelope (with,
+or without additional containers) as input and flash it onto the
+device. Similarly, Toit (and the corresponding tools) use firmware
+envelopes as input which are then transformed into binary data
+that can be sent to the device and flashed.
+
+Different tools have different capabilities:
+- the [SDK tools](./toit-sdk) are specialized for working with
+  envelopes (typically before flashing).
+- [Jaguar](./jaguar) only modifies containers dynamically.
+- [Artemis](./artemis) bundles containers with the OTA firmware,
+  but can also install containers dynamically without
+  needing a firmware update.
