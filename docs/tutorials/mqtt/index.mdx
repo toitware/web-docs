@@ -39,6 +39,8 @@ main:
 Some brokers require the client to provide a `username` and `password`. These can be passed to the client during the
 `start` call in an `options` object:
 
+<!-- HIDDEN CODE   MY_USERNAME ::= "" -->
+<!-- HIDDEN CODE   MY_PASSWORD ::= "" -->
 ```
   options := mqtt.SessionOptions
       --client_id=CLIENT_ID
@@ -97,6 +99,14 @@ as soon as the client connects. If the `subscribe` function wasn't called yet, t
 invoked for these early messages. To avoid losing packets, the client can also be configured with routes at
 construction time:
 
+<!-- RESET CODE -->
+<!-- HIDDEN CODE import net -->
+<!-- HIDDEN CODE import mqtt -->
+<!-- HIDDEN CODE import certificate_roots -->
+<!-- HIDDEN CODE import encoding.json -->
+<!-- HIDDEN CODE HOST ::= "" -->
+<!-- HIDDEN CODE CLIENT_ID ::= "" -->
+<!-- HIDDEN CODE TOPIC ::= "" -->
 ```
 main:
   network := net.open

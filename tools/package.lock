@@ -1,13 +1,60 @@
+sdk: ^2.0.0-alpha.64
 prefixes:
+  bme280: bme280-driver
+  certificate_roots: toit-cert-roots
+  cli: pkg-cli
+  font_x11_adobe: pkg-font-x11-adobe
+  host: pkg-host
   morse: toit-morse
+  mqtt: mqtt
+  ntp: pkg-ntp
   pictogrammers_icons: toit-icons-pictogrammers
-  server: server
+  pixel_display: toit-pixel-display
+  ssd1306: toit-ssd1306
 packages:
-  server:
-    path: ../../toit/system/lib/server
+  bme280-driver:
+    url: github.com/toitware/bme280-driver
+    version: 1.0.0
+    hash: 65b88ac19a5e2b48627a2dbae6d7757ae45c502c
+  mqtt:
+    url: github.com/toitware/mqtt
+    version: 2.2.0
+    hash: 74eabce1f3056b90c4528f48fb585aa9ff286fbe
+  pkg-cli:
+    url: github.com/toitlang/pkg-cli
+    version: 1.2.0
+    hash: 0e2adab3ab434c597be60438ccf64008f703ad9c
+  pkg-font-x11-adobe:
+    url: github.com/toitlang/pkg-font-x11-adobe
+    version: 0.1.0
+    hash: f844400722165252148f087cdf189abab0a47f3d
+  pkg-host:
+    url: github.com/toitlang/pkg-host
+    version: 1.9.0
+    hash: 76e4dc5328a5c3739e97f65ed196d05058071359
+  pkg-ntp:
+    url: github.com/toitlang/pkg-ntp
+    version: 1.0.0
+    hash: 1c3cc4a4819f459393f00efc576f66f838665719
+  toit-cert-roots:
+    url: github.com/toitware/toit-cert-roots
+    version: 1.5.0
+    hash: 27a9f9ff3d337b6128e98e220126e3cc275bcd73
   toit-icons-pictogrammers:
     url: github.com/toitware/toit-icons-pictogrammers
     version: 1.0.0
+    hash: 5ac660cc480d5da1fec72e1b24d425ce978419b7
   toit-morse:
     url: github.com/toitware/toit-morse
     version: 1.0.2
+    hash: fe850faa235a1dc964f255b77d2a83935e026025
+  toit-pixel-display:
+    url: github.com/toitware/toit-pixel-display
+    version: 1.6.0
+    hash: 39de82f680e27961e39ca24ba94520f21759370c
+  toit-ssd1306:
+    url: github.com/toitware/toit-ssd1306
+    version: 1.6.0
+    hash: 806c93972b733ff45e10a4eeeefa9a7e5e808c46
+    prefixes:
+      pixel_display: toit-pixel-display

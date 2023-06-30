@@ -154,6 +154,7 @@ then substituted into the outer string at that point. You can also use this to
 make sure that someone’s name is properly trimmed so leading and trailing
 whitespace is ignored:
 
+<!-- RESET CODE -->
 ```
 hi name="World":
   print "Hello, $name.trim!"
@@ -667,7 +668,7 @@ We can program a ridiculously inefficient Fibonacci sequence generator using `if
 ```
 fib n:
   if n <= 1: return n
-  return (fib n-1) + (fib n-2)
+  return (fib n - 1) + (fib n - 2)
 
 main:
   print "The 10th Fibonacci number is $(fib 10)"
@@ -688,16 +689,7 @@ and the relational operators `<`, `<=`, `>`, `>=`, `==` and `!=`. The
 operators have higher [precedence](./syntax#precedence) than function
 arguments, so we had to group the calls in parentheses to get the desired
 behavior. The high precedence is what makes the arguments for the recursive
-invocation of `fib` work. We could have spaced it more conventionally and got
-the same effect:
-
-<!-- RESET CODE -->
-
-```
-fib n:
-  if n <= 1: return n
-  return (fib n - 1) + (fib n - 2)
-```
+invocation of `fib` work.
 
 ## Loops
 

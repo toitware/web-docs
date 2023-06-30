@@ -76,7 +76,10 @@ As seen above prefer to break before operators, not after operators.
 This fits well with the ability to [use newlines in long argument
 lists](../syntax#line-breaks-in-function-arguments), since argument lists have
 lower precedence than operators.
-
+<!-- HIDDEN CODE import math -->
+<!-- HIDDEN CODE unary_function x: -->
+<!-- HIDDEN CODE main: -->
+<!-- HIDDEN CODE   argument := 499 -->
 ```
   // Using newline instead of parentheses to delineate the
   // single argument to the print function.
@@ -87,7 +90,12 @@ lower precedence than operators.
 ### Whitespace around operators
 
 Always surround operators with whitespace.
-
+<!-- HIDDEN CODE   y := 499 -->
+```
+  x1:=y+1  // Not enough spaces.
+  x2 := y + 1  // Better spacing.
+```
+<!-- HIDDEN CODE   degrees := 3.0 -->
 ```
   radians_1:=degrees*2*math.PI/180  // Not enough spaces.
 
@@ -107,6 +115,11 @@ fib n:
 For functions with more than one argument this can be hard to read, in which
 case you should add parentheses or newlines.
 
+<!-- ALLOW WARNING -->
+<!-- HIDDEN CODE my_func x y: -->
+<!-- HIDDEN CODE main: -->
+<!-- HIDDEN CODE   x := 499 -->
+<!-- HIDDEN CODE   y := 499 -->
 ```
   my_func x+1 x-1          // Not enough spaces.
   my_func x + 1 x - 1      // Hard to read.
@@ -155,13 +168,13 @@ We prefer not to use abbreviations in API-visible names unless they are
 very well established.
 
 ```
-// Name too abbreviated unless it is solely used internally.
+// Name too abbreviated.
 f_to_c f/num -> num:
   return (f - 32.0) / 9 * 5
 
 // Better.
 fahrenheit_to_celcius fahrenheit/num -> num:
-  return (f - 32.0) / 9 * 5
+  return (fahrenheit - 32.0) / 9 * 5
 ```
 
 An exception must be made for variables named `str` since the name
@@ -189,7 +202,9 @@ See also [documentation comments](../sdk/toitdoc).
 Variables and members are not given an initial value unless it makes
 sense.
 
+<!-- HIDDEN CODE   some_value := random 10 -->
 ```
+  z := some_value
   x := 0      // No need to give x an inital value.
   y /int := ?  // Compiler will check it is initialized before being used.
   if z == 1:
@@ -222,7 +237,7 @@ setters and getters:
 class UnneededPrivacy:
   // No point in making this private since it has a trivial
   // getter and setter.
-  x_ /int  // Private member variable.
+  x_ /int := ? // Private member variable.
 
   constructor x/int:
     x_ = x
@@ -240,7 +255,7 @@ Instead just make the member public:
 
 ```
 class Simple:
-  x/int
+  x/int := ?
 
   constructor .x:
 ```
@@ -269,6 +284,7 @@ Types of
 and locals are written with a space
 before the `/`:
 
+<!-- RESET CODE -->
 ```
 class Foo:
   x /int
@@ -294,6 +310,7 @@ As seen above, the closing bracket is dedented to the initial indentation.
 If all values are in the 0-255 range and you don't expect to modify the
 list with a non-byte value, consider using a ByteArray literal:
 
+<!-- RESET CODE -->
 ```
 RGB ::= #[
   0,
@@ -306,6 +323,8 @@ RGB ::= #[
 
 For simple zero-to-n loops prefer `repeat` to `for`-loops.
 
+<!-- HIDDEN CODE main: -->
+<!-- HIDDEN CODE   n := 10 -->
 ```
   for i := 0; i < n; i++:  // No need for a for-loop.
     print i
@@ -315,7 +334,7 @@ For simple zero-to-n loops prefer `repeat` to `for`-loops.
 ```
 
 If possible use the iteration built-in to the collection:
-
+<!-- HIDDEN CODE   list := [1, 2, 3] -->
 ```
   for i := 0; i < list.size; i++:  // Not using the collection's own iterator.
     print list[i]

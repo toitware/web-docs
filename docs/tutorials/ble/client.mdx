@@ -26,7 +26,7 @@ With the address available, the connection can be established. In the following 
 // Devices that implement the battery service should (but don't
 // need to) advertise it.
 // For custom services use a full 128-bit UUID.
-BATTERY_SERVICE ::= ble.uuid "180F"
+BATTERY_SERVICE ::= ble.BleUuid "180F"
 
 main:
   adapter := ble.Adapter

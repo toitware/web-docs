@@ -1,7 +1,8 @@
 // Copyright (C) 2021 Toitware ApS. All rights reserved.
 
-import server.file as file
-import server.pipe as pipe
+import host.file
+import host.pipe
+import host.os
 import reader
 
 // Give it an .mdx file on the command line, and it writes the code
@@ -26,22 +27,24 @@ import reader
 // If it encounters a line that contains: <!-- ANALYZE CODE -->, then
 //   the next time we invoke the Toit compiler we do so in --analyze mode
 //   where the code is analyzed, but not run.
+// If it encounters a line that contains: <!-- ALLOW WARNING -->, then
+//   the next time we invoke the Toit compiler we do so without -Werror
 // Ellipses in the code are replaced by /**/
 
-TOITVM ::= "../../toit/build/release/bin/toitvm"
-TOITC ::= "../../toit/build/release/bin/toitc"
 DEFAULT_OUTPUT ::= "snippet.toit"
 
 THINGS_THAT_WONT_RUN_ON_SERVER ::= [
   "import gpio",
   "import pixel_display",
+  "import mqtt",
+  "import ble",
 ]
 
 main args -> none:
   mdfile := args[0]
 
   r := reader.BufferedReader
-    file.Stream.read mdfile
+    file.Stream.for_read mdfile
 
   s := State 0
 
@@ -52,12 +55,14 @@ main args -> none:
   FILENAME_PRE ::= "<!-- CODE FILENAME "
   FILENAME_POST ::= " -->"
 
+  allow_warning := false
   while line := r.read_line:
     if line.contains " CODE " and line.contains "--" and not line.contains "<!--":
       throw "Malformed HTML comment at line $s.line_number"
     if line.contains "<!-- RESET CODE":
       s.run
     if not s.check_only: s.check_only = line.contains "<!-- ANALYZE CODE -->"
+    if not s.allow_warning: s.allow_warning = line.contains "<!-- ALLOW WARNING -->"
     if not skip: skip = line.contains "<!-- SKIP CODE"
     if line.starts_with HIDDEN_PRE and line.ends_with HIDDEN_POST:
       hidden = line[HIDDEN_PRE.size .. line.size - HIDDEN_POST.size]
@@ -68,15 +73,23 @@ main args -> none:
           throw "Illegal filename in .mdx file"
       s.run
       s.snippet_filename = fn
-    if (line == "```" or line == "```toit") and not skip:
+    if s.code_segment_marker and line.starts_with s.code_segment_marker:
+      // We've reached the end of a code segment.
+      s.code_segment_marker = null
       line = ""
-      if s.in_non_toit_code:
-        s.in_non_toit_code = false
-      else:
-        s.in_toit_code = not s.in_toit_code
-    else if line.starts_with "```":
-      s.in_non_toit_code = true
+      s.in_toit_code = false
       skip = false
+    else if line == "```" or line == "```toit" or line == "``` toit":
+      s.code_segment_marker = "```"
+      line = ""
+      // If skip is true, treat the code segment as non-toit code.
+      s.in_toit_code = not skip
+    else if line.starts_with "```":
+      // We assume that ```` is not toit code.
+      s.code_segment_marker = line.starts_with "````" ? "````" : "```"
+      line = ""
+      s.in_toit_code = false
+
     if s.in_toit_code:
       if line.contains "rror" and line.ends_with "!":
         line = ""
@@ -98,13 +111,14 @@ main args -> none:
   s.run
 
 class State:
+  code_segment_marker/string? := null
   in_toit_code/bool := false
-  in_non_toit_code/bool := false
   has_seen_non_import/bool := false
   check_only/bool := false
   line_number/int := ?
   program/List := ?
   snippet_filename/string? := null
+  allow_warning/bool := false
 
   add line/string -> none:
     program.add line
@@ -116,9 +130,15 @@ class State:
     program = List line_number: ""
 
   run:
+    werror_flag := allow_warning ? "" : "-Werror"
+    toit_sdk := os.env.get "TOIT_SDK"
+    if not toit_sdk:
+      throw "TOIT_SDK environment variable not set"
+    toitc := "$toit_sdk/bin/toit.compile"
+    toitvm := "$toit_sdk/bin/toit.run"
     filename := snippet_filename ? snippet_filename : DEFAULT_OUTPUT
     snippet_filename = null
-    snippet := file.Stream.write filename
+    snippet := file.Stream.for_write filename
     mains := 0
     program.do: if it.starts_with "main": mains++
     if mains > 1:
@@ -138,9 +158,9 @@ class State:
     snippet.close
     result := ?
     if check_only:
-      result = pipe.system "$TOITC --analyze $filename"
+      result = pipe.system "$toitc --analyze $werror_flag $filename"
     else:
-      result = pipe.system "$TOITVM $filename"
+      result = pipe.system "$toitvm $werror_flag $filename"
     check_only = false
     if result != 0:
       throw "Failure for $filename"
@@ -149,3 +169,4 @@ class State:
 
     program = List line_number: ""
     has_seen_non_import = false
+    allow_warning = false

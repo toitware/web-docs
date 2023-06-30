@@ -112,7 +112,7 @@ take an oversimplified example:
 
 ```
 import gpio
-import gpio.adc
+import gpio.adc as gpio
 
 // The analog input is connected to pin 17.
 ADC1 ::= gpio.Adc (gpio.Pin.in 17)
@@ -141,8 +141,8 @@ Updates the status object with the measured voltage
 my_task_1:
   while true:
     sleep --ms=100
-    mv := ADC1.get
-    status.update mv
+    value := ADC1.get
+    status.update (value * 1000).to_int
 
 /// Prints the current status every 123ms.
 my_task_2:
