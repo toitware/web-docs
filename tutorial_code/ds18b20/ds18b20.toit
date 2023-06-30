@@ -2,16 +2,14 @@
 // Use of this source code is governed by a Zero-Clause BSD license that can
 // be found in the LICENSE_BSD0 file.
 
-import ds18b20
-import one_wire
+import ds18b20 show Ds18b20
 import gpio
 
-GPIO_PIN_NUM ::=  32
+GPIO_PIN_NUM ::= 32
 
 main:
   pin := gpio.Pin GPIO_PIN_NUM
-  ow := one_wire.Protocol pin
-  driver := ds18b20.Driver ow
+  ds18b20 := Ds18b20 pin
 
   (Duration --ms=500).periodic:
-    print "Temperature: $(%.2f driver.read_temperature) C"
+    print "Temperature: $(%.2f ds18b20.read_temperature) C"

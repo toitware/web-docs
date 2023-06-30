@@ -1,15 +1,14 @@
-sdk: ^2.0.0-alpha.1
+sdk: ^2.0.0-alpha.49
 prefixes:
   ds18b20: toit-ds18b20
-  one_wire: toit-1-wire
 packages:
   toit-1-wire:
     url: github.com/toitware/toit-1-wire
-    version: 1.2.0
-    hash: 181448812714bca85d03c1daffc130f0bddacee9
+    version: 2.1.1
+    hash: 54b96442d359b86bd5b8888ad07b9c9d38b82884
   toit-ds18b20:
     url: github.com/toitware/toit-ds18b20
-    version: 1.0.1
-    hash: c59cf843a1fe4a7472406e790636e26691830cdb
+    version: 2.0.0
+    hash: ff7e98673b8979278571020aa2beca563c108480
     prefixes:
       one_wire: toit-1-wire
