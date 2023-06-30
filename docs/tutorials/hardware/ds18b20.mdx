@@ -52,23 +52,13 @@ We are using the [ds18b20](https://pkg.toit.io/package/github.com%2Ftoitware%2Ft
 package. To install it, run the following command in your project directory:
 
 ```bash
-jag pkg install github.com/toitware/toit-ds18b20@1
-```
-
-The DS18B20 sensor uses the 1-wire protocol, so we need to install
-a package for that as well. We are using the
-[1-wire](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-1-wire@v1)
-package. To install it, run the following command in your project directory:
-
-```bash
-jag pkg install github.com/toitware/toit-1-wire@1
+jag pkg install github.com/toitware/toit-ds18b20@2
 ```
 
 <Note>
 
-You can probably just write `jag pkg install ds18b20` and
-`jag pkg install one_wire`, but the full ID together
-with the version is more explicit, and will make sure you get the right packages.
+You can probably just write `jag pkg install ds18b20`, but the full ID together
+with the version is more explicit, and will make sure you get the right package.
 
 </Note>
 
@@ -76,20 +66,21 @@ with the version is more explicit, and will make sure you get the right packages
 Write the following `ds18b20.toit` file and watch it with Jaguar.
 
 ``` toit
-import ds18b20
-import one_wire
+import ds18b20 show Ds18b20
 import gpio
 
-GPIO_PIN_NUM ::=  32
+GPIO_PIN_NUM ::= 32
 
 main:
   pin := gpio.Pin GPIO_PIN_NUM
-  ow := one_wire.Protocol pin
-  driver := ds18b20.Driver ow
+  ds18b20 := Ds18b20 pin
 
   (Duration --ms=500).periodic:
-    print "Temperature: $(%.2f driver.read_temperature) C"
+    print "Temperature: $(%.2f ds18b20.read_temperature) C"
 ```
+
+The code allocates a ds18b20 object for the given pin and
+then reads the temperature every 500ms.
 
 ## Exercises
 As long as the connections were done correctly you can't damage your
