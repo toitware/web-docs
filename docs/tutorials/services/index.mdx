@@ -1,0 +1,177 @@
+# Services
+Services are Toit's way of communicating between different containers. They
+are an RPC mechanism that allows containers to call predefined methods
+across container boundaries.
+
+## Architecture
+Services provide a flexible way for containers to communicate with each other.
+A "service interface" describes how each side of the communication should look
+like. A "provider" implementation then implements the service interface and
+registers itself as a service provider. Similarly, a "client" implementation
+implements the actual RPC calls so that users of the service can interact
+with the provider as if it was a local object.
+
+## Service Interface
+A service interface consists of methods that a provider must implement, and
+that a client can call. The interface is identified by a UUID, together
+with a major and minor version number. Each method furthermore gets a
+unique integer.
+
+For example:
+<!-- CODE FILENAME service.toit -->
+
+```
+// service.toit.
+import system.services show ServiceSelector
+
+interface RandomGeneratorService:
+  static SELECTOR ::= ServiceSelector
+      --uuid="8195471c-6b9c-4975-8665-ecf3d1af5be1"
+      --major=0
+      --minor=1
+
+  generate limit/int -> int
+  static GENERATE_INDEX ::= 1
+```
+
+In this example, a service with UUID `8195471c-6b9c-4975-8665-ecf3d1af5be1`,
+and version v0.1 declares that it accepts messages with index "1".
+
+The interface also adds information on what the method for index 1
+should look like. The underlying RPC mechanism doesn't take advantage of
+this information. Provider and client implementations, on the other
+hand can use this information to ensure that they correctly implement
+the interface and are thus compatible.
+
+<Note>
+
+The RPC mechanism is not Toit specific and can be used in other
+languages (most notably C). The only information these other languages
+need is the UUID, major and minor version, and the index of the method
+they want to call or implement.
+
+</Note>
+
+## Service Provider
+A service provider is an object that implements a service interface,
+providing the functionality that the service interface promises.
+
+Independent of the programming language use, a service provider
+registers itself with the service manager, and then listens for
+incoming requests. The service manager connects clients and
+providers, and dispatches requests between them.
+
+For convenience, the Toit framework provides base classes for Toit and
+C that makes implementing a service provider easier.
+
+For example, the aforementioned `RandomGeneratorService` could be
+implemented as follows:
+
+```
+import system.services show ServiceProvider ServiceHandler
+import .service
+
+class RandomGeneratorServiceProvider extends ServiceProvider
+    implements ServiceHandler RandomGeneratorService:
+
+  constructor:
+    super "test/random-generator" --major=7 --minor=9
+    provides RandomGeneratorService.SELECTOR --handler=this
+
+  handle index/int arguments/any --gid/int --client/int -> any:
+    if index == RandomGeneratorService.GENERATE_INDEX:
+      return generate arguments
+    unreachable
+
+  generate limit/int -> int:
+    print "got request to generate a random number with limit $limit"
+    return random limit
+```
+
+The `RandomGeneratorServiceProvider` class extends the `ServiceProvider`
+base clase which implements the communication with the service manager.
+
+The arguments to the `super` call are the name of the service, and the
+version of the service interface. These are not used by the service
+manager, and are there mostly for debugging purposes. They are
+fundamentally a description of the provider.
+
+The `provides` call (invoking a method on the super class) registers
+the provider with the service manager. After this call, clients can
+find the provider and connect to it. The `provides` invocation takes a
+`ServiceHandler` object as `--handler` argument. This object is
+responsible for handling incoming requests. In most cases, the provider
+itself will implement the `ServiceHandler` interface.
+
+Note that the `ServiceHandler` interface consists of just one method:
+```
+interface ServiceHandler:
+  handle index/int arguments/any --gid/int --client/int -> any
+```
+
+The `handle` method then implements the actual service. It switches on
+the index of the incoming request, and calls the appropriate method.
+
+We decided to implement the `RandomGeneratorService` interface, but
+this is not necessary. It just helps to implement all the methods that
+the service interface promises.
+
+## Service Client
+A service client is an object that implements a service interface,
+transparently forwarding calls to the service provider.
+
+Once the client has connected to a provider (with the help of the
+service manager), its main job consists of serializing the arguments
+and return values, and to map the method calls to the appropriate
+index.
+
+Again, the Toit framework provides base classes
+for Toit and C that makes implementing a service client easier.
+
+For example, the aforementioned `RandomGeneratorService` could be
+implemented as follows:
+
+```
+import system.services show ServiceClient ServiceSelector
+import .service
+
+class RandomGeneratorServiceClient extends ServiceClient
+    implements RandomGeneratorService:
+
+  static SELECTOR ::= RandomGeneratorService.SELECTOR
+
+  constructor selector=SELECTOR:
+    assert: selector.matches SELECTOR
+    super selector
+
+  generate limit/int -> int:
+    return invoke_ RandomGeneratorService.GENERATE_INDEX limit
+```
+
+The `RandomGeneratorServiceClient` class extends the `ServiceClient`
+base clase which implements the communication with the service manager.
+
+The `super` call takes a `ServiceSelector` object as argument. This
+object describes the service that the client wants to connect to. By
+default the selector from the `RandomGeneratorService` interface is
+used, but users can also provide their own selector as long as its
+compatible (the `assert` call checks this).
+
+The `generate` method then implements the actual service. It calls the
+`invoke_` method on the super class, passing the index of the method
+to call, and the arguments to the method. The `invoke_` method then
+serializes the arguments, sends them to the service provider, and
+waits for the response. It then deserializes the response and returns
+it.
+
+## Serialization
+The communication between clients and providers is done by serializing
+the arguments and return values of the methods. The serialization
+format is based on
+[tison](https://libs.toit.io/encoding/tison/library-summary)
+and thus accepts `null`, integers, booleans, floats, strings, byte arrays,
+lists and maps.
+
+If a service method takes different types (or simply more than one argument)
+then the client and provider need to agree on how these should be
+encoded.
