@@ -1,0 +1,81 @@
+import PotentiometerDiagram from "../../_images/hw_ff_potentiometer.png";
+import PotentiometerSchematics from "../../_images/hw_ff_potentiometer_schem.png";
+import PotentiometerLedDiagram from "../../_images/hw_ff_potentiometer_led.png";
+
+# Potentiometer
+A potentiometer is a variable resistor with 3 terminals. A so-called "wiper"
+slides over a resistive element dividing the full resistance based on its
+position.
+
+The most common potentiometer value is 10kΩ. This means that the resistance
+between the outer terminals is 10kΩ. The resistance between the wiper and one
+of the outer terminals is 0Ω when the wiper is at that terminal, and 10kΩ when
+the wiper is at the other terminal.
+
+## Prerequisites
+You should have done the [ADC](../adc) tutorial before this one.
+
+## Variable resistor
+Before using the potentiometer together with the ESP32, let's see how it
+works. Connect the potentiometer as follows:
+- VCC (one of the terminals) to 3V3
+- OUT (the wiper; typically in the middle) to an LED
+- the LED to a 330Ω resistor
+- the resistor to GND
+
+<img
+  src={PotentiometerLedDiagram}
+  alt="Wiring diagram for a potentiometer and an LED"
+/>
+
+In this case we use the ESP32 board simply as a power supply. The potentiometer
+is a variable resistor, so we can use it to dim the LED. Turn the knob and see
+the LED get brighter and dimmer.
+
+In the [binary sensors tutorial](../binary) we mentioned that many
+binary sensors come with a blue potentiometer to set the sensitivity. This is
+how it works: the potentiometer is used as a variable resistor to set the
+threshold for the sensor.
+
+## Setup with a microcontroller
+Connect the potentiometer as follows:
+- GND (one of the terminals) to GND
+- VCC (the other terminal) to 3V3
+- OUT (the wiper) to pin 34
+
+<img
+  src={PotentiometerDiagram}
+  alt="Wiring diagram for a potentiometer"
+/>
+
+<img
+  src={PotentiometerSchematics}
+  alt="Schematics for a potentiometer"
+/>
+
+
+## Code
+You can use the program from the ADC tutorial to see the voltage change when
+the knob is turned.
+
+``` toit
+import gpio
+import gpio.adc
+
+main:
+  pin := gpio.Pin 34
+  adc := adc.Adc pin
+  256.repeat:
+    print "$(%1.3f adc.get)"
+    sleep --ms=500
+```
+
+## Exercises
+In order not to damage the hardware, follow the same recommendation as
+for the [ADC](../adc) tutorial:
+- Only measure 5V through a voltage divider.
+- Don't connect GND and 3V3/5V.
+- Keep the pin 34 pin as input.
+
+Servos are great tools for variable inputs. For example, you
+can control the angle of a [servo motor](../pwm-servo) with it.
