@@ -2,7 +2,7 @@
 // Use of this source code is governed by a Zero-Clause BSD license that can
 // be found in the LICENSE_BSD0 file.
 
-import system.services show ServiceClient ServiceSelector
+import system.services show ServiceClient ServiceSelector ServiceResourceProxy
 import .service
 
 class RandomGeneratorServiceClient extends ServiceClient
