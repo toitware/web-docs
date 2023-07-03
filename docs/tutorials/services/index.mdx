@@ -1,17 +1,17 @@
 # Services
 Services are Toit's way of communicating between different containers. They
-are an RPC mechanism that allows containers to call predefined methods
+use an RPC mechanism that allows containers to call predefined methods
 across container boundaries.
 
 ## Architecture
 Services provide a flexible way for containers to communicate with each other.
 A "service interface" describes how each side of the communication should look
-like. A "provider" implementation then implements the service interface and
-registers itself as a service provider. Similarly, a "client" implementation
+like. A "provider" class then implements the service interface and
+registers itself as a service provider. Similarly, a "client" class
 implements the actual RPC calls so that users of the service can interact
 with the provider as if it was a local object.
 
-## Service Interface
+## Service interfaces
 A service interface consists of methods that a provider must implement, and
 that a client can call. The interface is identified by a UUID, together
 with a major and minor version number. Each method furthermore gets a
@@ -38,7 +38,7 @@ and version v0.1 declares that it accepts messages with index "1".
 The interface also adds information on what the method for index 1
 should look like. The underlying RPC mechanism doesn't take advantage of
 this information. Provider and client implementations, on the other
-hand can use this information to ensure that they correctly implement
+hand, can use this information to ensure that they correctly implement
 the interface and are thus compatible.
 
 <Note>
@@ -50,7 +50,7 @@ they want to call or implement.
 
 </Note>
 
-## Service Provider
+## Service providers
 A service provider is an object that implements a service interface,
 providing the functionality that the service interface promises.
 
@@ -114,14 +114,14 @@ We decided to implement the `RandomGeneratorService` interface, but
 this is not necessary. It just helps to implement all the methods that
 the service interface promises.
 
-## Service Client
+## Service clients
 A service client is an object that implements a service interface,
 transparently forwarding calls to the service provider.
 
 Once the client has connected to a provider (with the help of the
 service manager), its main job consists of serializing the arguments
 and return values, and to map the method calls to the appropriate
-index.
+indexes.
 
 Again, the Toit framework provides base classes
 for Toit and C that makes implementing a service client easier.
