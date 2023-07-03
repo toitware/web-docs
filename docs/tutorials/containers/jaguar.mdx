@@ -1,0 +1,92 @@
+# Containers and Jaguar
+[Jaguar](https://github.com/toitlang/jaguar) is Toit's development
+tool. It dynamically installs and runs program (as containers) on
+devices.
+
+## Prerequisites
+We assume that you have read the [container introduction](../).
+
+## Listing containers
+When Jaguar is flashed onto a device (with `jag flash`) it automatically
+adds a service version of Jaguar as container to the device. All other
+programs that are executed or installed with Jaguar are installed
+dynamically.
+
+After [flashing Jaguar](../setup/firstprogram) onto a device, you can
+list the installed containers:
+
+``` shell
+jag container list
+```
+
+By default this should list a single container called `jaguar`.
+
+``` text
+ᐅ jag container list
+DEVICE     IMAGE                                  NAME
+kind-bet   cfdacf51-230f-2628-53dc-fe8c011c0ae6   jaguar
+```
+
+## Installing containers
+You can install additional containers with the `jag container install`:
+
+``` shell
+jag container install hello hello.toit
+```
+
+Note that Jaguar automatically compiles the given program (`hello.toit`)
+into a snapshot before installing it.
+
+Containers that are installed this way are automatically started after
+installation and at boot time.
+
+## Uninstalling containers
+You can uninstall containers with `jag container uninstall`:
+
+``` shell
+jag container uninstall hello
+```
+
+## Disabling Jaguar
+Sometimes it can be useful or necessary to
+[disable Jaguar](https://github.com/toitlang/jaguar#temporarily-disabling-jaguar)
+when running a specific container.
+
+This can be done by installing the container with the `-D jag.disabled`
+flag:
+
+``` shell
+jag container install -D jag.disabled hello hello.toit
+```
+
+At the next boot this gives the container 10 seconds to run before Jaguar
+is started. If 10 seconds is not enough, you can specify a different
+timeout with `-D jag.timeout=<duration>`, where `<duration>` is a
+duration string like `10s` or `1m`.
+
+Example:
+``` shell
+jag container install -D jag.disabled -D jag.timeout=1m hello hello.toit
+```
+
+### Use cases
+The primary use case for disabling Jaguar is to run a container that
+needs full access to the WiFi module. For example, a container that
+implements a WiFi access point. The
+[provision](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-provision@v0.2.0)
+package falls into this category.
+
+Disabling Jaguar can also be used to limit battery usage. For example,
+a program could sample a sensor at regular intervals and immediately go
+to [deep-sleep](../hardware/deepsleep) without giving Jaguar a chance to
+run and start the WiFi. Only if a certain condition is met (like a
+button is pressed), it could avoid the call to `deep_sleep` and
+instead let Jaguar run.
+
+<Note>
+
+We don't recommend keeping Jaguar active in production devices, since
+it gives the user full access to the device. Instead, we recommend
+to use [Artemis](/getstarted/fleet) instead.
+
+</Note>
