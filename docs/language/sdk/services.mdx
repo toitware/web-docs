@@ -1,0 +1,471 @@
+# Services
+Services are Toit's way of communicating between different containers. They
+use an RPC mechanism that allows containers to call predefined methods
+across container boundaries. As such they are a natural way of separating
+out complex drivers (like the ones for cellular modems), so they can run
+in the own address spaces.
+
+## Architecture
+Services provide a flexible way for containers to communicate with each other.
+A "service interface" describes how each side of the communication should look
+like. A "provider" class then implements the service interface and
+registers itself as a service provider. Similarly, a "client" class
+implements the actual RPC calls so that users of the service can interact
+with the provider as if it was a local object.
+
+## Service interfaces
+A service interface consists of methods that a provider must implement, and
+that a client can call. The interface is identified by a UUID, together
+with a major and minor version number. Each method furthermore gets a
+unique integer.
+
+For example:
+```
+// service.toit.
+import system.services show ServiceSelector
+
+interface RandomGeneratorService:
+  static SELECTOR ::= ServiceSelector
+      --uuid="dd9e5fd1-a5e9-464e-b2ef-92bf15ea02ca"
+      --major=0
+      --minor=1
+
+  generate limit/int -> int
+  static GENERATE_INDEX ::= 1
+```
+
+The `RandomGeneratorService.SELECTOR` constant will bind a
+client of the service and the service implementation together. We typically
+just generate random UUIDs, because all we need is some notion of identity.
+The `dd9e5fd1-a5e9-464e-b2ef-92bf15ea02ca` constant was generated via
+https://www.uuidgenerator.net/.
+
+The `RandomGeneratorService.SELECTOR.major` and
+`RandomGeneratorService.SELECTOR.minor` values
+represent the current version of the interface. The version is used during
+service discovery, because it is possible that a client will be trying to
+access a newer or older implementation of the service due to the fact that
+clients and implementations are decoupled and are likely to be updated
+independently of each other.
+
+The interface furthemore adds information on what the method for index
+1 (`GENERATE_INDEX`) should look like. The underlying RPC mechanism doesn't
+take advantage of this information. Provider and client implementations,
+on the other hand, can use this information to ensure that they correctly
+implement the interface and are thus compatible.
+
+We currently manually assign indexes to methods, but
+you could imagine generating the interface definition from something like a
+[protocol buffer service](https://developers.google.com/protocol-buffers) and
+have the indices automatically assigned. If you change the index of any
+existing method you should bump the major version, but if you only add new
+methods with previously unused indices, you can get away with just bumping the
+minor version.
+
+## Service providers
+A service provider is an object that implements a service interface,
+providing the functionality that the service interface promises.
+
+A service provider registers itself with the service manager, and then
+listens for incoming requests. The service manager connects clients and
+providers, and dispatches requests between them.
+
+For example, the aforementioned `RandomGeneratorService` could be
+implemented as follows:
+
+```
+import system.services show ServiceProvider ServiceHandler
+import .service
+
+class RandomGeneratorServiceProvider extends ServiceProvider
+    implements ServiceHandler RandomGeneratorService:
+
+  constructor:
+    super "test/random-generator" --major=7 --minor=9
+    provides RandomGeneratorService.SELECTOR --handler=this
+
+  handle index/int arguments/any --gid/int --client/int -> any:
+    if index == RandomGeneratorService.GENERATE_INDEX:
+      return generate arguments
+    unreachable
+
+  generate limit/int -> int:
+    print "got request to generate a random number with limit $limit"
+    return random limit
+```
+
+The `RandomGeneratorServiceProvider` class extends the `ServiceProvider`
+base clase which implements the communication with the service manager.
+
+The arguments to the `super` call are the name of the service, and the
+version of the service interface. These are not used by the service
+manager, and are there mostly for debugging purposes. They are
+fundamentally a description of the provider.
+
+The `provides` call (invoking a method on the super class) declares the
+selector this provider implements. There can be multiple calls to
+`provides` if the provider implements multiple service interfaces.
+
+The `provides` invocation takes a
+`ServiceHandler` object as `--handler` argument. This object is
+responsible for handling incoming requests. In most cases, the provider
+itself will implement the `ServiceHandler` interface. However,
+especially for providers that implement multiple service interfaces, it
+can be useful, or even necessary, to have a separate handlers for each
+interface. For example, a temperature, humidity, and pressure sensor
+could implement three different service interfaces, and have a separate
+handler for each.
+
+Note that the `ServiceHandler` interface is just describing
+a callback:
+```
+interface ServiceHandler:
+  handle index/int arguments/any --gid/int --client/int -> any
+```
+
+The `handle` method implements the actual service. It switches on
+the index of the incoming request, and calls the appropriate method.
+
+We decided to implement the `RandomGeneratorService` interface, but
+this is not necessary. It just helps to implement all the methods that
+the service interface promises.
+
+<Note>
+
+A provider must be registered with the service manager by calling
+`install` on the provider object.
+
+</Note>
+
+## Service clients
+A service client is an object that implements a service interface,
+transparently forwarding calls to the service provider.
+
+Once the client has connected to a provider (with the help of the
+service manager), its main job consists of serializing the arguments
+and return values, and to map the method calls to the appropriate
+indexes.
+
+For example, the aforementioned `RandomGeneratorService` could be
+implemented as follows:
+
+```
+import system.services show ServiceClient ServiceSelector
+import .service
+
+class RandomGeneratorServiceClient extends ServiceClient
+    implements RandomGeneratorService:
+
+  static SELECTOR ::= RandomGeneratorService.SELECTOR
+
+  constructor selector=SELECTOR:
+    assert: selector.matches SELECTOR
+    super selector
+
+  generate limit/int -> int:
+    return invoke_ RandomGeneratorService.GENERATE_INDEX limit
+```
+
+The `RandomGeneratorServiceClient` class extends the `ServiceClient`
+base clase which implements the communication with the service manager.
+
+The `super` call takes a `ServiceSelector` object as argument. This
+object describes the service that the client wants to connect to. By
+default the selector from the `RandomGeneratorService` interface is
+used, but users can also provide their own selector as long as its
+compatible (the `assert` call checks this).
+
+The `generate` method then implements the actual service. It calls the
+`invoke_` method on the super class, passing the index of the method
+to call, and the arguments to the method. The `invoke_` method then
+serializes the arguments, sends them to the service provider, and
+waits for the response. It then deserializes the response and returns
+it.
+
+### Using a service client
+The common way to use a service is to construct it and to `open` it. The
+`open` call contacts the service manager and finds a matching provider.
+
+```
+main:
+  client := RandomGeneratorServiceClient
+  client.open
+  10.repeat:
+    print "random = $(client.generate 100)"
+```
+
+Often, the service can also be in a lazy-initialized constant:
+
+```
+service_/RandomGeneratorService? ::= (RandomGeneratorServiceClient).open
+    --if_absent=: null
+```
+
+The `--if_absent` block is invoked when we cannot find the requested service.
+You can provide a timeout if you're willing to
+wait a bit for the service to appear:
+
+```
+service_/RandomGeneratorService? ::= (RandomGeneratorServiceClient).open
+    --timeout=(Duration --s=2)
+    --if_absent=: null
+```
+
+## Serialization
+The communication between clients and providers is done by serializing
+messages to byte arrays. Toit's base classes use
+[tison](https://libs.toit.io/encoding/tison/library-summary)
+to serialize and deserialize messages. This library accepts `null`,
+integers, booleans, floats, strings, byte arrays, lists and maps.
+Any type that is not one of these must be converted before calling
+`invoke_`. In that case, the provider and client must agree on how
+to encode the type.
+
+For example, if we want to send more than one argument as an
+RPC message we must encode them first. By convention, we
+encode them as a list of the individual arguments, but this
+is not required.
+
+## Service resources and proxies
+Sometimes it is useful for a service to let clients refer to resources
+allocated on their behalf. The resource lives with the service provider,
+and the client receives a handle to it. The system will then take care
+of cleaning up the resource when the client goes away.
+
+Say, we want to add a `Die` resource that the client can allocate on the
+provider:
+
+```
+interface RandomGeneratorService:
+  ...
+  create_die -> Die
+  static CREATE_DIE_INDEX /int ::= 2
+```
+
+with the `Die` interface looking like this:
+
+```
+interface Die:
+  roll -> int
+  static ROLL_INDEX /int ::= 100
+```
+
+Since the RPC calls for provider resources are handled by the provider,
+we need to use a method index that is unique to the provider. For
+simplicity we use indexes starting at 100 for the `Die` resource.
+
+### Resources on the provider
+On the provider side the resource object should extend the `ServiceResource`
+base class:
+
+```
+import system.services show ServiceResource ServiceProvider
+
+class DieResource extends ServiceResource implements Die:
+  sides_/int ::= ?
+
+  constructor .sides_ provider/ServiceProvider client/int:
+    super provider client
+
+  roll -> int:
+    return random sides_
+
+  on_closed -> none:
+    // Handle cleanup.
+```
+We now add a new method `create_die` to the `RandomGeneratorService`
+
+The `on_closed` method is automatically called when the client closes
+the resource or if the client happens to go away. Instances of
+`ServiceResource` are automatically serializable, so it is possible to
+return them from the `handle` method in the service provider and
+the `ServiceResource` constructor takes care of registering them
+correctly, so they can be found later on future client method calls.
+
+Let's add the new methods to the `RandomGeneratorServiceProvider`:
+
+```
+handle index/int arguments/any --gid/int --client/int -> any:
+  ...
+  if index == RandomGeneratorService.CREATE_DIE_INDEX:
+    return DieResource arguments this client
+
+  if index == Die.ROLL_INDEX:
+    die := (resource client arguments) as DieResource
+    return die.roll
+
+create_die sides/int -> Die:
+  unreachable  // Handled in the `handle` method.
+```
+
+Note that we implement the `create_die` functionality directly in the
+`handle` method. This is because the construction of the `DieResource`
+requires access to the service provider and to the client. The actual
+`create_die` method now throws an error if invoked (due to the
+`unreachable`). We could also stop implementing the `RandomGeneratorService`
+interface at this point. As mentioned in the
+[provider section](#service-providers), the provider does not need
+to implement the interface
+
+The provider also handles the `Die.ROLL_INDEX` method by forwarding it to
+the corresponding `DieResource` instance.
+
+### Resources on the client
+Clients receive resources as integers, representing the handle to the
+resource. They need to convert the handle to a resource proxy that
+can be used to call methods on the resource. The proxy should extend
+the `ServiceResourceProxy` base class, which automatically closes
+the resources if it is garbage-collected:
+
+```
+import system.services show ServiceResourceProxy
+
+class DieProxy extends ServiceResourceProxy implements Die:
+  constructor client/ServiceClient handle/int:
+    super client handle
+
+  roll -> int:
+    return (client_ as RandomGeneratorServiceClient).invoke_roll_ handle_
+```
+
+The proxy takes the corresponding client and handle as arguments. As can be
+seen, a handle is serialized as an `int`, but for the most part this can
+be ignored.
+
+The proxy doesn't call `invoke_` directly, but instead calls the (as of now
+unimplemented) `invoke_roll_` method on the `RandomGeneratorServiceClient`.
+The `invoke_` method should be seen as a protected method (since it is private
+and comes from a different package), and the `DieProxy` class thus shouldn't
+call it directly.
+
+Let's implement the `create_die` and `invoke_roll_` methods on the
+`RandomGeneratorServiceClient`:
+
+```
+class RandomGeneratorServiceClient extends ServiceClient:
+  ...
+  create_die sides/int -> Die:
+    handle := invoke_ RandomGeneratorService.CREATE_DIE_INDEX sides
+    proxy := DieProxy this handle
+    return proxy
+
+  invoke_roll_ handle/int -> int:
+    return invoke_ Die.ROLL_INDEX handle
+```
+
+### Using a resource
+With all that machinery in place, we can now use create resources through
+our client and call methods on them:
+
+```
+main:
+  spawn::
+    service := RandomGeneratorServiceProvider
+    service.install
+
+  client := RandomGeneratorServiceClient
+  client.open
+  die := client.create_die 6
+  10.repeat:
+    print "die roll = $(die.roll)"
+  die.close
+```
+
+### Resource notifications
+
+While most interactions with resources follow a simple request-response
+pattern, it can be useful to be able to asynchronously notify users of
+a resource of certain events. The `ServiceResource` and
+`ServiceResourceProxy` classes have built-in support for this through
+notifications. A notification is any kind of serializable object sent
+from the resource to the proxy. The resources that take part in this
+must be marked notifiable at construction time:
+
+```
+class DieResource extends ServiceResource implements Die:
+  ...
+  constructor .sides_ provider/ServiceProvider client/int:
+    super provider client --notifiable
+  ...
+```
+
+Even though you probably wouldn't expect dice to ping you periodically, we can
+now experiment with the behavior by adding periodic notifications like this:
+
+```
+class DieResource extends ServiceResource implements Die:
+  sides_/int ::= ?
+  task_ := null
+
+  constructor .sides_ provider/ServiceProvider client/int:
+    super provider client --notifiable
+    task_ = task:: notify_periodically
+
+  roll -> int:
+    return random sides_
+
+  notify_periodically -> none:
+    while not Task.current.is_canceled:
+      sleep --ms=(random 500) + 500
+      notify_ 87
+
+  on_closed -> none:
+    task_.cancel
+```
+
+The notifications will show up on the proxy side through calls to `on_notified_`:
+
+```
+import monitor
+
+class DieProxy extends ServiceResourceProxy implements Die:
+  ...
+  pinged_ ::= monitor.Signal
+
+  on_notified_ notification/any -> none:
+    print "got notified: $notification"
+    pinged_.raise
+  ...
+```
+
+You'll need to wait a bit in `main` for the notifications to start showing up:
+
+```
+main:
+  ...
+  die := client.create_die 6
+  10.repeat:
+    print "die roll = $(die.roll)"
+  sleep (Duration --s=10)
+  die.close
+```
+
+## Example: Network by proxy
+
+We have used the service framework to allow providing a full network
+implementation from a separate container. The core of this is the
+`NetworkService` interface and the associated `NetworkServiceClient`:
+
+https://github.com/toitlang/toit/blob/master/lib/system/api/network.toit
+
+We use them to build proxying sockets like `SocketResourceProxy_`
+that forward reads and writes to the network service:
+
+```
+class SocketResourceProxy_ extends ServiceResourceProxy:
+  static WRITE_DATA_SIZE_MAX_ /int ::= 2048
+  ...
+  write data from=0 to=data.size -> int:
+    to = min to (from + WRITE_DATA_SIZE_MAX_)
+    return (client_ as NetworkServiceClient).socket_write handle_ data[from..to]
+  ...
+```
+
+You can find all the helpers in the main repository:
+
+https://github.com/toitlang/toit/blob/master/lib/system/base/network.toit
+
+All in all, this allows a cellular driver to provide a network to all other
+apps that a blissfully unaware that their data flows through a good
+old-fashioned sequence of
+[AT commands](https://en.wikipedia.org/wiki/Hayes_command_set).
