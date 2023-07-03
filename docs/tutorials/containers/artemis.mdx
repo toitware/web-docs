@@ -1,0 +1,60 @@
+# Containers in Artemis
+[Artemis](/getstarted/fleet) is Toit's fleet management system. It
+takes full advantage of Toit's containerization to provide a
+convenient way to manage multiple programs on a device.
+
+## Prerequisites
+We assume that you have read the [container introduction](../).
+
+## Pod specification
+Containers are usually declared in the
+[pod specification](/getstarted/fleet/pods#specifications).
+
+For example:
+``` json
+  "containers": {
+    "hello": {
+      "entrypoint": "hello.toit"
+    },
+    "solar": {
+      "entrypoint": "examples/solar_example.toit",
+      "git": "https://github.com/toitware/toit-solar-position.git",
+      "branch": "v0.0.3"
+    }
+  }
+```
+
+When building a pod, Artemis will compile the container programs
+(potentially downloading them via `git`) and bundle the resulting
+binaries into the pod.
+
+Pods can then be used to update devices. See the
+[fleet description](/getstarted/fleet) for more information.
+
+## Installing containers manually
+Artemis also supports installing containers manually on individual
+devices. In that case, Artemis behaves slightly similar to
+Jaguar, in that containers are installed dynamically on the device
+and are executed without the device needing to reboot. However,
+Artemis (contrary to Jaguar) installs containers asynchronously. That is,
+Artemis uploads the container and updates the device's configuration
+to install the container, but it does not wait for the container to
+be installed before returning. The next time the device connects to
+the broker it will download and install the container.
+
+To install a container manually, use the following command:
+``` shell
+artemis device -d <device-id> container install <container-name> <path-to-program>
+```
+
+Containers can also be installed with triggers, such as `--trigger=gpio-high:32`.
+See the help of the `container install` command.
+
+<Note>
+
+Containers that are installed manually are lost when the device
+updates to a new pod. In the `artemis fleet status` output,
+devices that have manually installed containers are marked
+as "Modified".
+
+</Note>
