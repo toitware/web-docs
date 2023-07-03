@@ -30,11 +30,9 @@ Alternatively, containers can be installed statically, where they
 are bundled together with a firmware. These bundles are called
 envelopes and are an integral part of Toit's firmware process.
 
-When flashing a device, Toit's tools take a firmware envelope (with,
-or without additional containers) as input and flash it onto the
-device. Similarly, Toit (and the corresponding tools) use firmware
-envelopes as input which are then transformed into binary data
-that can be sent to the device and flashed.
+When flashing a device, Toit's tools take a firmware envelope as input
+and flash it onto the device. Similarly, Toit use firmware
+envelopes as input for over-the-air updates.
 
 Different tools have different capabilities:
 - the [SDK tools](./toit-sdk) are specialized for working with

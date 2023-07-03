@@ -1,10 +1,7 @@
 # Containers in Artemis
-
 [Artemis](/getstarted/fleet) is Toit's fleet management system. It
 takes full advantage of Toit's containerization to provide a
-convenient way to manage multiple programs on a device. This makes
-it possible to safely update individual programs without losing
-confidence that the stability of the device is compromised.
+convenient way to manage multiple programs on a device.
 
 ## Prerequisites
 We assume that you have read the [container introduction](../).
@@ -28,7 +25,7 @@ For example:
 ```
 
 When building a pod, Artemis will compile the container programs
-(potentially downloading them from git) and bundle the resulting
+(potentially downloading them via `git`) and bundle the resulting
 binaries into the pod.
 
 Pods can then be used to update devices. See the
