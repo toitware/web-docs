@@ -30,7 +30,7 @@ you want to log other data, you can of course change this.
 1. Open the `Extensions` menu and select `Apps Script`.
 1. Give the project a name, for example `ESP32 data logger`.
 1. In the editor that opens, replace the default code with the following:
-   ```js
+   ``` javascript
    /*
    OnlyCurrentDoc
    */
@@ -43,7 +43,7 @@ you want to log other data, you can of course change this.
    ```
 1. Optionally add the following `doGet` function. This will allow you to
    test the script with a browser.
-   ```js
+   ``` javascript
    function doGet(e) {
      var sheet = SpreadsheetApp.getActiveSheet();
      var data = JSON.parse(e.parameter.data);
@@ -71,12 +71,12 @@ If you added the `doGet` function, you can test your Google spreadsheet
 setup with a browser.
 
 Take the URL you received in the previous section and append the following to it:
-```
+``` text
 ?data={"timestamp":123456789,"temperature":25.0,"humidity":50.0}
 ```
 
 The complete URL should now look like this:
-```
+``` text
 https://script.google.com/macros/s/<SOME_ID>/exec?data={"timestamp":123456789,"temperature":25.0,"humidity":50.0}
 ```
 
@@ -115,6 +115,7 @@ Start a new Toit program `sheets.toit` and watch it with Jaguar.
 Don't forget to replace `<YOUR URL>` with the URL you received from
 Google.
 
+<!-- ANALYZE CODE -->
 ``` toit
 import certificate_roots
 import http
