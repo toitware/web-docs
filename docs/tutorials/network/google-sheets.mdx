@@ -1,0 +1,150 @@
+# Log data to Google spreadsheets
+In this tutorial we will show how to send data from an ESP32 to a Google
+Spreadsheet.
+
+## Requirements
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+Note that you can do this tutorial without a device. In that case,
+you need to use the `-d host` option whenever you invoke
+`jag run`. The program will then run on your computer instead of on
+a device.
+
+You will need a Google account to do this tutorial.
+
+## Prepare the Google spreadsheet
+First, we need to create a Google spreadsheet to log the data to. We
+will prepare the sheet to log timestamps, temperature and humidity. If
+you want to log other data, you can of course change this.
+
+1. Go to [Google Sheets](https://docs.google.com/spreadsheets/).
+1. Click on the `+` button to create a new spreadsheet.
+1. Name the spreadsheet `ESP32 data`.
+1. In the first row, enter the following column headers:
+   `Timestamp`, `Temperature`, `Humidity`.
+1. Open the `Extensions` menu and select `Apps Script`.
+1. Give the project a name, for example `ESP32 data logger`.
+1. In the editor that opens, replace the default code with the following:
+   ```js
+   /*
+   OnlyCurrentDoc
+   */
+   function doPost(e) {
+     var sheet = SpreadsheetApp.getActiveSheet();
+     var data = JSON.parse(e.postData.contents);
+     sheet.appendRow([new Date(data.timestamp), data.temperature, data.humidity]);
+     return ContentService.createTextOutput("OK");
+   }
+   ```
+1. Optionally add the following `doGet` function. This will allow you to
+   test the script with a browser.
+   ```js
+   function doGet(e) {
+     var sheet = SpreadsheetApp.getActiveSheet();
+     var data = JSON.parse(e.parameter.data);
+     sheet.appendRow([new Date(data.timestamp), data.temperature, data.humidity]);
+     return ContentService.createTextOutput("OK");
+   }
+   ```
+1. Save the project.
+1. Click on the `Deploy` button and select `New deployment`.
+1. Select `Web app` under "Select type".
+1. Optionally add a description, for example "Initial deployment".
+1. Under "Who has access to the app", select `Anyone".
+1. Click on the `Deploy` button.
+1. Authorize the app to access your Google account.
+1. Copy the URL that is displayed in the dialog.
+1. Click on the `OK` button to close the dialog.
+
+If you ever lose the URL, you can find it again by opening the
+`Manage Deployments` dialog. To do this, click on the `Deploy` button and
+select `Manage deployments`. The URL is displayed in the dialog.
+
+
+### Testing the script with the browser
+If you added the `doGet` function, you can test your Google spreadsheet
+setup with a browser.
+
+Take the URL you received in the previous section and append the following to it:
+```
+?data={"timestamp":123456789,"temperature":25.0,"humidity":50.0}
+```
+
+The complete URL should now look like this:
+```
+https://script.google.com/macros/s/<SOME_ID>/exec?data={"timestamp":123456789,"temperature":25.0,"humidity":50.0}
+```
+
+Open this URL in your browser. You should see the text `OK` displayed, and the
+data should be added to the spreadsheet.
+
+You can simply delete the row from the spreadsheet to remove the data.
+
+## Toit program
+Now that we have a spreadsheet to log the data to, we can write the Toit
+program that will send the data to it.
+
+### Packages
+The HTTP functionality is not part of the core libraries and must be
+imported as a package. See the [packages](../../setup/packages)
+tutorial for details.
+
+We are using the [http](https://pkg.toit.io/package/github.com%2Ftoitlang%2Fpkg-http@v2)
+package. To install it, run the following command:
+
+``` shell
+jag pkg install github.com/toitlang/pkg-http@v2
+```
+
+We will also use the
+[certificate-roots](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-cert-roots@v1)
+package:
+
+``` shell
+jag pkg install github.com/toitware/toit-cert-roots@v1
+```
+
+### Code
+Start a new Toit program `sheets.toit` and watch it with Jaguar.
+
+Don't forget to replace `<YOUR URL>` with the URL you received from
+Google.
+
+``` toit
+import certificate_roots
+import http
+import net
+
+URL ::= "<YOUR URL>"
+CERTIFICATE ::= certificate_roots.GTS_ROOT_R1
+
+main:
+  network := net.open
+  client := http.Client.tls network
+      --root_certificates=[CERTIFICATE]
+
+  request := client.post_json --uri=URL {
+    "timestamp": Time.now.utc.to_iso8601_string,
+    "temperature": 42.0,
+    "humidity": 1013.25,
+  }
+
+  if request.status_code != 200:
+    print "Request failed: $request.status_code $request.status_message"
+  else:
+    request.drain
+```
+
+For simplicity we simply post some dummy data to the spreadsheet. In a real
+application you replace this with the actual data you want to log.
+
+#### Timestamp
+If your ESP32 hasn't synchronized with an NTP server, the timestamp will be
+incorrect (somewhere in the 1970s). See the
+[date-time tutorial](../../misc/date-time) for details on how to synchronize
+the time.
