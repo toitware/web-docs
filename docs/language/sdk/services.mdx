@@ -60,7 +60,7 @@ access a newer or older implementation of the service due to the fact that
 clients and implementations are decoupled and are likely to be updated
 independently of each other.
 
-The interface furthemore adds information on what the method for index
+The interface furthermore adds information on what the method for index
 1 (`GENERATE_INDEX`) should look like. The underlying RPC mechanism doesn't
 take advantage of this information. Provider and client implementations,
 on the other hand, should use this information to implement the interface,
@@ -282,9 +282,9 @@ service_/RandomGeneratorServiceClient? ::= (RandomGeneratorServiceClient).open
 
 ## Serialization
 As part of the communication between clients and providers, messages
-are serialized in an efficient way. Messagse must be either `null`,
-integers, booleans, floats, strings, byte arrays, lists or maps
-(with string keys). Any type that is not one of these must be converted
+are serialized in an efficient way. Messages must be either `null`,
+integers, booleans, floats, strings, byte arrays, lists or maps.
+Any type that is not one of these must be converted
 before calling `invoke_`. In that case, the provider and client must agree
 on how to encode the type.
 
