@@ -71,7 +71,7 @@ main args -> none:
     if line.starts_with FILENAME_PRE and line.ends_with FILENAME_POST:
       fn := line[FILENAME_PRE.size .. line.size - FILENAME_POST.size]
       fn.do --runes:
-        if not 'a' <= it <= 'z' and not ['.', '-', '_'].contains it:
+        if not 'a' <= it <= 'z' and not '0' <= it <= '9' and not ['.', '-', '_'].contains it:
           throw "Illegal filename in .mdx file"
       s.run
       s.snippet_filename = fn
