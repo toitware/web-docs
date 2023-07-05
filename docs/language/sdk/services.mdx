@@ -183,6 +183,22 @@ main:
   // Do client stuff here.
 ```
 
+### Service provider lifecycle
+A service provider is a long-lived object. It is usually installed
+when the container starts, and stays alive until the container is
+forcefully stopped. In [Artemis](../../../getstarted/fleet) containers
+that run providers should be marked as `background` so they don't
+prevent the system to go to deep sleep.
+
+For each client that connects to a provider, the `on_opened` method
+is called. Similarly, when a client disconnects, the `on_closed`
+method is called. These methods can be used to keep track of the
+number of connected clients, and to perform setup actions or cleanups.
+
+For example, a driver that requires an external peripheral to be
+powered on could use the `on_opened` method to power on the peripheral,
+and the `on_closed` method to power it off again.
+
 ## Service clients
 A service client is an object that provides the service functionality
 to the client. It transparently forwards calls to the service
