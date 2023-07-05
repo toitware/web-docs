@@ -91,6 +91,8 @@ items:
             path: /language/sdk/fonts
           - name: Bit blit
             path: /language/sdk/blit
+          - name: Services
+            path: /language/sdk/services
       - name: Packages
         path: /language/package
         children:
