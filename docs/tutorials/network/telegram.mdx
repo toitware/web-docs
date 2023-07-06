@@ -1,0 +1,91 @@
+# Telegram
+This tutorial shows you how to create a Telegram bot that runs on your device.
+With this setup it is easy to control your device from anywhere in the world,
+or to send notifications from your device to your phone (or any other device
+that has Telegram installed).
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+Note that you can do this tutorial without a device. In that case,
+you need to use the `-d host` option whenever you invoke
+`jag run`. The program will then run on your computer instead of on
+a device.
+
+You will need a Telegram account to do this tutorial.
+
+## Create a Telegram bot
+To create a Telegram bot, you need to talk to the [BotFather](https://t.me/botfather).
+This is a bot that helps you create other bots.
+
+Start a conversation with the BotFather by clicking on the link above.
+Then type `/newbot` and follow the instructions. You will be asked to
+give your bot a name and a username. The username must end with `bot`.
+For example, you can call your bot `ToitBot` and give it the username
+`ToitBot_bot`. The bot names are globally unique, so you may have to
+try a few different names before you find one that is available.
+
+When you are done, the BotFather will give you a token that you can
+use to access your bot. You will need this token later.
+
+See the official
+[BotFather documentation](https://core.telegram.org/bots/features#botfather).
+
+## Toit program
+Now that we have a bot, we can write a Toit program that uses it.
+
+### Packages
+We will use the `telegram` package to communicate with the Telegram bot. Install
+it with the following command. See the [packages](../../setup/packages)
+tutorial for details.
+
+```shell
+jag pkg install github.com/floitsch/toit-telegram@0.5
+```
+
+<Note>
+
+You can probably just write `jag pkg install telegram`, but the full ID together
+with the version is more explicit, and will make sure you get the right package.
+
+Feel free to use a newer version of the package if one is available. You
+might need to update the code samples below if you do.
+
+</Note>
+
+### Code
+The following program implements a simple bot that listens for
+messages that are sent to it (in a private chat). It will reply
+to these messages with an "Of course!" message.
+
+Don't forget to replace `<YOUR TOKEN>` with the token that you got
+from the BotFather.
+
+<!-- ANALYZE CODE -->
+```toit
+import telegram show *
+
+TELEGRAM_TOKEN ::= "<YOUR TOKEN>"
+
+main:
+  client := Client --token=TELEGRAM_TOKEN
+  my_username := client.get_me.username
+
+  client.listen: | update/Update? |
+    if update is UpdateMessage:
+      print "Got message: $update"
+      message := (update as UpdateMessage).message
+      if message.chat and message.chat.type == Chat.TYPE_PRIVATE:
+        client.send_message "Of course!"
+            --chat_id=message.chat.id
+```
+
+For a more useful bot, you would probably want to do something more
+interesting than just replying to messages. For example, you could
+use the bot to control a peripheral on your device, or to send
+notifications to your phone when a sensor value changes.
