@@ -6,7 +6,7 @@ import net
 import mqtt
 
 CLIENT_ID ::= ""
-HOST      ::= "test.mosquitto.org"
+HOST ::= "test.mosquitto.org"
 
 main:
   network := net.open
