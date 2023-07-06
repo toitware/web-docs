@@ -115,6 +115,18 @@ Start a new Toit program `sheets.toit` and watch it with Jaguar.
 Don't forget to replace `<YOUR URL>` with the URL you received from
 Google.
 
+The program uses the `post_json` method on the HTTP `Client` class to
+send the data to the spreadsheet. The `post_json` method will
+automatically encode the data as JSON and set the `Content-Type` header
+to `application/json`.
+
+The `--no-follow_redirects` option is used to prevent the HTTP client
+from following any redirects. The Google Apps Script returns a
+redirect to a different site. That site is known to have a very big
+certificate that might not fit into memory. By not following the
+redirect we avoid potential issues with the page and also avoid
+another HTTP request.
+
 <!-- ANALYZE CODE -->
 ``` toit
 import certificate_roots
@@ -129,20 +141,20 @@ main:
   client := http.Client.tls network
       --root_certificates=[CERTIFICATE]
 
-  response := client.post_json --uri=URL {
+  response := client.post_json --no-follow_redirects --uri=URL {
     "timestamp": Time.now.utc.to_iso8601_string,
     "temperature": 42.0,
     "humidity": 1013.25,
   }
 
-  if response.status_code != 200:
+  if response.status_code != 200 and response.status_code != 302:
     print "Request failed: $response.status_code $response.status_message"
 
   response.drain
 ```
 
 For simplicity we simply post some dummy data to the spreadsheet. In a real
-application you replace this with the actual data you want to log.
+application you would replace this with the actual data you want to log.
 
 #### Timestamp
 If your ESP32 hasn't synchronized with an NTP server, the timestamp will be
