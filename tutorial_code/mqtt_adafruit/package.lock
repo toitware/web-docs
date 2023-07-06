@@ -1,0 +1,13 @@
+sdk: ^2.0.0-alpha.35
+prefixes:
+  certificate_roots: toit-cert-roots
+  mqtt: mqtt
+packages:
+  mqtt:
+    url: github.com/toitware/mqtt
+    version: 2.2.0
+    hash: 74eabce1f3056b90c4528f48fb585aa9ff286fbe
+  toit-cert-roots:
+    url: github.com/toitware/toit-cert-roots
+    version: 1.5.0
+    hash: 27a9f9ff3d337b6128e98e220126e3cc275bcd73

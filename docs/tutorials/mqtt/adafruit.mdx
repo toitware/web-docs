@@ -1,0 +1,146 @@
+import AioKey from "../../_images/adafruit_aio_key.png"
+
+# MQTT with Adafruit
+[Adafruit](https://www.adafruit.com) is an open-source hardware company that is
+popular among the maker community. One of their services is
+[Adafruit IO](https://io.adafruit.com), which is a MQTT broker.
+
+The broker has a free tier with some restrictions. It is perfectly
+usable for makers with few devices.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+While not necessary, we recommend to do the [MQTT tutorial](..) first.
+
+Note that you can do this tutorial without a device. In that case,
+you need to use the `-d host` option whenever you invoke
+`jag run`. The program will then run on your computer instead of on
+a device.
+
+## Packages
+The MQTT functionality is not part of the core libraries and must be
+imported as a package. See the [packages](../../setup/packages)
+tutorial for details.
+
+We are using the [mqtt](https://pkg.toit.io/package/github.com%2Ftoitware%2Fmqtt@v2)
+package. To install it, run the following command:
+
+``` shell
+jag pkg install github.com/toitware/mqtt@v2
+```
+
+When connecting to TLS secured services we will also use the
+[certificate-roots](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-cert-roots@v1)
+package:
+
+``` shell
+jag pkg install github.com/toitware/toit-cert-roots@v1
+```
+
+## Adafruit IO
+To use Adafruit IO, you need to create an account. Go to
+[io.adafruit.com](https://io.adafruit.com) and create an account.
+
+Once you have created an account, you need to create a feed. Feeds
+are topics that you can publish to and subscribe from.
+Go to [io.adafruit.com/feeds](https://io.adafruit.com/feeds) and click on
+the "`+` New Feed" button to create a new feed. For this tutorial we
+will use the feed `temperature`.
+
+Click on the "AIO Key" button on the top right of the page (next to
+"`+` New Device"). This opens a dialog with your AIO key.
+
+<img
+  src={AioKey}
+  alt="Screenshot of the AIO key button"
+/>
+
+Copy the username and key. You will need them later.
+
+## Code
+The following code connects to Adafruit IO and publishes a message
+every 2.5 seconds. The message goes to the feed `temperature` and
+will thus be a simple number. The number is a simulated temperature
+reading, and will randomly fluctuate (starting at 25°C).
+
+Don't forget to replace `<YOUR_USERNAME>` and `<YOUR_KEY>` with your
+username and key. If you created a feed with a different name, you
+also need to change the `ADAFRUIT_IO_FEEDNAME` constant.
+
+We will leave the `CLIENT_ID` empty. This means that the broker will
+generate a random client ID for us. It also resets the session with
+every connection. If you want to take full advantage of the broker,
+you should use a persistent client ID. See the [MQTT tutorial](..)
+for details.
+
+``` toit
+import certificate_roots
+import mqtt
+import net
+
+ADAFRUIT_IO_USERNAME ::= "<YOUR_USERNAME>"
+ADAFRUIT_IO_KEY ::= "<YOUR_KEY>"
+
+ADAFRUIT_IO_FEEDNAME ::= "temperature"
+
+ADAFRUIT_IO_HOST ::= "io.adafruit.com"
+
+CLIENT_ID ::= ""
+
+main:
+  network := net.open
+  transport := mqtt.TcpTransport.tls network --host=ADAFRUIT_IO_HOST
+      --root_certificates=[certificate_roots.DIGICERT_GLOBAL_ROOT_CA]
+  /**
+  // Alternatively, you can also connect without TLS, by using the
+  // following transport:
+  transport := mqtt.TcpTransport network --host=ADAFRUIT_IO_HOST
+  // In that case you can remove the `certificate_roots` import.
+  */
+
+  client := mqtt.Client --transport=transport
+
+  options := mqtt.SessionOptions
+    --client_id = CLIENT_ID
+    --username = ADAFRUIT_IO_USERNAME
+    --password = ADAFRUIT_IO_KEY
+
+  client.start --options=options
+
+  print "Connected to broker"
+
+  topic := "$ADAFRUIT_IO_USERNAME/feeds/$ADAFRUIT_IO_FEEDNAME"
+
+  // Simulates a temperature sensor.
+  temperature := 25.0
+  10.repeat:
+    temperature += ((random 100) - 50) / 100.0
+    client.publish topic "$temperature".to_byte_array
+    // Don't publish too often to avoid rate limiting.
+    sleep --ms=2_500
+
+  client.close
+  network.close
+```
+
+You can see the published values on
+`https://io.adafruit.com/<ADAFRUIT_IO_USERNAME>/feeds/temperature`.
+
+## Adafruit IO features
+In this tutorial we only publish messages to Adafruit IO. However,
+Adafruit IO also supports many other features: You can, obviously,
+also subscribe to feeds. You can also create dashboards and
+visualize your data. You can also create triggers that send you
+emails or text messages when certain conditions are met.
+
+The [Adafruit IO documentation](https://learn.adafruit.com/welcome-to-adafruit-io)
+contains a lot of information about the service.
+
+For MQTT specific information, see
+[Adafruit IO MQTT API](https://io.adafruit.com/api/docs/mqtt.html).
