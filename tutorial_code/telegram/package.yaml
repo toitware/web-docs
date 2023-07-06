@@ -1,0 +1,4 @@
+dependencies:
+  telegram:
+    url: github.com/floitsch/toit-telegram
+    version: ^0.5.0
