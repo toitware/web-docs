@@ -1,31 +1,116 @@
 # MQTT
+[MQTT](https://mqtt.org/) is an IoT friendly messaging protocol for publishing and
+subscribing to a shared MQTT broker from a wide range of devices.
 
-[MQTT](https://mqtt.org/) is an IoT friendly messaging protocol for publishing and subscribing to a shared MQTT broker from a wide range of devices.
+This tutorial shows you how to connect to an MQTT broker using TCP (with or
+without TLS). We will use the public `test.mosquitto.org` server in this
+introduction.
 
-This tutorial shows you how to connect to an MQTT broker using TCP (or TLS).
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
 
-## Connect
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
 
-The Toit MQTT client is available from the [`mqtt` package](https://pkg.toit.io/package/github.com%2Ftoitware%2Fmqtt) - in the Toit package registry.
+Note that you can do this tutorial without a device. In that case,
+you need to use the `-d host` option whenever you invoke
+`jag run`. The program will then run on your computer instead of on
+a device.
 
-Install the package using the Jaguar:
+## Packages
+The MQTT functionality is not part of the core libraries and must be
+imported as a package. See the [packages](../../setup/packages)
+tutorial for details.
 
-```shell
-jag pkg install github.com/toitware/mqtt
+We are using the [mqtt](https://pkg.toit.io/package/github.com%2Ftoitware%2Fmqtt@v2)
+package. To install it, run the following command:
+
+``` shell
+jag pkg install github.com/toitware/mqtt@v2
 ```
 
-and use it by importing it into your application with `import mqtt`.
+When connecting to TLS secured services we will also use the
+[certificate-roots](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-cert-roots@v1)
+package:
 
-MQTT requires every client to have a unique `CLIENT_ID`. That ID is sent when connecting to the broker, and identifies a session on the broker.
-It is used to reliably transmit packets that require acknowledgements (QoS=1).
+``` shell
+jag pkg install github.com/toitware/toit-cert-roots@v1
+```
 
+## Introduction
+MQTT uses a long-running broker to which clients connect. The broker is
+responsible for routing messages between clients. Clients can publish
+messages to certain topics, and subscribe to topics to receive messages
+published to those topics.
+
+When a client is not connected, the broker can store messages for the
+client until it reconnects.
+
+Not all messages are stored, however. Each message is published with a
+QoS (Quality of Service) level. The QoS level determines how the broker
+handles the message. The QoS levels are:
+- QoS 0: At most once delivery
+- QoS 1: At least once delivery
+- QoS 2: Exactly once delivery
+
+QoS 2 is not implemented in the Toit MQTT library, and we will not cover
+it in this tutorial.
+
+QoS 0 messages are not stored by the broker. If a client is not connected
+when a QoS 0 message is published, the message is lost.
+
+QoS 1 messages are stored by the broker until the client reconnects. When
+the client reconnects, the broker will resend all messages that were
+published with QoS 1.
+
+QoS 1 furthermore has the property that the broker will acknowledge
+receipt of the message. This means that the client can be sure that the
+message was received by the broker.
+
+Note that clients can also lower a QoS level when subscribing to a topic.
+This can be used to inform the broker not to store messages even if they
+were sent with QoS 1.
+
+## Identification
+In order to store messages for a client, the broker needs to be able to
+identify the client. This is done using a `CLIENT_ID`. The client ID is
+sent when connecting to the broker, and identifies a session on the broker.
+
+To avoid impersonation, the broker can require the client to provide a
+client certificate or a `username` and `password` when connecting.
+
+When a client connects to the broker, it can also specify a `CLEAN_SESSION`
+flag. If this flag is set, the broker will discard any stored messages for
+the client. If the flag is not set, the broker will keep any stored messages
+for the client.
+
+With the `CLEAN_SESSION` flag, a client may also decide not to provide a
+`CLIENT_ID`. In this case, the broker will generate a random ID for the
+client.
+
+## The MQTT library
+The MQTT library comes with two client implementations:
+1. a simplified `Client` class,
+2. and a `FullClient` class that exposes more of the MQTT protocol.
+
+We will use the `Client` class in this tutorial. If you need more control
+you can use the `FullClient` class instead. The documentation for the
+`FullClient` class can be found
+[here](https://pkg.toit.io/github.com/toitware/mqtt@2.2.0/docs/mqtt/full_client/class-FullClient).
+
+## Code
+Open an `mqtt.toit` file, and watch it with Jaguar.
+
+Insert the following code:
+<!-- ANALYZE CODE -->
 ```toit
 import net
 import mqtt
 
-// Include a random number, as we are sharing test.mosquitto.org with other users.
-CLIENT_ID ::= "my-client-id-$(random)"
-HOST      ::= "test.mosquitto.org"
+CLIENT_ID ::= ""  // Use a random client ID.
+HOST ::= "test.mosquitto.org"
 
 main:
   network := net.open
@@ -36,7 +121,14 @@ main:
   // Client is now connected.
 ```
 
-Some brokers require the client to provide a `username` and `password`. These can be passed to the client during the
+Note that the `start` call starts a [task](../../../language/tasks) that
+connects to the broker. The task will keep running in the background. It
+will prevent the program from exiting until the client is disconnected.
+Alternatively, you can use the `--background` flag to start the task
+with a background priority, thus allowing the program to exit.
+
+Some brokers require the client to provide a `username` and `password`.
+These can be passed to the client during the
 `start` call in an `options` object:
 
 <!-- HIDDEN CODE   MY_USERNAME ::= "" -->
@@ -48,56 +140,132 @@ Some brokers require the client to provide a `username` and `password`. These ca
       --password=MY_PASSWORD
   client.start --options=options
 ```
-See the [documentation](https://pkg.toit.io/github.com/toitware/mqtt@2.0.1/docs/mqtt/library-summary) or
-[examples](https://github.com/toitware/mqtt/tree/main/examples) of the MQTT library for more information.
+See the [documentation](https://pkg.toit.io/github.com/toitware/mqtt@2.2.0/docs/mqtt/library-summary) or
+[examples](https://github.com/toitware/mqtt/tree/main/examples) of the
+MQTT library for more information.
 
-## Publish
+### Publish
+When publishing data to the broker, you simply need to specify which topic to
+publish to and provide a payload.
 
-Simple sensor applications mainly have one purpose; to send sensor data. When sending data, you simply need to specify which topic to publish to, together with the payload.
+Let's change the example so it publishes a message. Since the mosquitto server is
+shared with other developers, we should choose a topic that avoids interference
+with other clients. For simplicity, we will use `toit-mqtt/tutorial` in the
+code below, but you should change it to a different topic name. Otherwise, you
+might receive messages from other clients.
 
-A publish function could look similar to the following:
+Call the file `publish.toit` and insert the following code.
 
+<!-- ANALYZE CODE -->
 ```toit
+import net
 import mqtt
 import encoding.json
 
-TOPIC ::= "my/topic"
+CLIENT_ID ::= ""  // Use a random client ID.
+HOST ::= "test.mosquitto.org"
+TOPIC ::= "toit-mqtt/tutorial"
 
-publish client/mqtt.Client value/float:
+main:
+  network := net.open
+  transport := mqtt.TcpTransport network --host=HOST
+  client := mqtt.Client --transport=transport
+  client.start --client_id=CLIENT_ID
+
   payload := json.encode {
-    "value": value
+    "value": 42
   }
   client.publish TOPIC payload
-
+  client.close
 ```
 
-Note that the payload must be a byte array. If your data is a string, simply call `.to_byte_array` on it.
+Note that the payload must be a byte array. If your data is a string, simply
+call `.to_byte_array` on it.
 
-## Subscribe
+This program publishes a JSON object with the value `42` to the topic and then
+disconnects. Let's verify that the message was published by subscribing to the
+topic. You will need a second device, or run the program with
+`jag run -d host ...`.
 
-Subscribing to data requires two pieces of information: the topic (or filter) to subscribe to, and the callback that should be called
+### Subscribe
+Subscribing to data requires two pieces of information: the topic (or filter)
+to subscribe to, and the callback that should be called
 when a message arrives.
 
-For example:
+Create the following `subscribe.toit` file. Don't forget to change the topic
+name to the one you used in the previous example.
+
 ```toit
 import mqtt
+import net
 import encoding.json
 
-TOPIC ::= "my/topic"
+CLIENT_ID ::= ""  // Use a random client ID.
+HOST ::= "test.mosquitto.org"
+TOPIC ::= "toit-mqtt/tutorial"
 
-subscribe client/mqtt.Client:
+main:
+  network := net.open
+  transport := mqtt.TcpTransport network --host=HOST
+  client := mqtt.Client --transport=transport
+  client.start --client_id=CLIENT_ID
+
   client.subscribe TOPIC:: | topic/string payload/ByteArray |
     decoded := json.decode payload
-    print "Received value on '$topic': $(decoded["value"])"
+    print "Received value on '$topic': $decoded"
 ```
 
-Here, we decode the incoming payload with the JSON decoder. If the data payload should just be interpreted as a
+The `client.subscribe` function takes a topic (here `TOPIC`) and a
+callback (indicated by the `::` and the `|` and `|` around the parameters).
+
+The callback will be called every time a message is received on the topic.
+
+Here, we decode the incoming payload with the JSON decoder. If the data
+payload should just be interpreted as a
 string, you can simply call `payload.to_string` instead.
 
-Since MQTT clients can have a session on the server, we could receive packets for previously subscribed topics
-as soon as the client connects. If the `subscribe` function wasn't called yet, then the callback wouldn't be
-invoked for these early messages. To avoid losing packets, the client can also be configured with routes at
-construction time:
+Start this program first (optionally on your desktop with
+`jag run -d host subscribe.toit`), and then, in a second terminal, start the
+`publish.toit` program. You should see the following output:
+
+``` text
+Received value on 'toit-mqtt/tutorial': {value: 42}
+```
+
+### Quality of Service
+As discussed, brokers can store messages for clients when they are offline. For
+this to work the client must connect with a client ID. When the client
+disconnects and reconnects with the same client ID, the broker will deliver
+messages that were published while the client was offline.
+
+Change the `subscribe.toit` program to use a non-empty client ID. For
+example:
+
+<!-- SKIP CODE -->
+```
+CLIENT_ID ::= "toit-tutorial-ID-2023-07-06"
+```
+
+Make sure to use a unique ID, to avoid conflicts with other clients.
+
+Now start the subscribe program, and then stop it, before starting the
+publish program.
+
+Now run the `publish.toit` program again. Once it has terminated,
+start the `subscribe.toit` program again. If you are lucky you
+should see the following output. If not, see below.
+
+``` text
+Received value on 'toit-mqtt/tutorial': {value: 42}
+```
+This is the message that was published while the client was offline.
+
+Since the subscribe program only subscribes to the topic after it has
+connected, there is a race condition between the connection being
+established and the subscription handler being registered. If the
+stored messages are delivered before the subscription handler is
+registered, they will be lost. To avoid this, you can register the
+subscription handler before connecting to the broker:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE import net -->
@@ -110,12 +278,11 @@ construction time:
 ```
 main:
   network := net.open
-  transport := mqtt.TcpTransport.tls network --host=HOST
-      --root_certificates=[ certificate_roots.ISRG_ROOT_X1 ]
+  transport := mqtt.TcpTransport network --host=HOST
   routes := {
     TOPIC: :: | topic/string payload/ByteArray |
       decoded := json.decode payload
-      print "Received value on '$topic': $(decoded["value"])"
+      print "Received value on '$topic': $decoded"
   }
   client := mqtt.Client --transport=transport --routes=routes
   client.start --client_id=CLIENT_ID
@@ -123,17 +290,17 @@ main:
 ```
 
 ## TLS
+For secure connections to the broker, we need to use TLS. The `TcpTransport` can
+be used to connect to secure servers. For that we need root certificates which are
+then used to authenticate the server.
 
-The `TcpTransport` mentioned above can also be used to connect to secure servers. For
-that we need root certificatse which are then used to authenticate the server.
-
-Here, we are using the certificate-roots package which can be installed with
+If you haven't already, install the certificate-roots package with
 
 ``` shell
-jag pkg install github.com/toitware/toit-cert-roots
+jag pkg install github.com/toitware/toit-cert-roots@v1
 ```
 
-In other cases, the certificate might be given by the server and should be pasted into
+In some cases, the certificate might be given by the server and should be pasted into
 the sources.
 
 Once we have the root certificates, the client's transport can be created as follows:
@@ -141,19 +308,49 @@ Once we have the root certificates, the client's transport can be created as fol
 ```toit
 import mqtt
 import net
-import net.x509
 import certificate_roots
+import encoding.json
 
-// Include a random number, as we are sharing test.mosquitto.org with other users.
-CLIENT_ID ::= "my-client-id-$(random)"
-HOST      ::= "test.mosquitto.org"
-PORT      ::= 8886
+CLIENT_ID ::= "toit-tutorial-ID-2023-07-06"
+HOST ::= "test.mosquitto.org"
+TOPIC ::= "toit-mqtt/tutorial"
+PORT ::= 8886
 
 main:
   network := net.open
   transport := mqtt.TcpTransport.tls network --host=HOST --port=PORT
-      --root_certificates=[ certificate_roots.ISRG_ROOT_X1 ]
-  client := mqtt.Client --transport=transport
+      --root_certificates=[certificate_roots.ISRG_ROOT_X1]
+
+  routes := {
+    TOPIC: :: | topic/string payload/ByteArray |
+      decoded := json.decode payload
+      print "Received value on '$topic': $decoded"
+  }
+  client := mqtt.Client --transport=transport --routes=routes
   client.start --client_id=CLIENT_ID
-  // Client is now connected.
+
+  while true:
+    payload := json.encode {
+      "now": Time.now.utc.to_iso8601_string
+    }
+    client.publish TOPIC payload
+    sleep --ms=1_000
 ```
+
+This example combines all the previous examples. It connects to the broker
+using TLS, subscribes to the topic, and publishes a message every second.
+
+## Conclusion
+In conclusion, this tutorial has introduced the MQTT protocol and its usage
+in Toit. We have covered how to set up and initiate an MQTT client, publish
+and subscribe to topics, and control message storage with Quality of Service
+levels. It is recommended that you experiment further with these features
+and consult the
+[Toit MQTT library documentation](https://pkg.toit.io/github.com/toitware/mqtt@2.2.0/docs/mqtt/library-summary)
+for more advanced usage and options.
+
+## Exercises
+1. Try to publish and subscribe to different topics.
+2. Try to publish and subscribe to topics with different QoS levels.
+    1. Send messages with QoS 0 and 1 and see what happens when the subscriber is offline.
+    2. Send messages with QoS 1 but subscribe with `--max_qos=0` and see what happens.
