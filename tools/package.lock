@@ -17,6 +17,7 @@ prefixes:
   pixel_display: toit-pixel-display
   pixel_strip: toit-pixel-strip
   ssd1306: toit-ssd1306
+  supabase: toit-supabase
   telegram: toit-telegram
 packages:
   bme280-driver:
@@ -91,6 +92,13 @@ packages:
     hash: 806c93972b733ff45e10a4eeeefa9a7e5e808c46
     prefixes:
       pixel_display: toit-pixel-display
+  toit-supabase:
+    url: github.com/toitware/toit-supabase
+    version: 0.1.0
+    hash: 460be4b6dd3af6fadecd4d0b2029afdb672035d5
+    prefixes:
+      host: pkg-host
+      http: pkg-http
   toit-telegram:
     url: github.com/floitsch/toit-telegram
     version: 0.5.0
