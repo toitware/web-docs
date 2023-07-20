@@ -1,0 +1,195 @@
+# MQTT with AWS IoT Core
+[AWS IoT Core](https://aws.amazon.com/iot-core/) is a managed MQTT
+broker. It is designed for large scale IoT deployments and supports
+many advanced features.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+While not necessary, we recommend to do the [MQTT tutorial](..) first.
+
+Note that you can do this tutorial without a device. In that case,
+you need to use the `-d host` option whenever you invoke
+`jag run`. The program will then run on your computer instead of on
+a device.
+
+## Packages
+The MQTT functionality is not part of the core libraries and must be
+imported as a package. See the [packages](../../setup/packages)
+tutorial for details.
+
+We are using the [mqtt](https://pkg.toit.io/package/github.com%2Ftoitware%2Fmqtt@v2)
+package. To install it, run the following command:
+
+``` shell
+jag pkg install github.com/toitware/mqtt@v2
+```
+
+When connecting to TLS secured services we will also use the
+[certificate-roots](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-cert-roots@v1)
+package:
+
+``` shell
+jag pkg install github.com/toitware/toit-cert-roots@v1
+```
+
+## AWS IoT Core
+Amazon has several tutorials on how to get started with their service. For example,
+see the
+[Getting started guide](https://docs.aws.amazon.com/iot/latest/developerguide/iot-gs.html).
+
+We will not repeat all the steps here, but only give a brief overview.
+
+1. Create an AWS account, and sign in.
+2. Search for the IoT Core service.
+3. On the left click on "Connect one device".
+
+This will start a wizard that will guide you through the process of
+creating a device and a certificate.
+
+As instructed, make sure that you can ping your AWS broker. The URL
+is shown in the wizard. It should be something like
+`<your_id>.iot.<your_region>.amazonaws.com`. Remember this URL,
+we will need it later.
+
+Select "Create a new thing" and give it a name.
+
+The next screen asks you for the platform operating system and Device SDK.
+We are not using any of the SDKs, so you can keep the default settings.
+
+Download the connection kit on the next page. This zip file contains the
+certificate and private key for your device. Unzip it and save the
+following files into your project directory:
+- `<name>.cert.pem`
+- `<name>.private.key`
+- `<name>-Policy`
+- `<name>-public.key`
+
+Strictly speaking, we only need the certificate and private key, but
+these files aren't big, and for completeness sake we also save the
+policy and public key.
+
+## Code
+AWS IoT Core uses TLS with client certificates to authenticate
+devices. This requires a few more steps than usual to establish a connection.
+
+Create a new file `aws.toit` in your project directory, and watch it
+with Jaguar.
+
+Add the following code to the file:
+
+``` toit
+import certificate_roots
+import net
+import net.x509
+import mqtt
+import mqtt.transport as mqtt
+import tls
+
+HOST ::= "<YOUR AMAZON HOST>"
+PORT ::= 8883
+ROOT_CERTIFICATE ::= certificate_roots.AMAZON_ROOT_CA_1
+
+CLIENT_ID ::= "sdk-nodejs-toit"
+TOPIC ::= "sdk/test/js"
+
+CLIENT_CERTIFICATE_DER ::= """
+-----BEGIN CERTIFICATE-----
+<YOUR CERTIFICATE>
+-----END CERTIFICATE-----
+"""
+
+CLIENT_KEY_DER ::= """
+-----BEGIN RSA PRIVATE KEY-----
+<YOUR KEY>
+-----END RSA PRIVATE KEY-----
+"""
+```
+
+Here the `HOST` is the URL of your AWS broker. If you forgot it, you
+can find it in the "Settings" tab of the IoT Core console.
+
+The `CLIENT_ID` and `TOPIC` are *not* arbitrary strings. They must
+comply with the policy restrictions for this device. These can
+be found in the `<name>-Policy` file you downloaded earlier. If
+you used the "Connect" wizard, it should, for example, have
+the following restrictions for the `"iot:Connect"` action:
+``` text
+        "arn:aws:iot:eu-west-1:915358716417:client/sdk-java",
+        "arn:aws:iot:eu-west-1:915358716417:client/basicPubSub",
+        "arn:aws:iot:eu-west-1:915358716417:client/sdk-nodejs-*"
+```
+The client ID, thus must be either `sdk-java`, `basicPubSub`, or
+`sdk-nodejs-*`, where `*` is a wildcard. The chosen
+`sdk-nodejs-toit` is thus a valid client ID.
+
+Any other client ID will be rejected by the broker, and the connection
+will be cut (leading to an infinite "Attempting to (re)connect" loop).
+
+Similarly, publishing to a topic that is not allowed by the policy
+will also lead to a disconnect.
+
+The `CLIENT_CERTIFICATE_DER` and `CLIENT_KEY_DER` are the certificate
+and private key that you downloaded earlier. You can copy and paste
+them into the file.
+
+### Creating the transport
+As mentioned above, AWS IoT Core uses TLS with client certificates
+to authenticate devices. Add the following function that creates
+an MQTT transport with the correct settings:
+
+``` toit
+create_aws_transport network/net.Interface -> mqtt.Transport:
+  parsed := x509.Certificate.parse CLIENT_CERTIFICATE_DER
+  client_certificate := tls.Certificate parsed CLIENT_KEY_DER
+  return mqtt.TcpTransport.tls network
+      --host=HOST
+      --port=PORT
+      --root_certificates=[ROOT_CERTIFICATE]
+      --certificate=client_certificate
+```
+
+This function accepts a network interface and returns an MQTT transport.
+It parses the certificate and generates a TLS certificate object from it,
+and then creates a TLS transport with the appropriate settings.
+
+### Connecting to the broker
+We can now connect to the broker. Add the following code to the `main` function:
+
+``` toit
+main:
+  network := net.open
+  transport := create_aws_transport network
+  client := mqtt.Client --transport=transport
+  options := mqtt.SessionOptions --client_id=CLIENT_ID
+  client.start --options=options
+  client.publish TOPIC "hello".to_byte_array
+  client.close
+  network.close
+```
+
+If you still have the AWS IoT Core console open, you should see the
+message appear in the wizard.
+
+<Note>
+
+It is not good practice to hard-code credentials in your program.
+See the [secrets](../../misc/secrets) tutorial for details on how to
+handle secrets in Toit projects.
+
+</Note>
+
+## Summary
+In this tutorial we have seen how to connect to AWS IoT Core using
+TLS with client certificates. We have also seen how to use the
+`mqtt` package to publish a message to a topic.
+
+AWS IoT Core supports many more features, such as device shadows,
+rules, and jobs. See the
+[AWS IoT Core documentation](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
+for more details.
