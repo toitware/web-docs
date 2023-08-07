@@ -1561,6 +1561,30 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@lmdb/lmdb-darwin-arm64@2.5.3":
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/@lmdb/lmdb-darwin-arm64/-/lmdb-darwin-arm64-2.5.3.tgz#c423b068165df18da57a81dce5c95f98c6ab9265"
+
+"@lmdb/lmdb-darwin-x64@2.5.3":
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/@lmdb/lmdb-darwin-x64/-/lmdb-darwin-x64-2.5.3.tgz#dde76e65595b34a17289a63f770a8aee13a85a9b"
+
+"@lmdb/lmdb-linux-arm64@2.5.3":
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/@lmdb/lmdb-linux-arm64/-/lmdb-linux-arm64-2.5.3.tgz#d98f32383d37a058e6c51b7ffd665c2c2f91c285"
+
+"@lmdb/lmdb-linux-arm@2.5.3":
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/@lmdb/lmdb-linux-arm/-/lmdb-linux-arm-2.5.3.tgz#6251143d7b470e126b0b0fc17ae64c6680e268b2"
+
+"@lmdb/lmdb-linux-x64@2.5.3":
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/@lmdb/lmdb-linux-x64/-/lmdb-linux-x64-2.5.3.tgz#ef3a9793391ab4a68379e753943c9055fd0f5bf3"
+
+"@lmdb/lmdb-win32-x64@2.5.3":
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/@lmdb/lmdb-win32-x64/-/lmdb-win32-x64-2.5.3.tgz#c72e8b6faae31d925d23a6db0379cc3fe0216fdd"
+
 "@mdx-js/mdx@^1.6.22":
   version "1.6.22"
   resolved "https://registry.npmjs.org/@mdx-js/mdx/-/mdx-1.6.22.tgz"
@@ -1600,6 +1624,30 @@
 "@microsoft/fetch-event-source@2.0.1":
   version "2.0.1"
   resolved "https://registry.npmjs.org/@microsoft/fetch-event-source/-/fetch-event-source-2.0.1.tgz"
+
+"@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-darwin-arm64/-/msgpackr-extract-darwin-arm64-3.0.2.tgz#44d752c1a2dc113f15f781b7cc4f53a307e3fa38"
+
+"@msgpackr-extract/msgpackr-extract-darwin-x64@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-darwin-x64/-/msgpackr-extract-darwin-x64-3.0.2.tgz#f954f34355712212a8e06c465bc06c40852c6bb3"
+
+"@msgpackr-extract/msgpackr-extract-linux-arm64@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-linux-arm64/-/msgpackr-extract-linux-arm64-3.0.2.tgz#45c63037f045c2b15c44f80f0393fa24f9655367"
+
+"@msgpackr-extract/msgpackr-extract-linux-arm@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-linux-arm/-/msgpackr-extract-linux-arm-3.0.2.tgz#35707efeafe6d22b3f373caf9e8775e8920d1399"
+
+"@msgpackr-extract/msgpackr-extract-linux-x64@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-linux-x64/-/msgpackr-extract-linux-x64-3.0.2.tgz#091b1218b66c341f532611477ef89e83f25fae4f"
+
+"@msgpackr-extract/msgpackr-extract-win32-x64@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-win32-x64/-/msgpackr-extract-win32-x64-3.0.2.tgz#0f164b726869f71da3c594171df5ebc1c4b0a407"
 
 "@mui/base@5.0.0-alpha.58":
   version "5.0.0-alpha.58"
@@ -5274,6 +5322,12 @@ fastq@^1.10.0, fastq@^1.11.1, fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
+fastq@^1.13.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.15.0.tgz#d04d07c6a2a68fe4599fea8d2e103a937fae6b3a"
+  dependencies:
+    reusify "^1.0.4"
+
 fb-watchman@^2.0.0:
   version "2.0.1"
   resolved "https://registry.npmjs.org/fb-watchman/-/fb-watchman-2.0.1.tgz"
@@ -5491,6 +5545,14 @@ fs-extra@^10.0.0:
     jsonfile "^6.0.1"
     universalify "^2.0.0"
 
+fs-extra@^10.1.0:
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.1.0.tgz#02873cfbc4084dde127eaa5f9905eef2325d1abf"
+  dependencies:
+    graceful-fs "^4.2.0"
+    jsonfile "^6.0.1"
+    universalify "^2.0.0"
+
 fs-monkey@1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/fs-monkey/-/fs-monkey-1.0.3.tgz"
@@ -5575,6 +5637,26 @@ gatsby-core-utils@^2.14.0:
     got "^11.8.2"
     node-object-hash "^2.3.9"
     proper-lockfile "^4.1.2"
+    tmp "^0.2.1"
+    xdg-basedir "^4.0.0"
+
+gatsby-core-utils@^3.25.0:
+  version "3.25.0"
+  resolved "https://registry.yarnpkg.com/gatsby-core-utils/-/gatsby-core-utils-3.25.0.tgz#6ebfd2b8c95f3bbc3b52a9619a1ff26c68109c25"
+  dependencies:
+    "@babel/runtime" "^7.15.4"
+    ci-info "2.0.0"
+    configstore "^5.0.1"
+    fastq "^1.13.0"
+    file-type "^16.5.3"
+    fs-extra "^10.1.0"
+    got "^11.8.5"
+    import-from "^4.0.0"
+    lmdb "2.5.3"
+    lock "^1.1.0"
+    node-object-hash "^2.3.10"
+    proper-lockfile "^4.1.2"
+    resolve-from "^5.0.0"
     tmp "^0.2.1"
     xdg-basedir "^4.0.0"
 
@@ -5872,15 +5954,15 @@ gatsby-telemetry@^2.14.0:
     node-fetch "^2.6.1"
     uuid "3.4.0"
 
-gatsby-transformer-remark@^4.11.0:
-  version "4.11.0"
-  resolved "https://registry.npmjs.org/gatsby-transformer-remark/-/gatsby-transformer-remark-4.11.0.tgz"
+gatsby-transformer-remark@^5.25.1:
+  version "5.25.1"
+  resolved "https://registry.yarnpkg.com/gatsby-transformer-remark/-/gatsby-transformer-remark-5.25.1.tgz#6df0117dbe3bb39c06e05c85db494948a565b7c8"
   dependencies:
     "@babel/runtime" "^7.15.4"
-    gatsby-core-utils "^2.14.0"
-    gray-matter "^4.0.2"
+    gatsby-core-utils "^3.25.0"
+    gray-matter "^4.0.3"
     hast-util-raw "^6.0.2"
-    hast-util-to-html "^7.1.2"
+    hast-util-to-html "^7.1.3"
     lodash "^4.17.21"
     mdast-util-to-hast "^10.2.0"
     mdast-util-to-string "^2.0.0"
@@ -5893,8 +5975,8 @@ gatsby-transformer-remark@^4.11.0:
     remark-stringify "^9.0.1"
     retext-english "^3.0.4"
     sanitize-html "^1.27.5"
-    underscore.string "^3.3.5"
-    unified "^9.2.1"
+    underscore.string "^3.3.6"
+    unified "^9.2.2"
     unist-util-remove-position "^3.0.0"
     unist-util-select "^3.0.4"
     unist-util-visit "^2.0.3"
@@ -6266,6 +6348,22 @@ got@^11.8.2:
     p-cancelable "^2.0.0"
     responselike "^2.0.0"
 
+got@^11.8.5:
+  version "11.8.6"
+  resolved "https://registry.yarnpkg.com/got/-/got-11.8.6.tgz#276e827ead8772eddbcfc97170590b841823233a"
+  dependencies:
+    "@sindresorhus/is" "^4.0.0"
+    "@szmarczak/http-timer" "^4.0.5"
+    "@types/cacheable-request" "^6.0.1"
+    "@types/responselike" "^1.0.0"
+    cacheable-lookup "^5.0.3"
+    cacheable-request "^7.0.2"
+    decompress-response "^6.0.0"
+    http2-wrapper "^1.0.0-beta.5.2"
+    lowercase-keys "^2.0.0"
+    p-cancelable "^2.0.0"
+    responselike "^2.0.0"
+
 got@^9.6.0:
   version "9.6.0"
   resolved "https://registry.npmjs.org/got/-/got-9.6.0.tgz"
@@ -6339,7 +6437,7 @@ graphql@^15.4.0:
   version "15.7.2"
   resolved "https://registry.npmjs.org/graphql/-/graphql-15.7.2.tgz"
 
-gray-matter@^4.0.2:
+gray-matter@^4.0.2, gray-matter@^4.0.3:
   version "4.0.3"
   resolved "https://registry.npmjs.org/gray-matter/-/gray-matter-4.0.3.tgz"
   dependencies:
@@ -6514,9 +6612,9 @@ hast-util-raw@^6.0.2:
     xtend "^4.0.0"
     zwitch "^1.0.0"
 
-hast-util-to-html@^7.1.2:
+hast-util-to-html@^7.1.3:
   version "7.1.3"
-  resolved "https://registry.npmjs.org/hast-util-to-html/-/hast-util-to-html-7.1.3.tgz"
+  resolved "https://registry.yarnpkg.com/hast-util-to-html/-/hast-util-to-html-7.1.3.tgz#9f339ca9bea71246e565fc79ff7dbfe98bb50f5e"
   dependencies:
     ccount "^1.0.0"
     comma-separated-tokens "^1.0.0"
@@ -6766,6 +6864,10 @@ import-from@3.0.0:
   resolved "https://registry.npmjs.org/import-from/-/import-from-3.0.0.tgz"
   dependencies:
     resolve-from "^5.0.0"
+
+import-from@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/import-from/-/import-from-4.0.0.tgz#2710b8d66817d232e16f4166e319248d3d5492e2"
 
 import-lazy@^2.1.0:
   version "2.1.0"
@@ -7955,6 +8057,23 @@ lines-and-columns@^1.1.6:
   version "1.2.4"
   resolved "https://registry.npmjs.org/lines-and-columns/-/lines-and-columns-1.2.4.tgz"
 
+lmdb@2.5.3:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/lmdb/-/lmdb-2.5.3.tgz#cac845a8576ef0fd2dcc279faab6fdb383f07463"
+  dependencies:
+    msgpackr "^1.5.4"
+    node-addon-api "^4.3.0"
+    node-gyp-build-optional-packages "5.0.3"
+    ordered-binary "^1.2.4"
+    weak-lru-cache "^1.2.2"
+  optionalDependencies:
+    "@lmdb/lmdb-darwin-arm64" "2.5.3"
+    "@lmdb/lmdb-darwin-x64" "2.5.3"
+    "@lmdb/lmdb-linux-arm" "2.5.3"
+    "@lmdb/lmdb-linux-arm64" "2.5.3"
+    "@lmdb/lmdb-linux-x64" "2.5.3"
+    "@lmdb/lmdb-win32-x64" "2.5.3"
+
 loader-runner@^4.2.0:
   version "4.2.0"
   resolved "https://registry.npmjs.org/loader-runner/-/loader-runner-4.2.0.tgz"
@@ -8004,7 +8123,7 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lock@^1.0.0:
+lock@^1.0.0, lock@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/lock/-/lock-1.1.0.tgz"
   integrity "sha1-UxV0mdFlOxNspmRRBx/KYVcD+lU= sha512-NZQIJJL5Rb9lMJ0Yl1JoVr9GSdo4HTPsUEWsSFzB8dE8DSoiLCVavWZPi7Rnlv/o73u6I24S/XYc/NmG4l8EKA=="
@@ -9009,6 +9128,25 @@ ms@2.1.2, ms@^2.1.1:
   version "2.1.2"
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz"
 
+msgpackr-extract@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/msgpackr-extract/-/msgpackr-extract-3.0.2.tgz#e05ec1bb4453ddf020551bcd5daaf0092a2c279d"
+  dependencies:
+    node-gyp-build-optional-packages "5.0.7"
+  optionalDependencies:
+    "@msgpackr-extract/msgpackr-extract-darwin-arm64" "3.0.2"
+    "@msgpackr-extract/msgpackr-extract-darwin-x64" "3.0.2"
+    "@msgpackr-extract/msgpackr-extract-linux-arm" "3.0.2"
+    "@msgpackr-extract/msgpackr-extract-linux-arm64" "3.0.2"
+    "@msgpackr-extract/msgpackr-extract-linux-x64" "3.0.2"
+    "@msgpackr-extract/msgpackr-extract-win32-x64" "3.0.2"
+
+msgpackr@^1.5.4:
+  version "1.9.6"
+  resolved "https://registry.yarnpkg.com/msgpackr/-/msgpackr-1.9.6.tgz#0b2bd37fba705756df795fdfe06a55f447c7bc47"
+  optionalDependencies:
+    msgpackr-extract "^3.0.2"
+
 multer@^1.4.2:
   version "1.4.3"
   resolved "https://registry.npmjs.org/multer/-/multer-1.4.3.tgz"
@@ -9121,6 +9259,10 @@ node-addon-api@^4.2.0:
   version "4.2.0"
   resolved "https://registry.npmjs.org/node-addon-api/-/node-addon-api-4.2.0.tgz"
 
+node-addon-api@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-4.3.0.tgz#52a1a0b475193e0928e98e0426a0d1254782b77f"
+
 node-addon-api@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/node-addon-api/-/node-addon-api-5.0.0.tgz"
@@ -9139,6 +9281,14 @@ node-fetch@^2.5.0, node-fetch@^2.6.1:
   resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.6.tgz"
   dependencies:
     whatwg-url "^5.0.0"
+
+node-gyp-build-optional-packages@5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/node-gyp-build-optional-packages/-/node-gyp-build-optional-packages-5.0.3.tgz#92a89d400352c44ad3975010368072b41ad66c17"
+
+node-gyp-build-optional-packages@5.0.7:
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/node-gyp-build-optional-packages/-/node-gyp-build-optional-packages-5.0.7.tgz#5d2632bbde0ab2f6e22f1bbac2199b07244ae0b3"
 
 node-int64@^0.4.0:
   version "0.4.0"
@@ -9161,7 +9311,7 @@ node-notifier@^8.0.0:
     uuid "^8.3.0"
     which "^2.0.2"
 
-node-object-hash@^2.3.9:
+node-object-hash@^2.3.10, node-object-hash@^2.3.9:
   version "2.3.10"
   resolved "https://registry.npmjs.org/node-object-hash/-/node-object-hash-2.3.10.tgz"
 
@@ -9409,6 +9559,10 @@ optionator@^0.9.1:
     prelude-ls "^1.2.1"
     type-check "^0.4.0"
     word-wrap "^1.2.3"
+
+ordered-binary@^1.2.4:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/ordered-binary/-/ordered-binary-1.4.1.tgz#205cb6efd6c27fa0ef4eced994a023e081cdc911"
 
 os-tmpdir@~1.0.2:
   version "1.0.2"
@@ -11343,7 +11497,7 @@ split-string@^3.0.1, split-string@^3.0.2:
   dependencies:
     extend-shallow "^3.0.0"
 
-sprintf-js@^1.0.3:
+sprintf-js@^1.1.1:
   version "1.1.2"
   resolved "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.1.2.tgz"
 
@@ -12134,11 +12288,11 @@ unc-path-regex@^0.1.2:
   resolved "https://registry.npmjs.org/unc-path-regex/-/unc-path-regex-0.1.2.tgz"
   integrity "sha1-5z3T17DXxe2G+6xrCufYxqadUPo= sha512-eXL4nmJT7oCpkZsHZUOJo8hcX3GbsiDOa0Qu9F646fi8dT3XuSVopVqAcEiVzSKKH7UoDti23wNX3qGFxcW5Qg=="
 
-underscore.string@^3.3.5:
-  version "3.3.5"
-  resolved "https://registry.npmjs.org/underscore.string/-/underscore.string-3.3.5.tgz"
+underscore.string@^3.3.5, underscore.string@^3.3.6:
+  version "3.3.6"
+  resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-3.3.6.tgz#ad8cf23d7423cb3b53b898476117588f4e2f9159"
   dependencies:
-    sprintf-js "^1.0.3"
+    sprintf-js "^1.1.1"
     util-deprecate "^1.0.2"
 
 underscore@^1.7.0:
@@ -12205,7 +12359,7 @@ unified@^8.4.2:
     trough "^1.0.0"
     vfile "^4.0.0"
 
-unified@^9.1.0, unified@^9.2.1:
+unified@^9.1.0, unified@^9.2.2:
   version "9.2.2"
   resolved "https://registry.npmjs.org/unified/-/unified-9.2.2.tgz"
   dependencies:
@@ -12672,6 +12826,10 @@ watchpack@^2.4.0:
   dependencies:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
+
+weak-lru-cache@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/weak-lru-cache/-/weak-lru-cache-1.2.2.tgz#fdbb6741f36bae9540d12f480ce8254060dccd19"
 
 web-namespaces@^1.0.0:
   version "1.1.4"
