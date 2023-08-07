@@ -4,21 +4,15 @@ This section provides instructions on how to use the Toit package manager (hence
 
 ## Installing a package
 
-You might need to add a registry as the first thing, before you can proceed with installing a package (see [below](#adding-a-registry)).
-
-The following CLI commands update the local registry, search for a package, and then install it.
+The following CLI commands search for a package, and then install it.
 
 <Tabs>
 <Tab label="Jaguar">
 
 ```shell
-jag pkg sync          # Synchronize the installed registries.
-jag pkg search morse  # Search for a package "morse".
+jag pkg search --verbose morse  # Search for a package "morse".
 jag pkg install morse # Install package "morse".
 ```
-
-It is important to execute these commands in the correct folder. Ideally,
-they should be run in the root of the project that needs the package.
 
 Note that the example and test folder generally are considered to be
 separate projects as they might have different dependencies than the package
@@ -39,13 +33,9 @@ jag pkg install toitware/toit-morse  # Probably already unique.
 <Tab label="toitlang.org">
 
 ```shell
-toit.pkg sync          # Synchronize the installed registries.
-toit.pkg search morse  # Search for a package "morse".
+toit.pkg search --verbose morse  # Search for a package "morse".
 toit.pkg install morse # Install package "morse".
 ```
-
-It is important to execute these commands in the correct folder. Ideally,
-they should be run in the root of the project that needs the package.
 
 Note that the example and test folder generally are considered to be
 separate projects as they might have different dependencies than the package
@@ -67,7 +57,7 @@ toit.pkg install toitware/toit-morse  # Probably already unique.
 
 ## Adding a registry
 
-Before being able to install any package, one must have a registry installed. Newer versions of the `toit` CLI do this automatically, but it never hurts to check:
+Toit supports multiple package registries. This can be useful if you want to use packages that are not part of the Toit registry, like private packages.
 
 <Tabs>
 <Tab label="Jaguar">
@@ -120,9 +110,7 @@ Add or move code into the `src` folder of the new repository.
 
 Optionally (but strongly recommended) add a LICENSE file. We recommend a [permissive free software license](https://en.wikipedia.org/wiki/Permissive_software_license), such as MIT.
 
-Optionally (but strongly recommended) add a README.md. The title should be the package-name. The first paragraph should start as if prefixed with "This is a package containing". The first paragraph should have meaning on its own.
-
-Optionally (but recommended) add a CHANGELOG.md.
+Optionally (but strongly recommended) add a README.md. The first paragraph should start as if prefixed with "This is a package containing". The first paragraph should have meaning on its own.
 
 Optional (but strongly recommended): polish the package, with an eye on
 
@@ -133,18 +121,20 @@ Optional (but strongly recommended): polish the package, with an eye on
 
 Create a `package.yaml` in the root of the repository, with the following entries:
 
-- `name`: The name of the package. Don't add this entry if the README's title is the package-name.
+- `name`: The name of the package.
 
-- `description`: A short description of the package. Don't add this entry if the README's first paragraph is a good description.
+- `description`: A short description of the package.
 
 - `license`: The license of the package. Don't add this entry if there is a LICENSE file. The license file or entry should follow [github conventions](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository).
 
-- `dependencies`: a map of dependencies. Each entry should look as follows:
+- `dependencies`: a map of dependencies. This are automatically added by `install` commands, so you rarely have to add them by hand. Each entry should look as follows:
   ```
     prefix:
       url: <PKG_URL>
       version: <VERSION_CONSTRAINT, such as ^1.0.0>
   ```
+
+### Publishing
 
 Commit everything and tag it with the version number of the package. If you think that the package should be used by other developers, consider giving it a `v1.0.0` version number. (There is nothing gained by calling it `v0.0.1`).
 

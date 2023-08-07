@@ -35,8 +35,6 @@ Here are the common steps for creating a package:
 
    - Tests
 
-   - A CHANGELOG file
-
 3. Create a `package.yaml` file.
 
 4. Tag and Upload.
@@ -150,11 +148,9 @@ You should also add copyright headers to the source files.
 
 ### README
 
-Packages (and generally all repositories) should have a `README.md` file describing the package. Unless given already in the `package.yaml`, this is also the place where the package gets its description from.
+Packages (and generally all repositories) should have a `README.md` file describing the package.
 
-We recommend to have a title `# <package-name>`, followed by a paragraph that makes sense on its own and describes the project. The first paragraph should start as if preceded by "This is a package containing".
-
-These conventions (package name and good first-paragraph description) are not just to make it easier for users to understand the package, but they are also used by the package manager to infer the name and description. See the `package.yaml` section.
+We recommend to have a title `# <package-name>` (or similar), followed by a paragraph that makes sense on its own and describes the project. The first paragraph should start as if preceded by "This is a package containing".
 
 For the tutorial we add the following `README.md` (again, simplified to save space):
 
@@ -381,36 +377,17 @@ toit.run morse_test.toit
 </Tab>
 </Tabs>
 
-### Changelog
-
-It's good practice to have a `CHANGELOG.md` file in the project root. There are many variations on how to structure this file.
-
-We recommend having the newest entries on the top. `## <Version> - <Date>`. For example:
-
-```txt
-## 1.0.1 - 2021-03-12
-* Add library toitdoc.
-* Add another example.
-
-## 1.0.0 - 2021-03-05
-Initial version.
-```
-
 ## Package.yaml
 
-A package must have a `package.yaml` file at the root of the package. The file can be empty, but it must exist.
+A package must have a `package.yaml` file at the root of the package.
 
-Since we already added a license and a README file, we don't need to worry about the license and description entries.
-The name, too, can be inferred from the README. We used "Morse Tutorial" as title, which isn't a valid identifier.
-By convention, spaces in the title are simply replaced with `_` (underscore).
-
-If we wanted a package name different to "morse_tutorial", we could also just add it to the yaml file:
+Since we already added a license, we don't need to worry about the license. However, we need to add the
+"name" and "description" entries.
 
 ```yaml
 name: morse_package_tutorial
+description: A tutorial version of the Morse package. Not intended for use as package.
 ```
-
-This would take precedence over the inferred name.
 
 ### Dependencies
 
@@ -426,24 +403,18 @@ dependencies:
     version: ^1.0.0
 ```
 
-When starting from an application, you can find the dependency information in its `package.lock` file.
+You normally don't need to worry about them, as theyare automatically added when running `jag pkg install <dependency>` or `toit.pkg install <dependency>`.
 
-## Tag and upload
+## Publishing to the Toit package registry
 
-As one of the last steps we need to tag the sources with a version.
-Version numbers follow [semantic versioning](https://semver.org), and the corresponding
-git-tag is a "v" followed by the version.
+Toit packages are downloaded from the original sources, and (if published publicly) must be accessible through a public Git repository. The URL of the Git repository is part of the ID of a package (together with its version tag). As such, we advise to use the one of the following choices as repository name:
+* "toit-" followed by the package name.
+* the package name, or
 
-After committing all sources, we simply execute `git tag v1.0.0`.
+The easiest way to publish a package is to upload the sources to GitHub and to use the [publish action](https://github.com/toitlang/action-publish).
 
-Then we need to upload the package to a Git repository. Toit packages are downloaded from the original sources, and (if published publicly) must be accessible through a public Git repository. The URL of the Git repository is part of the ID of a package (together with its version tag). As such, we advise to use the one of the following choices as repository name:
-the package name, or
-"toit-" followed by the package name.
-
-## Publish to the Toit package registry
-
-As the last step we need to inform a registry about the existence of the (new
-version of the) package. For the Toit package registry, publish your package [here](https://pkg.toit.io/publish).
+At each release it automatically takes the version number and informs the Toit package registry about the new
+release. Just make sure that the version is of the form `v1.0.0` (or similar). Version numbers follow [semantic versioning](https://semver.org) and tags must be valid semver versions with a prefixed 'v'.
 
 <Tabs>
 <Tab label="Jaguar">
@@ -455,3 +426,11 @@ Once published successfully, the registry will distribute a description of the p
 Once published successfully, the registry will distribute a description of the package so that anyone can start using the package with a simple `toit.pkg install`.
 </Tab>
 </Tabs>
+
+
+### Publishing without a Github action
+
+After committing all sources, add a tag yourself by executing `git tag v1.0.0`.
+
+As the last step we need to inform a registry about the existence of the (new
+version of the) package. For the Toit package registry, publish your package [here](https://pkg.toit.io/publish).
