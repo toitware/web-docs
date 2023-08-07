@@ -65,6 +65,7 @@ main args -> none:
       s.run
     if not s.check_only: s.check_only = line.contains "<!-- ANALYZE CODE -->"
     if not s.allow_warning: s.allow_warning = line.contains "<!-- ALLOW WARNING -->"
+    if not s.no_rename_main: s.no_rename_main = line.contains "<!-- NO RENAME MAIN -->"
     if not skip: skip = line.contains "<!-- SKIP CODE"
     if line.starts_with HIDDEN_PRE and line.ends_with HIDDEN_POST:
       hidden = line[HIDDEN_PRE.size .. line.size - HIDDEN_POST.size]
@@ -121,6 +122,7 @@ class State:
   program/List := ?
   snippet_filename/string? := null
   allow_warning/bool := false
+  no_rename_main/bool := false
 
   add line/string -> none:
     program.add line
@@ -143,7 +145,7 @@ class State:
     snippet := file.Stream.for_write filename
     mains := 0
     program.do: if it.starts_with "main": mains++
-    if mains > 1:
+    if mains > 1 and not no_rename_main:
       i := mains
       program.map --in_place:
         if it.starts_with "main":
@@ -152,11 +154,12 @@ class State:
         else:
           it
     program.do: snippet.write "$it\n"
-    if mains != 1:
-      snippet.write "main:\n"
-    if mains > 1:
-      mains.repeat:
-        snippet.write "  main$it\n"
+    if not no_rename_main:
+      if mains != 1:
+        snippet.write "main:\n"
+      if mains > 1:
+        mains.repeat:
+          snippet.write "  main$it\n"
     snippet.close
     result := ?
     if check_only:

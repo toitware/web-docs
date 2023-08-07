@@ -27,6 +27,7 @@ import Adafruit from "../_images/adafruit_io_logo.svg";
 import Telegram from "../_images/telegram_logo.svg";
 import Shushing from "../_images/shushing_face.svg";
 import Supabase from "../_images/supabase_logo.svg";
+import AwsIotCore from "../_images/aws_iot_core.png";
 
 # Tutorials
 
@@ -315,6 +316,16 @@ Get to know about how to use the network capabilities of your device.
 Connect to the internet with HTTP.
 </Box>
 
+<Box title="HTTP chat server" to="network/http-server">
+<img
+  src={Http}
+  alt="HTTP logo."
+/>
+
+Write an HTTP chat server using websockets.
+</Box>
+
+
 <Box title="HTTP File server" to="network/http-file-server">
 <img
   src={Http}
@@ -371,11 +382,20 @@ for IoT devices.
 Use Adafruit IO as your MQTT broker.
 </Box>
 
+<Box title="MQTT with AWS IoT Core" to="mqtt/aws">
+<img
+  src={AwsIotCore}
+  alt="AWS IoT Core logo."
+/>
+
+Use AWS IoT Core as your MQTT broker.
+</Box>
+
 </Boxes>
 
 ## Containers
 Learn how to use containers to run multiple programs independently on
-your device.
+your device, and how they can communicate with each other.
 
 <Boxes>
 <Box title="Containers" to="containers">
@@ -392,6 +412,10 @@ How to use containers with Jaguar.
 
 <Box title="Containers with Artemis" to="containers/artemis">
 How to use containers with Artemis.
+</Box>
+
+<Box title="Services" to="containers/services">
+Learn how to use services to communicate between containers.
 </Box>
 
 </Boxes>
