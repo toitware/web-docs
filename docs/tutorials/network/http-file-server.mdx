@@ -1,0 +1,251 @@
+# HTTP
+In this tutorial we will write an HTTP file server. The server
+takes the HTTP path and serves the corresponding file from the
+local file system. In spirit it is very similar to
+python's `python -m http.server` command.
+
+You will learn how to use the `http` package to serve HTML pages and the
+`host` package to list local files.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+This tutorial is written for the desktop and not the ESP32. You should
+still have a look at the [Hello world](../../setup/firstprogram) tutorial.
+However, instead of running the program on the ESP32, you should run it
+on your desktop, using the `-d host` option to the `jag run` command. Note,
+that `jag watch` does not support the `-d` option, so you will have to
+manually restart the program after each change.
+
+## Packages
+The HTTP functionality is not part of the core libraries and must be
+imported as a package. See the [packages](../../setup/packages)
+tutorial for details.
+
+We are using the [http](https://pkg.toit.io/package/github.com%2Ftoitlang%2Fpkg-http@v2)
+package. To install it, run the following command:
+
+``` shell
+jag pkg install github.com/toitlang/pkg-http@v2
+```
+
+For file access we will use the
+[host](https://pkg.toit.io/package/github.com%2Ftoitlang%2Fpkg-host@v1)
+package. To install it, run the following command:
+
+``` shell
+jag pkg install github.com/toitlang/pkg-host@v1
+```
+
+<Note>
+
+You can probably just write `jag pkg install http` and `jag pkg install host`,
+but the full IDs together with the versions are more explicit, and will
+make sure you get the right packages.
+
+Feel free to use a newer version of the package if one is available. You
+might need to update the code samples below if you do.
+
+</Note>
+
+## Code
+Create a new file called `file-server.toit`, and start by adding the imports
+and constants:
+
+<!-- ANALYZE CODE -->
+``` toit
+import host.file
+import host.directory
+import http
+import net
+
+CSS ::= """
+"""
+```
+
+For now we leave the CSS empty. We will add some content later.
+
+We can now add the `main` function:
+
+``` toit
+main:
+  network := net.open
+  server_socket := network.tcp_listen 0
+  port := server_socket.local_address.port
+  print "Listening on http://localhost:$port/"
+
+  clients := []
+  server := http.Server
+  task::
+    server.listen server_socket:: | request/http.RequestIncoming response_writer/http.ResponseWriter |
+      // Note that we are not sanitizing the path here.  This is a security
+      // risk, as it allows a client to access files outside of the current
+      // directory.
+      path := "./$request.path"
+      if file.is_file path:
+        serve_file request.path response_writer
+      else if file.is_directory path:
+        serve_directory request.path response_writer
+      else:
+        response_writer.write_headers http.STATUS_NOT_FOUND --message="Not Found"
+      response_writer.close
+```
+
+The `main` function starts by establishing a network connection on a random
+port. It then creates a `Server` object and starts listening for incoming
+connections.
+
+Depending on the path of the request, we either serve a file, a directory
+listing, or a 404 error.
+
+The `serve_file` function is implemented as follows:
+
+``` toit
+serve_file request_path/string writer/http.ResponseWriter:
+  path := "./$request_path"
+  // Serve the file as binary data.
+  writer.headers.add "content_type" "application/octet-stream"
+  writer.headers.add "content_length" "$(file.size path)"
+  stream := file.Stream.for_read path
+  try:
+    while chunk := stream.read:
+      writer.write chunk
+  finally:
+    stream.close
+```
+
+It adds the correct headers and then pipes the file contents to the
+response writer.
+
+The `serve_directory` function is slightly more involved since it
+needs to differentiate between files and directories:
+
+``` toit
+serve_directory request_path/string writer/http.ResponseWriter:
+  // List the directory contents.
+  path := "./$request_path"
+  stream := directory.DirectoryStream path
+  writer.headers.add "content_type" "text/html"
+  writer.write """
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Directory Listing - $request_path</title>
+      <style>
+        $CSS
+      </style>
+    </head>
+    <body>
+      <h1>Directory Listing - $request_path</h1>
+    """
+  while entry := stream.next:
+    entry_path := "$path/$entry"
+    prefix := request_path.trim --right "/"
+    entry_request_path := "$prefix/$entry"
+    if file.is_directory entry_path:
+      writer.write """
+        <div class="directory">
+          <a href="$entry_request_path">$entry/</a>
+        </div>
+      """
+    else:
+      writer.write """
+        <div class="file">
+          <a href="$entry_request_path" download>$entry</a>
+        </div>
+      """
+  stream.close
+  writer.write """
+    </body>
+    </html>
+  """
+```
+
+Most of the function consists of HTML code. The key part is the
+`while` loop. For each entry in the directory we check if it is a
+file or a directory. We then generate the appropriate HTML.
+
+## CSS
+There are many ways to render a directory listing. We have chosen to
+ask chat.openai.com for help. Our prompt was:
+
+``` text
+Create a CSS for a web page that will show a file system.
+Users can click on files to download them, or click on directories to go into them.
+Show an example HTML file that the server needs to generate to use this CSS.
+```
+
+This is what we got back:
+``` CSS
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.directory, .file {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 5px 0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.directory:hover, .file:hover {
+    background-color: #e0e0e0;
+}
+
+.directory:before {
+    content: "📁 ";
+}
+
+.file:before {
+    content: "📄 ";
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+```
+
+For reference, the AI model suggested the following HTML page
+(Note: it was missing the charset meta tag):
+
+``` HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="your-stylesheet.css">
+</head>
+<body>
+    <div class="container">
+        <div class="directory">
+            <a href="/path/to/directory1">Directory 1</a>
+        </div>
+        <div class="directory">
+            <a href="/path/to/directory2">Directory 2</a>
+        </div>
+        <div class="file">
+            <a href="/path/to/file1" download>File 1</a>
+        </div>
+        <div class="file">
+            <a href="/path/to/file2" download>File 2</a>
+        </div>
+    </div>
+</body>
+</html>
+```
