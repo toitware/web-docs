@@ -2,19 +2,19 @@
 
 This section provides a more detailed description of the concepts that are used in TPM.
 
-## Program and lock file
+## Users of packages
 
-Package programs are Toit projects that are not intended to be used by other projects. As of 2021-02-07 they are not supposed to be shared through the package management system, either.
+Code that is not intended to be used by other projects is simply called a "program". As of 2023-07-28 they are not supposed to be shared through the package management system. Toit makes it possible to compile programs into executables that can be distributed through platform typical means.
 
-When a program uses a package, that dependency is registered in the program's lock file `package.lock`. This is where the mapping from `prefix` to package is stored. Programs have concrete dependencies. All their dependent packages are resolved to a specific version, not a range of versions. These versions are written in the lock file.
+When a program uses a package, that dependency is registered in the program's yaml file `package.yaml` and lock file `package.lock`. The latter is where the mapping from `prefix` to package is stored. Programs have concrete dependencies. All their dependent packages are resolved to a specific version, not a range of versions. These versions are written in the lock file.
 
 When a developer calls `jag pkg install` or `toit.pkg install` they always get the same packages. A team of developers working on the same project will thus work with the exact same versions.
 
-Lock files must be located at the root of the project. Certain commands (like `pkg install`) automatically create a lock file if one doesn't exist yet. Be careful, as the lock-file is created in the current directory, which might not be the root directory.
+Both files must be located at the root of the project. Certain commands (like `pkg install`) automatically create these file if one doesn't exist yet. Be careful, as they are created in the current directory, which might not be the root directory. It is a good idea to initialize a new project with `jag pkg init` or `toit.pkg init` to create the files in the root directory.
 
 <Note>
 
-The `package.lock` file should be shared with other developers of the program and should therefore be checked into the version control system.
+The `package.yaml` and `package.lock` files should be shared with other developers of the program and should therefore be checked into the version control system.
 
 </Note>
 
@@ -23,7 +23,7 @@ The `package.lock` file should be shared with other developers of the program an
 A version control checkout of a package may have a `tests` subdirectory and/or an
 `examples` directory.  Although they are colocated with the package source they
 should be thought of as programs, not packages.  Since those directories
-contain programs they will normally also have `package.lock` files, which
+contain programs they will normally also have `package.yaml` and `package.lock` file, which
 specify the exact versions of other packages that tests and examples run with.
 
 The package itself is normally accessed from the examples subdirectory
@@ -37,7 +37,7 @@ A package is a folder of Toit code that is intended to be imported by programs a
 
 With the exception of local packages (see below), packages must be in their own git repository. The URL of the git repository is part of the identity of a package. A package is uniquely identified by the URL together with a version tag.
 
-If a package has itself dependencies, it declares them in a `package.yaml` file. Contrary to programs, packages should declare constraints on their dependencies, and not require specific versions (if possible). This gives the TPM version solver more flexibility when finding compatible packages.
+If a package has itself dependencies, it declares them in a `package.yaml` file. This happens automatically when the author uses a `pkg install` command.
 
 Typically, dependencies are marked with `^x.y.z` which is a shorthand for `>=x.y.z, <X,0,0` (where `x.y.z` is the current version of the dependency, and `X` is equal to `x + 1`). Such a constraint means that the package will work with the current version, or any future version that is compatible (according to semantic versioning).
 
@@ -119,10 +119,9 @@ only depend on Git packages.
 
 ### Specification - package.yaml
 
-The specification file, `package.yaml`, provides information about the package. A `package.yaml` file can contain the following entries:
-`name`: The name of the package. If not given, the package name is inferred from the `README.md` or the Git repository URL.
-If a `README.md` exists, and the title (`# title`) is a valid identifier, then that identifier is used as the package name.
-`description`: A short description of the package. If none is provided, and a `README.md` exists, then the first paragraph of the `README.md` is used.
+The specification file, `package.yaml`, provides information about the package. A `package.yaml` file may have the following entries:
+`name`: The name of the package. This entry is mandatory for packages (but not programs).
+`description`: A short description of the package. This entry is mandatory for packages (but not programs).
 `license`: The license of the package. Whenever possible, packages should use the same license keywords as provided by [SPDX](https://spdx.github.io/license-list-data/).
 Packages that are not intended to be reused should use the keyword `proprietary`. This is generally only useful for private packages.
 If no `license` entry is present, but a `LICENSE` file exists, then TPM tries to infer the license by matching the license file.
@@ -137,8 +136,6 @@ dependencies:
     url: github.com/toitware/example_pkg2
     version: ^3.1.4
 ```
-
-As can be seen, almost all entries of the specification file can be inferred by looking at the repository in which the package is located. If a package doesn't have any dependency it is thus completely OK to have an empty specification file.
 
 ## Multiple packages with different versions
 
@@ -175,16 +172,19 @@ class A:
 ```
 
 In this example the method `my_method` (inside package `my_pkg`) returns an instance of `Class_from_other_pkg`. One of the dependencies of `my_pkg` would thus be the package `other_pkg`.
+
 Let's say the current version constraint for `other_pkg` is `^1.0.0` (allowing any package that is compatible with 1.0.0). Suppose we now update the other package to `^2.0.0`. Obviously, we need to ensure that our own code still works with the newer version (since the higher major version number indicates potentially breaking changes), but we also need to update the major version of `my_pkg`!
+
 Specifically, we need to change our version number from `1.2.3` to `2.0.0`. This is, because users of `my_pkg` are now also exposed to the breaking changes of `other_pkg`. Furthermore, they could have type checks on `Class_from_other_pkg` which would need to match the same version.
 
 ## Registry
 
 A registry collects descriptions of available packages. Conceptually it's a database of packages. Crucially, it doesn't store the content/sources of packages, but only descriptions of them (see below).
 
-Most of the time, developers only work with the public [github.com/toitware/registry](https://github.com/toitware/registry) registry. However, TPM supports multiple registries. Companies are free to create their own private registries and use them instead of, or in addition to the public Toit registry.
+Most of the time, developers only work with the public [github.com/toitware/registry](https://github.com/toitware/registry) registry. However, TPM supports multiple registries. Companies are free to create their own private registries and use them instead of, or in addition to, the public Toit registry.
 
 Similar to packages, registries also exist in two variants: Git and local registries. Git registries are added to TPM with a Git-URL, and can be synchronized with `jag pkg sync` or `toit.pkg sync` (see the [quick start](../pkgguide) section for more).
+
 Local registries are just pointers to a path that contains descriptions.
 
 ## Description

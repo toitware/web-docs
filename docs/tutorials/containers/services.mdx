@@ -1,0 +1,507 @@
+# Services
+[Services](../../../language/sdk/services) are Toit's way of communicating
+between different containers. They build on top of low-level
+remote-procedure-calls (RPCs) and provide a higher-level abstraction for
+inter-container communication.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+Note that you can do this tutorial without a device. In that case,
+you need to use the `-d host` option whenever you invoke
+`jag run`. The program will then run on your computer instead of on
+a device. In this case will need to
+[spawn](https://libs.toit.io/core/process/library-summary#spawn(2%2C0%2C0%2Cpriority)
+the individual containers from your main program, instead of
+running them individually.
+
+``` toit
+code_for_container1:
+  print "running in container1"
+
+code_for_container2:
+  print "running in container2"
+
+main:
+  // Spawn a new process for each container.
+  spawn:: code_for_container1
+  spawn:: code_for_container2
+```
+
+## API
+Services make it possible to provide APIs across container boundaries. Before
+using multiple containers it is a good idea to implement the functionality
+in a single container first. Once you are happy with the API and have tested
+it, you can split the functionality into multiple containers.
+
+In this tutorial we will implement a simple notification service. Each
+client can publish a message to the service, and the service will then
+forward the message to all other clients.
+
+As discussed above, it's a good idea to implement the functionality in a
+single container first.
+
+### Code
+Create a new file `notification.toit` and watch it with Jaguar.
+
+We will need a monitor channel later, so let's start with that.
+
+
+``` toit
+import monitor
+```
+
+#### API
+Next, we specify the API we want to have using interfaces.
+
+``` toit
+/**
+A notification service that connects multiple clients to each other.
+*/
+interface NotificationService:
+  connect -> Connection
+
+/**
+A connection to a notification service.
+
+All messages sent through the connection are broadcast to all other
+  connections.
+*/
+interface Connection:
+  /** Closes the connection. */
+  close -> none
+  /** Sends a message to all other connected clients. */
+  send message/string -> none
+  /**
+  Receives a message from another client.
+  This method blocks until a message is received.
+  */
+  receive -> string
+```
+
+#### Implementation
+We might need to adjust the API later, but this is a good starting point.
+Let's implement the service in a single-container context:
+
+``` toit
+class NotificationService_ implements NotificationService:
+  clients_ := {:}
+  client_id_ := 0
+
+  connect -> Connection:
+    id := client_id_++
+    result := Connection_ id this
+    clients_[id] = result
+    return result
+
+  send_all_ message/string --sender/int -> none:
+    clients_.do: | client_id connection/Connection_ |
+      if client_id != sender:
+        connection.dispatch_ message
+
+class Connection_ implements Connection:
+  id/int
+  service_/NotificationService_
+  channel/monitor.Channel ::= monitor.Channel 10
+
+  constructor .id .service_:
+
+  close -> none:
+    service_.clients_.remove id
+
+  send message/string -> none:
+    service_.send_all_ message --sender=id
+
+  receive -> string:
+    return channel.receive
+
+  dispatch_ message/string -> none:
+    channel.send message
+```
+
+This is a very simple implementation, but allows us to test the API
+and play around with it. The `NotificationService_` class keeps track
+of all clients and forwards messages to them. The `Connection_` class
+is a thin wrapper around a
+[monitor channel](../../../language/tasks#channel). It is used to send and
+receive messages.
+
+#### Test program
+Let's implement some tasks that use this service:
+
+``` toit
+run service/NotificationService --name/string:
+  connection/Connection? := service.connect
+  send_task/Task? := null
+  try:
+    send_task = task::
+      counter := 0
+      while true:
+        connection.send "hello from $name ($(counter++))"
+        sleep (Duration --s=(1 + (random 3)))
+
+    while true:
+      message := connection.receive
+      if message == "quit":
+        break
+      print "$name received: $message"
+
+  finally:
+    // Make sure we execute all of these finally statements
+    // even if one of them yields.
+    critical_do:
+      if send_task != null:
+        send_task.cancel
+      connection.close
+
+main:
+  service := NotificationService_
+  runner1 := task:: run service --name="runner1"
+  runner2 := task:: run service --name="runner2"
+  runner3 := task:: run service --name="runner3"
+
+  sleep (Duration --s=10)
+  main_connection := service.connect
+  main_connection.send "quit"
+  main_connection.close
+```
+
+Here we create 3 tasks that connect to the service. Each sends
+a message at a random interval (1 to 3 seconds), and prints
+any messages it receives. The main tasks shuts everything
+down after 10 seconds by sending a `quit` message to the service
+(and thus to all clients).
+
+## Services
+Now that we have a working implementation, we can use services
+to make the API work across container boundaries.
+
+### Service interface
+As before we start by specifying the interfaces.
+
+Create a `service.toit` file and insert the following code.
+
+<!-- CODE FILENAME service.toit -->
+``` toit
+import system.services show ServiceSelector
+
+/**
+A notification service that connects multiple clients to each other.
+*/
+interface NotificationService:
+  static SELECTOR ::= ServiceSelector
+      --uuid="c6f4862f-c17f-4624-865b-fa19467865c5"
+      --major=0
+      --minor=1
+
+  /**
+  Connects this client to the notification service.
+
+  Returns a handle (int) to the Connection.
+  */
+  connect -> int
+  static CONNECT_INDEX ::= 0
+
+  connection_send handle/int message/string -> none
+  static CONNECTION_SEND_INDEX ::= 1
+```
+
+This is very similar to the interface we used in the single-container
+implementation. The main difference is that we have added a
+`ServiceSelector` to the interface. This is used to identify the
+service. The `SELECTOR` is used by the client to find the service,
+and the `CONNECT_INDEX` is used to find the `connect` method.
+
+We also removed the `Connection` interface. This is because we
+will not be able to pass objects across container boundaries.
+Instead we will use handles (integers) to identify connections.
+
+The service now also has the methods of the `Connection` interface.
+That is, it has the `connection_send` method. The `receive` method
+is not on the service, as we will use resource notifications for that.
+
+### Provider
+Next, we need to implement the service. Create a `provider.toit` file
+and insert the following code.
+
+<!-- CODE FILENAME provider.toit -->
+<!-- ANALYZE CODE -->
+``` toit
+import system.services show ServiceProvider ServiceResource ServiceHandler
+import .service
+
+class NotificationServiceProvider extends ServiceProvider
+    implements ServiceHandler:
+  connections_ ::= {:}
+
+  constructor:
+    super "tutorial/notification" --major=1 --minor=0
+    provides NotificationService.SELECTOR --handler=this
+
+  handle index/int arguments/any --gid/int --client/int -> any:
+    if index == NotificationService.CONNECT_INDEX:
+      connection := Connection this client
+      connections_[connection.id] = connection
+      return connection
+    if index == NotificationService.CONNECTION_SEND_INDEX:
+      sender := (this.resource client arguments[0]) as Connection
+      message := arguments[1]
+      connections_.do: | id connection/Connection |
+        if id != sender.id:
+          connection.dispatch_ message
+      return null
+    unreachable
+
+  remove_connection_ connection/Connection:
+    connections_.remove connection.id
+
+class Connection extends ServiceResource:
+  static id_counter/int := 0
+
+  provider/NotificationServiceProvider
+  id/int
+
+  constructor .provider client/int:
+    id = id_counter++
+    super provider client --notifiable
+
+  dispatch_ message/string -> none:
+    notify_ message
+
+  on_closed -> none:
+    provider.remove_connection_ this
+```
+
+There is a lot of boilerplate code here. The provider must initialize
+its super class with a name and its version number (both usually
+only used for debugging). It must also specify which selectors it
+provides. In our case the `NotificationServiceProvider` is also the
+handler of the service, which is why it implements the `ServiceHandler`
+interface and passes itself as handler for the `provides` call.
+
+The `handle` method is the main method of the provider. It is called
+when a client calls a method on the service. The `index` argument is
+used to identify the method, and the `arguments` argument is the
+object that the client passed to the method. (See the
+[serialization section](../../../language/sdk/services#serialization)
+for information on what type the object can be of.)
+
+The `Connection` is implemented as a resource. Resources have the advantage
+that the framework automatically closes them if the client disappears. They
+also have a built-in notification mechanism that allows us to send messages
+to the client without the client having to poll for them. This is,
+why the `super` call in the `Connection` constructor has the `--notifiable`
+flag.
+
+Since we often want to install the provider as a separate container, let's
+add a `main` function to that file:
+
+``` toit
+main:
+  provider := NotificationServiceProvider
+  provider.install
+```
+
+### Client
+Finally, we need to implement the client. Create a `client.toit` file
+and insert the following code.
+
+<!-- CODE FILENAME client.toit -->
+``` toit
+import monitor
+import system.services show ServiceClient ServiceResourceProxy
+import .service
+
+class NotificationServiceClient extends ServiceClient:
+  static SELECTOR ::= NotificationService.SELECTOR
+
+  constructor selector=SELECTOR:
+    assert: selector.matches SELECTOR
+    super selector
+
+  connect -> Connection:
+    handle := invoke_ NotificationService.CONNECT_INDEX null
+    proxy := Connection this handle
+    return proxy
+
+  send_ handle/int message/string -> none:
+    invoke_ NotificationService.CONNECTION_SEND_INDEX [handle, message]
+
+class Connection extends ServiceResourceProxy:
+  channel_ := monitor.Channel 10
+
+  constructor client/ServiceClient handle/int:
+    super client handle
+
+  send message/string -> none:
+    client := (client_ as NotificationServiceClient)
+    client.send_ handle_ message
+
+  receive -> string:
+    return channel_.receive
+
+  on_notified_ notification/any -> none:
+    channel_.send notification
+```
+
+The client code is typically the most human readable code as it is
+imported by users of the service (which are frequently unfamiliar
+with the service implementation).
+
+Users of the service must instantiate a `NotificationServiceClient`.
+They can then connect to it using the `connect` method. This returns
+a `Connection` object that can be used to send and receive messages
+to and from the service.
+
+The `Connection` object is implemented as a proxy. This means that
+it is a local object that forwards all method calls to the service.
+It has a handle integer that identifies it to the service.
+
+Since the provider marked the resource as `--notifiable`, the proxy
+can receive notifications from the provider. These are handled
+by the `on_notified_` method, which overrides the default
+implementation in `ServiceResourceProxy`. The `on_notified_` method
+simply forwards the notification to a channel, which is used by
+the `receive` method.
+
+### A user
+Now that we have implemented the service, we can use it. Create
+a `user.toit` file and insert the following code.
+
+<!-- CODE FILENAME user.toit -->
+<!-- ANALYZE CODE -->
+<!-- NO RENAME MAIN -->
+``` toit
+import .client
+
+main:
+  name := "client - $Time.now"
+  print "My name is $name"
+  main --name=name
+
+main --name:
+  client := NotificationServiceClient
+  client.open
+  connection := client.connect
+  send_task/Task? := null
+  try:
+    send_task = task::
+      counter := 0
+      while true:
+        connection.send "hello from $name ($(counter++))"
+        sleep (Duration --s=(1 + (random 3)))
+
+    while true:
+      message := connection.receive
+      if message == "quit":
+        break
+      print "$name received: $message"
+
+  finally:
+    // Make sure we execute all of these finally statements
+    // even if one of them yields.
+    critical_do:
+      if send_task != null:
+        send_task.cancel
+      connection.close
+      client.close
+```
+This code is very similar to the code we used in the single-container
+implementation. Instead of running in a task, this program now
+runs in a `main` function. This is because we will run it in a
+separate container. We added a second `main` function with a
+`--name` argument. We will use this for the case where we
+spawn multiple clients from the same program (see below). It is
+not essential to services.
+
+### Running the service
+If you have an actual device, you can install the service on the
+device with, for example Jaguar. Otherwise you can also run them
+locally on your desktop machine. We will show both options.
+
+#### Jaguar
+Jaguar does not support running multiple containers with the same sources.
+To work around this, we create a `user2.toit` file that just imports
+`user.toit` and calls its `main`.
+
+<!-- RESET CODE -->
+<!-- ANALYZE CODE -->
+``` toit
+import .user as user
+
+main:
+  user.main
+```
+
+We recommend you have a look at the
+[container tutorial](../../containers) for more information on how to
+install containers on a device. For our purpose the following
+command should work:
+
+``` shell
+jaguar container install provider provider.toit
+jaguar container install user1 user.toit
+jaguar container install user2 user2.toit
+```
+
+This will install the provider and two clients on the device. As
+soon as the clients are installed they start sending messages to
+each other (through the provider).
+
+#### Local
+If you do not have a device, you can run the service locally. You
+will have to spawn the individual containers from your main program.
+
+Write the following `spawn.toit` file:
+
+``` toit
+import .user as user
+import .provider
+import .client
+
+main:
+  spawn::
+    provider := NotificationServiceProvider
+    provider.install
+    sleep (Duration --s=15)
+    provider.uninstall
+
+  spawn:: user.main --name="process1"
+  spawn:: user.main --name="process2"
+  spawn:: user.main --name="process3"
+
+  sleep (Duration --s=10)
+  client := NotificationServiceClient
+  client.open
+  connection := client.connect
+  connection.send "quit"
+  connection.close
+  client.close
+```
+
+This program spawns the provider and three clients. It then waits
+for 10 seconds and sends a "quit" message to the clients. The
+clients should then stop sending messages.
+
+You can run the program with:
+
+``` shell
+jaguar run -d host spawn.toit
+```
+
+## Conclusion
+In this tutorial, we have seen how to implement a service that
+can be used by multiple clients. We have also seen how to run
+the service on a device and how to run it locally.
+
+It should be straight-forward to extend this tutorial to other
+use-cases that require coordination between different containers. For
+example, you could implement a service that uses
+[MQTT](../../mqtt), [Supabase](../../network/supabase), or
+[Telegram](../../network/telegram) to send or receive data for
+multiple containers without needing to open multiple connections.
