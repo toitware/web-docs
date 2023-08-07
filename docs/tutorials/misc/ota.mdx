@@ -1,0 +1,261 @@
+# Over the air (OTA) Updates
+In this tutorial we will learn how to update the firmware of the ESP32
+over the air (OTA). This mechanism is used by `jag firmware update` or
+by [Artemis](https://github.com/toitware/artemis-releases) whenever
+a new firmware is sent to the device.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+The OTA program will use HTTP to download the new firmware. While not
+necessary, you can have a look at the [HTTP tutorial](../../network/http)
+first.
+
+A new firmware consists of updating a Toit firmware envelope with
+the desired containers and to build a binary image out of it.
+We will provide the necessary steps to create a new firmware, but
+you might need to update your setup to have the required tools
+(`toit.compile` and `firmware`) accessible. See the
+[containers tutorial](../../containers/toit-sdk) for how to
+set up your environment, and for more information on how containers
+and envelopes work.
+
+## Packages
+We are going to download the new firmware through HTTP. As such, we will
+use the
+[http](https://pkg.toit.io/package/github.com%2Ftoitlang%2Fpkg-http@v2)
+package. To install it, run the following command:
+
+``` shell
+jag pkg install github.com/toitlang/pkg-http@v2
+```
+
+See the [packages](../../setup/packages)
+tutorial for more information on Toit's package management system.
+
+<Note>
+
+You can probably just write `jag pkg install http`, but the full ID together
+with the version is more explicit, and will make sure you get the right package.
+
+</Note>
+
+## Introduction
+The ESP32 has two partitions for storing firmware. This allows us to
+update the firmware without the risk of bricking the device. The
+firmware is always running from one of the partitions, while the other
+one is used for updating the firmware. When the update is complete, the
+device will reboot and run the new firmware. To avoid getting stuck with
+a bad firmware, the new firmware then needs to "validate" the update.
+Otherwise, the device runs the old firmware again once it reboots.
+
+In this tutorial we will thus have two programs: one that downloads the
+new firmware and writes it to the other partition, and one that is
+run with the new firmware and validates the update.
+
+## The validator
+The validator is a simple program that prints a message and then
+validates the update. Without that step the device would boot into
+the old firmware after a reboot. (Feel free to leave the validation
+out if you want to test the recovery mechanism.)
+
+Typically, a validating program would check some important properties,
+like access to a server, before validating the update. If the check
+fails, the program would eventually just reboot the device, which would
+then run the old firmware again.
+
+Create a file `validate.toit` with the following content:
+
+``` toit
+import system.firmware
+
+main:
+  print "hello after update"
+
+  if firmware.is_validation_pending:
+    if firmware.validate:
+      print "firmware update validated"
+    else:
+      print "firmware update failed to validate"
+```
+
+This program imports the `system.firmware` library, which provides
+the `is_validation_pending` and `validate` functions. The first function
+returns `true` if the device booted into a new firmware, but has not
+yet validated the update. The second function validates the update and
+returns `true` if the validation was successful.
+
+## Preparing the new firmware
+A new firmware needs to be extracted from Toit's firmware envelopes. Each
+SDK version comes with a set of envelopes the user can choose from. See
+the [release assets](https://github.com/toitlang/toit/releases) for the
+latest SDK release and its envelopes.
+
+Download the envelope you want to use. For this tutorial we will use
+`firmware-esp32.gz`. Gunzip it and extract the file:
+
+``` shell
+gunzip firmware-esp32.gz
+```
+
+You should now have a file called `firmware-esp32`.
+
+Compile the validate program to a snapshot and add it to the envelope:
+
+``` shell
+toit.compile -w validate.snapshot validate.toit
+firmware -e firmware-esp32 container install validate validate.snapshot
+```
+
+Optionally, add other containers to the envelope.
+
+Run the `firmware` tool again to extract a binary image from the envelope:
+
+``` shell
+firmware -e firmware-esp32 extract --format=binary -o ota.bin
+```
+
+### Makefile
+For reference, here is a Makefile that creates an `ota.bin` file. It uses a
+different name for the envelope file (`firmware.envelope`), but otherwise
+follows the same steps.
+
+The paths are set up for a Linux system with the Toit SDK installed in
+`/opt/toit-sdk`. You might need to adjust the paths to match your setup.
+
+
+``` makefile
+TOIT_SDK := /opt/toit-sdk
+TOIT_COMPILE := $(TOIT_SDK)/bin/toit.compile
+TOIT_FIRMWARE := $(TOIT_SDK)/tools/firmware
+VERSION := v2.0.0-alpha.90
+ENVELOPE_URL := https://github.com/toitlang/toit/releases/download/$(VERSION)/firmware-esp32.gz
+
+.PHONY: all
+all: ota.bin
+
+# Always repuild the firmware envelope since we modify it.
+.PHONY: firmware.envelope
+firmware.envelope: firmware.envelope.gz
+	gunzip -c firmware.envelope.gz > firmware.envelope
+
+firmware.envelop.gz:
+	curl -L -o $@ $(ENVELOPE_URL)
+
+%.snapshot: %.toit
+	$(TOIT_COMPILE) -w $@ $<
+
+ota.bin: validate.snapshot firmware.envelope
+	$(TOIT_FIRMWARE) -e firmware.envelope container install validate validate.snapshot
+	$(TOIT_FIRMWARE) -e firmware.envelope extract --format=binary -o ota.bin
+
+.PHONY:
+serve: ota.bin
+	python3 -m http.server
+```
+
+## Serving the new firmware
+For this tutorial the new firmware needs to be served over HTTP. You can use
+any HTTP server you want, including the one presented in
+[the HTTP file server tutorial](../../network/http-file-server), but for
+simplicity we will use Python's built-in HTTP server.
+
+``` shell
+python3 -m http.server
+```
+
+This will serve the current directory on port 8000. Make sure the `ota.bin`
+file is in the current directory.
+
+Now find the IP address of your desktop computer. You can use one
+of the following commands to find your LAN address:
+- Linux: `ip -j route get 1`
+- Macos: `route -n get default`
+- Windows: `ipconfig`
+
+## Installing the firmware
+We will now write a program that downloads the new firmware and writes
+it to the other partition. Create a file `ota.toit` with the following
+content. Don't forget to replace `<YOUR_IP>` with the IP address of your
+desktop computer, as found in the previous step.
+
+<!-- RESET CODE -->
+<!-- ANALYZE CODE -->
+``` toit
+import http
+import net
+import system.firmware
+import reader show Reader SizedReader
+
+UPDATE_URL := "http://<YOUR_IP>:8000/ota.bin"
+
+install_firmware reader/SizedReader -> none:
+  firmware_size := reader.size
+  print "installing firmware with $firmware_size bytes"
+  written_size := 0
+  writer := firmware.FirmwareWriter 0 firmware_size
+  try:
+    last := null
+    while data := reader.read:
+      written_size += data.size
+      writer.write data
+      percent := (written_size * 100) / firmware_size
+      if percent != last:
+        print "installing firmware with $firmware_size bytes ($percent%)"
+        last = percent
+    writer.commit
+    print "installed firmware; ready to update on chip reset"
+  finally:
+    writer.close
+
+main:
+  network := net.open
+  client := http.Client network
+  try:
+    response := client.get --uri=UPDATE_URL
+    install_firmware (response.body as SizedReader)
+  finally:
+    client.close
+    network.close
+  firmware.upgrade
+```
+
+Note that the program expects the server to return a `Content-Length`
+header with the size of the firmware. Given this header, the
+`body` field of the response will be a `SizedReader`, giving us access
+to the size of the firmware. The program could also obtain the
+firmware size in other ways.
+
+Flashing the firmware consists of three steps:
+1. Create a `FirmwareWriter` with the size of the firmware.
+2. Write the firmware to the writer.
+3. Commit the writer.
+
+Finally, when the firmware is flashed, we call `firmware.upgrade` to
+reboot the device and run the new firmware.
+
+### Running the program
+Typically, this program would be executed without Jaguar, as part
+of a container that was installed together with the firmware.
+
+However, as long as Jaguar is not writing to the flash at the same time,
+(un)installing containers or a new firmware, it is safe to run the
+program with Jaguar. After a reboot the new firmware will then
+be running without the Jaguar service. You would need to reflash
+the device through Jaguar to get the Jaguar service back.
+
+``` shell
+jag run ota.toit
+```
+
+## Conclusion
+We have seen how to update the firmware of the ESP32 over the air.
+
+The program we wrote is very simple, but it can be extended to
+check for updates periodically, and to fetch the new firmware from
+a public server (like a GitHub release page).
