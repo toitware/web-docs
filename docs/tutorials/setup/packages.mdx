@@ -120,7 +120,6 @@ When installing a package, Jaguar creates a .packages folder in your
 project and stores the downloaded code there. This folder should not
 be committed to your source-code management system.
 
-
 Alternatively, one can make sure that a package is installed in the right
 place, by telling Jaguar where the project root is located:
 ```shell
@@ -128,8 +127,9 @@ jag pkg install toitlang/pkg-ntp@1 --project-root=PATH_TO_PROJECT
 ```
 
 In our examples and tutorials we recommend to just open a folder with
-vscode, and then to run Jaguar commands in one of its terminals. Vscode
-automatically moves the shell to the right place, thus avoiding the need
-to specify the project root.
+Visual Studio Code, and then to run Jaguar commands in one of its terminals.
+Visual Studio Code automatically moves the shell to the right place, thus
+avoiding the need to specify the project root.
 
-The command to install all packages is simply jag pkg install. This takes the package.yaml/lock files and downloads the same packages again.
+The command to install all packages is simply jag pkg install. This takes the
+package.yaml/lock files and downloads the same packages again.
