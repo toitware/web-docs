@@ -1904,9 +1904,10 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
 
-"@toitware/code-block@^0.4.0":
-  version "0.4.0"
-  resolved "https://npm.pkg.github.com/download/@toitware/code-block/0.4.0/8c97e2750f4498d16339777eaf2ca0bcea414550ae65b737318d56ddc5c770de"
+"@toitware/code-block@^0.4.1":
+  version "0.4.1"
+  resolved "https://npm.pkg.github.com/download/@toitware/code-block/0.4.1/a9e6585f4f8dd355b6f3638964bd026dc9d43dff#a9e6585f4f8dd355b6f3638964bd026dc9d43dff"
+  integrity sha512-oeioiv5dXgyxwiDB6DbLgRfuXeifJk1Xp+LrkaxPV43VnsrIfIsrEZZYtvXnXNqMVNtY6B604Z6iehf1mn1xDA==
   dependencies:
     codemirror-theme-vars "^0.1.1"
     use-codemirror "^0.2.0"
