@@ -45,20 +45,20 @@ Start a new Toit program `http_get.toit` and watch it with Jaguar.
 ``` toit
 import http
 import net
-import certificate_roots
+import certificate-roots
 import encoding.json
 
 URL ::= "uselessfacts.jsph.pl"
 PATH ::= "/random.json?language=en"
-CERTIFICATE ::= certificate_roots.ISRG_ROOT_X1
+CERTIFICATE ::= certificate-roots.ISRG-ROOT-X1
 
 main:
   network := net.open
   client := http.Client.tls network
-      --root_certificates=[CERTIFICATE]
+      --root-certificates=[CERTIFICATE]
 
   request := client.get URL PATH
-  decoded := json.decode_stream request.body
+  decoded := json.decode-stream request.body
   print decoded["text"]
 ```
 
@@ -80,11 +80,11 @@ looking at the site's certificate in Chrome:
   alt="Certificate information in Chrome"
 />
 
-The `certificate_roots` package is maintained by Toitware and contains
+The `certificate-roots` package is maintained by Toitware and contains
 some of the most common roots. The included roots are the ones that are
 shipped with Mozilla's Firefox and should thus be safe to use.
 
-Decoding the given data as JSON is straightforward with the `decode_stream`
+Decoding the given data as JSON is straightforward with the `decode-stream`
 functionality of the `json` library (imported with `encoding.json`).
 The server is supposed to return an array of exactly one string item.
 As such the output of this program could look something like:

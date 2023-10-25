@@ -70,19 +70,19 @@ from the BotFather.
 ```toit
 import telegram show *
 
-TELEGRAM_TOKEN ::= "<YOUR TOKEN>"
+TELEGRAM-TOKEN ::= "<YOUR TOKEN>"
 
 main:
-  client := Client --token=TELEGRAM_TOKEN
-  my_username := client.get_me.username
+  client := Client --token=TELEGRAM-TOKEN
+  my-username := client.get-me.username
 
   client.listen: | update/Update? |
     if update is UpdateMessage:
       print "Got message: $update"
       message := (update as UpdateMessage).message
-      if message.chat and message.chat.type == Chat.TYPE_PRIVATE:
-        client.send_message "Of course!"
-            --chat_id=message.chat.id
+      if message.chat and message.chat.type == Chat.TYPE-PRIVATE:
+        client.send-message "Of course!"
+            --chat-id=message.chat.id
 ```
 
 For a more useful bot, you would probably want to do something more

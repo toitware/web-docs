@@ -2,5 +2,5 @@
 // Use of this source code is governed by a Zero-Clause BSD license that can
 // be found in the LICENSE_BSD0 file.
 
-main api_key:
-  print "Using the API_KEY now: $api_key"
+main api-key:
+  print "Using the API_KEY now: $api-key"

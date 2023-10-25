@@ -71,57 +71,57 @@ reading, and will randomly fluctuate (starting at 25°C).
 
 Don't forget to replace `<YOUR_USERNAME>` and `<YOUR_KEY>` with your
 username and key. If you created a feed with a different name, you
-also need to change the `ADAFRUIT_IO_FEEDNAME` constant.
+also need to change the `ADAFRUIT-IO-FEEDNAME` constant.
 
-We will leave the `CLIENT_ID` empty. This means that the broker will
+We will leave the `CLIENT-ID` empty. This means that the broker will
 generate a random client ID for us. It also resets the session with
 every connection. If you want to take full advantage of the broker,
 you should use a persistent client ID. See the [MQTT tutorial](..)
 for details.
 
 ``` toit
-import certificate_roots
+import certificate-roots
 import mqtt
 import net
 
-ADAFRUIT_IO_USERNAME ::= "<YOUR_USERNAME>"
-ADAFRUIT_IO_KEY ::= "<YOUR_KEY>"
+ADAFRUIT-IO-USERNAME ::= "<YOUR_USERNAME>"
+ADAFRUIT-IO-KEY ::= "<YOUR_KEY>"
 
-ADAFRUIT_IO_FEEDNAME ::= "temperature"
+ADAFRUIT-IO-FEEDNAME ::= "temperature"
 
-ADAFRUIT_IO_HOST ::= "io.adafruit.com"
+ADAFRUIT-IO-HOST ::= "io.adafruit.com"
 
-CLIENT_ID ::= ""
+CLIENT-ID ::= ""
 
 main:
   network := net.open
-  transport := mqtt.TcpTransport.tls network --host=ADAFRUIT_IO_HOST
-      --root_certificates=[certificate_roots.DIGICERT_GLOBAL_ROOT_CA]
+  transport := mqtt.TcpTransport.tls network --host=ADAFRUIT-IO-HOST
+      --root-certificates=[certificate-roots.DIGICERT-GLOBAL-ROOT-CA]
   /**
   // Alternatively, you can also connect without TLS, by using the
   // following transport:
-  transport := mqtt.TcpTransport network --host=ADAFRUIT_IO_HOST
-  // In that case you can remove the `certificate_roots` import.
+  transport := mqtt.TcpTransport network --host=ADAFRUIT-IO-HOST
+  // In that case you can remove the `certificate-roots` import.
   */
 
   client := mqtt.Client --transport=transport
 
   options := mqtt.SessionOptions
-    --client_id = CLIENT_ID
-    --username = ADAFRUIT_IO_USERNAME
-    --password = ADAFRUIT_IO_KEY
+    --client-id = CLIENT-ID
+    --username = ADAFRUIT-IO-USERNAME
+    --password = ADAFRUIT-IO-KEY
 
   client.start --options=options
 
   print "Connected to broker"
 
-  topic := "$ADAFRUIT_IO_USERNAME/feeds/$ADAFRUIT_IO_FEEDNAME"
+  topic := "$ADAFRUIT-IO-USERNAME/feeds/$ADAFRUIT-IO-FEEDNAME"
 
   // Simulates a temperature sensor.
   temperature := 25.0
   10.repeat:
     temperature += ((random 100) - 50) / 100.0
-    client.publish topic "$temperature".to_byte_array
+    client.publish topic "$temperature".to-byte-array
     // Don't publish too often to avoid rate limiting.
     sleep --ms=2_500
 

@@ -5,4 +5,4 @@
 import esp32
 
 main:
-  esp32.deep_sleep (Duration --s=2)
+  esp32.deep-sleep (Duration --s=2)

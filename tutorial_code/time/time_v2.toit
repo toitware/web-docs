@@ -3,5 +3,5 @@
 // be found in the LICENSE_BSD0 file.
 
 main:
-  set_timezone "CET-1CEST,M3.5.0,M10.5.0/3"  // Central European Timezone (as of 2022).
+  set-timezone "CET-1CEST,M3.5.0,M10.5.0/3"  // Central European Timezone (as of 2022).
   print Time.now.local

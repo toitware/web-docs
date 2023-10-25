@@ -115,12 +115,12 @@ Start a new Toit program `sheets.toit` and watch it with Jaguar.
 Don't forget to replace `<YOUR URL>` with the URL you received from
 Google.
 
-The program uses the `post_json` method on the HTTP `Client` class to
-send the data to the spreadsheet. The `post_json` method will
+The program uses the `post-json` method on the HTTP `Client` class to
+send the data to the spreadsheet. The `post-json` method will
 automatically encode the data as JSON and set the `Content-Type` header
 to `application/json`.
 
-The `--no-follow_redirects` option is used to prevent the HTTP client
+The `--no-follow-redirects` option is used to prevent the HTTP client
 from following any redirects. The Google Apps Script returns a
 redirect to a different site. That site is known to have a very big
 certificate that might not fit into memory. By not following the
@@ -129,26 +129,26 @@ another HTTP request.
 
 <!-- ANALYZE CODE -->
 ``` toit
-import certificate_roots
+import certificate-roots
 import http
 import net
 
 URL ::= "<YOUR URL>"
-CERTIFICATE ::= certificate_roots.GTS_ROOT_R1
+CERTIFICATE ::= certificate-roots.GTS-ROOT-R1
 
 main:
   network := net.open
   client := http.Client.tls network
-      --root_certificates=[CERTIFICATE]
+      --root-certificates=[CERTIFICATE]
 
-  response := client.post_json --no-follow_redirects --uri=URL {
-    "timestamp": Time.now.utc.to_iso8601_string,
+  response := client.post-json --no-follow-redirects --uri=URL {
+    "timestamp": Time.now.utc.to-iso8601-string,
     "temperature": 42.0,
     "humidity": 1013.25,
   }
 
-  if response.status_code != 200 and response.status_code != 302:
-    print "Request failed: $response.status_code $response.status_message"
+  if response.status-code != 200 and response.status-code != 302:
+    print "Request failed: $response.status-code $response.status-message"
 
   response.drain
 ```

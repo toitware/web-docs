@@ -10,5 +10,5 @@ main:
   pin := gpio.Pin 32
   touch := gpio.Touch pin
   touch.threshold = 800
-  esp32.enable_touchpad_wakeup
-  esp32.deep_sleep (Duration --m=3)
+  esp32.enable-touchpad-wakeup
+  esp32.deep-sleep (Duration --m=3)

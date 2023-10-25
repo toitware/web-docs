@@ -12,6 +12,6 @@ main:
   touch.threshold = 800
 
   while true:
-    is_touched := touch.get
-    print (is_touched ? "touched" : "not touched")
+    is-touched := touch.get
+    print (is-touched ? "touched" : "not touched")
     sleep --ms=500

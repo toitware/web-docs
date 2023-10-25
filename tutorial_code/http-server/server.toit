@@ -4,21 +4,21 @@ import .index
 
 main:
   network := net.open
-  server_socket := network.tcp_listen 0
-  port := server_socket.local_address.port
+  server-socket := network.tcp-listen 0
+  port := server-socket.local-address.port
   print "Listening on http://$network.address:$port/"
 
   clients := []
-  server := http.Server --max_tasks=5
-  server.listen server_socket:: | request/http.RequestIncoming response_writer/http.ResponseWriter |
+  server := http.Server --max-tasks=5
+  server.listen server-socket:: | request/http.RequestIncoming response-writer/http.ResponseWriter |
     if request.path == "/" or request.path == "/index.html":
-      response_writer.headers.add "Content-Type" "text/html"
-      response_writer.write INDEX_HTML
+      response-writer.headers.add "Content-Type" "text/html"
+      response-writer.write INDEX-HTML
     else if request.path == "/ws":
-      web_socket := server.web_socket request response_writer
-      clients.add web_socket
-      while data := web_socket.receive:
+      web-socket := server.web-socket request response-writer
+      clients.add web-socket
+      while data := web-socket.receive:
         clients.do: it.send data
-      clients.remove web_socket
+      clients.remove web-socket
     else:
-      response_writer.write_headers http.STATUS_NOT_FOUND --message="Not Found"
+      response-writer.write-headers http.STATUS-NOT-FOUND --message="Not Found"

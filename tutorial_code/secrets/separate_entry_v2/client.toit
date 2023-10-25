@@ -5,12 +5,12 @@
 import host.os
 
 main:
-  api_key := os.env.get "API_KEY"
-  if not api_key or api_key == "":
+  api-key := os.env.get "API_KEY"
+  if not api-key or api-key == "":
     print "Please set the API_KEY environment variable."
     return
 
-  main api_key
+  main api-key
 
-main api_key:
-  print "Using the API_KEY now: $api_key"
+main api-key:
+  print "Using the API_KEY now: $api-key"

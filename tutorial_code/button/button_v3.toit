@@ -5,11 +5,11 @@
 import gpio
 
 main:
-  button := gpio.Pin 27 --input --pull_down
+  button := gpio.Pin 27 --input --pull-down
   led := gpio.Pin 26 --output
 
   while true:
-    button.wait_for 1
+    button.wait-for 1
     led.set 1
-    button.wait_for 0
+    button.wait-for 0
     led.set 0

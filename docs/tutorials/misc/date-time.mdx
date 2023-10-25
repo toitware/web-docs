@@ -37,7 +37,7 @@ main:
   now := Time.now
   utc := now.utc
   print "UTC: $utc"
-  print utc.to_iso8601_string
+  print utc.to-iso8601-string
   local := now.local
   print "Local: $local"
   print "local time: $(%02d local.h):$(%02d local.m):$(%02d local.s)"
@@ -46,7 +46,7 @@ main:
 This example shows how to get the current time and print it in UTC and
 in the local time zone. Note that the `TimeInfo` class stringifies to
 the `ISO 8601` format by default. When this is the desired string format
-we recommend to use the `to_iso8601_string` method instead, as it is
+we recommend to use the `to-iso8601-string` method instead, as it is
 more explicit and guaranteed not to change in the future.
 
 The program also shows how to access the fields of a `TimeInfo`
@@ -66,7 +66,7 @@ The most important fields of the `TimeInfo` class are:
 
 ## Timezones
 The core libraries provide a way to change the Time zone.
-The [`set_timezone`](https://libs.toit.io/core/time/library-summary#set_timezone(1%2C0%2C0%2C))
+The [`set-timezone`](https://libs.toit.io/core/time/library-summary#set-timezone(1%2C0%2C0%2C))
 function takes a time zone description in Posix TZ format and applies it.
 
 On the desktop calling this function only changes the time zone of the currently
@@ -77,7 +77,7 @@ Example:
 
 ```
 main:
-  set_timezone "CET-1CEST,M3.5.0,M10.5.0/3"  // Central European Timezone (as of 2022).
+  set-timezone "CET-1CEST,M3.5.0,M10.5.0/3"  // Central European Timezone (as of 2022).
   print Time.now.local
 ```
 
@@ -132,14 +132,14 @@ the server:
 
 ```
 import ntp
-import esp32 show adjust_real_time_clock
+import esp32 show adjust-real-time-clock
 
 main:
   now := Time.now
-  if now < (Time.from_string "2022-01-10T00:00:00Z"):
+  if now < (Time.from-string "2022-01-10T00:00:00Z"):
     result ::= ntp.synchronize
     if result:
-      adjust_real_time_clock result.adjustment
+      adjust-real-time-clock result.adjustment
       print "Set time to $Time.now by adjusting $result.adjustment"
     else:
       print "ntp: synchronization request failed"

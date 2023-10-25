@@ -9,7 +9,7 @@ main:
   led := gpio.Pin 26 --output
 
   while true:
-    sensor.wait_for 0
+    sensor.wait-for 0
     led.set 1
-    sensor.wait_for 1
+    sensor.wait-for 1
     led.set 0

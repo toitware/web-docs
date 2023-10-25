@@ -30,8 +30,8 @@ For example, let's assume we have a file structure as follows:
 
 ```text
 .
-├── my_lib
-│   ├── my_lib.toit
+├── my-lib
+│   ├── my-lib.toit
 │   ├── other.toit
 │   └── sub
 │       └── sub.toit
@@ -42,11 +42,11 @@ For example, let's assume we have a file structure as follows:
 3 directories, 5 files
 ```
 
-If we are editing `my_lib.toit` then we can import `other.toit` and
+If we are editing `my-lib.toit` then we can import `other.toit` and
 `sibling.toit` as follows:
 
 ```
-// In my_lib.toit.
+// In my-lib.toit.
 import .other
 import .sub.sub
 import ..sibling.sibling
@@ -168,14 +168,14 @@ and makes them available without prefix:
 
 ```
 import math show sin cos
-import .other show top_level_fun
+import .other show top-level-fun
 ```
 
 In the example, we only import the `sin` and `cos` functions from the
 SDK's `math` library and make it available without any prefix.
 
 For the local `.other` import we restrict the import to one single
-identifier: `top_level_fun`.
+identifier: `top-level-fun`.
 
 If we want to access all identifiers of the `math` library without prefix
 we can write `import math show *`. The `show *` clause just removes the
@@ -189,30 +189,30 @@ is visible as if it was a top-level element of the exporting library.
 For example:
 
 ```
-// In file export_example.toit
+// In file export-example.toit
 
 import math show cos
 
 export cos
 
-print_hello:
+print-hello:
   print "hello"
 ```
 
 When this library is imported, the importee sees two entries: `cos` and
-`print_hello`. For example, let's say this library is imported locally
+`print-hello`. For example, let's say this library is imported locally
 as follows:
 
 ```
-import .export_example as example
+import .export-example as example
 
 main:
-  example.print_hello
+  example.print-hello
   print (example.cos 0.0)
 ```
 
-Here we import `export_example` with a prefix `example`. This gives access
-to the elements `print_hello` and `cos` on this prefix.
+Here we import `export-example` with a prefix `example`. This gives access
+to the elements `print-hello` and `cos` on this prefix.
 
 Note that the main Toit file could also just import `math` itself, but there
 are often reasons why that's not as convenient. Most commonly, `export` is

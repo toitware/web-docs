@@ -43,7 +43,7 @@ interface RandomGeneratorService:
       --minor=1
 
   generate limit/int -> int
-  static GENERATE_INDEX ::= 1
+  static GENERATE-INDEX ::= 1
 ```
 
 The `RandomGeneratorService.SELECTOR` constant will bind a
@@ -61,7 +61,7 @@ clients and implementations are decoupled and are likely to be updated
 independently of each other.
 
 The interface furthermore adds information on what the method for index
-1 (`GENERATE_INDEX`) should look like. The underlying RPC mechanism doesn't
+1 (`GENERATE-INDEX`) should look like. The underlying RPC mechanism doesn't
 take advantage of this information. Provider and client implementations,
 on the other hand, should use this information to implement the interface,
 so they are compatible.
@@ -100,7 +100,7 @@ class RandomGeneratorServiceProvider extends ServiceProvider
     provides RandomGeneratorService.SELECTOR --handler=this
 
   handle index/int arguments/any --gid/int --client/int -> any:
-    if index == RandomGeneratorService.GENERATE_INDEX:
+    if index == RandomGeneratorService.GENERATE-INDEX:
       return generate arguments
     unreachable
 
@@ -190,14 +190,14 @@ forcefully stopped. In [Artemis](../../../getstarted/fleet) containers
 that run providers should be marked as `background` so they don't
 prevent the system to go to deep sleep.
 
-For each client that connects to a provider, the `on_opened` method
-is called. Similarly, when a client disconnects, the `on_closed`
+For each client that connects to a provider, the `on-opened` method
+is called. Similarly, when a client disconnects, the `on-closed`
 method is called. These methods can be used to keep track of the
 number of connected clients, and to perform setup actions or cleanups.
 
 For example, a driver that requires an external peripheral to be
-powered on could use the `on_opened` method to power on the peripheral,
-and the `on_closed` method to power it off again.
+powered on could use the `on-opened` method to power on the peripheral,
+and the `on-closed` method to power it off again.
 
 ## Service clients
 A service client is an object that provides the service functionality
@@ -224,7 +224,7 @@ class RandomGeneratorServiceClient extends ServiceClient:
     super selector
 
   generate limit/int -> int:
-    return invoke_ RandomGeneratorService.GENERATE_INDEX limit
+    return invoke_ RandomGeneratorService.GENERATE-INDEX limit
 ```
 
 The `RandomGeneratorServiceClient` class extends the `ServiceClient`
@@ -263,21 +263,21 @@ Often, the service can also be in a lazy-initialized constant:
 <!-- ANALYZE CODE -->
 ```
 service_/RandomGeneratorServiceClient? ::= (RandomGeneratorServiceClient).open
-    --if_absent=: null
+    --if-absent=: null
 ```
 
-The `--if_absent` block is invoked when we cannot find the requested service.
+The `--if-absent` block is invoked when we cannot find the requested service.
 You can provide a timeout if you're willing to
 wait a bit for the service to appear:
 
 <!-- RESET CODE -->
 <!-- ANALYZE CODE -->
 <!-- HIDDEN CODE class RandomGeneratorServiceClient: -->
-<!-- HIDDEN CODE   open --timeout [--if_absent]: return null -->
+<!-- HIDDEN CODE   open --timeout [--if-absent]: return null -->
 ```
 service_/RandomGeneratorServiceClient? ::= (RandomGeneratorServiceClient).open
     --timeout=(Duration --s=2)
-    --if_absent=: null
+    --if-absent=: null
 ```
 
 ## Serialization
@@ -318,11 +318,11 @@ Handles are simply integers, and the service is thus changed as follows:
 ```
 interface RandomGeneratorService:
   ...
-  create_die -> int
-  static CREATE_DIE_INDEX /int ::= 2
+  create-die -> int
+  static CREATE-DIE-INDEX /int ::= 2
 
-  roll_die handle/int -> int
-  static ROLL_DIE_INDEX /int ::= 3
+  roll-die handle/int -> int
+  static ROLL-DIE-INDEX /int ::= 3
 ```
 <!-- HIDDEN CODE   static SELECTOR ::= ServiceSelector -->
 <!-- HIDDEN CODE     --uuid="dd9e5fd1-a5e9-464e-b2ef-92bf15ea02ca" -->
@@ -350,11 +350,11 @@ class DieResource extends ServiceResource:
   roll -> int:
     return 1 + (random sides_)
 
-  on_closed -> none:
+  on-closed -> none:
     // Handle cleanup.
 ```
 
-The `on_closed` method is automatically called when the client closes
+The `on-closed` method is automatically called when the client closes
 the resource or if the client happens to go away. Instances of
 `ServiceResource` are automatically serializable, so it is possible to
 return them from the `handle` method in the service provider and
@@ -368,22 +368,22 @@ Let's add the new methods to the `RandomGeneratorServiceProvider`:
 ```
   handle index/int arguments/any --gid/int --client/int -> any:
     ...
-    if index == RandomGeneratorService.CREATE_DIE_INDEX:
+    if index == RandomGeneratorService.CREATE-DIE-INDEX:
       // The 'arguments' parameter is equal to the number of sides.
       return DieResource arguments this client
 
-    if index == RandomGeneratorService.ROLL_DIE_INDEX:
+    if index == RandomGeneratorService.ROLL-DIE-INDEX:
       // The 'arguments' parameter is set to the handle of the resource.
       die := (resource client arguments) as DieResource
       return die.roll
 ```
 <!-- HIDDEN CODE     return null -->
 
-Note that we implement the `create_die` and `roll_die` functionality
+Note that we implement the `create-die` and `roll-die` functionality
 directly in the `handle` method. That's not necessary, but often
 convenient if it's as simple as in this case.
 
-The provider also handles the `ROLL_DIE_INDEX` method by forwarding it to
+The provider also handles the `ROLL-DIE-INDEX` method by forwarding it to
 the corresponding `DieResource` instance.
 
 ### Resources on the client
@@ -409,7 +409,7 @@ class DieProxy extends ServiceResourceProxy:
     super client handle
 
   roll -> int:
-    return (client_ as RandomGeneratorServiceClient).roll_die_ handle_
+    return (client_ as RandomGeneratorServiceClient).roll-die_ handle_
 ```
 
 The proxy takes the corresponding client and handle as arguments. As can be
@@ -417,18 +417,18 @@ seen, a handle is serialized as an `int`, but for the most part this can
 be ignored.
 
 The proxy simply forwards its 'roll' method to the client which needs to
-add `create_die` and `roll_die_` methods:
+add `create-die` and `roll-die_` methods:
 
 ```
 class RandomGeneratorServiceClient extends ServiceClient:
   ...
-  create_die sides/int -> DieProxy:
-    handle := invoke_ RandomGeneratorService.CREATE_DIE_INDEX sides
+  create-die sides/int -> DieProxy:
+    handle := invoke_ RandomGeneratorService.CREATE-DIE-INDEX sides
     proxy := DieProxy this handle
     return proxy
 
-  roll_die_ handle/int -> int:
-    return invoke_ RandomGeneratorService.ROLL_DIE_INDEX handle
+  roll-die_ handle/int -> int:
+    return invoke_ RandomGeneratorService.ROLL-DIE-INDEX handle
 ```
 <!-- HIDDEN CODE   constructor: super RandomGeneratorService.SELECTOR -->
 
@@ -441,7 +441,7 @@ our client and call methods on them:
 <!-- HIDDEN CODE   install: -->
 <!-- HIDDEN CODE class RandomGeneratorServiceClient: -->
 <!-- HIDDEN CODE   open: -->
-<!-- HIDDEN CODE   create_die sides: return null -->
+<!-- HIDDEN CODE   create-die sides: return null -->
 <!-- ANALYZE CODE -->
 ```
 main:
@@ -451,7 +451,7 @@ main:
 
   client := RandomGeneratorServiceClient
   client.open
-  die := client.create_die 6
+  die := client.create-die 6
   10.repeat:
     print "die roll = $(die.roll)"
   die.close
@@ -474,7 +474,7 @@ class DieResource extends ServiceResource:
     super provider client --notifiable
   ...
 ```
-<!-- HIDDEN CODE   on_closed: -->
+<!-- HIDDEN CODE   on-closed: -->
 <!-- HIDDEN CODE   sides_ := ? -->
 
 Even though you probably wouldn't expect dice to ping you periodically, we can
@@ -488,26 +488,26 @@ class DieResource extends ServiceResource:
 
   constructor .sides_ provider/ServiceProvider client/int:
     super provider client --notifiable
-    task_ = task:: notify_periodically
+    task_ = task:: notify-periodically
 
   roll -> int:
     return random sides_
 
-  notify_periodically -> none:
-    while not Task.current.is_canceled:
+  notify-periodically -> none:
+    while not Task.current.is-canceled:
       sleep --ms=(random 500) + 500
       notify_ 87
 
-  on_closed -> none:
+  on-closed -> none:
     task_.cancel
 ```
 
-The notifications will show up on the proxy side through calls to `on_notified_`:
+The notifications will show up on the proxy side through calls to `on-notified_`:
 <!-- HIDDEN CODE class ServiceResourceProxy: -->
 ```
 class DieProxy extends ServiceResourceProxy:
   ...
-  on_notified_ notification/any -> none:
+  on-notified_ notification/any -> none:
     print "got notified: $notification"
   ...
 ```
@@ -517,7 +517,7 @@ You'll need to wait a bit in `main` for the notifications to start showing up:
 ```
 main:
   ...
-  die := client.create_die 6
+  die := client.create-die 6
   10.repeat:
     print "die roll = $(die.roll)"
   sleep (Duration --s=10)
@@ -538,11 +538,11 @@ that forward reads and writes to the network service:
 <!-- SKIP CODE -->
 ```
 class SocketResourceProxy_ extends ServiceResourceProxy:
-  static WRITE_DATA_SIZE_MAX_ /int ::= 2048
+  static WRITE-DATA-SIZE-MAX_ /int ::= 2048
   ...
   write data from=0 to=data.size -> int:
-    to = min to (from + WRITE_DATA_SIZE_MAX_)
-    return (client_ as NetworkServiceClient).socket_write handle_ data[from..to]
+    to = min to (from + WRITE-DATA-SIZE-MAX_)
+    return (client_ as NetworkServiceClient).socket-write handle_ data[from..to]
   ...
 ```
 

@@ -67,13 +67,13 @@ main:
   sensor := gpio.Pin 27 --input
 
   while true:
-    sensor.wait_for 1
+    sensor.wait-for 1
     led.set 1
     sleep --ms=1000
     led.set 0
 ```
 
-This program uses the `wait_for` method on the `Pin` class to wait for
+This program uses the `wait-for` method on the `Pin` class to wait for
 the sensor pin to reach the 1 state. If your LED triggers too easily or
 not often enough, change the threshold by rotating the blue potentiometer.
 
@@ -111,7 +111,7 @@ OUT/DO pin and the ESP32.
 - Using a noise senso, let the LED blink when the noise sensor detects
   a clap. Turn the blinking off again with the next clap. This exercise
   requires the blinking code to run in parallel with the noise-detection
-  (`sensor.wait_for`) code. You probably want to use Toit's
+  (`sensor.wait-for`) code. You probably want to use Toit's
   [tasks](../..language/tasks) for this.
 - Take a light sensor and configure the sensitivity so that the sensor
   detects when a cupboard is opened. If you have a battery pack, put the

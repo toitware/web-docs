@@ -49,41 +49,41 @@ a {
 
 main:
   network := net.open
-  server_socket := network.tcp_listen 0
-  port := server_socket.local_address.port
+  server-socket := network.tcp-listen 0
+  port := server-socket.local-address.port
   print "Listening on http://localhost:$port/"
 
   clients := []
   server := http.Server
   task::
-    server.listen server_socket:: | request/http.RequestIncoming response_writer/http.ResponseWriter |
+    server.listen server-socket:: | request/http.RequestIncoming response-writer/http.ResponseWriter |
       // Note that we are not sanitizing the path here.  This is a security
       // risk, as it allows a client to access files outside of the current
       // directory.
       path := "./$request.path"
-      if file.is_file path:
-        serve_file request.path response_writer
-      else if file.is_directory path:
-        serve_directory request.path response_writer
+      if file.is-file path:
+        serve-file request.path response-writer
+      else if file.is-directory path:
+        serve-directory request.path response-writer
       else:
-        response_writer.write_headers http.STATUS_NOT_FOUND --message="Not Found"
-      response_writer.close
+        response-writer.write-headers http.STATUS-NOT-FOUND --message="Not Found"
+      response-writer.close
 
-serve_file request_path/string writer/http.ResponseWriter:
-  path := "./$request_path"
+serve-file request-path/string writer/http.ResponseWriter:
+  path := "./$request-path"
   // Serve the file as binary data.
   writer.headers.add "Content-Type" "application/octet-stream"
   writer.headers.add "Content-Length" "$(file.size path)"
-  stream := file.Stream.for_read path
+  stream := file.Stream.for-read path
   try:
     while chunk := stream.read:
       writer.write chunk
   finally:
     stream.close
 
-serve_directory request_path/string writer/http.ResponseWriter:
+serve-directory request-path/string writer/http.ResponseWriter:
   // List the directory contents.
-  path := "./$request_path"
+  path := "./$request-path"
   stream := directory.DirectoryStream path
   writer.headers.add "Content-Type" "text/html"
   writer.write """
@@ -91,28 +91,28 @@ serve_directory request_path/string writer/http.ResponseWriter:
     <html>
     <head>
       <meta charset="UTF-8">
-      <title>Directory Listing - $request_path</title>
+      <title>Directory Listing - $request-path</title>
       <style>
         $CSS
       </style>
     </head>
     <body>
-      <h1>Directory Listing - $request_path</h1>
+      <h1>Directory Listing - $request-path</h1>
     """
   while entry := stream.next:
-    entry_path := "$path/$entry"
-    prefix := request_path.trim --right "/"
-    entry_request_path := "$prefix/$entry"
-    if file.is_directory entry_path:
+    entry-path := "$path/$entry"
+    prefix := request-path.trim --right "/"
+    entry-request-path := "$prefix/$entry"
+    if file.is-directory entry-path:
       writer.write """
         <div class="directory">
-          <a href="$entry_request_path">$entry/</a>
+          <a href="$entry-request-path">$entry/</a>
         </div>
       """
     else:
       writer.write """
         <div class="file">
-          <a href="$entry_request_path" download>$entry</a>
+          <a href="$entry-request-path" download>$entry</a>
         </div>
       """
   stream.close

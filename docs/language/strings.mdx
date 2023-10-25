@@ -157,15 +157,15 @@ strings:
   // The following examples use the #[...] syntax for
   // byte array literals.
   // Create a single-character string containing an 'A':
-  s1/string := #[65].to_string
+  s1/string := #[65].to-string
   // Create a string with the word "Hello":
-  s2/string := #[72, 101, 108, 108, 111].to_string
+  s2/string := #[72, 101, 108, 108, 111].to-string
   // Null characters are allowed in strings:
-  s3/string := #[0].to_string
+  s3/string := #[0].to-string
   // Bytes above 127 are part of multi-byte UTF-8 sequences
   // and cannot stand alone:
-  s4/string := #[128].to_string // Error: Not legal UTF-8!
-  s5/string := #[0xc0, 0xbb].to_string // Error: Overlong encoding!
+  s4/string := #[128].to-string // Error: Not legal UTF-8!
+  s5/string := #[0xc0, 0xbb].to-string // Error: Overlong encoding!
 ```
 
 [Surrogates](https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Surrogates)
@@ -185,8 +185,8 @@ The raw UTF-8 bytes in a Toit string can be accessed with
 
 Alternatively, the string's UTF-8 bytes can be written to a
 byte array with the
-[to_byte_array](<https://libs.toit.io/core/class-string#to_byte_array(0%2C0%2C0%2C)>)
-or [write_to_byte_array](<https://libs.toit.io/core/class-string#write_to_byte_array(1%2C0%2C0%2C)>)
+[to-byte-array](<https://libs.toit.io/core/class-string#to-byte-array(0%2C0%2C0%2C)>)
+or [write-to-byte-array](<https://libs.toit.io/core/class-string#write-to-byte-array(1%2C0%2C0%2C)>)
 methods.
 
 ## Slices of strings
@@ -198,9 +198,9 @@ x is inclusive and y is exclusive:
 ```
   hello ::= "Hello"
   print hello[2..4] // Prints "ll", characters 2 to 4 of "Hello".
-  two_euro := "€2"
-  print two_euro[0..2] // Error, this 2-byte slice cuts the '€' character!
-  print two_euro[0..3] // Prints "€", these 3 bytes make up the '€' character.
+  two-euro := "€2"
+  print two-euro[0..2] // Error, this 2-byte slice cuts the '€' character!
+  print two-euro[0..3] // Prints "€", these 3 bytes make up the '€' character.
 ```
 
 The first index can be omitted, in which case the slice
@@ -209,9 +209,9 @@ second index is omitted, the slice ends at the end of the
 source string.
 
 ```
-  hello_world := "Hello, World!"
-  print hello_world[..5] // >> Hello
-  print hello_world[7..] // >> World!
+  hello-world := "Hello, World!"
+  print hello-world[..5] // >> Hello
+  print hello-world[7..] // >> World!
 ```
 
 ## Multi-line strings
@@ -221,14 +221,14 @@ with `\n`, but it is often clearer to use the triple-quotes
 syntax, `"""..."""`.
 
 ```
-help_message := """
+help-message := """
   My CLI command
       -h help
       -d device name
       -p prefix
   """
 main:
-  print help_message
+  print help-message
 ```
 
 The multi-line strings trim indentation-based white-space

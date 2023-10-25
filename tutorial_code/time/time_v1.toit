@@ -6,7 +6,7 @@ main:
   now := Time.now
   utc := now.utc
   print "UTC: $utc"
-  print utc.to_iso8601_string
+  print utc.to-iso8601-string
   local := now.local
   print "Local: $local"
   print "local time: $(%02d local.h):$(%02d local.m):$(%02d local.s)"

@@ -167,15 +167,15 @@ Let's have a look at an example of `my_pkg`, a package with version number `1.2.
 import other_pkg
 
 class A:
-   my_method -> other_pkg.Class_from_other_pkg:
+   my-method -> other-pkg.Class-from-other-pkg:
     return ...
 ```
 
-In this example the method `my_method` (inside package `my_pkg`) returns an instance of `Class_from_other_pkg`. One of the dependencies of `my_pkg` would thus be the package `other_pkg`.
+In this example the method `my-method` (inside package `my-pkg`) returns an instance of `Class-from-other-pkg`. One of the dependencies of `my-pkg` would thus be the package `other-pkg`.
 
-Let's say the current version constraint for `other_pkg` is `^1.0.0` (allowing any package that is compatible with 1.0.0). Suppose we now update the other package to `^2.0.0`. Obviously, we need to ensure that our own code still works with the newer version (since the higher major version number indicates potentially breaking changes), but we also need to update the major version of `my_pkg`!
+Let's say the current version constraint for `other-pkg` is `^1.0.0` (allowing any package that is compatible with 1.0.0). Suppose we now update the other package to `^2.0.0`. Obviously, we need to ensure that our own code still works with the newer version (since the higher major version number indicates potentially breaking changes), but we also need to update the major version of `my-pkg`!
 
-Specifically, we need to change our version number from `1.2.3` to `2.0.0`. This is, because users of `my_pkg` are now also exposed to the breaking changes of `other_pkg`. Furthermore, they could have type checks on `Class_from_other_pkg` which would need to match the same version.
+Specifically, we need to change our version number from `1.2.3` to `2.0.0`. This is, because users of `my-pkg` are now also exposed to the breaking changes of `other-pkg`. Furthermore, they could have type checks on `Class-from-other-pkg` which would need to match the same version.
 
 ## Registry
 

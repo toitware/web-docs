@@ -18,7 +18,7 @@ is in insertion order. Overwriting the value associated with a key does not
 change the order of the key-value pair.
 
 The `Set` and `Map` implementations use hashing to do their operations in
-constant speed. As a consequence their keys must have a `hash_code` member.
+constant speed. As a consequence their keys must have a `hash-code` member.
 
 There are two concrete implementations of `Set` and `Map`:
 `Set`/`Map` use the overwritable `==` operator to determine whether two keys
@@ -63,7 +63,7 @@ some similarities to collections.
 
 ```
 list := []
-byte_array := #[]
+byte-array := #[]
 set := {}
 map := {:}
 ```
@@ -74,7 +74,7 @@ These are the preferred short cuts for:
 
 ```
 list := List
-byte_array := ByteArray 0
+byte-array := ByteArray 0
 set := Set
 map := Map
 ```
@@ -82,10 +82,10 @@ map := Map
 Literals may also contain values:
 
 ```
-list_with_values := [1, 2, 3]
-byte_array_with_values := #[1, 2, 3]
-set_with_values := {1, 2}
-map_with_values := {
+list-with-values := [1, 2, 3]
+byte-array-with-values := #[1, 2, 3]
+set-with-values := {1, 2}
+map-with-values := {
   "key": 499,
   "key2": 42,
 }
@@ -94,15 +94,15 @@ map_with_values := {
 <Note>
 
 Both `Set` and `Map` use hash values to place elements into the underlying data structure.
-This means that all keys must implement the `hash_code` method. The performance of sets and
+This means that all keys must implement the `hash-code` method. The performance of sets and
 maps is best if two different keys have a different hash code (with high probability).
 
 </Note>
 
 <Note type="warning">
 
-Sets and Maps only use the `hash_code` function if their size is big enough. Objects that
-don't implement `hash_code` might thus not yield errors until the collections grow big enough.
+Sets and Maps only use the `hash-code` function if their size is big enough. Objects that
+don't implement `hash-code` might thus not yield errors until the collections grow big enough.
 where the chance of two different objects having the same hash code should be
 low.
 
@@ -129,11 +129,11 @@ The index operator syntax is understood by the string interpolation syntax, so y
 
 Updating or adding to a map is done with the `[]=` operator:
 
-<!-- HIDDEN CODE title_map := {:} -->
+<!-- HIDDEN CODE title-map := {:} -->
 
 ```
 graduate name/string:
-  title_map[name] = "PhD"
+  title-map[name] = "PhD"
 ```
 
 The index operator, `[]` requires the key to be present in the map, otherwise
@@ -147,15 +147,15 @@ class Scoring:
   // is a set of those that have scored goals for the team.
   scorers /Map ::= {:}
 
-  register_goal team/string new_scorer/string -> none:
-    goal_scorers /Set? := scorers.get team
-    if goal_scorers == null:
+  register-goal team/string new-scorer/string -> none:
+    goal-scorers /Set? := scorers.get team
+    if goal-scorers == null:
       // First time the team scores, there is no set of
       // goal scorers in the map.  We insert an empty set
       // into which we can insert the new goal scorer.
-      goal_scorers = {}  // Empty set.
-      scorers[team] = goal_scorers
-    goal_scorers.add new_scorer
+      goal-scorers = {}  // Empty set.
+      scorers[team] = goal-scorers
+    goal-scorers.add new-scorer
 ```
 
 Often there are more succinct ways to achieve the same with variations of the
@@ -166,11 +166,11 @@ Often there are more succinct ways to achieve the same with variations of the
 <!-- HIDDEN CODE   scorers / Map ::= {:} -->
 
 ```
-  register_goal team/string new_scorer/string -> none:
+  register-goal team/string new-scorer/string -> none:
     // Get the set of goal-scorers for this team,
     // initializing with the empty set if necessary.
-    goal_scorers /Set := scorers.get team --init=: {}
-    goal_scorers.add new_scorer
+    goal-scorers /Set := scorers.get team --init=: {}
+    goal-scorers.add new-scorer
 ```
 
 The full set of map methods is available in the [class
@@ -187,7 +187,7 @@ iterating over the collection.
 Instead of:
 
 ```
-report_odd collection/List:
+report-odd collection/List:
   found := false
   collection.do:
     if it % 2 == 1:
@@ -238,9 +238,9 @@ elements of the collection are integers, but the result of the `reduce`
 operation has a different type, `float`.
 
 ```
-sum_of_roots collection/Collection -> float:
-  return collection.reduce --initial=0.0: | sum_so_far integer |
-    sum_so_far + integer.sqrt
+sum-of-roots collection/Collection -> float:
+  return collection.reduce --initial=0.0: | sum-so-far integer |
+    sum-so-far + integer.sqrt
 ```
 
 The version of `reduce` with an initial value is called `fold` in functional
@@ -254,8 +254,8 @@ csv list/List -> string:
   Q ::= "\""  // A double quote.
   if (list.any: it.contains Q):
     throw "Can't handle strings containing quotes"
-  quoted_list := list.map: "$Q$it$Q"
-  return quoted_list.join ","
+  quoted-list := list.map: "$Q$it$Q"
+  return quoted-list.join ","
 ```
 
 A more advanced version would handle strings containing quotes:
@@ -267,15 +267,15 @@ A more advanced version would handle strings containing quotes:
 // escaping quotes.
 csv list/List -> string:
   Q ::= "\""  // A double quote.
-  escaped_list := list.map:
+  escaped-list := list.map:
     str := "$it"
     if str.contains Q:
       // In CSV quotes are escaped as two quotes.
       str.replace --all Q "$Q$Q"
     else:
       str
-  quoted_list := escaped_list.map: "$Q$it$Q"
-  return quoted_list.join ","
+  quoted-list := escaped-list.map: "$Q$it$Q"
+  return quoted-list.join ","
 ```
 
 That example also illustrates that the value of the block (returned to the
@@ -315,7 +315,7 @@ If the list should be sorted in place, avoiding the allocation of a fresh list
 ```
 main:
   list := [3, 2, 5, 1]
-  list.sort --in_place
+  list.sort --in-place
   print list.first
 ```
 
@@ -329,9 +329,9 @@ It is also possible to sort with a custom comparison by passing a block to the `
 
 ```
 main:
-  my_list := [1, 2, 5, 9]
-  my_list.sort --in_place: | a b | b - a
-  print my_list[0]
+  my-list := [1, 2, 5, 9]
+  my-list.sort --in-place: | a b | b - a
+  print my-list[0]
 ```
 
 The block takes two arguments, which are here called `a` and `b` and should

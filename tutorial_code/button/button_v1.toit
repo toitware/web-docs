@@ -5,7 +5,7 @@
 import gpio
 
 main:
-  button := gpio.Pin 27 --input --pull_down
+  button := gpio.Pin 27 --input --pull-down
   led := gpio.Pin 26 --output
 
   while true:

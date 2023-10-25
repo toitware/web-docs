@@ -14,11 +14,11 @@ class NotificationServiceProvider extends ServiceProvider
     provides NotificationService.SELECTOR --handler=this
 
   handle index/int arguments/any --gid/int --client/int -> any:
-    if index == NotificationService.CONNECT_INDEX:
+    if index == NotificationService.CONNECT-INDEX:
       connection := Connection this client
       connections_[connection.id] = connection
       return connection
-    if index == NotificationService.CONNECTION_SEND_INDEX:
+    if index == NotificationService.CONNECTION-SEND-INDEX:
       sender := (this.resource client arguments[0]) as Connection
       message := arguments[1]
       connections_.do: | id connection/Connection |
@@ -27,24 +27,24 @@ class NotificationServiceProvider extends ServiceProvider
       return null
     unreachable
 
-  remove_connection_ connection/Connection:
+  remove-connection_ connection/Connection:
     connections_.remove connection.id
 
 class Connection extends ServiceResource:
-  static id_counter/int := 0
+  static id-counter/int := 0
 
   provider/NotificationServiceProvider
   id/int
 
   constructor .provider client/int:
-    id = id_counter++
+    id = id-counter++
     super provider client --notifiable
 
   dispatch_ message/string -> none:
     notify_ message
 
-  on_closed -> none:
-    provider.remove_connection_ this
+  on-closed -> none:
+    provider.remove-connection_ this
 
 main:
   provider := NotificationServiceProvider

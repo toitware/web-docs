@@ -6,7 +6,7 @@ import mqtt
 import net
 import encoding.json
 
-CLIENT_ID ::= "toit-tutorial-ID-2023-07-06"
+CLIENT-ID ::= "toit-tutorial-ID-2023-07-06"
 HOST ::= "test.mosquitto.org"
 TOPIC ::= "toit-mqtt/tutorial"
 
@@ -19,5 +19,5 @@ main:
       print "Received value on '$topic': $decoded"
   }
   client := mqtt.Client --transport=transport --routes=routes
-  client.start --client_id=CLIENT_ID
+  client.start --client-id=CLIENT-ID
   // Client is now connected and subscribed to the given routes.

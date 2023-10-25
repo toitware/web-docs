@@ -29,17 +29,17 @@ interface Connection:
 
 class NotificationService_ implements NotificationService:
   clients_ := {:}
-  client_id_ := 0
+  client-id_ := 0
 
   connect -> Connection:
-    id := client_id_++
+    id := client-id_++
     result := Connection_ id this
     clients_[id] = result
     return result
 
-  send_all_ message/string --sender/int -> none:
-    clients_.do: | client_id connection/Connection_ |
-      if client_id != sender:
+  send-all_ message/string --sender/int -> none:
+    clients_.do: | client-id connection/Connection_ |
+      if client-id != sender:
         connection.dispatch_ message
 
 class Connection_ implements Connection:
@@ -53,7 +53,7 @@ class Connection_ implements Connection:
     service_.clients_.remove id
 
   send message/string -> none:
-    service_.send_all_ message --sender=id
+    service_.send-all_ message --sender=id
 
   receive -> string:
     return channel.receive
@@ -63,9 +63,9 @@ class Connection_ implements Connection:
 
 run service/NotificationService --name/string:
   connection/Connection? := service.connect
-  send_task/Task? := null
+  send-task/Task? := null
   try:
-    send_task = task::
+    send-task = task::
       counter := 0
       while true:
         connection.send "hello from $name ($(counter++))"
@@ -80,9 +80,9 @@ run service/NotificationService --name/string:
   finally:
     // Make sure we execute all of these finally statements
     // even if one of them yields.
-    critical_do:
-      if send_task != null:
-        send_task.cancel
+    critical-do:
+      if send-task != null:
+        send-task.cancel
       connection.close
 
 main:
@@ -92,6 +92,6 @@ main:
   runner3 := task:: run service --name="runner3"
 
   sleep (Duration --s=10)
-  main_connection := service.connect
-  main_connection.send "quit"
-  main_connection.close
+  main-connection := service.connect
+  main-connection.send "quit"
+  main-connection.close

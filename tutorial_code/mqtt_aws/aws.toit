@@ -2,7 +2,7 @@
 // Use of this source code is governed by a Zero-Clause BSD license that can
 // be found in the LICENSE_BSD0 file.
 
-import certificate_roots
+import certificate-roots
 import net
 import net.x509
 import mqtt
@@ -11,38 +11,36 @@ import tls
 
 HOST ::= "<YOUR AMAZON HOST>"
 PORT ::= 8883
-ROOT_CERTIFICATE ::= certificate_roots.AMAZON_ROOT_CA_1
+ROOT-CERTIFICATE ::= certificate-roots.AMAZON-ROOT-CA-1
 
-CLIENT_ID ::= "sdk-nodejs-toit"
+CLIENT-ID ::= "sdk-nodejs-toit"
 TOPIC ::= "sdk/test/js"
 
-CLIENT_CERTIFICATE_DER ::= """
+CLIENT-CERTIFICATE-DER ::= """
 -----BEGIN CERTIFICATE-----
 <YOUR CERTIFICATE>
 -----END CERTIFICATE-----
 """
 
-CLIENT_KEY_DER ::= """
+CLIENT-KEY-DER ::= """
 -----BEGIN RSA PRIVATE KEY-----
 <YOUR KEY>
 -----END RSA PRIVATE KEY-----
 """
 
-create_aws_transport network/net.Interface -> mqtt.Transport:
-  parsed := x509.Certificate.parse CLIENT_CERTIFICATE_DER
-  client_certificate := tls.Certificate parsed CLIENT_KEY_DER
-  return mqtt.TcpTransport.tls network
+create-aws-transport -> mqtt.Transport:
+  parsed := x509.Certificate.parse CLIENT-CERTIFICATE-DER
+  client-certificate := tls.Certificate parsed CLIENT-KEY-DER
+  return mqtt.TcpTransport.tls
       --host=HOST
       --port=PORT
-      --root_certificates=[ROOT_CERTIFICATE]
-      --certificate=client_certificate
+      --root-certificates=[ROOT-CERTIFICATE]
+      --certificate=client-certificate
 
 main:
-  network := net.open
-  transport := create_aws_transport network
+  transport := create-aws-transport
   client := mqtt.Client --transport=transport
-  options := mqtt.SessionOptions --client_id=CLIENT_ID
+  options := mqtt.SessionOptions --client-id=CLIENT-ID
   client.start --options=options
-  client.publish TOPIC "hello".to_byte_array
+  client.publish TOPIC "hello".to-byte-array
   client.close
-  network.close

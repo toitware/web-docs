@@ -22,7 +22,7 @@ imported into every file. It contains common classes, like
 
 - **Globals**: a variable declared outside the scope of a function or class. Globals are initialized at first access, and remain alive until the end of the program.
 
-- **Constants** are a special case of globals, defined with a `::=` assignment. By convention they have an ALL_CAPS_NAME (see [Toit globals and constants](../syntax#toit-globals-and-constants)).
+- **Constants** are a special case of globals, defined with a `::=` assignment. By convention they have an ALL-CAPS-NAME (see [Toit globals and constants](../syntax#toit-globals-and-constants)).
 
 Within a class, the following items are available: constructors, statics, factories, fields, methods.
 
@@ -30,7 +30,7 @@ Within a class, the following items are available: constructors, statics, factor
   See [more details here](../objects-constructors-inheritance-interfaces#constructors).
 - **Named constructors** allow more than one constructor with the same signature, and often make code more readable.
   See [more details here](../objects-constructors-inheritance-interfaces#named-constructors).
-  For example, in the [string class](https://libs.toit.io/core/string/class-string) we have a constructor called `constructor.from_rune rune/int`. Thus, when reading the instantiation point `x := string.from_rune 'X'` it is clear that we construct a string with the character 'X'.
+  For example, in the [string class](https://libs.toit.io/core/string/class-string) we have a constructor called `constructor.from-rune rune/int`. Thus, when reading the instantiation point `x := string.from-rune 'X'` it is clear that we construct a string with the character 'X'.
 - A **Factory** is a constructor or named constructor with a return. See an example below and more [details here](../objects-constructors-inheritance-interfaces#factory-constructors).
 - **Static functions and fields**: Static functions and fields are tied to the class rather than individual objects.
   Inside a class, static fields and functions are marked with the keyword `static`. Constructors and factories are implicitly static.
@@ -43,16 +43,16 @@ static entries must be prefixed with the class name.
 
 ```
 class A:
-  static some_static_field := 499
+  static some-static-field := 499
   foo:
     // Inside the class, static entries can be referred to
     // directly.
-    print some_static_field
+    print some-static-field
 
 main:
   // But outside the class, they must be referred to through
   // the class name:
-  print A.some_static_field
+  print A.some-static-field
 ```
 
 - **Methods and instance fields**: everything that needs to go through an object.
@@ -66,7 +66,7 @@ main:
 foo: print "foo"
 
 // Implicitly static, can be accessed without a class.
-some_global := 499
+some-global := 499
 
 // A static constant.
 CONSTANT ::= 42
@@ -81,7 +81,7 @@ class A:
 
   // A factory is just a constructor with a `return`. From
   // the outside there is no difference to a constructor.
-  constructor.my_factory:
+  constructor.my-factory:
     return singleton
 
   // A static field.
@@ -89,17 +89,17 @@ class A:
 
   // A static function that doesn't require the creation of
   // an object `A`.  It's important to see that
-  // `A.static_in_A` doesn't first create `A` and then call
-  // `static_in_A`.  The leading `A.` is just so we can find
+  // `A.static-in-A` doesn't first create `A` and then call
+  // `static-in-A`.  The leading `A.` is just so we can find
   // the static function.
-  static static_in_A: print "static fun"
+  static static-in-A: print "static fun"
 
   // Same as for the static function: this is a field that
   // lives independent of an instance.
-  // If you write `A.static_field = 1` followed by `print
-  // A.static_field`, then you would get `1`.  Static fields
+  // If you write `A.static-field = 1` followed by `print
+  // A.static-field`, then you would get `1`.  Static fields
   // are really just like scoped globals.
-  static static_field := 42
+  static static-field := 42
 
   // This non-static method can only be used on an object,
   // like `a := A` followed by `a.method`.
@@ -117,16 +117,16 @@ main:
   // Statics can be accessed directly or must be prefixed
   // with the class name:
   foo  // Calls foo
-  print some_global  // Prints the global
+  print some-global  // Prints the global
   print CONSTANT     // Prints the constant.
   a := A             // Creates a new A.
   a2 := A.named      // Creates a new A.
-  a3 := A.my_factory // From the outside the same syntax as
+  a3 := A.my-factory // From the outside the same syntax as
                      // `A.named`.
-  A.static_in_A      // Calls the static function *without*
+  A.static-in-A      // Calls the static function *without*
                      // creating an object first.
-  A.static_field = 11  // Does *not* create an object first.
-  print A.static_field  // Prints the static field 11.
+  A.static-field = 11  // Does *not* create an object first.
+  print A.static-field  // Prints the static field 11.
   a.method           // Invokes the instance method on `a`.
   a2.method          // Invokes it on `a2`.
   print a.field      // Reads the field in `a`. => 11
@@ -192,14 +192,14 @@ for any input type or that the type-info is missing.
 The `->` indicates the return type of the function, so `foo -> bar` means that the function `foo` returns `bar`.
 The `rename` function in the example `rename from/any to/any -> any` returns `any`.
 
-In the following example the parameter `param`, the local `my_var`, and the
+In the following example the parameter `param`, the local `my-var`, and the
 global `glob` are all typed in the following example:
 
 ```
 foo param/int:  // The parameter 'param' must be of type int.
-  // The variable 'my_var' is typed as 'float'. The second
+  // The variable 'my-var' is typed as 'float'. The second
   // '/' is a division.
-  my_var /float := param / 3.14
+  my-var /float := param / 3.14
 glob /string := "the global 'glob' is typed as string"
 ```
 

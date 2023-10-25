@@ -36,21 +36,21 @@ processed as one line.
 For example to create a new byte array with only the low four bits of
 each byte in a source array you can write:
 
-```
+```toit
 import bitmap show blit
 
-mask_four_bits source/ByteArray -> ByteArray:
+mask-four-bits source/ByteArray -> ByteArray:
   destination := ByteArray source.size
   blit
     source
     destination
     source.size  // Line length is whole array.
-    --mask=0xf   // Perform dest_byte = source_byte & 0xf.
+    --mask=0xf   // Perform dest-byte = source-byte & 0xf.
   return destination
 
 main:
   source := #[0xff, 0x3e, 0x9f]
-  print (mask_four_bits source)  // => #[0xf, 0xe, 0xf]
+  print (mask-four-bits source)  // => #[0xf, 0xe, 0xf]
 ```
 
 You can specify a pixel stride for source and destination. This
@@ -58,17 +58,17 @@ lets you read or write only every 2nd (or nth) byte. For example
 you might want to double the size of a byte array, writing alternately
 the high and low halves of the original byte array:
 
-```
+```toit
 import bitmap show blit
 
-explode_nibbles source/ByteArray -> ByteArray:
+explode-nibbles source/ByteArray -> ByteArray:
   destination := ByteArray source.size * 2
   // Put high nibble in even destination bytes.
   blit
     source
     destination
     source.size       // Line length is whole array.
-    --destination_pixel_stride=2
+    --destination-pixel-stride=2
     --shift=4         // Rotate 4 bits to the left
     --mask=0xf        // Extract the high nibble after rotation.
   // Put low nibble in odd destination bytes.
@@ -76,13 +76,13 @@ explode_nibbles source/ByteArray -> ByteArray:
     source
     destination[1..]  // Write into destination with offset 1.
     source.size       // Line length is whole array.
-    --destination_pixel_stride=2
+    --destination-pixel-stride=2
     --mask=0xf        // Extract the low nibble
   return destination
 
 main:
   source := #[0xff, 0x3e, 0x9f]
-  print (explode_nibbles source)  // => #[0xf, 0xf, 0x3, 0xe, 0x9, 0xf]
+  print (explode-nibbles source)  // => #[0xf, 0xf, 0x3, 0xe, 0x9, 0xf]
 ```
 
 ## Line strides
@@ -90,7 +90,7 @@ main:
 When using blit for line-oriented operations it is often the case that the
 lines are not adjacent. Or you might be writing only the first 4 bytes of each
 line, but each line has 10 bytes in it. In this case you can use
-`--destination_line_stride` and `--source_line_stride` to specify the
+`--destination-line-stride` and `--source-line-stride` to specify the
 distance in bytes between adjacent lines. You can also use this to
 manipulate only every second line, by specifying a line stride that is
 twice as large as the line length.
@@ -103,7 +103,7 @@ destination byte array.
 
 <img src={BlitDiagram} alt="Diagram showing blit operation" />
 
-By using `destination_pixel_stride` you can write every second byte
+By using `destination-pixel-stride` you can write every second byte
 in the output, giving the following result.
 
-<img src={BlitStrideDiagram} alt="Diagram showing blit operation with --destination_pixel_stride=2" />
+<img src={BlitStrideDiagram} alt="Diagram showing blit operation with --destination-pixel-stride=2" />

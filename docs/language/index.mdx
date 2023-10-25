@@ -107,7 +107,7 @@ main:
 ```
 
 Calling a function in Toit is as simple as mentioning its name. If the function
-doesn’t take arguments that’s all you need.
+doesn't take arguments that's all you need.
 
 What if we want to say hello to one person, and not the whole world? Just redefine hi to take a name as an argument.
 
@@ -147,11 +147,11 @@ Hello Kasper!
 
 ## Inserting strings in strings
 
-What’s the `$name` bit? That’s Toit's way of inserting something into a string.
+What's the `$name` bit? That's Toit's way of inserting something into a string.
 It is called [_string interpolation_](./strings#string-interpolation).
-The bit after the `$` is turned into a string (if it isn’t one already) and
+The bit after the `$` is turned into a string (if it isn't one already) and
 then substituted into the outer string at that point. You can also use this to
-make sure that someone’s name is properly trimmed so leading and trailing
+make sure that someone's name is properly trimmed so leading and trailing
 whitespace is ignored:
 
 <!-- RESET CODE -->
@@ -172,7 +172,7 @@ belong to the outer string:
 
 Maybe you already spotted that we went ahead and added one other trick to the
 code above? We added a default value for the `name` parameter, so if the name
-isn’t supplied when you call `hi`, we use the default name "World". Now we can
+isn't supplied when you call `hi`, we use the default name "World". Now we can
 try:
 
 ```
@@ -206,7 +206,7 @@ Hello Kasper!
 
 What if we want a real greeter around, one that remembers your name and
 welcomes you and treats you with respect. You might want to use an object for
-that. Let’s create a `Greeter` class:
+that. Let's create a `Greeter` class:
 
 ```
 class Greeter:
@@ -214,15 +214,15 @@ class Greeter:
 
   constructor .name="World":
 
-  say_hi: print "Hi $name.trim!"
+  say-hi: print "Hi $name.trim!"
 
-  say_bye: print "Bye $name.trim, come back soon."
+  say-bye: print "Bye $name.trim, come back soon."
 ```
 
 The new keyword here is `class`. This defines a new class called `Greeter` and
 a bunch of methods for that class. Methods are just functions that are attached
 to an object. Pay special attention to the method `constructor`. There is
-nothing after the `:` and the `constructor` method isn’t followed by any
+nothing after the `:` and the `constructor` method isn't followed by any
 indented lines, so the constructor has no statements in it:
 
 <!-- SKIP CODE -->
@@ -239,23 +239,23 @@ parameter actually tells us that the name is immediately stored as a field on
 `Greeter` objects. The field is defined just above the constructor with the
 `:=` syntax.
 
-The field parameter `.name` still has a default value, so if we don’t pass a name, the `Greeter` will greet the world.
+The field parameter `.name` still has a default value, so if we don't pass a name, the `Greeter` will greet the world.
 
-The `say_hi` and `say_bye` methods are introduced on the next two lines. The
+The `say-hi` and `say-bye` methods are introduced on the next two lines. The
 methods both have a single statement in them, so we can keep them on one line
-each. The `say_hi` and `say_bye` method both use the `name` field from the
+each. The `say-hi` and `say-bye` method both use the `name` field from the
 object they are called on. You can refer to fields in the class of a method
 simply by mentioning them (`name`).
 
 ## Creating a greeter object
 
-Now let’s create a greeter object and use it:
+Now let's create a greeter object and use it:
 
 ```
 main:
   greeter := Greeter " Helena "
-  greeter.say_hi
-  greeter.say_bye
+  greeter.say-hi
+  greeter.say-bye
 ```
 
 We create an object simply by mentioning the constructor, `Greeter`. The
@@ -290,7 +290,7 @@ main:
 ```
 
 This would show `How are you Helena ?`. Almost neat, right? Unfortunately, the
-name isn’t trimmed like we expected. Let’s fix that!
+name isn't trimmed like we expected. Let's fix that!
 
 ## Fields and methods
 
@@ -320,8 +320,8 @@ class Greeter:
   constructor .name_="World":
 
   name: return name_
-  say_hi: print "Hi $name_.trim!"
-  say_bye: print "Bye $name_.trim, come back soon."
+  say-hi: print "Hi $name_.trim!"
+  say-bye: print "Bye $name_.trim, come back soon."
 ```
 
 Here we use the new keyword `return` to specify the value a method returns. We
@@ -345,8 +345,8 @@ class Greeter:
   constructor .name_="World":
 
   name: return name_.trim
-  say_hi: print "Hi $name!"
-  say_bye: print "Bye $name, come back soon."
+  say-hi: print "Hi $name!"
+  say-bye: print "Bye $name, come back soon."
 ```
 
 We can check that it works by running:
@@ -363,9 +363,9 @@ member variables in classes.
 
 ## Greetings everyone!
 
-This greeter isn’t all that interesting though, it can only deal with one
+This greeter isn't all that interesting though, it can only deal with one
 person at a time. What if we had some kind of MegaGreeter that could either
-greet the world, one person, or a whole list of people? Let’s try to build
+greet the world, one person, or a whole list of people? Let's try to build
 that. We will start with a class definition:
 
 ```
@@ -421,26 +421,26 @@ class MegaGreeter:
   constructor name="World":
     names.add name
 
-  say_hi:
+  say-hi:
     // Greet everyone individually!
     names.do: print "Hello $it!"
-  say_bye:
+  say-bye:
     everyone := names.join ", "
     print "Bye $everyone, come back soon."
 
 main:
   greeter := MegaGreeter
-  greeter.say_hi
-  greeter.say_bye
+  greeter.say-hi
+  greeter.say-bye
 
   greeter.names.add "Lars"
   greeter.names.add "Kasper"
   greeter.names.add "Rikke"
-  greeter.say_hi
-  greeter.say_bye
+  greeter.say-hi
+  greeter.say-bye
 ```
 
-If you run this, you’ll get this output:
+If you run this, you'll get this output:
 
 <Tabs>
 <Tab label="Jaguar">
@@ -471,7 +471,7 @@ Bye World, Lars, Kasper, Rikke, come back soon.
 </Tab>
 </Tabs>
 
-Let’s dive into the new constructs in the next sections.
+Let's dive into the new constructs in the next sections.
 
 ## Comments and indentation
 
@@ -496,7 +496,7 @@ construct if it fits on one line:
 ```
 class SimpleGreeter:
 
-  say_hi: print "Hi!"  // Method all on one line.
+  say-hi: print "Hi!"  // Method all on one line.
 ```
 
 or you can add a newline after the `:` and let the following lines that are
@@ -506,7 +506,7 @@ indented relative to the outer construct be a sequence of inner constructs:
   names := []
 
   // Method delimited by indentation
-  say_bye:
+  say-bye:
     everyone := names.join ", "
     print "Bye $everyone, come back soon."
 ```
@@ -535,7 +535,7 @@ For methods in a class, the statements in them are nested one level further (two
 class MegaGreeter:
   // class members start
   // ...
-  say_hi:
+  say-hi:
     // method body start
     // ...
     // method body end
@@ -547,8 +547,8 @@ It is common to refer to such nested structure as _block structure_.
 
 ## Iterating over lists
 
-Let’s return to the `MegaGreeter` example and take a look at another place
-where constructs are block structured. In the `say_hi` method, we want to call
+Let's return to the `MegaGreeter` example and take a look at another place
+where constructs are block structured. In the `say-hi` method, we want to call
 `print` for every single name in the `names` [list](./listsetmap). We can do
 this by calling `names.do` and provide the list of statements we want to run
 for each element using block structure:
@@ -558,7 +558,7 @@ for each element using block structure:
 <!-- HIDDEN CODE   names := [] -->
 
 ```
-  say_hi:
+  say-hi:
     // Greet everyone individually!
     names.do: print "Hello $it!"
 ```
@@ -580,7 +580,7 @@ main:
   list.do: print "Element = $it"
 
   print "Here they are (sorted):"
-  list.sort --in_place
+  list.sort --in-place
   list.do: print "Element = $it"
 ```
 
@@ -588,24 +588,24 @@ One of the methods on lists that is very useful when constructing strings is
 `join`. It produces a string from a list of strings by joining the parts and
 adding a separator between them. We use this in the `MegaGreeter` example to
 produce a single comma-separated list of names for the single line output of
-`say_bye`:
+`say-bye`:
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE class MegaGreeter: -->
 <!-- HIDDEN CODE   names := [] -->
 
 ```
-  say_bye:
+  say-bye:
     everyone := names.join ", "
     print "Bye $everyone, come back soon."
 ```
 
 ## Named arguments
 
-Perhaps you don’t always want to say "Hello", so you add an argument with a default value to the `say_hi` method:
+Perhaps you don't always want to say "Hello", so you add an argument with a default value to the `say-hi` method:
 
 ```
-  say_hi greeting="Hello,":
+  say-hi greeting="Hello,":
     // Greet everyone individually!
     names.do: print "$greeting $it!"
 ```
@@ -617,7 +617,7 @@ main:
   greeter := MegaGreeter
   greeter.names.add "Lars"
   greeter.names.add "Kasper"
-  greeter.say_hi "Kaixo,"
+  greeter.say-hi "Kaixo,"
 ```
 
 Which produces the output:
@@ -636,7 +636,7 @@ for. We can make it clearer with a named argument:
 <!-- HIDDEN CODE   names := [] -->
 
 ```
-  say_hi --greeting="Hello,":
+  say-hi --greeting="Hello,":
     // Greet everyone individually!
     names.do: print "$greeting $it!"
 ```
@@ -646,10 +646,10 @@ Now we can use this with:
 ```
 main:
   greeter := MegaGreeter
-  greeter.say_hi
+  greeter.say-hi
   greeter.names.add "Lars"
   greeter.names.add "Kasper"
-  greeter.say_hi --greeting="Hej,"
+  greeter.say-hi --greeting="Hej,"
 ```
 
 which outputs:
@@ -713,7 +713,7 @@ that gives the iteration number:
 
 ```
 // Prints the numbers from 0 to n (exclusive).
-print_n_numbers n:
+print-n-numbers n:
   n.repeat: print it
 ```
 
@@ -723,7 +723,7 @@ statements:
 
 ```
 // Prints the odd numbers less than n.
-print_odd_numbers n:
+print-odd-numbers n:
   for i := 1; i < n; i += 2:
     print i
 
@@ -750,7 +750,7 @@ class MegaGreeter:
   add name title:
     names.add name
     titles[name] = title
-  say_hi:
+  say-hi:
     // Greet everyone individually!
     names.do: print "Hello, $titles[it] $it!"
 
@@ -759,7 +759,7 @@ main:
   greeter.add "Lars" "Mr."
   greeter.add "Rikke" "Dr."
   greeter.add "Günter" "Herr Professor Doktor Doktor"
-  greeter.say_hi
+  greeter.say-hi
 ```
 
 Here we use a [hash map](./listsetmap) to store the appropriate title for each
@@ -773,7 +773,7 @@ have used:
 <!-- HIDDEN CODE   names := [] -->
 
 ```
-  say_hi:
+  say-hi:
     for i := 0; i < names.size; i++:
       print "Hello, $names[i]"
 ```
@@ -787,9 +787,9 @@ main:
   // Print the numbers from 1 to 10, one per line.
   10.repeat:
     print it + 1
-  my_list := [1, 2, 3]
-  // Print the elements in my_list, one per line.
-  my_list.do:
+  my-list := [1, 2, 3]
+  // Print the elements in my-list, one per line.
+  my-list.do:
     print it
 ```
 
@@ -826,7 +826,7 @@ A block can return a value each time it is run. This is used for example in the 
 ```
 // Takes a list of words, and returns a new list with only the
 // words that are 5 characters or fewer.
-short_words words:
+short-words words:
   return words.filter:
     it.size <= 5
 ```
@@ -844,17 +844,17 @@ function or method in which it is written. Usually this will behave as you
 would expect:
 
 ```
-wheres_walter list:
+wheres-walter list:
   list.do:
-    if it.starts_with "Walter ":
+    if it.starts-with "Walter ":
       return it
   return null
 
 main:
-  print (wheres_walter ["Ib Michael", "Walter White", "Marie Curie"])
+  print (wheres-walter ["Ib Michael", "Walter White", "Marie Curie"])
 ```
 
 The `return` keyword is inside a block that is passed to the `do` method. When
 the name that starts with `"Walter "` is found we immediately return the full
-name from the `wheres_walter` function without continuing to iterate over the
+name from the `wheres-walter` function without continuing to iterate over the
 list.

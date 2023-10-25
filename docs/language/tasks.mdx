@@ -28,19 +28,19 @@ LED2 ::= gpio.Pin.out 18
 
 main:
   // Note the double `::` on the next two lines.
-  // Start a task that runs the my_task_1 function.
-  task:: my_task_1
-  // Start a second task that runs my_task_2.
-  task:: my_task_2
+  // Start a task that runs the my-task-1 function.
+  task:: my-task-1
+  // Start a second task that runs my-task-2.
+  task:: my-task-2
 
-my_task_1:
+my-task-1:
   while true:
     sleep --ms=500
     LED1.set 1
     sleep --ms=500
     LED1.set 0
 
-my_task_2:
+my-task-2:
   while true:
     sleep --ms=123
     LED2.set 1
@@ -70,16 +70,16 @@ Unlike threads, the tasks in Toit do not actually run at the same time as each
 other. The program only switches to a different task when the previous task
 stops to wait for something. One way to wait is with the `sleep` function, but
 there are other ways, for example waiting for a GPIO pin to change with
-`pin.wait_for`. This is both a limitation and a simplification for the
+`pin.wait-for`. This is both a limitation and a simplification for the
 programmer. On the negative side, a task can block all other tasks, by never
 waiting (also called _yielding_). For example:
 
 ```
 main:
-  task:: my_uncooperative_task
-  task:: my_starved_task
+  task:: my-uncooperative-task
+  task:: my-starved-task
 
-my_uncooperative_task:
+my-uncooperative-task:
   M ::= 1_000_000
   M.repeat:
     x := it + 1
@@ -93,7 +93,7 @@ my_uncooperative_task:
             $x^3 + $y^3 = $z^3"""
           return
 
-my_starved_task:
+my-starved-task:
   while true:
     sleep --ms=100
     print "If you see this, the task is running."
@@ -103,7 +103,7 @@ In this example, the first task is attempting to find a counterexample to
 Fermat's Last Theorem. This will take a long time, since no such counterexample
 exists. While it is calculating, it doesn't wait for anything (yield), and so
 no other tasks can run. As soon as the uncooperative task starts running it hogs
-the CPU and prevents other tasks from running, stopping 'my_starved_task' from
+the CPU and prevents other tasks from running, stopping 'my-starved-task' from
 emitting messages (if it ever did so).
 task will stop appearing.
 
@@ -119,44 +119,44 @@ ADC1 ::= gpio.Adc (gpio.Pin.in 17)
 
 class VoltageStatus:
   mv /int := 0
-  missing_mv /int := 0
+  missing-mv /int := 0
   goal /int := ?
 
   constructor .goal:
 
-  update new_mv/int -> none:
-    mv = new_mv
-    missing_mv = goal - mv
+  update new-mv/int -> none:
+    mv = new-mv
+    missing-mv = goal - mv
 
 status := VoltageStatus 554  // Aim for 554millivolts.
 
 main:
-  task:: my_task_1
-  task:: my_task_2
+  task:: my-task-1
+  task:: my-task-2
 
 /**
 Updates the status object with the measured voltage
   every 100ms.
 */
-my_task_1:
+my-task-1:
   while true:
     sleep --ms=100
     value := ADC1.get
-    status.update (value * 1000).to_int
+    status.update (value * 1000).to-int
 
 /// Prints the current status every 123ms.
-my_task_2:
+my-task-2:
   while true:
     sleep --ms=123
     print "Voltage is $(status.mv)mV"
-    print "We are $(status.missing_mv)mV from our target"
+    print "We are $(status.missing-mv)mV from our target"
 
 ```
 
 This code looks rather simple and would work OK in Toit, but if we had threads
 instead of tasks it would contain a race condition. The two fields of the
-status object, `mv` and `missing_mv` are not updated at the exact same moment.
-The printing thread might read values of `mv` and `missing_mv` that do not fit
+status object, `mv` and `missing-mv` are not updated at the exact same moment.
+The printing thread might read values of `mv` and `missing-mv` that do not fit
 together because the other thread has updated one, but not the other.
 
 In Toit we only switch tasks at yield points. In this case the yield points are
@@ -186,30 +186,30 @@ import monitor
 latch := monitor.Latch
 
 main:
-  task:: producer_task_code
-  task:: consumer_task_code
+  task:: producer-task-code
+  task:: consumer-task-code
 
-producer_task_code:
-  // Call some do_other_processing function to compute some value.
-  result := do_other_processing
+producer-task-code:
+  // Call some do-other-processing function to compute some value.
+  result := do-other-processing
 
   // This unblocks the other task, if it is already waiting
   // on latch.get.
   latch.set result
 
-consumer_task_code:
-  // Call some do_processing function to compute some value.
-  my_result := do_processing
+consumer-task-code:
+  // Call some do-processing function to compute some value.
+  my-result := do-processing
   // Blocks until the other task is done collecting a
   // result.
-  other_result := latch.get
-  print "Result was $(my_result + other_result)"
+  other-result := latch.get
+  print "Result was $(my-result + other-result)"
 
-do_other_processing:
+do-other-processing:
   // Compute some value...
   return 0
 
-do_processing:
+do-processing:
   // Compute some value...
   return 0
 ```

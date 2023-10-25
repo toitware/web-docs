@@ -13,13 +13,13 @@ main:
 
   // Use 'I2C_ADDRESS' if your device has address 0x76 (118).
   // Use 'I2C_ADDRESS_ALT' if your device has address 0x77 (119).
-  device := bus.device bme280.I2C_ADDRESS
+  device := bus.device bme280.I2C-ADDRESS
 
   driver := bme280.Driver device
 
-  print "$driver.read_temperature C"
-  print "$driver.read_pressure Pa"
-  print "$driver.read_humidity %"
+  print "$driver.read-temperature C"
+  print "$driver.read-pressure Pa"
+  print "$driver.read-humidity %"
 
   driver.close
   bus.close

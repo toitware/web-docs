@@ -143,7 +143,7 @@ might need to update the code samples below if you do.
 
 </Note>
 
-We will also use the `certificate_roots` package to provide the root
+We will also use the `certificate-roots` package to provide the root
 certificate for the TLS connection. Install it with the following command:
 
 ```shell
@@ -161,26 +161,26 @@ with the device ID that you entered into the `devices` table.
 
 <!-- ANALYZE CODE -->
 ``` toit
-import certificate_roots
+import certificate-roots
 import supabase
 
 TABLE ::= "temperatures"
-PROJECT_ID ::= "<project-id>"
-ANON_KEY ::= "<anon-key>"
+PROJECT-ID ::= "<project-id>"
+ANON-KEY ::= "<anon-key>"
 
-DEVICE_ID ::= "<device-id>"
+DEVICE-ID ::= "<device-id>"
 
 main:
-  host := "$(PROJECT_ID).supabase.co"
+  host := "$(PROJECT-ID).supabase.co"
   client := supabase.Client.tls
       --host=host
-      --anon=ANON_KEY
-      --root_certificates=[certificate_roots.BALTIMORE_CYBERTRUST_ROOT]
+      --anon=ANON-KEY
+      --root-certificates=[certificate-roots.BALTIMORE-CYBERTRUST-ROOT]
 
   // We don't want to receive the inserted row, because we don't have
   // read access to the table.
-  client.rest.insert TABLE --no-return_inserted {
-    "device_id": DEVICE_ID,
+  client.rest.insert TABLE --no-return-inserted {
+    "device-id": DEVICE-ID,
     "temperature": 42.0,
   }
 
@@ -190,7 +190,7 @@ main:
 The program uses the `supabase.Client` class to connect to Supabase.
 Since the project needs to be accessed with TLS (https), we need to provide
 the root certificate for the connection. We do this with the
-`certificate_roots.BALTIMORE_CYBERTRUST_ROOT` constant.
+`certificate-roots.BALTIMORE-CYBERTRUST-ROOT` constant.
 
 This program will send a sensor value of 42.0 to the `temperatures` table
 in your Supabase project. It will use the device ID that you entered into

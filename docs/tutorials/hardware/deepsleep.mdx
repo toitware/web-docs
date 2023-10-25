@@ -23,7 +23,7 @@ While not necessary, we recommend to have done the [LED](../led),
 [Button](../button) and [Touch button](../touch) tutorials before this one.
 
 ## Putting to sleep
-The ESP32 can be put into deep sleep by calling the `deep_sleep` method of
+The ESP32 can be put into deep sleep by calling the `deep-sleep` method of
 the [`esp32`](https://libs.toit.io/esp32/library-summary) library. This method
 takes a single argument, which is the duration of the sleep.
 
@@ -33,14 +33,14 @@ Write the following `sleep.toit` program and run it with Jaguar.
 import esp32
 
 main:
-  esp32.deep_sleep (Duration --s=2)
+  esp32.deep-sleep (Duration --s=2)
 ```
 This program will let the ESP32 sleep for 2 seconds, and then wake up again.
 
 <Note type="warning">
 
 If a program is installed as a [container](../../containers)
-and starts at boot, then an early `deep_sleep` call could make the
+and starts at boot, then an early `deep-sleep` call could make the
 device unresponsive.
 
 If your are using Jaguar for development, but Jaguar doesn't have the time
@@ -58,10 +58,10 @@ import gpio
 import esp32
 
 main:
-  sleep_pin := gpio.Pin --input 33 --pull_up
-  if sleep_pin.get != 0:
+  sleep-pin := gpio.Pin --input 33 --pull-up
+  if sleep-pin.get != 0:
     // Not pulled low. Go to sleep.
-    esp32.deep_sleep (Duration --s=2)
+    esp32.deep-sleep (Duration --s=2)
 ```
 
 This way you always have a way to recover from such a scenario.
@@ -82,10 +82,10 @@ import esp32
 
 main:
   // Enable wakeup if pin 32 goes high.
-  pin_mask := 1 << 32
-  on_any_high := true
-  esp32.enable_external_wakeup pin_mask on_any_high
-  esp32.deep_sleep (Duration --m=3)
+  pin-mask := 1 << 32
+  on-any-high := true
+  esp32.enable-external-wakeup pin-mask on-any-high
+  esp32.deep-sleep (Duration --m=3)
 ```
 
 Run it, and then remove the connection between pin 32 and ground. Without
@@ -117,8 +117,8 @@ main:
   pin := gpio.Pin 32
   touch := gpio.Touch pin
   touch.threshold = 800
-  esp32.enable_touchpad_wakeup
-  esp32.deep_sleep (Duration --m=3)
+  esp32.enable-touchpad-wakeup
+  esp32.deep-sleep (Duration --m=3)
 ```
 
 The ESP32 will go to sleep for three minutes, or wake up if it

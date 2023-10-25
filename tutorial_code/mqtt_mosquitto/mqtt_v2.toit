@@ -4,10 +4,10 @@
 
 import mqtt
 import net
-import certificate_roots
+import certificate-roots
 import encoding.json
 
-CLIENT_ID ::= "toit-tutorial-ID-2023-07-06"
+CLIENT-ID ::= "toit-tutorial-ID-2023-07-06"
 HOST ::= "test.mosquitto.org"
 TOPIC ::= "toit-mqtt/tutorial"
 PORT ::= 8886
@@ -15,7 +15,7 @@ PORT ::= 8886
 main:
   network := net.open
   transport := mqtt.TcpTransport.tls network --host=HOST --port=PORT
-      --root_certificates=[certificate_roots.ISRG_ROOT_X1]
+      --root-certificates=[certificate-roots.ISRG-ROOT-X1]
 
   routes := {
     TOPIC: :: | topic/string payload/ByteArray |
@@ -23,11 +23,11 @@ main:
       print "Received value on '$topic': $decoded"
   }
   client := mqtt.Client --transport=transport --routes=routes
-  client.start --client_id=CLIENT_ID
+  client.start --client-id=CLIENT-ID
 
   while true:
     payload := json.encode {
-      "now": Time.now.utc.to_iso8601_string
+      "now": Time.now.utc.to-iso8601-string
     }
     client.publish TOPIC payload
     sleep --ms=1_000
