@@ -90,15 +90,15 @@ Enter the following program:
 import font show *
 import gpio
 import i2c
-import pixel_display show *
-import pixel_display.two_color show *
+import pixel-display show *
+import pixel-display.two-color show *
 import ssd1306 show *
 
-current_date:
+current-date:
   now := Time.now.local
   return "$now.year-$(%02d now.month)-$(%02d now.day)"
 
-current_time:
+current-time:
   now := Time.now.local
   return "$(%02d now.h):$(%02d now.m):$(%02d now.s)"
 
@@ -110,25 +110,25 @@ main:
   bus := i2c.Bus --sda=sda --scl=scl --frequency=frequency
 
   devices := bus.scan
-  if not devices.contains Ssd1306.I2C_ADDRESS:
+  if not devices.contains Ssd1306.I2C-ADDRESS:
     throw "No SSD1306 display found"
 
-  device := bus.device Ssd1306.I2C_ADDRESS
+  device := bus.device Ssd1306.I2C-ADDRESS
   driver := Ssd1306.i2c device
   display := TwoColorPixelDisplay driver
   display.background = BLACK
 
   sans := Font.get "sans10"
-  sans_context := display.context
+  sans-context := display.context
       --landscape
       --font=sans
       --color=WHITE
-  display.text sans_context 30 20 "Toit"
-  date := display.text sans_context 30 40 ""
-  time_text := display.text sans_context 30 60 ""
+  display.text sans-context 30 20 "Toit"
+  date := display.text sans-context 30 40 ""
+  time-text := display.text sans-context 30 60 ""
   while true:
-    date.text = current_date
-    time_text.text = current_time
+    date.text = current-date
+    time-text.text = current-time
     display.draw
     sleep --ms=250
 ```
@@ -141,8 +141,8 @@ frequency to 400KHz (and not just 100KHz). The code would work the
 same way with 100KHz.
 
 We then instantiate a `Ssd1306` object by calling its i2c constructor.
-As argument it receives the i2c device with ID `Ssd1306.I2C_ADDRESS`.
-The value of `Ssd1306.I2C_ADDRESS` is equal to 60, thus
+As argument it receives the i2c device with ID `Ssd1306.I2C-ADDRESS`.
+The value of `Ssd1306.I2C-ADDRESS` is equal to 60, thus
 identifying the display on the bus.
 
 With the driver object we can then build a display object which
@@ -162,7 +162,7 @@ physical display.
 This has two major advantages. We can reuse the graph and simply
 update the parts that change. In our example we have a while-true
 loop that just updates the objects we received from the `display.text`
-calls. We could also call `move_to` on the object to move it
+calls. We could also call `move-to` on the object to move it
 somewhere.
 
 See the documentation of the
@@ -198,14 +198,14 @@ run it whenever it is saved.
 Enter the following code into the new file:
 
 ```toit
-import pictogrammers_icons.size_48 as icons
+import pictogrammers-icons.size-48 as icons
 import gpio
 import i2c
-import pixel_display show *
-import pixel_display.two_color show *
+import pixel-display show *
+import pixel-display.two-color show *
 import ssd1306 show *
 
-get_display -> TwoColorPixelDisplay:
+get-display -> TwoColorPixelDisplay:
   sda := gpio.Pin 26
   scl := gpio.Pin 25
   frequency := 400_000
@@ -213,22 +213,22 @@ get_display -> TwoColorPixelDisplay:
   bus := i2c.Bus --sda=sda --scl=scl --frequency=frequency
 
   devices := bus.scan
-  if not devices.contains Ssd1306.I2C_ADDRESS:
+  if not devices.contains Ssd1306.I2C-ADDRESS:
     throw "No SSD1306 display found"
 
-  device := bus.device Ssd1306.I2C_ADDRESS
+  device := bus.device Ssd1306.I2C-ADDRESS
   driver := Ssd1306.i2c device
   return TwoColorPixelDisplay driver
 
 main:
-  display := get_display
+  display := get-display
   display.background = BLACK
 
   context := display.context --landscape --color=WHITE
-  icon := display.icon context 0 50 icons.HUMAN_SCOOTER
+  icon := display.icon context 0 50 icons.HUMAN-SCOOTER
   while true:
     80.repeat:
-      icon.move_to it 50
+      icon.move-to it 50
       display.draw
       sleep --ms=1
     sleep --ms=2_000
@@ -236,16 +236,16 @@ main:
 
 The code starts again by creating the display. This time we moved
 the display-creation code into its own function
-(`get_display` which returns a `TwoColorPixelDisplay`).
+(`get-display` which returns a `TwoColorPixelDisplay`).
 
 If your display is only a 32-line display you need to add the
 argument `--height=32` to the driver creation. In some cases
 you also need to play with the following arguments:
 - `--flip`, to flip the display vertically,
 - `--inverse`, to invert black and white,
-- `--layout=XXX` where `XXX` is one of `LAYOUT_SEQUENTIAL`,
-  `LAYOUT_SEQUENTIAL_SWITCHED`, `LAYOUT_ALTERNATED`, or
-  `LAYOUT_ALTERNATED_SWITCHED`.
+- `--layout=XXX` where `XXX` is one of `LAYOUT-SEQUENTIAL`,
+  `LAYOUT-SEQUENTIAL-SWITCHED`, `LAYOUT-ALTERNATED`, or
+  `LAYOUT-ALTERNATED-SWITCHED`.
 
 As before we create a context, which we can use to add the
 icon to the drawing queue. Inside the loop the

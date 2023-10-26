@@ -5,15 +5,15 @@
 import font show *
 import gpio
 import i2c
-import pixel_display show *
-import pixel_display.two_color show *
+import pixel-display show *
+import pixel-display.two-color show *
 import ssd1306 show *
 
-current_date:
+current-date:
   now := Time.now.local
   return "$now.year-$(%02d now.month)-$(%02d now.day)"
 
-current_time:
+current-time:
   now := Time.now.local
   return "$(%02d now.h):$(%02d now.m):$(%02d now.s)"
 
@@ -25,24 +25,24 @@ main:
   bus := i2c.Bus --sda=sda --scl=scl --frequency=frequency
 
   devices := bus.scan
-  if not devices.contains Ssd1306.I2C_ADDRESS:
+  if not devices.contains Ssd1306.I2C-ADDRESS:
     throw "No SSD1306 display found"
 
-  device := bus.device Ssd1306.I2C_ADDRESS
+  device := bus.device Ssd1306.I2C-ADDRESS
   driver := Ssd1306.i2c device
   display := TwoColorPixelDisplay driver
   display.background = BLACK
 
   sans := Font.get "sans10"
-  sans_context := display.context
+  sans-context := display.context
       --landscape
       --font=sans
       --color=WHITE
-  display.text sans_context 30 20 "Toit"
-  date := display.text sans_context 30 40 ""
-  time_text := display.text sans_context 30 60 ""
+  display.text sans-context 30 20 "Toit"
+  date := display.text sans-context 30 40 ""
+  time-text := display.text sans-context 30 60 ""
   while true:
-    date.text = current_date
-    time_text.text = current_time
+    date.text = current-date
+    time-text.text = current-time
     display.draw
     sleep --ms=250

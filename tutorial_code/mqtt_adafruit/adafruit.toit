@@ -1,20 +1,20 @@
-import certificate_roots
+import certificate-roots
 import mqtt
 import net
 
-ADAFRUIT_IO_USERNAME ::= "<YOUR_USERNAME>"
-ADAFRUIT_IO_KEY ::= "<YOUR_KEY>"
+ADAFRUIT-IO-USERNAME ::= "<YOUR_USERNAME>"
+ADAFRUIT-IO-KEY ::= "<YOUR_KEY>"
 
-ADAFRUIT_IO_FEEDNAME ::= "temperature"
+ADAFRUIT-IO-FEEDNAME ::= "temperature"
 
-ADAFRUIT_IO_HOST ::= "io.adafruit.com"
+ADAFRUIT-IO-HOST ::= "io.adafruit.com"
 
-CLIENT_ID ::= ""
+CLIENT-ID ::= ""
 
 main:
   network := net.open
-  transport := mqtt.TcpTransport.tls network --host=ADAFRUIT_IO_HOST
-      --root_certificates=[certificate_roots.DIGICERT_GLOBAL_ROOT_CA]
+  transport := mqtt.TcpTransport.tls network --host=ADAFRUIT-IO-HOST
+      --root-certificates=[certificate-roots.DIGICERT-GLOBAL-ROOT-CA]
   /**
   // Alternatively, you can also connect without TLS, by using the
   // following transport:
@@ -25,21 +25,21 @@ main:
   client := mqtt.Client --transport=transport
 
   options := mqtt.SessionOptions
-    --client_id = CLIENT_ID
-    --username = ADAFRUIT_IO_USERNAME
-    --password = ADAFRUIT_IO_KEY
+    --client-id = CLIENT-ID
+    --username = ADAFRUIT-IO-USERNAME
+    --password = ADAFRUIT-IO-KEY
 
   client.start --options=options
 
   print "Connected to broker"
 
-  topic := "$ADAFRUIT_IO_USERNAME/feeds/$ADAFRUIT_IO_FEEDNAME"
+  topic := "$ADAFRUIT-IO-USERNAME/feeds/$ADAFRUIT-IO-FEEDNAME"
 
   // Simulates a temperature sensor.
   temperature := 25.0
   10.repeat:
     temperature += ((random 100) - 50) / 100.0
-    client.publish topic "$temperature".to_byte_array
+    client.publish topic "$temperature".to-byte-array
     // Don't publish too often to avoid rate limiting.
     sleep --ms=2_500
 

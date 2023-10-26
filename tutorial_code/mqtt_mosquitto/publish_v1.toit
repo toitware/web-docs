@@ -6,7 +6,7 @@ import net
 import mqtt
 import encoding.json
 
-CLIENT_ID ::= ""  // Use a random client ID.
+CLIENT-ID ::= ""  // Use a random client ID.
 HOST ::= "test.mosquitto.org"
 TOPIC ::= "toit-mqtt/tutorial"
 
@@ -14,7 +14,7 @@ main:
   network := net.open
   transport := mqtt.TcpTransport network --host=HOST
   client := mqtt.Client --transport=transport
-  client.start --client_id=CLIENT_ID
+  client.start --client-id=CLIENT-ID
 
   payload := json.encode {
     "value": 42

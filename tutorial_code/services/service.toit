@@ -19,7 +19,7 @@ interface NotificationService:
   Returns a handle (int) to the Connection.
   */
   connect -> int
-  static CONNECT_INDEX ::= 0
+  static CONNECT-INDEX ::= 0
 
-  connection_send handle/int message/string -> none
-  static CONNECTION_SEND_INDEX ::= 1
+  connection-send handle/int message/string -> none
+  static CONNECTION-SEND-INDEX ::= 1

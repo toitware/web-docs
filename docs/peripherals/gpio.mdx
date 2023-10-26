@@ -30,7 +30,7 @@ When an application terminates, the pin will automatically be closed and release
 To configure a GPIO pin in output mode, either do it initially:
 
 ```
-  output_pin := gpio.Pin 21 --output // Initialized for output mode.
+  output-pin := gpio.Pin 21 --output // Initialized for output mode.
 ```
 
 or later (independent of previous mode):
@@ -51,7 +51,7 @@ If a GPIO pin is configured for `output` mode, `Pin.set` can be used to either d
 GPIO pins also supports output mode as [open-drain](https://en.wikipedia.org/wiki/Open_collector). To configure the GPIO Pin as open-drain output do the following:
 
 ```
-  pin.configure --output --open_drain
+  pin.configure --output --open-drain
 ```
 
 In open-drain output mode, when setting the pin high, the pin will go into open-drain mode. That means the pin is not being pulled in any direction (floating).
@@ -104,7 +104,7 @@ The GPIO input mode can be used to read the state of a pin. This can be done by 
 To configure a GPIO pin in input mode, either do it initially:
 
 ```
-  input_pin := gpio.Pin 21 --input // Initialized for input mode.
+  input-pin := gpio.Pin 21 --input // Initialized for input mode.
 ```
 
 or later (independent of previous mode):
@@ -116,14 +116,14 @@ or later (independent of previous mode):
 ### Waiting for state change
 
 While `Pin.get` can be used to get the current Pin state, sometimes it's useful to block and wait until the pin changes state.
-That can be done using the `Pin.wait_for` method.
+That can be done using the `Pin.wait-for` method.
 
 ```
 import gpio
 
 main:
   pin := gpio.Pin 21 --input
-  pin.wait_for 1  // Wait for pin to be high.
+  pin.wait-for 1  // Wait for pin to be high.
 ```
 
 ### Pull-up and pull-down resistors
@@ -132,7 +132,7 @@ Some chips supports internal pull-up and/or pull-down resistors. While the size 
 used, it can be enabled like this:
 
 ```
-  pulled_up_pin := gpio.Pin 21 --input --pull_up
+  pulled-up-pin := gpio.Pin 21 --input --pull-up
 ```
 
 <Note>
@@ -179,12 +179,12 @@ main:
   led := gpio.Pin 5
   generator := pwm.Pwm --frequency=400
   channel := generator.start led
-  duty_percent := 0
+  duty-percent := 0
   step := 1
   while true:
-    channel.set_duty_factor duty_percent/100.0
-    duty_percent += step
-    if duty_percent == 0 or duty_percent == 100:
+    channel.set-duty-factor duty-percent/100.0
+    duty-percent += step
+    if duty-percent == 0 or duty-percent == 100:
       step = -step
     sleep --ms=10
 ```

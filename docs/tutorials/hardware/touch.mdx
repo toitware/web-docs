@@ -57,8 +57,8 @@ main:
   touch.threshold = 800
 
   while true:
-    is_touched := touch.get
-    print (is_touched ? "touched" : "not touched")
+    is-touched := touch.get
+    print (is-touched ? "touched" : "not touched")
     sleep --ms=500
 ```
 The program will now print `touched` when the wire is touched and
@@ -94,8 +94,8 @@ main:
   calibrate touch
 
   while true:
-    is_touched := touch.get
-    print (is_touched ? "touched" : "not touched")
+    is-touched := touch.get
+    print (is-touched ? "touched" : "not touched")
     sleep --ms=500
 ```
 It's important that the wire is not touched during the calibration

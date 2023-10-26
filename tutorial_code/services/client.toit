@@ -14,12 +14,12 @@ class NotificationServiceClient extends ServiceClient:
     super selector
 
   connect -> Connection:
-    handle := invoke_ NotificationService.CONNECT_INDEX null
+    handle := invoke_ NotificationService.CONNECT-INDEX null
     proxy := Connection this handle
     return proxy
 
   send_ handle/int message/string -> none:
-    invoke_ NotificationService.CONNECTION_SEND_INDEX [handle, message]
+    invoke_ NotificationService.CONNECTION-SEND-INDEX [handle, message]
 
 class Connection extends ServiceResourceProxy:
   channel_ := monitor.Channel 10
@@ -34,5 +34,5 @@ class Connection extends ServiceResourceProxy:
   receive -> string:
     return channel_.receive
 
-  on_notified_ notification/any -> none:
+  on-notified_ notification/any -> none:
     channel_.send notification

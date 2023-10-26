@@ -3,10 +3,10 @@
 The following examples show how to convert between strings, integers, floating point
 numbers, characters (integer code points), and fixed point numbers in Toit.
 
-Some of these require the import of the [fixed_point library](https://libs.toit.io/fixed_point/library-summary).
+Some of these require the import of the [fixed-point library](https://libs.toit.io/fixed_point/library-summary).
 
 ```
-import fixed_point show FixedPoint
+import fixed-point show FixedPoint
 
 main:
   str := "123"
@@ -50,8 +50,8 @@ main:
   print u2  // => 8364 because the Euro sign is Unicode 8364.
 
   // Convert a Unicode value to a string.
-  print (string.from_rune '\u20ac') // => the Euro sign, €.
-  print (string.from_rune 0x20ac) // => the Euro sign, €.
+  print (string.from-rune '\u20ac') // => the Euro sign, €.
+  print (string.from-rune 0x20ac) // => the Euro sign, €.
 
   // Also convert a Unicode value to a string. Here we are
   // also using a format specifier inspired by printf. In
@@ -80,14 +80,14 @@ main:
   print (PI.stringify 2)
 
   // Convert an integer to a floating point number
-  f2 /float := i.to_float
+  f2 /float := i.to-float
   print f2/2  // => 61.5, half of 123.
 
   // Convert a floating point number to an integer, rounding
   // towards zero.
-  i3 /int := (61.9).to_int
+  i3 /int := (61.9).to-int
   print i3  // => 61, rounded towards zero from 61.9.
-  i4 /int := (-61.9).to_int
+  i4 /int := (-61.9).to-int
   print i4  // => -61, rounded towards zero from -61.9
 
   // Convert a floating point number to an integer, rounding
@@ -110,12 +110,12 @@ main:
   // Convert a fixed point number to a floating point
   // number.  The long number is the consequence of working
   // with floating-point numbers.
-  print fix2.to_float  // => 3.1419999999999999041
+  print fix2.to-float  // => 3.1419999999999999041
 
   // Convert a fixed point number to an integer, rounding
   // towards zero.
-  print fix2.to_int  // => 3, rounding towards zero.
-  print (-fix2).to_int  // => 3, rounding towards zero.
+  print fix2.to-int  // => 3, rounding towards zero.
+  print (-fix2).to-int  // => 3, rounding towards zero.
 
   // Convert a string to a fixed point number.
   fix3 := FixedPoint "3.1415"

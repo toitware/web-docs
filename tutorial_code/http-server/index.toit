@@ -1,4 +1,4 @@
-INDEX_HTML ::= """
+INDEX-HTML ::= """
 <!DOCTYPE html>
 <html>
 <head>

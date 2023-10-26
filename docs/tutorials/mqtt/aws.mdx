@@ -84,7 +84,7 @@ with Jaguar.
 Add the following code to the file:
 
 ``` toit
-import certificate_roots
+import certificate-roots
 import net
 import net.x509
 import mqtt
@@ -93,18 +93,18 @@ import tls
 
 HOST ::= "<YOUR AMAZON HOST>"
 PORT ::= 8883
-ROOT_CERTIFICATE ::= certificate_roots.AMAZON_ROOT_CA_1
+ROOT-CERTIFICATE ::= certificate-roots.AMAZON-ROOT-CA-1
 
-CLIENT_ID ::= "sdk-nodejs-toit"
+CLIENT-ID ::= "sdk-nodejs-toit"
 TOPIC ::= "sdk/test/js"
 
-CLIENT_CERTIFICATE_DER ::= """
+CLIENT-CERTIFICATE-DER ::= """
 -----BEGIN CERTIFICATE-----
 <YOUR CERTIFICATE>
 -----END CERTIFICATE-----
 """
 
-CLIENT_KEY_DER ::= """
+CLIENT-KEY-DER ::= """
 -----BEGIN RSA PRIVATE KEY-----
 <YOUR KEY>
 -----END RSA PRIVATE KEY-----
@@ -114,7 +114,7 @@ CLIENT_KEY_DER ::= """
 Here the `HOST` is the URL of your AWS broker. If you forgot it, you
 can find it in the "Settings" tab of the IoT Core console.
 
-The `CLIENT_ID` and `TOPIC` are *not* arbitrary strings. They must
+The `CLIENT-ID` and `TOPIC` are *not* arbitrary strings. They must
 comply with the policy restrictions for this device. These can
 be found in the `<name>-Policy` file you downloaded earlier. If
 you used the "Connect" wizard, it should, for example, have
@@ -134,7 +134,7 @@ will be cut (leading to an infinite "Attempting to (re)connect" loop).
 Similarly, publishing to a topic that is not allowed by the policy
 will also lead to a disconnect.
 
-The `CLIENT_CERTIFICATE_DER` and `CLIENT_KEY_DER` are the certificate
+The `CLIENT-CERTIFICATE-DER` and `CLIENT-KEY-DER` are the certificate
 and private key that you downloaded earlier. You can copy and paste
 them into the file.
 
@@ -144,14 +144,14 @@ to authenticate devices. Add the following function that creates
 an MQTT transport with the correct settings:
 
 ``` toit
-create_aws_transport network/net.Interface -> mqtt.Transport:
-  parsed := x509.Certificate.parse CLIENT_CERTIFICATE_DER
-  client_certificate := tls.Certificate parsed CLIENT_KEY_DER
-  return mqtt.TcpTransport.tls network
+create-aws-transport -> mqtt.Transport:
+  parsed := x509.Certificate.parse CLIENT-CERTIFICATE-DER
+  client-certificate := tls.Certificate parsed CLIENT-KEY-DER
+  return mqtt.TcpTransport.tls
       --host=HOST
       --port=PORT
-      --root_certificates=[ROOT_CERTIFICATE]
-      --certificate=client_certificate
+      --root-certificates=[ROOT-CERTIFICATE]
+      --certificate=client-certificate
 ```
 
 This function accepts a network interface and returns an MQTT transport.
@@ -163,14 +163,12 @@ We can now connect to the broker. Add the following code to the `main` function:
 
 ``` toit
 main:
-  network := net.open
-  transport := create_aws_transport network
+  transport := create-aws-transport
   client := mqtt.Client --transport=transport
-  options := mqtt.SessionOptions --client_id=CLIENT_ID
+  options := mqtt.SessionOptions --client-id=CLIENT-ID
   client.start --options=options
-  client.publish TOPIC "hello".to_byte_array
+  client.publish TOPIC "hello".to-byte-array
   client.close
-  network.close
 ```
 
 If you still have the AWS IoT Core console open, you should see the

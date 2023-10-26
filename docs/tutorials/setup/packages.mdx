@@ -74,16 +74,16 @@ compatible versions of the packages.
 
 ## Using packages
 Once a package has been installed, it can be imported by writing
-`import PACKAGE_NAME`. For the `ntp` package that would be
+`import PACKAGE-NAME`. For the `ntp` package that would be
 `import ntp`.
 
 ### Selecting a library
 When importing a package with the package name (like `import ntp`), Toit
-automatically selects the `PACKAGE_NAME.toit` library (`ntp.toit`) of
+automatically selects the `PACKAGE-NAME.toit` library (`ntp.toit`) of
 that package.
 
 If a package has multiple libraries, or if it doesn't have a
-`PACKAGE_NAME.toit` library, then one needs to select the correct library
+`PACKAGE-NAME.toit` library, then one needs to select the correct library
 by adding a dot followed by the library that is needed. For example, the
 [host](https://pkg.toit.io/package/github.com%2Ftoitlang%2Fpkg-host@v1)
 package has no `host.toit` library, but one could use the `directory.toit`

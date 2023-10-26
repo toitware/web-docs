@@ -5,10 +5,10 @@
 import dhtxx
 import gpio
 
-GPIO_PIN_NUM ::=  32
+GPIO-PIN-NUM ::=  32
 
 main:
-  pin := gpio.Pin GPIO_PIN_NUM
+  pin := gpio.Pin GPIO-PIN-NUM
   driver := dhtxx.Dht11 pin
 
   (Duration --ms=500).periodic:

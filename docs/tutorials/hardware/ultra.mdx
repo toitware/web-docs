@@ -75,29 +75,29 @@ import gpio
 TRIGGER ::= 33
 ECHO ::= 32
 
-measure_distance trigger echo:
-  trigger_start := Time.monotonic_us
+measure-distance trigger echo:
+  trigger-start := Time.monotonic-us
   trigger.set 1
-  while Time.monotonic_us < trigger_start + 10:
+  while Time.monotonic-us < trigger-start + 10:
     // Do nothing while waiting for the 10us.
   trigger.set 0
 
   while echo.get != 1: null
-  echo_start := Time.monotonic_us
+  echo-start := Time.monotonic-us
   while echo.get == 1: null
-  echo_end := Time.monotonic_us
-  diff := echo_end - echo_start
+  echo-end := Time.monotonic-us
+  diff := echo-end - echo-start
   return diff / 58
 
 main:
   trigger := gpio.Pin TRIGGER --output
   echo := gpio.Pin ECHO --input
   while true:
-    print "measured $(measure_distance trigger echo)cm"
+    print "measured $(measure-distance trigger echo)cm"
     sleep --ms=500
 ```
 
-The measure_distance function does all the work:
+The `measure-distance` function does all the work:
 - Set the trigger to 1 for at least 10μs.
 - Wait for the echo pin to go high.
 - Measure the duration of the echo-pin pulse.
@@ -139,7 +139,7 @@ We can now simplify the code:
 
 ``` toit
 import gpio
-import hc_sr04
+import hc-sr04
 
 TRIGGER ::= 33
 ECHO ::= 32
@@ -147,10 +147,10 @@ ECHO ::= 32
 main:
   trigger := gpio.Pin TRIGGER
   echo := gpio.Pin ECHO
-  sensor := hc_sr04.Driver --echo=echo --trigger=trigger
+  sensor := hc-sr04.Driver --echo=echo --trigger=trigger
 
   while true:
-    distance := sensor.read_distance
+    distance := sensor.read-distance
     print "measured $distance mm"
     sleep --ms=500
 ```

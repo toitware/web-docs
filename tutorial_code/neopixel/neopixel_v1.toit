@@ -3,7 +3,7 @@
 // be found in the LICENSE_BSD0 file.
 
 import gpio
-import pixel_strip show PixelStrip
+import pixel-strip show PixelStrip
 
 PIXELS ::= 12
 

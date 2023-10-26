@@ -62,12 +62,12 @@ This mask value has zeros everywhere except in the area
 we are interested in, positions 3 to 7. For every mask
 there is the opposite mask, with all the bits reversed:
 
-`ANTI_MASK ::= 0b111111111_0000_111`
+`ANTI-MASK ::= 0b111111111_0000_111`
 
 If we have one mask, we can make the other one with the
 tilde (~) operator:
 
-`ANTI_MASK ::= ~MASK // This does the same.`
+`ANTI-MASK ::= ~MASK // This does the same.`
 
 Now if we want to change the bits 3-7 in a value to
 be 1010 regardless of what they were before we start
@@ -75,11 +75,11 @@ by zeroing bits 3-7. This can be done with the
 anti-mask:
 
 ```
-// This can also be written:  value &= ANTI_MASK
-value = value & ANTI_MASK
+// This can also be written:  value &= ANTI-MASK
+value = value & ANTI-MASK
 ```
 
-```
+```text
 value      101010101_0101_010
 antimask   111111111_0000_111
            ------------------  & operation ("and")
@@ -109,7 +109,7 @@ and zeroes in all other places.
 value = value | 0b000000000_1100_000
 ```
 
-```
+```text
 new value  101010101_0000_010
 number     000000000_1100_000
            ------------------  | operation ("or")
@@ -124,39 +124,39 @@ The low 4 bits control brightness, and the high 4 control contrast.
 There are some constants:
 
 ```
-BRIGHTNESS_0 ::= 0b0000
-BRIGHTNESS_1 ::= 0b0001
-BRIGHTNESS_2 ::= 0b0010
-BRIGHTNESS_3 ::= 0b0011
-BRIGHTNESS_4 ::= 0b0100
-BRIGHTNESS_5 ::= 0b0101
-BRIGHTNESS_6 ::= 0b0110
-BRIGHTNESS_7 ::= 0b0111
-BRIGHTNESS_8 ::= 0b1000
-BRIGHTNESS_9 ::= 0b1001
-BRIGHTNESS_10 ::= 0b1010
-BRIGHTNESS_11 ::= 0b1011
-BRIGHTNESS_12 ::= 0b1100
-BRIGHTNESS_13 ::= 0b1101
-BRIGHTNESS_14 ::= 0b1110
-BRIGHTNESS_15 ::= 0b1111
+BRIGHTNESS-0 ::= 0b0000
+BRIGHTNESS-1 ::= 0b0001
+BRIGHTNESS-2 ::= 0b0010
+BRIGHTNESS-3 ::= 0b0011
+BRIGHTNESS-4 ::= 0b0100
+BRIGHTNESS-5 ::= 0b0101
+BRIGHTNESS-6 ::= 0b0110
+BRIGHTNESS-7 ::= 0b0111
+BRIGHTNESS-8 ::= 0b1000
+BRIGHTNESS-9 ::= 0b1001
+BRIGHTNESS-10 ::= 0b1010
+BRIGHTNESS-11 ::= 0b1011
+BRIGHTNESS-12 ::= 0b1100
+BRIGHTNESS-13 ::= 0b1101
+BRIGHTNESS-14 ::= 0b1110
+BRIGHTNESS-15 ::= 0b1111
 
-CONTRAST_0 ::=  0b0000_0000
-CONTRAST_1 ::=  0b0001_0000
-CONTRAST_2 ::=  0b0010_0000
-CONTRAST_3 ::=  0b0011_0000
-CONTRAST_4 ::=  0b0100_0000
-CONTRAST_5 ::=  0b0101_0000
-CONTRAST_6 ::=  0b0110_0000
-CONTRAST_7 ::=  0b0111_0000
-CONTRAST_8 ::=  0b1000_0000
-CONTRAST_9 ::=  0b1001_0000
-CONTRAST_10 ::= 0b1010_0000
-CONTRAST_11 ::= 0b1011_0000
-CONTRAST_12 ::= 0b1100_0000
-CONTRAST_13 ::= 0b1101_0000
-CONTRAST_14 ::= 0b1110_0000
-CONTRAST_15 ::= 0b1111_0000
+CONTRAST-0 ::=  0b0000_0000
+CONTRAST-1 ::=  0b0001_0000
+CONTRAST-2 ::=  0b0010_0000
+CONTRAST-3 ::=  0b0011_0000
+CONTRAST-4 ::=  0b0100_0000
+CONTRAST-5 ::=  0b0101_0000
+CONTRAST-6 ::=  0b0110_0000
+CONTRAST-7 ::=  0b0111_0000
+CONTRAST-8 ::=  0b1000_0000
+CONTRAST-9 ::=  0b1001_0000
+CONTRAST-10 ::= 0b1010_0000
+CONTRAST-11 ::= 0b1011_0000
+CONTRAST-12 ::= 0b1100_0000
+CONTRAST-13 ::= 0b1101_0000
+CONTRAST-14 ::= 0b1110_0000
+CONTRAST-15 ::= 0b1111_0000
 ```
 
 We only have the operations `read_register` and `write_register`,
@@ -167,34 +167,34 @@ class MyDevice extends OneRegisterDevice:
 
   // Constructor...
 
-  get_brightness -> int:
-    reg := read_register
-    return reg & BRIGHTNESS_MASK_
+  get-brightness -> int:
+    reg := read-register
+    return reg & BRIGHTNESS-MASK_
 
-  get_contrast -> int:
-    reg := read_register
+  get-contrast -> int:
+    reg := read-register
     return reg & CONTRAST_MASK_
 
-  set_brightness brightness/int -> none:
-    reg := read_register
+  set-brightness brightness/int -> none:
+    reg := read-register
     // Remove the old brightness with the mask.
-    reg &= ~BRIGHTNESS_MASK_
+    reg &= ~BRIGHTNESS-MASK_
     // Insert the new brightness with the "or" operation.
     reg |= brightness
     // Write back the old contrast and the new brightness.
-    write_register reg
+    write-register reg
 
-  set_contrast contrast/int -> none:
-    reg := read_register
+  set-contrast contrast/int -> none:
+    reg := read-register
     // Remove the old brightness with the mask.
-    reg &= ~CONTRAST_MASK_
+    reg &= ~CONTRAST-MASK_
     // Insert the new contrast with the "or" operation.
     reg |= contrast
     // Write back the new contrast and the old brightness.
-    write_register reg
+    write-register reg
 
-  BRIGHTNESS_MASK_ ::= 0b0000_1111
-  CONTRAST_MASK_   ::= 0b1111_0000
+  BRIGHTNESS-MASK_ ::= 0b0000_1111
+  CONTRAST-MASK_   ::= 0b1111_0000
 ```
 
 ## Using the shift operations
@@ -224,41 +224,41 @@ class MyDevice extends OneRegisterDevice:
   // Constructors...
 
   /// Get the current brightness from 0-15.
-  get_brightness -> int:
-    reg := read_register
-    return (reg & BRIGHTNESS_MASK_) >> BRIGHTNESS_SHIFT_
+  get-brightness -> int:
+    reg := read-register
+    return (reg & BRIGHTNESS-MASK_) >> BRIGHTNESS-SHIFT_
 
   /// Get the current contrast from 0-15.
-  get_contrast -> int:
-    reg := read_register
-    return (reg & CONTRAST_MASK_) >> CONTRAST_SHIFT_
+  get-contrast -> int:
+    reg := read-register
+    return (reg & CONTRAST-MASK_) >> CONTRAST-SHIFT_
 
   /// Set the current brightness from 0-15.
-  set_brightness brightness/int -> none:
+  set-brightness brightness/int -> none:
     assert: 0 <= brightness <= 15
-    reg := read_register
+    reg := read-register
     // Remove the old brightness with the mask.
-    reg &= ~BRIGHTNESS_MASK_
+    reg &= ~BRIGHTNESS-MASK_
     // Insert the new brightness with the "or" operation.
-    reg |= brightness << BRIGHTNESS_SHIFT_
+    reg |= brightness << BRIGHTNESS-SHIFT_
     // Write back the old contrast and the new brightness.
-    write_register reg
+    write-register reg
 
   /// Set the current contrast from 0-15.
-  set_contrast contrast/int -> none:
+  set-contrast contrast/int -> none:
     assert: 0 <= contrast <= 15
-    reg := read_register
+    reg := read-register
     // Remove the old contrast with the mask.
-    reg &= ~CONTRAST_MASK_
+    reg &= ~CONTRAST-MASK_
     // Insert the new contrast with the "or" operation.
-    reg |= contrast << CONTRAST_SHIFT_
+    reg |= contrast << CONTRAST-SHIFT_
     // Write back the new contrast and the old brightness.
-    write_register reg
+    write-register reg
 
   // The brightness is stored in the low 4 bits, and the
   // contrast is stored in the high 4 bits.
-  BRIGHTNESS_MASK_  ::= 0b0000_1111
-  CONTRAST_MASK_    ::= 0b1111_0000
-  BRIGHTNESS_SHIFT_ ::= 0
-  CONTRAST_SHIFT_   ::= 4
+  BRIGHTNESS-MASK_  ::= 0b0000_1111
+  CONTRAST-MASK_    ::= 0b1111_0000
+  BRIGHTNESS-SHIFT_ ::= 0
+  CONTRAST-SHIFT_   ::= 4
 ```

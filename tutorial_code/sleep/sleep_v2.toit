@@ -6,7 +6,7 @@ import gpio
 import esp32
 
 main:
-  sleep_pin := gpio.Pin --input 33 --pull_up
-  if sleep_pin.get != 0:
+  sleep-pin := gpio.Pin --input 33 --pull-up
+  if sleep-pin.get != 0:
     // Not pulled low. Go to sleep.
-    esp32.deep_sleep (Duration --s=2)
+    esp32.deep-sleep (Duration --s=2)

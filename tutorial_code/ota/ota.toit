@@ -7,21 +7,21 @@ import net
 import system.firmware
 import reader show Reader SizedReader
 
-UPDATE_URL := "http://<YOUR_IP>:8000/ota.bin"
+UPDATE-URL := "http://<YOUR_IP>:8000/ota.bin"
 
-install_firmware reader/SizedReader -> none:
-  firmware_size := reader.size
-  print "installing firmware with $firmware_size bytes"
-  written_size := 0
-  writer := firmware.FirmwareWriter 0 firmware_size
+install-firmware reader/SizedReader -> none:
+  firmware-size := reader.size
+  print "installing firmware with $firmware-size bytes"
+  written-size := 0
+  writer := firmware.FirmwareWriter 0 firmware-size
   try:
     last := null
     while data := reader.read:
-      written_size += data.size
+      written-size += data.size
       writer.write data
-      percent := (written_size * 100) / firmware_size
+      percent := (written-size * 100) / firmware-size
       if percent != last:
-        print "installing firmware with $firmware_size bytes ($percent%)"
+        print "installing firmware with $firmware-size bytes ($percent%)"
         last = percent
     writer.commit
     print "installed firmware; ready to update on chip reset"
@@ -32,8 +32,8 @@ main:
   network := net.open
   client := http.Client network
   try:
-    response := client.get --uri=UPDATE_URL
-    install_firmware (response.body as SizedReader)
+    response := client.get --uri=UPDATE-URL
+    install-firmware (response.body as SizedReader)
   finally:
     client.close
     network.close

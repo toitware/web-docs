@@ -83,10 +83,10 @@ import system.containers
 
 main:
   images := containers.images
-  current_id := containers.current
+  current-id := containers.current
   images.do: | image/containers.ContainerImage |
     print "$image.id - $image.name"
-    if image.name != "jaguar" and image.id != current_id:
+    if image.name != "jaguar" and image.id != current-id:
       print "Starting"
       container := containers.start image.id
       status := container.wait

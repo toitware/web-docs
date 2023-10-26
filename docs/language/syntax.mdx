@@ -66,7 +66,9 @@ comment
 
 Identifiers are names that identify globals, locals, functions, classes, libraries, and other objects in Toit.
 
-- Identifier names can contain only letters, numbers, and underscores (\_), but cannot contain spaces.
+- Identifier names can contain only letters, numbers, dashes (-) and underscores (\_), but cannot contain
+  spaces. Dashes must be enclosed by letters or numbers. Dashes are equated with underscores. That is,
+  `foo-bar` and `foo_bar` refere to the same entity. When possible, prefer dashes.
 - Identifiers need to start with a letter or an underscore (\_), but not with a number. The following characters can be alphanumeric or underscore.
 - Toit identifiers are case-sensitive.
 - Identifier names cannot be the same as keywords and built-in functions in Toit.
@@ -136,28 +138,28 @@ See also the [guide to Toit strings](../strings).
 
 ## Toit globals and constants
 
-The `:=` operator introduces a new global variable with the name of the given identifier (here "global_name").
+The `:=` operator introduces a new global variable with the name of the given identifier (here "global-name").
 
 ```
-global_name := 103
+global-name := 103
 ```
 
 If the global is final (that is, can't be assigned to), then you can use `::=` as in:
 
 ```
-global_number ::= 42
+global-number ::= 42
 ```
 
-Note that this in this case, `global_number` is actually a constant, and should thus be written in capital characters:
+Note that this in this case, `global-number` is actually a constant, and should thus be written in capital characters:
 
 ```
-GLOBAL_NUMBER ::= 42
+GLOBAL-NUMBER ::= 42
 ```
 
 A final global that isn't a constant could be something that is mutable itself, such as
 
 ```
-some_global ::= []
+some-global ::= []
 ```
 
 In this case the global is initialized with an empty list. The content of the
@@ -198,7 +200,7 @@ brackets [] and indexes.
 
 ```
 str := "Toit String"
-byte_array := #[1, 42, 103]
+byte-array := #[1, 42, 103]
 list := [1, 10, 100, 1000]
 map := {
   "foo": 42,
@@ -207,7 +209,7 @@ map := {
 
 main:
   print str[0]         // Prints "84", the ASCII code of 'T'.
-  print byte_array[1]  // Prints "42", the byte at position 1.
+  print byte-array[1]  // Prints "42", the byte at position 1.
   print list[3]        // Prints "1000", the integer at position 3.
   print map["foo"]     // Prints "42", the value with the key "foo".
 ```
@@ -235,14 +237,14 @@ create a new object containing only the elements in the
 slice:
 
 ```
-long_lived_global/ByteArray := #[]
+long-lived-global/ByteArray := #[]
 
 main:
   huge := ByteArray 1000000
   // The slice keeps huge alive:
-  long_lived_global = huge[1000..1050]
+  long-lived-global = huge[1000..1050]
   // Makes a copy, so huge can be garbage collected:
-  long_lived_global = long_lived_global.copy
+  long-lived-global = long-lived-global.copy
 ```
 
 ## Continuation of statements
@@ -266,34 +268,34 @@ statement in the second line:
 foo a b c d e f g h i j: ...
 
 main:
-  some_long_local1 := 1
-  some_long_local2 := 2
-  some_long_local3 := 3
-  some_long_local4 := 4
-  some_long_local5 := 5
-  some_long_local6 := 6
-  some_long_local7 := 7
-  some_long_local8 := 8
-  some_long_local9 := 9
-  some_long_local10 := 10
+  some-long-local1 := 1
+  some-long-local2 := 2
+  some-long-local3 := 3
+  some-long-local4 := 4
+  some-long-local5 := 5
+  some-long-local6 := 6
+  some-long-local7 := 7
+  some-long-local8 := 8
+  some-long-local9 := 9
+  some-long-local10 := 10
   // Once there is a newline, all further arguments must be
   // on their own line:
-  foo some_long_local1 some_long_local2 some_long_local3
-    some_long_local4
-    some_long_local5
-    some_long_local6
-    some_long_local7
-    some_long_local8
-    some_long_local9
-    some_long_local10
+  foo some-long-local1 some-long-local2 some-long-local3
+    some-long-local4
+    some-long-local5
+    some-long-local6
+    some-long-local7
+    some-long-local8
+    some-long-local9
+    some-long-local10
   // We can also write all of them in one line:
-  foo some_long_local1 some_long_local2 some_long_local3 some_long_local4 some_long_local5 some_long_local6 some_long_local7 some_long_local8 some_long_local9 some_long_local10
+  foo some-long-local1 some-long-local2 some-long-local3 some-long-local4 some-long-local5 some-long-local6 some-long-local7 some-long-local8 some-long-local9 some-long-local10
   // But that becomes hard to read fast.
   // If we want to cut the line at some point we need a `\` to conceptually continue the first line:
-  foo some_long_local1 some_long_local2 some_long_local3 \
-      some_long_local4 some_long_local5 some_long_local6 \
-      some_long_local7 some_long_local8 some_long_local9 \
-      some_long_local10
+  foo some-long-local1 some-long-local2 some-long-local3 \
+      some-long-local4 some-long-local5 some-long-local6 \
+      some-long-local7 some-long-local8 some-long-local9 \
+      some-long-local10
 ```
 
 Putting a line break between function arguments also has the effect
@@ -301,28 +303,28 @@ of grouping the arguments, which can make parentheses
 unneccessary:
 
 ```
-two_arg_function a b:
+two-arg-function a b:
   return a + b
 
-three_arg_function a b c:
+three-arg-function a b c:
   return a + b + c
 
-my_func a/int b/int c/int -> int:
+my-func a/int b/int c/int -> int:
   // Long line with many parentheses.
-  x := three_arg_function (two_arg_function a b) (two_arg_function b c) (two_arg_function c a)
+  x := three-arg-function (two-arg-function a b) (two-arg-function b c) (two-arg-function c a)
 
   // One line per argument looks better:
-  y := three_arg_function
-    (two_arg_function a b)
-    (two_arg_function b c)
-    (two_arg_function c a)
+  y := three-arg-function
+    (two-arg-function a b)
+    (two-arg-function b c)
+    (two-arg-function c a)
 
   // For a cleaner look we don't need parentheses around
   // the arguments that have their own line.
-  z := three_arg_function
-    two_arg_function a b
-    two_arg_function b c
-    two_arg_function c a
+  z := three-arg-function
+    two-arg-function a b
+    two-arg-function b c
+    two-arg-function c a
 
   return x + y + z
 ```
@@ -333,10 +335,10 @@ If you need to break up a large expression, the second and subsequent
 lines should be indented more than the first:
 
 ```
-long_expr_function long_argument_name other_argument_name:
-  return long_argument_name
-    + 2 * other_argument_name
-    - long_argument_name.abs
+long-expr-function long-argument-name other-argument-name:
+  return long-argument-name
+    + 2 * other-argument-name
+    - long-argument-name.abs
 ```
 
 As seen here, the preferred style is to put binary operators after
@@ -501,11 +503,11 @@ of the left hand side has the type on the right.
 correct static type:
 
 <!-- HIDDEN CODE main: -->
-<!-- HIDDEN CODE   my_function 0 0 -->
-<!-- HIDDEN CODE   my_function2 0 0 0 0 0 0 0 0 0 -->
+<!-- HIDDEN CODE   my-function 0 0 -->
+<!-- HIDDEN CODE   my-function2 0 0 0 0 0 0 0 0 0 -->
 
 ```
-my_function x y:
+my-function x y:
   if x is int:
     // Code that can use x as an integer
   if y is not string:
@@ -539,7 +541,7 @@ The comparison operators form a group with ternary and other
 n-ary forms so that they can be used in the mathematical way. Thus the
 following pairs are equivalent:
 
-<!-- HIDDEN CODE my_function2 x y z from to base level top size: -->
+<!-- HIDDEN CODE my-function2 x y z from to base level top size: -->
 
 ```
   // Test that x is in the range [0, y).
@@ -571,7 +573,7 @@ parentheses and commas. Thus we write:
 ```
 import math show *
 
-my_function x y z:
+my-function x y z:
   foo x y z          // In C: foo(x, y, z)
   c7 := 2 * (sin x)  // In C: 2 * sin(x)
 ```
@@ -590,7 +592,7 @@ so the following are equivalent:
 ```
 
 <!-- HIDDEN CODE main: -->
-<!-- HIDDEN CODE   my_function 0 0 0 -->
+<!-- HIDDEN CODE   my-function 0 0 0 -->
 <!-- HIDDEN CODE foo x y z: -->
 
 The third form, with the redundant parentheses and no space, looks like
@@ -599,7 +601,7 @@ a C-style call syntax. However this is an illusion:
 ```
 import math show *
 
-my_function x/float y/float:
+my-function x/float y/float:
   acos(x) + 100   // Not what it looks like!
   acos (x + 100)  // Equivalent!
 
@@ -609,9 +611,9 @@ my_function x/float y/float:
 <!-- ALLOW WARNING -->
 
 <!-- HIDDEN CODE main: -->
-<!-- HIDDEN CODE   my_function 0.0 0.0 -->
-<!-- HIDDEN CODE   my_function 0 0 0 -->
-<!-- HIDDEN CODE   my_function true true 0 0 -->
+<!-- HIDDEN CODE   my-function 0.0 0.0 -->
+<!-- HIDDEN CODE   my-function 0 0 0 -->
+<!-- HIDDEN CODE   my-function true true 0 0 -->
 
 ### Logical operators
 
@@ -630,7 +632,7 @@ The symbolic forms are not available in Toit.
 The following pairs are equivalent:
 
 ```
-my_function a b c:
+my-function a b c:
   if not a and b == 0:
     // ...
   if (not a) and (b == 0):
@@ -646,19 +648,19 @@ Since the logical operators are lower than the calls and arguments
 we have to group them:
 
 ```
-my_unary_function x/bool:
+my-unary-function x/bool:
   // ...
 
-is_odd x/int -> bool:
+is-odd x/int -> bool:
   return x % 2 == 1
 
-my_function condition_a/bool condition_b/bool x/int y/int:
-  my_unary_function (condition_a and condition_b)  // Parentheses needed.
+my-function condition-a/bool condition-b/bool x/int y/int:
+  my-unary-function (condition-a and condition-b)  // Parentheses needed.
 
   // The following two forms are equivalent.
-  if is_odd x and is_odd y:
+  if is-odd x and is-odd y:
     // ...
-  if (is_odd x) and (is_odd y):
+  if (is-odd x) and (is-odd y):
     // ...
 ```
 
@@ -671,23 +673,23 @@ Since they are below the logical operators and calls, we can write
 equivalently:
 
 ```
-  angle_1 := atan2 x y
-  angle_2 := (atan2 x y)
+  angle-1 := atan2 x y
+  angle-2 := (atan2 x y)
 
-  condition_1 := condition_a and condition_b
-  condition_2 := (condition_1 and condition_b)
+  condition-1 := condition-a and condition-b
+  condition-2 := (condition-1 and condition-b)
 ```
 
 Assignment operators are only allowed at the start of statements and
 in the first clause of a `for`, `if`, or `while` statement.
 
 <!-- HIDDEN CODE import reader show Reader -->
-<!-- HIDDEN CODE my_function3 reader/Reader str/string: -->
+<!-- HIDDEN CODE my-function3 reader/Reader str/string: -->
 
 ```
   while data := reader.read:
     // data was not null.
 
-  if parsed := (int.parse str --on_error=: null):
+  if parsed := (int.parse str --on-error=: null):
     // parsed is not null and thus a valid number.
 ```

@@ -9,7 +9,7 @@ main:
   led := gpio.Pin 32
   generator := pwm.Pwm --frequency=400
   channel := generator.start led
-  channel.set_duty_factor 0.5
+  channel.set-duty-factor 0.5
   sleep --ms=10_000
   channel.close
   generator.close

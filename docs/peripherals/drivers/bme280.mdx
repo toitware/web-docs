@@ -75,9 +75,9 @@ The driver will take care of all the communication with the BME280 sensor and pr
 <!-- SKIP CODE -->
 
 ```
-  print "Temperature: $driver.read_temperature C"
-  print "Humidity: $driver.read_humidity %"
-  print "Pressure: $driver.read_pressure Pa"
+  print "Temperature: $driver.read-temperature C"
+  print "Humidity: $driver.read-humidity %"
+  print "Pressure: $driver.read-pressure Pa"
 ```
 
 ## Test it on an ESP32
@@ -104,11 +104,11 @@ main:
     --sda=gpio.Pin 21
     --scl=gpio.Pin 22
 
-  device := bus.device bme280.I2C_ADDRESS_ALT
+  device := bus.device bme280.I2C-ADDRESS-ALT
 
   driver := bme280.Driver device
 
-  print "Temperature: $driver.read_temperature C"
-  print "Humidity: $driver.read_humidity %"
-  print "Pressure: $driver.read_pressure Pa"
+  print "Temperature: $driver.read-temperature C"
+  print "Humidity: $driver.read-humidity %"
+  print "Pressure: $driver.read-pressure Pa"
 ```

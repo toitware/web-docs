@@ -5,4 +5,4 @@
 import .secrets
 
 main:
-  print "Using the API_KEY now: $API_KEY"
+  print "Using the API_KEY now: $API-KEY"

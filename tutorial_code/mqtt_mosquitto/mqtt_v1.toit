@@ -5,13 +5,13 @@
 import net
 import mqtt
 
-CLIENT_ID ::= ""
+CLIENT-ID ::= ""
 HOST ::= "test.mosquitto.org"
 
 main:
   network := net.open
   transport := mqtt.TcpTransport network --host=HOST
   client := mqtt.Client --transport=transport
-  client.start --client_id=CLIENT_ID
+  client.start --client-id=CLIENT-ID
 
   // Client is now connected.

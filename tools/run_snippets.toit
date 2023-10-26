@@ -31,11 +31,11 @@ import reader
 //   the next time we invoke the Toit compiler we do so without -Werror
 // Ellipses in the code are replaced by /**/
 
-DEFAULT_OUTPUT ::= "snippet.toit"
+DEFAULT-OUTPUT ::= "snippet.toit"
 
-THINGS_THAT_WONT_RUN_ON_SERVER ::= [
+THINGS-THAT-WONT-RUN-ON-SERVER ::= [
   "import gpio",
-  "import pixel_display",
+  "import pixel-display",
   "import mqtt",
   "import ble",
   "import esp32",
@@ -46,115 +46,117 @@ main args -> none:
   mdfile := args[0]
 
   r := reader.BufferedReader
-    file.Stream.for_read mdfile
+    file.Stream.for-read mdfile
 
   s := State 0
 
   skip := false
   hidden/string? := null
-  HIDDEN_PRE ::= "<!-- HIDDEN CODE "
-  HIDDEN_POST ::= " -->"
-  FILENAME_PRE ::= "<!-- CODE FILENAME "
-  FILENAME_POST ::= " -->"
+  HIDDEN-PRE ::= "<!-- HIDDEN CODE "
+  HIDDEN-POST ::= " -->"
+  FILENAME-PRE ::= "<!-- CODE FILENAME "
+  FILENAME-POST ::= " -->"
 
-  allow_warning := false
-  while line := r.read_line:
+  allow-warning := false
+  while line := r.read-line:
     if line.contains " CODE " and line.contains "--" and not line.contains "<!--":
-      throw "Malformed HTML comment at line $s.line_number"
+      throw "Malformed HTML comment at line $s.line-number"
     if line.contains "<!-- RESET CODE":
       s.run
-    if not s.check_only: s.check_only = line.contains "<!-- ANALYZE CODE -->"
-    if not s.allow_warning: s.allow_warning = line.contains "<!-- ALLOW WARNING -->"
-    if not s.no_rename_main: s.no_rename_main = line.contains "<!-- NO RENAME MAIN -->"
+    if not s.check-only: s.check-only = line.contains "<!-- ANALYZE CODE -->"
+    if not s.allow-warning: s.allow-warning = line.contains "<!-- ALLOW WARNING -->"
+    if not s.no-rename-main: s.no-rename-main = line.contains "<!-- NO RENAME MAIN -->"
     if not skip: skip = line.contains "<!-- SKIP CODE"
-    if line.starts_with HIDDEN_PRE and line.ends_with HIDDEN_POST:
-      hidden = line[HIDDEN_PRE.size .. line.size - HIDDEN_POST.size]
-    if line.starts_with FILENAME_PRE and line.ends_with FILENAME_POST:
-      fn := line[FILENAME_PRE.size .. line.size - FILENAME_POST.size]
+    if line.starts-with HIDDEN-PRE and line.ends-with HIDDEN-POST:
+      hidden = line[HIDDEN-PRE.size .. line.size - HIDDEN-POST.size]
+    if line.starts-with FILENAME-PRE and line.ends-with FILENAME-POST:
+      fn := line[FILENAME-PRE.size .. line.size - FILENAME-POST.size]
       fn.do --runes:
         if not 'a' <= it <= 'z' and not '0' <= it <= '9' and not ['.', '-', '_'].contains it:
           throw "Illegal filename in .mdx file"
       s.run
-      s.snippet_filename = fn
-    if s.code_segment_marker and line.starts_with s.code_segment_marker:
+      s.snippet-filename = fn
+    if s.code-segment-marker and line.starts-with s.code-segment-marker:
       // We've reached the end of a code segment.
-      s.code_segment_marker = null
+      s.code-segment-marker = null
       line = ""
-      s.in_toit_code = false
+      s.in-toit-code = false
       skip = false
     else if line == "```" or line == "```toit" or line == "``` toit":
-      s.code_segment_marker = "```"
+      s.code-segment-marker = "```"
       line = ""
       // If skip is true, treat the code segment as non-toit code.
-      s.in_toit_code = not skip
-    else if line.starts_with "```":
+      s.in-toit-code = not skip
+    else if line.starts-with "```":
       // We assume that ```` is not toit code.
-      s.code_segment_marker = line.starts_with "````" ? "````" : "```"
+      s.code-segment-marker = line.starts-with "````" ? "````" : "```"
       line = ""
-      s.in_toit_code = false
+      s.in-toit-code = false
 
-    if s.in_toit_code:
-      if line.contains "rror" and line.ends_with "!":
+    if s.in-toit-code:
+      if line.contains "rror" and line.ends-with "!":
         line = ""
     else:
       line = ""
     if hidden:
       line = hidden
       hidden = null
-    if line.starts_with "import ":
-      if s.has_seen_non_import:
+    if line.starts-with "import ":
+      if s.has-seen-non-import:
         s.run
-    else if line != "" and not (line.starts_with "//"):
-      s.has_seen_non_import = true
-    dots_index := line.index_of "..."
-    if dots_index >= 0:
-      line = line[0..dots_index] + "/**/" + line[dots_index + 3..]
+    else if line != "" and not (line.starts-with "//"):
+      s.has-seen-non-import = true
+    dots-index := line.index-of "..."
+    if dots-index >= 0:
+      line = line[0..dots-index] + "/**/" + line[dots-index + 3..]
     s.add line
-    if s.program.size != s.line_number: "Throw $s.program.size != $s.line_number"
+    if s.program.size != s.line-number: "Throw $s.program.size != $s.line-number"
   s.run
 
 class State:
-  code_segment_marker/string? := null
-  in_toit_code/bool := false
-  has_seen_non_import/bool := false
-  check_only/bool := false
-  line_number/int := ?
+  code-segment-marker/string? := null
+  in-toit-code/bool := false
+  has-seen-non-import/bool := false
+  check-only/bool := false
+  line-number/int := ?
   program/List := ?
-  snippet_filename/string? := null
-  allow_warning/bool := false
-  no_rename_main/bool := false
+  snippet-filename/string? := null
+  allow-warning/bool := false
+  no-rename-main/bool := false
 
   add line/string -> none:
     program.add line
-    THINGS_THAT_WONT_RUN_ON_SERVER.do:
-      if line.starts_with it: check_only = true
-    line_number++
+    THINGS-THAT-WONT-RUN-ON-SERVER.do:
+      if line.starts-with it: check-only = true
+    line-number++
 
-  constructor .line_number:
-    program = List line_number: ""
+  constructor .line-number:
+    program = List line-number: ""
 
   run:
-    werror_flag := allow_warning ? "" : "-Werror"
-    toit_sdk := os.env.get "TOIT_SDK"
-    if not toit_sdk:
+    // TODO(florian): reenable the `-Werror` flag if 'allow-warning' is true.
+    werror-flag := ""
+    toit-sdk := os.env.get "TOIT_SDK"
+    if not toit-sdk:
       throw "TOIT_SDK environment variable not set"
-    toitc := "$toit_sdk/bin/toit.compile"
-    toitvm := "$toit_sdk/bin/toit.run"
-    filename := snippet_filename ? snippet_filename : DEFAULT_OUTPUT
-    snippet_filename = null
-    snippet := file.Stream.for_write filename
+    toitc := "$toit-sdk/bin/toit.compile"
+    toitvm := "$toit-sdk/bin/toit.run"
+    kebabify := "$toit-sdk/tools/kebabify"
+    filename := snippet-filename ? snippet-filename : DEFAULT-OUTPUT
+    snippet-filename = null
+    snippet := file.Stream.for-write filename
     mains := 0
-    program.do: if it.starts_with "main": mains++
-    if mains > 1 and not no_rename_main:
+    program.do: if it.starts-with "main": mains++
+    if mains > 1 and not no-rename-main:
       i := mains
-      program.map --in_place:
-        if it.starts_with "main":
+      program.map --in-place:
+        if it.starts-with "main":
           i--
           "main$i$it[4..]"
         else:
           it
     program.do: snippet.write "$it\n"
-    if not no_rename_main:
+    if not no-rename-main:
       if mains != 1:
         snippet.write "main:\n"
       if mains > 1:
@@ -162,16 +164,21 @@ class State:
           snippet.write "  main$it\n"
     snippet.close
     result := ?
-    if check_only:
-      result = pipe.system "$toitc --analyze $werror_flag $filename"
+    if check-only:
+      result = pipe.system "$toitc --analyze $werror-flag $filename"
     else:
-      result = pipe.system "$toitvm $werror_flag $filename"
-    check_only = false
+      result = pipe.system "$toitvm $werror-flag $filename"
+    before-kebabify := file.read-content filename
+    pipe.system "$kebabify code $filename --toitc $toitc"
+    after-kebabify := file.read-content filename
+    if before-kebabify != after-kebabify:
+      throw "Kebabify changed the file $filename"
+    check-only = false
     if result != 0:
       throw "Failure for $filename"
-    if filename == DEFAULT_OUTPUT:
+    if filename == DEFAULT-OUTPUT:
       file.delete filename
 
-    program = List line_number: ""
-    has_seen_non_import = false
-    allow_warning = false
+    program = List line-number: ""
+    has-seen-non-import = false
+    allow-warning = false

@@ -10,13 +10,13 @@ main:
   generator := pwm.Pwm --frequency=50
 
   // Start with the half-way angle.
-  channel := generator.start servo --duty_factor=0.075
+  channel := generator.start servo --duty-factor=0.075
   sleep --ms=1500
 
   // Max angle.
-  channel.set_duty_factor 0.125
+  channel.set-duty-factor 0.125
   sleep --ms=1500
 
   // Min angle.
-  channel.set_duty_factor 0.025
+  channel.set-duty-factor 0.025
   sleep --ms=1500

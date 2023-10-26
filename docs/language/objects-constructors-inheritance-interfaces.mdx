@@ -70,7 +70,7 @@ class Bar:
 
   constructor .x:
 
-my_function bar/Bar -> none:
+my-function bar/Bar -> none:
   // Accesses public field x, or uses the x getter.
   print bar.x
 
@@ -188,7 +188,7 @@ abstract class TurtleBase:
   // Classes that extend `TurtleBase` should call this after
   // moving a distance to register the distance the Turtle
   // has moved.
-  register_mileage mm/int -> none:
+  register-mileage mm/int -> none:
     mileage += mm
 
   // Concrete (non-abstract) classes that extend TurtleBase
@@ -201,7 +201,7 @@ abstract class TurtleBase:
 class LogTurtle extends TurtleBase:
   forwards mm/int -> none:
     print "I moved forwards $(mm)mm."
-    register_mileage mm
+    register-mileage mm
 
   turn degrees/int -> none:
     print "I turned $degrees degrees"
@@ -229,9 +229,9 @@ class Vector:
   y /float
   length /float
 
-  constructor x_arg/float y_arg/float:
-    x = x_arg
-    y = y_arg
+  constructor x-arg/float y-arg/float:
+    x = x-arg
+    y = y-arg
     length = math.sqrt x * x + y * y
 ```
 
@@ -341,11 +341,11 @@ class Pair:
   constructor .x .y:
 
   // Private singleton object.
-  static SINGLETON_ORIGIN_ ::= Pair 0 0
+  static SINGLETON-ORIGIN_ ::= Pair 0 0
 
   // Named factory constructor.
   constructor.origin:
-    return SINGLETON_ORIGIN_
+    return SINGLETON-ORIGIN_
 ```
 
 Factory constructors are the only kinds of constructors
@@ -394,11 +394,11 @@ class Point:
   stringify -> string:
     return "$x, $y"
 
-  constructor x_arg/float y_arg/float:
+  constructor x-arg/float y-arg/float:
     // Calling the stringify method uses "this".
     print "Created " + stringify
-    x = x_arg  // Error - this happens in the instance...
-    y = y_arg  // ...part of the constructor.
+    x = x-arg  // Error - this happens in the instance...
+    y = y-arg  // ...part of the constructor.
 ```
 
 Although the compiler will infer the boundary between field

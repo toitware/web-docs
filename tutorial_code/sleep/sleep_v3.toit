@@ -7,7 +7,7 @@ import esp32
 
 main:
   // Enable wakeup if pin 32 goes high.
-  pin_mask := 1 << 32
-  on_any_high := true
-  esp32.enable_external_wakeup pin_mask on_any_high
-  esp32.deep_sleep (Duration --m=3)
+  pin-mask := 1 << 32
+  on-any-high := true
+  esp32.enable-external-wakeup pin-mask on-any-high
+  esp32.deep-sleep (Duration --m=3)

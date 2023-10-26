@@ -24,7 +24,7 @@ main:
 When parameters are indented, they should be intented by four spaces:
 
 ```
-fun_with_many_params
+fun-with-many-params
     param1 /int
     param2 /string
     param3 /Lambda:
@@ -35,7 +35,7 @@ Arguments are intended by four spaces, unless they are the body of a block or la
 
 ```
 main:
-  fun_with_many_params
+  fun-with-many-params
       1
       "string arg"::
     // Body of lambda is only intended by 2.
@@ -45,7 +45,7 @@ main:
 The same applies for operators or other reasons when a line gets too long:
 
 ```
-my_function x/num y/num -> num:
+my-function x/num y/num -> num:
   return x * x * x
       + y * y * y
 ```
@@ -62,11 +62,11 @@ When breaking longer lines, the point of lowest [precedence](../syntax#precedenc
 should be picked.
 
 ```
-my_badly_formatted_function x/num y/num -> num:
+my-badly-formatted-function x/num y/num -> num:
   return x * x * x + y * y   // Don't break at high-precedence '*'.
       * y
 
-my_well_formatted_function x/num y/num -> num:
+my-well-formatted-function x/num y/num -> num:
   return x * x * x           // Break at low-precedence '+'.
       + y * y * y
 ```
@@ -77,14 +77,14 @@ This fits well with the ability to [use newlines in long argument
 lists](../syntax#line-breaks-in-function-arguments), since argument lists have
 lower precedence than operators.
 <!-- HIDDEN CODE import math -->
-<!-- HIDDEN CODE unary_function x: -->
+<!-- HIDDEN CODE unary-function x: -->
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   argument := 499 -->
 ```
   // Using newline instead of parentheses to delineate the
   // single argument to the print function.
   print
-    unary_function argument
+    unary-function argument
 ```
 
 ### Whitespace around operators
@@ -97,9 +97,9 @@ Always surround operators with whitespace.
 ```
 <!-- HIDDEN CODE   degrees := 3.0 -->
 ```
-  radians_1:=degrees*2*math.PI/180  // Not enough spaces.
+  radians-1:=degrees*2*math.PI/180  // Not enough spaces.
 
-  radians_2 := degrees * 2 * math.PI / 180  // Better spacing.
+  radians-2 := degrees * 2 * math.PI / 180  // Better spacing.
 ```
 
 Arguments to functions and methods also have single spacing.
@@ -116,17 +116,17 @@ For functions with more than one argument this can be hard to read, in which
 case you should add parentheses or newlines.
 
 <!-- ALLOW WARNING -->
-<!-- HIDDEN CODE my_func x y: -->
+<!-- HIDDEN CODE my-func x y: -->
 <!-- HIDDEN CODE main: -->
 <!-- HIDDEN CODE   x := 499 -->
 <!-- HIDDEN CODE   y := 499 -->
 ```
-  my_func x+1 x-1          // Not enough spaces.
-  my_func x + 1 x - 1      // Hard to read.
-  my_func (x + 1) (x - 1)  // Easier to read.
-  my_func                  // Nice uncluttered look with newlines.
+  my-func x+1 x*1          // Not enough spaces.
+  my-func x + 1 x * 1      // Hard to read.
+  my-func (x + 1) (x * 1)  // Easier to read.
+  my-func                  // Nice uncluttered look with newlines.
       x + 1
-      x - 1
+      x * 1
 ```
 
 Between a line and an end-of-line comment there should be at least two spaces.
@@ -134,13 +134,13 @@ More can be added for alignment (see above).
 
 ## Naming
 
-Most names in Toit are named with lower letters and underscores between words.
+Most names in Toit are named with lower letters and dashes between words.
 
 ```
 // Top level function.
-my_function:
+my-function:
   // Local variable
-  my_variable := 0
+  my-variable := 0
 ```
 
 Classes are named with initial capital letters and camel case.
@@ -156,12 +156,12 @@ This applies even if they contain abbreviations that
 class MyRgbToYuvConverter:
 ```
 
-Constants are written in all-caps with underscores:
+Constants are written in all-caps with dashes:
 
 ```
-FAHRENHEIT_MODE ::= 0
-CELCIUS_MODE ::= 1
-KELVIN_MODE ::= 2
+FAHRENHEIT-MODE ::= 0
+CELCIUS-MODE ::= 1
+KELVIN-MODE ::= 2
 ```
 
 We prefer not to use abbreviations in API-visible names unless they are
@@ -169,11 +169,11 @@ very well established.
 
 ```
 // Name too abbreviated.
-f_to_c f/num -> num:
+f-to-c f/num -> num:
   return (f - 32.0) / 9 * 5
 
 // Better.
-fahrenheit_to_celcius fahrenheit/num -> num:
+fahrenheit-to-celcius fahrenheit/num -> num:
   return (fahrenheit - 32.0) / 9 * 5
 ```
 
@@ -202,9 +202,9 @@ See also [documentation comments](../sdk/toitdoc).
 Variables and members are not given an initial value unless it makes
 sense.
 
-<!-- HIDDEN CODE   some_value := random 10 -->
+<!-- HIDDEN CODE   some-value := random 10 -->
 ```
-  z := some_value
+  z := some-value
   x := 0      // No need to give x an inital value.
   y /int := ?  // Compiler will check it is initialized before being used.
   if z == 1:
@@ -275,7 +275,7 @@ Types in argument lists are written without spaces in order to
 group the arguments visually:
 
 ```
-my_function x/int y/float z/string -> none:
+my-function x/int y/float z/string -> none:
   // Implementation
 ```
 

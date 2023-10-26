@@ -18,7 +18,7 @@ main:
       while true:
         force := movement accelerometer
         print
-          "got movement: $force - moving: $(is_moving force)"
+          "got movement: $force - moving: $(is-moving force)"
         sleep --ms=1000
     finally:
       accelerometer.close
@@ -55,25 +55,25 @@ Catch takes two optional arguments
   which it can use to determine whether to unwind.
 
 ```
-my_function:
-  my_exception := catch --trace:
-    code_that_might_throw 42 103
-  if my_exception:
-    code_to_run_when_an_exception_was_thrown "foo" "bar"
+my-function:
+  my-exception := catch --trace:
+    code-that-might-throw 42 103
+  if my-exception:
+    code-to-run-when-an-exception-was-thrown "foo" "bar"
 
 // Identifies exceptions that we want to catch.  Every other
 // exception will result in a stack trace on the console and
 // an uncaught exception (which may nevertheless be caught
 // further up the call stack).
-is_bad thrown_object:
-  return thrown_object != "HARMLESS_ERROR"
+is-bad thrown-object:
+  return thrown-object != "HARMLESS_ERROR"
 
-my_other_function:
+my-other-function:
   exception := catch
-      --trace=: | thrown | is_bad thrown
-      --unwind=: | thrown | is_bad thrown:
-    code_that_might_throw 42 103
+      --trace=: | thrown | is-bad thrown
+      --unwind=: | thrown | is-bad thrown:
+    code-that-might-throw 42 103
   if exception:
     // A harmless error was thrown.
-    code_to_run_when_an_exception_was_thrown "foo" "bar"
+    code-to-run-when-an-exception-was-thrown "foo" "bar"
 ```

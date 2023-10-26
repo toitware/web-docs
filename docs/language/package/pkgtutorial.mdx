@@ -58,18 +58,18 @@ We'll start with some constants:
 ```
 DOT ::= 0
 DASH ::= 1
-SPACE_LETTER ::= 2
+SPACE-LETTER ::= 2
 
-MORSE_CODE_ ::= {
+MORSE-CODE_ ::= {
   'a': [ DOT, DASH ],
   'b': [ DASH, DOT, DOT, DOT ],
   'c': [ DASH, DOT, DASH, DOT ],
 }
 
 /// The dash duration is three times that of the dot.
-DASH_DURATION_FACTOR_ ::= 3
+DASH-DURATION-FACTOR_ ::= 3
 /// The duration between characters is three times the one of a dot.
-SPACE_LETTER_FACTOR_ ::= 3
+SPACE-LETTER-FACTOR_ ::= 3
 ```
 
 In the tutorial we only support the characters 'a', 'b', and 'c'. We are also skipping the constants necessary to encode word boundaries.
@@ -77,29 +77,29 @@ In the tutorial we only support the characters 'a', 'b', and 'c'. We are also sk
 A simple function converts a string from ASCII to Morse code:
 
 ```
-encode_string str:
+encode-string str:
   result := []
   str.do:
-    result.add_all MORSE_CODE_[it]
-    result.add SPACE_LETTER
+    result.add-all MORSE-CODE_[it]
+    result.add SPACE-LETTER
   return result
 ```
 
 Similarly, we want to have a function that emits the symbols with the correct timing:
 
 ```
-emit symbols --dot_duration [--on] [--off]:
+emit symbols --dot-duration [--on] [--off]:
   symbols.do:
     if it == DOT or it == DASH:
       on.call
-      sleep (it == DOT ? dot_duration : dot_duration * DASH_DURATION_FACTOR_)
+      sleep (it == DOT ? dot-duration : dot-duration * DASH-DURATION-FACTOR_)
       off.call
-      sleep dot_duration // The space between symbols.
+      sleep dot-duration // The space between symbols.
     else:
-      assert: it == SPACE_LETTER
+      assert: it == SPACE-LETTER
       // We already waited a dot-duration after the last character, so we have to
       // wait a bit shorter.
-      sleep dot_duration * (SPACE_LETTER_FACTOR_ - 1)
+      sleep dot-duration * (SPACE-LETTER-FACTOR_ - 1)
 ```
 
 There is much more functionality we could add, but for the purpose of this tutorial we are happy now. The next step is to polish the package.
@@ -169,7 +169,7 @@ that call given blocks `on` and `off` with the correct timing.
 A simple usage example.
 
 ```
-import morse_tutorial
+import morse-tutorial
 
 main:
   ...
@@ -193,7 +193,7 @@ In our example we will change the signatures of the two exposed functions:
 <!-- SKIP CODE -->
 
 ```
-encode_string str/string -> List:
+encode-string str/string -> List:
 ```
 
 and
@@ -201,7 +201,7 @@ and
 <!-- SKIP CODE -->
 
 ```
-emit symbols/List --dot_duration/Duration [--on] [--off] -> none:
+emit symbols/List --dot-duration/Duration [--on] [--off] -> none:
 ```
 
 ### Toitdoc
@@ -228,24 +228,24 @@ DASH ::= 1
 /**
 A symbol representing the space between two characters.
 */
-SPACE_LETTER ::= 2
+SPACE-LETTER ::= 2
 
 /**
 Encodes the given string $str to Morse code.
-Returns a list of $DOT, $DASH and $SPACE_LETTER.
+Returns a list of $DOT, $DASH and $SPACE-LETTER.
 The characters of $str must only be equal to 'a', 'b' or 'c'.
 */
-encode_string str/string -> List:
+encode-string str/string -> List:
   ...
 
 /**
 Emits the given Morse symbols.
 Uses the $on and $off blocks to turn the "emitter" on or off. The blocks
   could, for example, manipulate an LED, or a speaker.
-The given $symbols should be Morse symbols. See $encode_string for a function
+The given $symbols should be Morse symbols. See $encode-string for a function
   that generates Morse symbols from a string.
 */
-emit symbols/List --dot_duration/Duration [--on] [--off] -> none:
+emit symbols/List --dot-duration/Duration [--on] [--off] -> none:
   ...
 ```
 
@@ -262,7 +262,7 @@ A typical use case would be to emit morse on a GPIO pin (`examples/gpio.toit`):
 // Use of this source code is governed by an MIT-style license that can be
 // found in the LICENSE file.
 
-import morse_tutorial
+import morse-tutorial
 import gpio
 
 /**
@@ -271,15 +271,15 @@ It assumes that pin 23 is connected to an LED (and an appropriate resistor).
 */
 
 // Update the pin here if you use a different one.
-LED_PIN ::= 23
+LED-PIN ::= 23
 
 main:
-  pin := gpio.Pin.out LED_PIN
+  pin := gpio.Pin.out LED-PIN
 
   10.repeat:
-    morse_tutorial.emit
-        morse_tutorial.encode_string "ababc"
-        --dot_duration= Duration --ms=250
+    morse-tutorial.emit
+        morse-tutorial.encode-string "ababc"
+        --dot-duration= Duration --ms=250
         --on=:  pin.set 1
         --off=: pin.set 0
     sleep (Duration --ms=3000)
@@ -294,10 +294,10 @@ relying on the uploaded package (which would be a bit circular), we use the pack
 ```shell
 # In the examples directory:
 jag pkg init
-jag pkg install --local --name=morse_tutorial ..
+jag pkg install --local --prefix=morse-tutorial ..
 ```
 
-This creates a `package.lock` file mapping the prefix "morse_tutorial" to the package at location `..`.
+This creates a `package.lock` file mapping the prefix "morse-tutorial" to the package at location `..`.
 
 <Note>
 
@@ -310,10 +310,10 @@ We use `jag pkg init` to ensure that the `package.lock` file is created in the c
 ```shell
 # In the examples directory:
 toit.pkg init
-toit.pkg install --local --name=morse_tutorial ..
+toit.pkg install --local --name=morse-tutorial ..
 ```
 
-This creates a `package.lock` file mapping the prefix "morse_tutorial" to the package at location `..`.
+This creates a `package.lock` file mapping the prefix "morse-tutorial" to the package at location `..`.
 
 <Note>
 
@@ -336,12 +336,12 @@ Here is a simple test (`tests/morse_test.toit`) for ensuring that an 'a' is corr
 // Use of this source code is governed by an MIT-style license that can be
 // found in the LICENSE file.
 
-import morse_tutorial show *
+import morse-tutorial show *
 import expect show *
 
 main:
   encoded := encode_string "a"
-  expect_list_equals [DOT, DASH, SPACE_LETTER] encoded
+  expect-list-equals [DOT, DASH, SPACE_LETTER] encoded
 ```
 
 Similarly to the examples, it's necessary to install the local package to be able to use it first:
@@ -352,7 +352,7 @@ Similarly to the examples, it's necessary to install the local package to be abl
 ```shell
 # In the test directory:
 jag pkg init
-jag pkg install --local --name=morse_tutorial ..
+jag pkg install --local --name=morse-tutorial ..
 ```
 
 The test should then execute successfully by running it locally:
@@ -366,7 +366,7 @@ jag run -d host morse_test.toit
 ```shell
 # In the test directory:
 toit.pkg init
-toit.pkg install --local --name=morse_tutorial ..
+toit.pkg install --local --name=morse-tutorial ..
 ```
 
 The test should then execute successfully by running it locally:
@@ -403,7 +403,7 @@ dependencies:
     version: ^1.0.0
 ```
 
-You normally don't need to worry about them, as theyare automatically added when running `jag pkg install <dependency>` or `toit.pkg install <dependency>`.
+You normally don't need to worry about them, as they are automatically added when running `jag pkg install <dependency>` or `toit.pkg install <dependency>`.
 
 ## Publishing to the Toit package registry
 

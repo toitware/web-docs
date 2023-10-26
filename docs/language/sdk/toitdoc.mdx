@@ -32,7 +32,7 @@ Multi-line comments are the preferred documentation for longer comments. The ind
 
 Examples:
 
-```
+```toit
 /** This is a shorter comment for a class. */
 class A:
   /**
@@ -57,9 +57,9 @@ The used syntax for Toitdoc is a modified version of markdown.
 
 Contrary to markdown (and as the biggest difference), Toitdoc treats new lines as new paragraphs, unless they are indented more than the previous line. For example, the following Toitdoc is rendered as three paragraphs and not just as one (as would be the case in markdown):
 
-```
+```toit
   /**
-  Calls the given $block on each element of the given [collection]
+  Calls the given $block on each element of the given $collection
   Users must not modify the collection during iteration.
   If the $block call throws an exception, then the
     given $error value is returned.
@@ -149,7 +149,7 @@ The following sections have special meaning or should be used as conventions:
 - `Examples`: Contains examples for the given element. Individual examples that exhibit different properties can be in their own subsections. It is common to start each individual example-(sub)section with "This example demonstrates ". Since example sections can be very big, they should be the last section in a Toitdoc (except for `Categories`).
 - `Categories`: This section is used in the Toitdoc tool to assign members to specific categories. For example, a `File` class could have the categories, `Write`, `Read`, and `Query`. The Toitdoc tool can then group those members into the given categories to make it easier to find relevant methods. Categories are optional. They are not emitted in the Toitdoc-generated pages. The `Categories` section only consists of a markdown list.
 - `Errors`: This section should treat errors and exceptions, and/or discuss how to deal with common errors. Note that important prerequisites can/should be in the initial section. For example, the sentence "Users must not modify the collection while iteration over it", does not require a separate "Errors" section, but can be part of the top section. This section may also contain common mistakes in the usage of the API.
-- `Aliases`: This section contains a (markdown) list of aliases that can help finding the function. Typically, this list contains names of similar functions in other languages. For example, `List.add` should have `push`, and `push_back` as alias, since these are the names that are used in JavaScript and C++ respectively.
+- `Aliases`: This section contains a (markdown) list of aliases that can help finding the function. Typically, this list contains names of similar functions in other languages. For example, `List.add` should have `push`, and `push-back` as alias, since these are the names that are used in JavaScript and C++ respectively.
 
 ## Conventions
 
@@ -221,14 +221,14 @@ Overloaded methods can either duplicate the documentation (if it's sufficiently 
 
 Don't add implementation comments in Toitdocs. For example `TODO...` should be in a non-Toitdoc comment. Generally, the Toitdoc should come first, followed by implementation comments:
 
-```
+```toit
 /**
 Toitdoc goes here.
 */
 /*
 Implementation doc.
 */
-the_member:
+the-member:
 ```
 
 Errors should either be in their `# Errors` section, or (if they only take a sentence) be written as follows: "It's an error ...", or using "must" (as in "This instance must have at least two elements").

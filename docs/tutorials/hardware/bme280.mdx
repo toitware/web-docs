@@ -66,15 +66,15 @@ main:
     --sda=gpio.Pin 26
     --scl=gpio.Pin 25
 
-  // Use 'I2C_ADDRESS' if your device has address 0x76 (118).
-  // Use 'I2C_ADDRESS_ALT' if your device has address 0x77 (119).
-  device := bus.device bme280.I2C_ADDRESS
+  // Use 'I2C-ADDRESS' if your device has address 0x76 (118).
+  // Use 'I2C-ADDRESS-ALT' if your device has address 0x77 (119).
+  device := bus.device bme280.I2C-ADDRESS
 
   driver := bme280.Driver device
 
-  print "$driver.read_temperature C"
-  print "$driver.read_pressure Pa"
-  print "$driver.read_humidity %"
+  print "$driver.read-temperature C"
+  print "$driver.read-pressure Pa"
+  print "$driver.read-humidity %"
 
   driver.close
   bus.close
@@ -85,7 +85,7 @@ get a handle to the device with the BME280 address. It then passes
 this device to the BME280 driver. At that point the driver
 configures the sensor.
 
-When `read_temperature`, `read_pressure` and `read_huminity`
+When `read-temperature`, `read-pressure` and `read-huminity`
 is called, the driver then requests the corresponding values
 from the device. There is some computation to convert the
 raw values to human understandable values, but that's hidden

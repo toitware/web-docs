@@ -63,7 +63,7 @@ the program whenever you save.
 import gpio
 
 main:
-  button := gpio.Pin 27 --input --pull_down
+  button := gpio.Pin 27 --input --pull-down
   led := gpio.Pin 26 --output
 
   while true:
@@ -84,7 +84,7 @@ A shorter variant of this program avoids the `if`:
 import gpio
 
 main:
-  button := gpio.Pin 27 --input --pull_down
+  button := gpio.Pin 27 --input --pull-down
   led := gpio.Pin 26 --output
 
   while true:
@@ -95,32 +95,32 @@ In the loop the LED is simply set to the value of the button.
 
 ### Waiting
 Instead of continuously polling the input pin, we can also wait for the
-button to be pressed. This is done using the `wait_for` method:
+button to be pressed. This is done using the `wait-for` method:
 
 ```toit
 import gpio
 
 main:
-  button := gpio.Pin 27 --input --pull_down
+  button := gpio.Pin 27 --input --pull-down
   led := gpio.Pin 26 --output
 
   while true:
-    button.wait_for 1
+    button.wait-for 1
     led.set 1
-    button.wait_for 0
+    button.wait-for 0
     led.set 0
 ```
 
-While the program is stopped at the `wait_for` call, it does not use any
+While the program is stopped at the `wait-for` call, it does not use any
 CPU time. Other processes or [tasks](../../../language/tasks) can run in the
 meantime.
 
-It's generally a good idea to use `wait_for` instead of polling.
+It's generally a good idea to use `wait-for` instead of polling.
 
 ### Integrated pull-down resistor
 Some buttons have an integrated pull-down resistor. In this case you
 could connect the board's GND to the button's GND pin, and remove the
-`--pull_down` from the code.
+`--pull-down` from the code.
 
 We generally recommend to stick with the internal pull-down resistor, as
 you are less likely to accidentally create a short-circuit.

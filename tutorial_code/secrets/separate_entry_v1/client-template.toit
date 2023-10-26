@@ -4,7 +4,7 @@
 
 import .client as client
 
-API_KEY ::= "<API_KEY>"
+API-KEY ::= "<API_KEY>"
 
 main:
-  client.main API_KEY
+  client.main API-KEY

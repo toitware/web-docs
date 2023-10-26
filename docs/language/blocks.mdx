@@ -135,14 +135,14 @@ The non-local return is the most common return from blocks. It is best explained
 Takes a list $list and returns the first negative number.
 Returns null if $list contains no negative number.
 */
-first_negative list:
+first-negative list:
   list.do:
     if it < 0: return it
   return null
 
 main:
   print
-    first_negative [1, 2, 3, -3, -2, -1]
+    first-negative [1, 2, 3, -3, -2, -1]
 
 ```
 
@@ -152,8 +152,8 @@ which would print
 -3
 ```
 
-The `return it` in `first_negative` is a non-local return which means that it
-doesn't just return from the block or `do`, it returns from `first_negative`.
+The `return it` in `first-negative` is a non-local return which means that it
+doesn't just return from the block or `do`, it returns from `first-negative`.
 This means that we can short circuit the search when we find the first negative
 number.
 
@@ -200,14 +200,14 @@ the last statement in the block. For example
 Takes a list of words, and returns a new list with only the
   words that are 5 characters or fewer.
 */
-short_words words:
+short-words words:
   return words.filter:
     it.size < 6
 
 main:
   words := ["word", "small", "minuscule", "tiny"]
   print
-    short_words words
+    short-words words
 
 ```
 
@@ -257,22 +257,22 @@ was defined in. This includes access to local variable, field variables, and
 globals.
 
 ```
-my_stringify list -> string:
-  is_first := true
+my-stringify list -> string:
+  is-first := true
   str := "["
   list.do:
-    str += "$(is_first ? "" : ", ")$it"
-    is_first = false
+    str += "$(is-first ? "" : ", ")$it"
+    is-first = false
   str += "]"
   return str
 
 main:
   print
-    my_stringify [1, 2, 3]
+    my-stringify [1, 2, 3]
 
 ```
 
-Here the block (given to `do`) references both `is_first` and `str`.
+Here the block (given to `do`) references both `is-first` and `str`.
 Notice that the block both accesses and modifies the variables.
 
 The function returns a string representation of the list corresponding to the
@@ -290,12 +290,12 @@ prints the numbers from 1 to `n`, you could write
 
 ```
 /// Prints the numbers from 1 to $n on separate lines.
-print_numbers n:
+print-numbers n:
   for i := 0; i < n; i++:
     print i + 1
 
 main:
-    print_numbers 5
+    print-numbers 5
 ```
 
 As you can see, the `for`-loop is mostly boilerplate code. All you want to
@@ -307,12 +307,12 @@ where blocks come in handy. We can rewrite the above snippet using
 
 ```
 /// Prints the numbers from 1 to $n on separate lines.
-print_numbers n:
+print-numbers n:
   n.repeat:
     print it + 1
 
 main:
-    print_numbers 5
+    print-numbers 5
 ```
 
 The new code isn't just shorter, but also expresses the intent more clearly.
@@ -321,12 +321,12 @@ We can do the same exercise for list iterations. Say you have written a function
 
 ```
 /// Prints the elements of the list on separate lines.
-print_list list:
+print-list list:
   for i := 0; i < list.size; i++:
     print list[i]
 
 main:
-    print_list [1, 2, 3, 4, 5]
+    print-list [1, 2, 3, 4, 5]
 ```
 
 Again, you can use `int.repeat` to rewrite the `for`-loop:
@@ -335,29 +335,29 @@ Again, you can use `int.repeat` to rewrite the `for`-loop:
 
 ```
 /// Prints the elements of the list on separate lines.
-print_list list:
+print-list list:
   list.size.repeat:
     print list[it]
 
 main:
-  print_list [1, 2, 3, 4, 5]
+  print-list [1, 2, 3, 4, 5]
 ```
 
 Now the example is shorter, but it is still not clear what the intend is. You
 can do even better than the above. The collections in the Toit standard library
 have `do` functions that iterate the collections and call a block for each
-element. You can rewrite `print_list` to
+element. You can rewrite `print-list` to
 
 <!-- RESET CODE -->
 
 ```
 /// Prints the elements of the list on separate lines.
-print_list list:
+print-list list:
   list.do:
     print it
 
 main:
-  print_list [1, 2, 3, 4, 5]
+  print-list [1, 2, 3, 4, 5]
 ```
 
 Now the intend is clear: you are `do`'ing something to the list which corresponds to visiting each element of the list.
@@ -369,7 +369,7 @@ by enclosing the named parameter in brackets `[ ]` (the same as for other block
 parameters). For instance, the signature of `Map.remove` is
 
 ```
-remove key [--if_absent] -> none:
+remove key [--if-absent] -> none:
 ```
 
 The named parameter is given in the same way as normal block parameter. For
@@ -379,8 +379,8 @@ example we could make a throwing remove for `Map`
 class Map:
   // ...
 
-  throw_remove key:
-    remove key --if_absent=:
+  throw-remove key:
+    remove key --if-absent=:
       throw "No such entry"
 ```
 
@@ -393,13 +393,13 @@ class Map:
   // ...
 
   remove key:
-    remove key --if_absent=: null
+    remove key --if-absent=: null
 ```
 
 A function can take multiple blocks as arguments. Take the `Map.get` signature as an example:
 
 ```
-get key [--if_present] [--if_absent]:
+get key [--if-present] [--if-absent]:
 ```
 
 `Map.get` takes two block arguments. For the sake of readability, it is
@@ -407,9 +407,9 @@ get key [--if_present] [--if_absent]:
 ```
 announcer map key:
   map.get key
-    --if_present=: | value |
+    --if-present=: | value |
       print "Proudly presenting $value!"
-    --if_absent=:
+    --if-absent=:
       print "Unable to find $key"
 
 main:
@@ -451,8 +451,8 @@ Because blocks are values, they can be stored in local variables, just like othe
 
 ```
 main:
-  block_variable := : print it + 1
-  10.repeat block_variable
+  block-variable := : print it + 1
+  10.repeat block-variable
 ```
 
 Syntactically, it looks a bit cryptic when blocks are stored in local

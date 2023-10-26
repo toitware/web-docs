@@ -16,7 +16,7 @@ In order to save space on the device, you must select which blocks of glyphs
 languages you wish to support on the display, and which special characters you
 need. For English language text it will be enough to include the `ASCII` block.
 For the accented characters used in Western Europe you will need to add the
-`LATIN_1_SUPPLEMENT` block. See the full list of blocks at
+`LATIN-1-SUPPLEMENT` block. See the full list of blocks at
 [Wikipedia](https://en.wikipedia.org/wiki/Unicode_block). Toit packages use
 a capitalized version of the official names of the blocks, replacing spaces
 and dashes with undercores. The exception is the "Basic Latin" block, which
@@ -37,34 +37,34 @@ the font.
 
 ## Example
 
-In the following example we assume the `font_x11_adobe` package has
+In the following example we assume the `font-x11-adobe` package has
 been installed in your project.
 
-<!-- HIDDEN CODE import pixel_display show TwoColorPixelDisplay -->
+<!-- HIDDEN CODE import pixel-display show TwoColorPixelDisplay -->
 ```
 // Import the font and size that you need, and give it a name.
-import font_x11_adobe.sans_14_bold as s14b
+import font-x11-adobe.sans-14-bold as s14b
 
 // Other imports we need.
 import font show Font
 
 // Select the Unicode blocks you need from the font. In this
 // case we have the coverage needed for Western Europe, plus
-// the Euro sign, which is in the CURRENCY_SYMBOLS block. We
-// call our subset of the font sans_10_bold.
-sans_14_bold ::= Font [s14b.ASCII, s14b.LATIN_1_SUPPLEMENT, s14b.CURRENCY_SYMBOLS]
+// the Euro sign, which is in the CURRENCY-SYMBOLS block. We
+// call our subset of the font sans-10-bold.
+sans-14-bold ::= Font [s14b.ASCII, s14b.LATIN-1-SUPPLEMENT, s14b.CURRENCY-SYMBOLS]
 
-// For this example we assume there exists a function `get_display` that
+// For this example we assume there exists a function `get-display` that
 // creates a TwoColorPixelDisplay.
-display ::= get_display
+display ::= get-display
 
 // Create a graphics context that uses this font. Whenever we
 // add a text texture to a display using this context, the given
 // font will be used.
-context := display.context --landscape --font=sans_14_bold
+context := display.context --landscape --font=sans-14-bold
 
 // An example function that adds a text to a display.
-my_fish_adding_function:
+my-fish-adding-function:
 
   // Add the fish text to the display at coordinates (50, 50).
   display.text context 50 50 "Ål, 3€/kg"
@@ -72,7 +72,7 @@ my_fish_adding_function:
   // Update the display with the latest addition.
   display.draw
 ```
-<!-- HIDDEN CODE get_display -> TwoColorPixelDisplay?: return null -->
+<!-- HIDDEN CODE get-display -> TwoColorPixelDisplay?: return null -->
 
 
 ## Available Fonts
@@ -88,98 +88,98 @@ to the naked eye.
 
 #### sans
 
-This font is from the `font_x11_adobe` package.  It is a modified
+This font is from the `font-x11-adobe` package.  It is a modified
 version of the Adobe font named "Helvetica".  "Helvetica" is a trademark
 of Monotype Imaging Inc.
 
 A clean sans-serif variable-width font,
 available in sizes 6, 8, 10, 12, 14, 18, and 24. The styles are default,
-oblique, bold and bold_oblique. For example the default style is found
-with `import font_x11_adobe.sans_14` and the bold style can be
-found with `import font_x11_adobe.sans_14_bold`. Coverage includes
+oblique, bold and bold-oblique. For example the default style is found
+with `import font-x11-adobe.sans-14` and the bold style can be
+found with `import font-x11-adobe.sans-14-bold`. Coverage includes
 mainly Latin letters, including accented variants.
 See the [copyright message](../adobe_copyright).
 
 #### book
 
-This font is from the `font_x11_adobe` package.  It is a modified
+This font is from the `font-x11-adobe` package.  It is a modified
 version of the Adobe font named "New Century Schoolbook".
 "New Century Schoolbook" is a trademark of Monotype GmbH.
 
 A serif variable-width font,
 available in sizes 6, 8, 10, 12, 14, 18, and 24. The styles are default,
-italic, bold and bold_italic. For example the default style is found
-with `import font_x11_adobe.book_14` and the bold style can be
-found with `import font_x11_adobe.book_14_bold`. Coverage includes
+italic, bold and bold-italic. For example the default style is found
+with `import font-x11-adobe.book-14` and the bold style can be
+found with `import font-x11-adobe.book-14-bold`. Coverage includes
 mainly Latin letters, including accented variants.
 See the [copyright message](../adobe_copyright).
 
 #### serif
 
-This font is from the `font_x11_adobe` package.  It is a modified
+This font is from the `font-x11-adobe` package.  It is a modified
 version of the Adobe font named "Times New Roman".
 "Times New Roman" is a trademark of The Monotype Corporation.
 
 A serif variable-width font,
 available in sizes 6, 8, 10, 12, 14, 18, and 24. The styles are default,
-italic, bold and bold_italic. For example the default style is found
-with `import font_x11_adobe.serif_14` and the bold style can be
-found with `import font_x11_adobe.serif_14_bold`. Coverage includes
+italic, bold and bold-italic. For example the default style is found
+with `import font-x11-adobe.serif-14` and the bold style can be
+found with `import font-x11-adobe.serif-14-bold`. Coverage includes
 mainly Latin and Greek letters, including accented variants.
 See the [copyright message](../adobe_copyright).
 
 #### typewriter
 
-This font is from the `font_x11_adobe` package.  It is a modified
+This font is from the `font-x11-adobe` package.  It is a modified
 version of the Adobe font named "Courier".
 
 A serif fixed-width font,
 available in sizes 6, 8, 10, 12, 14, 18, and 24. The styles are default,
-oblique, bold and bold_oblique. For example the default style is found
-with `import font_x11_adobe.typewriter_14` and the bold style can be
-found with `import font_x11_adobe.typewriter_14_bold`. Coverage includes
+oblique, bold and bold-oblique. For example the default style is found
+with `import font-x11-adobe.typewriter-14` and the bold style can be
+found with `import font-x11-adobe.typewriter-14-bold`. Coverage includes
 mainly Latin letters, including accented variants.
 See the [copyright message](../adobe_copyright).
 
 #### clear
 
-This font is from the `font_clear` package.  It is a modified
+This font is from the `font-clear` package.  It is a modified
 version of the Bigelow and Holmes font named "Lucida Bright".
 "Lucida" is a trademark of Bigelow and Holmes, Inc.
 
 A serif variable-width font,
 available in sizes 8, 10, 12, 14, 18, 19, and 24. The styles are default,
-italic, bold and bold_italic. For example the default style is found
-with `import font_clear.clear_14` and the bold style can be
-found with `import font_clear.clear_14_bold`. Coverage includes
+italic, bold and bold-italic. For example the default style is found
+with `import font-clear.clear-14` and the bold style can be
+found with `import font-clear.clear-14-bold`. Coverage includes
 mainly Latin letters, including accented variants.
 See the [copyright message](../bigelow_and_holmes_copyright).
 
-#### clear_sans
+#### clear-sans
 
-This font is from the `font_clear` package.  It is a modified
+This font is from the `font-clear` package.  It is a modified
 version of the Bigelow and Holmes font named "Lucida Sans".
 "Lucida" is a trademark of Bigelow and Holmes, Inc.
 
 A sans-serif variable-width font,
 available in sizes 8, 10, 12, 14, 18, 19, and 24. The styles are default,
-italic, bold and bold_italic. For example the default style is found
-with `import font_clear.clear_sans_14` and the bold style can be
-found with `import font_clear.clear_sans_14_bold`. Coverage includes
+italic, bold and bold-italic. For example the default style is found
+with `import font-clear.clear-sans-14` and the bold style can be
+found with `import font-clear.clear-sans-14-bold`. Coverage includes
 mainly Latin letters, including accented variants.
 See the [copyright message](../bigelow_and_holmes_copyright).
 
 #### Clearly-U
 
-This font is from the `font_clearly_u` package.
+This font is from the `font-clearly-u` package.
 
 A sans-serif variable-width font,
 available only in size 12. The styles are default and autobold, where
 the autobold variant has been generated automatically by Toit, so it
 can be a little crude-looking.
 For example the default style is found
-with `import font_clearly_u.clearly_u_12` and the bold style can be
-found with `import font_clearly_u.clearly_u_12_autobold`.
+with `import font-clearly-u.clearly-u-12` and the bold style can be
+found with `import font-clearly-u.clearly-u-12-autobold`.
 It has
 good coverage of left-to-right alphabets, including Roman, Greek, Cyrillic,
 Armenian, Georgian, Ge'ez (Ethiopic), Cherokee, Unified Canadian Aboriginal,
@@ -193,15 +193,15 @@ one of which we have chosen for inclusion.
 
 #### tiny
 
-This font is from the `font_tiny` package.
+This font is from the `font-tiny` package.
 
 The tiny font has a normal height of only 4 pixels, plus one pixel for
 descenders. Toit also provides a modified version of this font to
 expand digits into the
 descender area, which makes them 5 pixels high, and slightly more readable.
 It covers only the ASCII area and so has no accented or non-English
-characters. Use with `import font_tiny.tiny` or
-`import font_tiny.tiny_bigger_digits`.
+characters. Use with `import font-tiny.tiny` or
+`import font-tiny.tiny-bigger-digits`.
 See the [copyright message](../matthew_welch_copyright).
 
 ### Google
@@ -224,7 +224,7 @@ bitmap fonts. The styles are thin, light, regular, medium, bold, and black.
 Each style is also available in an italic variant. Sizes are 10,
 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, and 36.
 For example the regular style is found
-with `import roboto.roboto_14_regular` and the italic style can be
-found with `import roboto.roboto_14_regular_italic`.
+with `import roboto.roboto-14-regular` and the italic style can be
+found with `import roboto.roboto-14-regular_italic`.
 Roboto has good coverage of Roman, Greek, and Cyrillic alphabets.
 See the [copyright message](../apache_font_license).

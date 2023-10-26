@@ -4,7 +4,7 @@
 
 import .client as client
 
-API_KEY ::= "123456"
+API-KEY ::= "123456"
 
 main:
-  client.main API_KEY
+  client.main API-KEY

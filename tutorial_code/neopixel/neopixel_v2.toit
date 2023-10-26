@@ -7,7 +7,7 @@ Implements a color wheel animation on a NeoPixel strip.
 */
 
 import gpio
-import pixel_strip show PixelStrip
+import pixel-strip show PixelStrip
 
 WHEEL := [
   [255, 125, 0],
@@ -25,13 +25,13 @@ WHEEL := [
 ]
 
 PIXELS ::= 12
-DEGREES_PER_LED ::= 30
+DEGREES-PER-LED ::= 30
 
 /**
 Linearily interpolates the integer values $a and $b by $t (in range 0-1.0).
 */
 lerp a/int b/int t/float -> int:
-  return (a + t * (b - a)).to_int
+  return (a + t * (b - a)).to-int
 
 main:
   pin := gpio.Pin 13
@@ -44,9 +44,9 @@ main:
   current := 0
   while true:
     PIXELS.repeat:
-      lower := (current / DEGREES_PER_LED + it) % WHEEL.size
+      lower := (current / DEGREES-PER-LED + it) % WHEEL.size
       higher := (lower + 1) % WHEEL.size
-      t := (current % DEGREES_PER_LED) / 360.0
+      t := (current % DEGREES-PER-LED) / 360.0
       r[it] = lerp WHEEL[lower][0] WHEEL[higher][0] t
       g[it] = lerp WHEEL[lower][1] WHEEL[higher][1] t
       b[it] = lerp WHEEL[lower][2] WHEEL[higher][1] t

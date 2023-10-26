@@ -7,7 +7,7 @@ import system.firmware
 main:
   print "hello after update"
 
-  if firmware.is_validation_pending:
+  if firmware.is-validation-pending:
     if firmware.validate:
       print "firmware update validated"
     else:
