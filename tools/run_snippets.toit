@@ -40,6 +40,7 @@ THINGS-THAT-WONT-RUN-ON-SERVER ::= [
   "import ble",
   "import esp32",
   "import system.containers",
+  "import net.cellular",
 ]
 
 main args -> none:

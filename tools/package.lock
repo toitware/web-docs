@@ -1,6 +1,7 @@
-sdk: ^2.0.0-alpha.91
+sdk: ^2.0.0-alpha.108
 prefixes:
   bme280: bme280-driver
+  cellular: cellular
   certificate_roots: toit-cert-roots
   cli: pkg-cli
   dhtxx: toit-dhtxx
@@ -25,6 +26,11 @@ packages:
     name: bme280
     version: 1.0.0
     hash: 65b88ac19a5e2b48627a2dbae6d7757ae45c502c
+  cellular:
+    url: github.com/toitware/cellular
+    name: cellular
+    version: 2.1.10
+    hash: a2b641e2da596ac1fd58b5fd5ce5e26d5e501c35
   mqtt:
     url: github.com/toitware/mqtt
     name: mqtt

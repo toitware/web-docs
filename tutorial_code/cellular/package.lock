@@ -1,0 +1,21 @@
+sdk: ^2.0.0-alpha.108
+prefixes:
+  cellular: cellular
+  certificate_roots: toit-cert-roots
+  http: pkg-http
+packages:
+  cellular:
+    url: github.com/toitware/cellular
+    name: cellular
+    version: 2.1.10
+    hash: a2b641e2da596ac1fd58b5fd5ce5e26d5e501c35
+  pkg-http:
+    url: github.com/toitlang/pkg-http
+    name: http
+    version: 2.3.4
+    hash: 39fe52083b4c745cc37420649a48277b45728fd2
+  toit-cert-roots:
+    url: github.com/toitware/toit-cert-roots
+    name: certificate_roots
+    version: 1.6.1
+    hash: 55d3be82ed53d8d332338b2de931865cf69fe48b

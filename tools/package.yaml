@@ -2,6 +2,9 @@ dependencies:
   bme280:
     url: github.com/toitware/bme280-driver
     version: ^1.0.0
+  cellular:
+    url: github.com/toitware/cellular
+    version: ^2.1.10
   certificate_roots:
     url: github.com/toitware/toit-cert-roots
     version: ^1.6.1
