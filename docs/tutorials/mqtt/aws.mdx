@@ -182,6 +182,23 @@ handle secrets in Toit projects.
 
 </Note>
 
+## Troubleshooting
+Amazon AWS disconnects client that don't satisfy the policy restrictions. Unfortunately,
+it does not provide any reasons for the disconnect in this case.
+
+If you are seeing a message like `Closing because of invalid packet kind: 0`, then
+the connection was likely rejected by the broker.
+
+In that case make sure that:
+- The client ID is correct, and accepted by the policy.
+- The certificate and private key are correct.
+- The topic is accepted by the policy. Topics typically start without a leading "/". If
+  you have seen a debug log stating that the "Connection [was] established", immediately
+  followed by a disconnect/reconnect, then a bad topic could be the problem.
+
+Also remember that you can run Toit programs on your desktop machine. Sometimes
+this is easier for debugging.
+
 ## Summary
 In this tutorial we have seen how to connect to AWS IoT Core using
 TLS with client certificates. We have also seen how to use the
