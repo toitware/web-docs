@@ -59,3 +59,6 @@ dependencies:
   telegram:
     url: github.com/floitsch/toit-telegram
     version: ^0.5.2
+  watchdog:
+    url: github.com/toitware/toit-watchdog
+    version: ^1.2.0

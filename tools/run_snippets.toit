@@ -41,6 +41,7 @@ THINGS-THAT-WONT-RUN-ON-SERVER ::= [
   "import esp32",
   "import system.containers",
   "import net.cellular",
+  "import watchdog",
 ]
 
 main args -> none:

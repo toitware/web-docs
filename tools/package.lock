@@ -1,4 +1,4 @@
-sdk: ^2.0.0-alpha.108
+sdk: ^2.0.0-alpha.118
 prefixes:
   bme280: bme280-driver
   cellular: cellular
@@ -20,6 +20,7 @@ prefixes:
   ssd1306: toit-ssd1306
   supabase: toit-supabase
   telegram: toit-telegram
+  watchdog: toit-watchdog
 packages:
   bme280-driver:
     url: github.com/toitware/bme280-driver
@@ -131,3 +132,8 @@ packages:
     prefixes:
       certificate_roots: toit-cert-roots
       http: pkg-http
+  toit-watchdog:
+    url: github.com/toitware/toit-watchdog
+    name: watchdog
+    version: 1.2.0
+    hash: 61e70151f3623e60464e6bab8aa00825fd41f320

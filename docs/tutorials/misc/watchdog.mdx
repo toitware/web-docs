@@ -36,7 +36,7 @@ force your device to reset.
 
 ``` toit
 import watchdog.provider
-import watchdog
+import watchdog show WatchdogServiceClient
 
 main:
   // Start the watchdog provider.
@@ -134,7 +134,7 @@ without having to start it themselves.
 We can now modify our watchdog program to use the shared watchdog
 
 ``` toit
-import watchdog
+import watchdog show WatchdogServiceClient
 
 main:
   client := WatchdogServiceClient
