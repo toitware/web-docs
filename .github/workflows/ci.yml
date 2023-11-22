@@ -24,37 +24,15 @@ jobs:
           submodules: recursive
 
       - name: Setup Toit
-        shell: bash
-        run: |
-          export NATIVE_DOWNLOAD_DIR="${{ github.workspace }}/downloads"
-          echo "NATIVE_DOWNLOAD_DIR=$NATIVE_DOWNLOAD_DIR" >> $GITHUB_ENV
-
-          export DOWNLOAD_DIR="$PWD/downloads"
-          echo "DOWNLOAD_DIR=$DOWNLOAD_DIR" >> $GITHUB_ENV
-
-          TOIT_SDK_DIR=$DOWNLOAD_DIR/toit
-          echo "TOIT_SDK=$TOIT_SDK_DIR" >> $GITHUB_ENV
-
-          TOIT_SDK_FILE=toit-$(echo $RUNNER_OS | tr '[:upper:]' '[:lower:]').tar.gz
-          TOIT_SDK_BASE_URL=https://github.com/toitlang/toit/releases
-
-          echo "TOIT_SDK_URL=$TOIT_SDK_BASE_URL/download/$TOIT_VERSION/$TOIT_SDK_FILE" >> $GITHUB_ENV
-
-      - uses: suisei-cn/actions-download-file@v1.3.0
-        name: Download Toit
+        id: setup-toit
+        uses: toitlang/action-setup@v1
         with:
-          url: ${{ env.TOIT_SDK_URL }}
-          target: ${{ env.NATIVE_DOWNLOAD_DIR }}
-
-      - name: Extract Toit
-        shell: bash
-        run: |
-          cd "$DOWNLOAD_DIR"
-          tar x -f *.tar.gz
+          toit-version: ${{ env.TOIT_VERSION }}
 
       - name: Check snippets
         shell: bash
         run: |
+          export TOIT_SDK=${{ steps.setup-toit.outputs.toit-install-dir }}/toit
           cd tools
           $TOIT_SDK/bin/toit.pkg install
           ./run_all.sh
