@@ -1,0 +1,175 @@
+# Watchdogs
+This tutorial will show you how to use the watchdogs to monitor the system and reset it if it hangs.
+
+Watchdogs are hardware timers that can be used to reset the system if it doesn't respond
+the way it should. Users set up an interval at which the watchdog should be fed. If the
+watchdog is not fed within that interval, the system resets. The hope is that the system
+will be able to recover from whatever caused it to hang by doing a hard reset.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+Watchdogs use services. While not necessary, you may want to read the
+[Services](../../containers/services) tutorial to learn more about them.
+
+## Packages
+While the system watchdog is part of the core libraries, the nicer
+high-level abstraction of watchdogs needs to be installed as a package.
+See the [packages](../../setup/packages) tutorial for more information.
+
+To install the [watchdog](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-watchdog@v1)
+package run the following command:
+
+``` shell
+jag pkg install github.com/toitware/toit-watchdog@v1
+```
+
+## Code
+Start a new Toit program `watchdog.toit` and watch it with Jaguar.
+Be aware that the following program has some side effects, and will likely
+force your device to reset.
+
+``` toit
+import watchdog.provider
+import watchdog
+
+main:
+  // Start the watchdog provider.
+  provider.main
+
+  // Create a watchdog client that connects to the provider.
+  client := WatchdogServiceClient
+  // Connect to the provider that has been started earlier.
+  client.open
+
+  // Create a watchdog.
+  dog := client.create "io.toit.docs/tutorial/my-dog"
+
+  // Require a feeding every 60 seconds.
+  dog.start --s=60
+
+  // Feed it:
+  dog.feed
+
+  // Stop it, if not necessary:
+  dog.stop
+
+  // When stopped, close it.
+  dog.close
+
+  print "done"
+```
+
+The watchdog provider is a service that runs in the background and
+provides watchdogs to clients. In our case the provider is started by
+the `provider.main` function.
+
+The client connects to the provider and creates a watchdog. The string
+that is passed to the constructor identifies the watchdog. Even if
+a program crashes, it can avoid a system reset if it restarts fast
+enough and feeds a watchdog with the same ID in time. See
+the "Recommendations" section below for more information.
+
+We then show how to start, feed, stop and close the watchdog.
+
+Note that the program prints "done", but does not exit. This is because
+the provider is still running in the background. For various reasons
+it is recommended to run the watchdog provider in its own container.
+
+
+<Note>
+
+It is critical that the watchdog functionality isn't shut down accidentally.
+Contrary to other resources, watchdogs are thus not cleaned up automatically
+when the program exits (cleanly or not). Instead, the underlying system
+watchdog is kept running, thus guaranteeing that the system will reset.
+
+In our case a `jag run` (or `jag watch`) might stop the program while the
+watchdog provider is active. Despite reinstalling a new version of the
+program, the old watchdog provider could still be running and then
+force a reset.
+
+This issue is mostly avoided if the provider
+is installed in its own container (see the next section). In that case
+reinstalling the program doesn't affect the container that contains
+the watchdog provider.
+
+User programs might still be aborted by Jaguar, but by reinstalling new
+versions of them they can recover, since the names are IDs that identify
+the watchdogs.
+
+</Note>
+
+## Running the watchdog provider in a container
+To run the watchdog provider in a container, we need to create a
+simple entrypoint script that starts the provider. Create a new file
+`watchdog-provider.toit` with the following content:
+
+``` toit
+import watchdog.provider
+
+main:
+  provider.main
+```
+
+Install it on your device with the following command:
+
+``` shell
+jag container install watchdog watchdog-provider.toit
+```
+
+This installs and starts the watchdog provider in a container named
+`watchdog`. See the [container](../../containers) tutorial for more
+information about containers.
+
+Once installed, other containers can connect to the watchdog provider
+without having to start it themselves.
+
+## Using the shared watchdog provider
+We can now modify our watchdog program to use the shared watchdog
+
+``` toit
+import watchdog
+
+main:
+  client := WatchdogServiceClient
+  client.open  // Now connects to the shared watchdog provider.
+
+  dog := client.create "io.toit.docs/tutorial/my-dog"
+  ...
+```
+
+Note that multiple containers can connect to the same watchdog provider.
+
+Try to reduce the feeding interval and remove the `stop`/`close` to see how
+the system reboots.
+
+## Recommendations
+Watchdogs are a powerful tool to make sure that the system doesn't hang. In
+this section we give some recommendations on how best to use them in Toit.
+
+1. Give watchdogs enough time, or disable them when appropriate. For example,
+  a system update might disable other programs. If these other programs had
+  a watchdog timer, then the update process could be interrupted by the
+  stale watchdog of the stopped program.
+2. Feed when important actions happen. For example, feed the dog, when data
+  has been uploaded, or when a sensor has been read and processed.
+  Contrary to the examples do *not*
+  feed a watchdog after it has been created. If your application has a
+  crash loop it could start up, create the watchdog, feed it, and then die
+  immediately afterwards.
+3. Use different watchdogs. Feel free to have a watchdog for uploading (for
+  example every 30 minutes), and another that is fed every 3 minutes, when
+  the device expects a ping from a server.
+4. Make sure to clean up *after* the watchdog has reset your system. If
+  your board has external sensors/peripherals, they might not be in a clean
+  state. You can use the
+  [reset-reason](https://libs.toit.io/esp32/library-summary#reset-reason(0%2C0%2C0%2C))
+  function to determine why a system has booted. If the reason wasn't a
+  deepsleep, then you have to assume that the external peripherals are in an unknown
+  state.
