@@ -1,6 +1,5 @@
 import certificate-roots
 import mqtt
-import net
 
 ADAFRUIT-IO-USERNAME ::= "<YOUR_USERNAME>"
 ADAFRUIT-IO-KEY ::= "<YOUR_KEY>"
@@ -12,17 +11,14 @@ ADAFRUIT-IO-HOST ::= "io.adafruit.com"
 CLIENT-ID ::= ""
 
 main:
-  network := net.open
-  transport := mqtt.TcpTransport.tls network --host=ADAFRUIT-IO-HOST
+  client := mqtt.Client.tls --host=ADAFRUIT-IO-HOST
       --root-certificates=[certificate-roots.DIGICERT-GLOBAL-ROOT-CA]
   /**
   // Alternatively, you can also connect without TLS, by using the
-  // following transport:
-  transport := mqtt.TcpTransport network --host=HOST
+  // following constructor call:
+  client := mqtt.Client --host=HOST
   // In that case you can remove the `certificate_roots` import.
   */
-
-  client := mqtt.Client --transport=transport
 
   options := mqtt.SessionOptions
     --client-id = CLIENT-ID
@@ -44,4 +40,3 @@ main:
     sleep --ms=2_500
 
   client.close
-  network.close

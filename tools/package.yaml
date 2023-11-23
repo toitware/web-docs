@@ -34,7 +34,7 @@ dependencies:
     version: ^1.0.6
   mqtt:
     url: github.com/toitware/mqtt
-    version: ^2.4.0
+    version: ^2.6.0
   ntp:
     url: github.com/toitlang/pkg-ntp
     version: ^1.0.0

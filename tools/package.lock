@@ -35,8 +35,8 @@ packages:
   mqtt:
     url: github.com/toitware/mqtt
     name: mqtt
-    version: 2.4.0
-    hash: 7cb455df6d2b5f527db12e4925d456a29b03cf03
+    version: 2.6.0
+    hash: 8e09fb35c393e442305ee4578e5546c5c80735be
   pkg-cli:
     url: github.com/toitlang/pkg-cli
     name: cli

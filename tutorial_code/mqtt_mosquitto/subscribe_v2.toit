@@ -3,7 +3,6 @@
 // be found in the LICENSE_BSD0 file.
 
 import mqtt
-import net
 import encoding.json
 
 CLIENT-ID ::= "toit-tutorial-ID-2023-07-06"
@@ -11,9 +10,7 @@ HOST ::= "test.mosquitto.org"
 TOPIC ::= "toit-mqtt/tutorial"
 
 main:
-  network := net.open
-  transport := mqtt.TcpTransport network --host=HOST
-  client := mqtt.Client --transport=transport
+  client := mqtt.Client --host=HOST
   client.start --client-id=CLIENT-ID
 
   client.subscribe TOPIC:: | topic/string payload/ByteArray |

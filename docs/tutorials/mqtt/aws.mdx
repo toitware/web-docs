@@ -85,7 +85,6 @@ Add the following code to the file:
 
 ``` toit
 import certificate-roots
-import net
 import net.x509
 import mqtt
 import mqtt.transport as mqtt
@@ -169,10 +168,33 @@ main:
   client.start --options=options
   client.publish TOPIC "hello".to-byte-array
   client.close
+  transport.close
 ```
 
 If you still have the AWS IoT Core console open, you should see the
 message appear in the wizard.
+
+For clarity we have moved the transport creation out of the `main` function.
+However, all the parameters to the `mqtt.TcpTransport.tls` constructor can
+also be passed directly to the `mqtt.Client` method:
+
+``` toit
+main:
+  parsed := x509.Certificate.parse CLIENT-CERTIFICATE-DER
+  client-certificate := tls.Certificate parsed CLIENT-KEY-DER
+  client := mqtt.Client.tls
+      --host=HOST
+      --port=PORT
+      --root-certificates=[ROOT-CERTIFICATE]
+      --certificate=client-certificate
+  options := mqtt.SessionOptions --client-id=CLIENT-ID
+  client.start --options=options
+  client.publish TOPIC "hello".to-byte-array
+  client.close
+```
+
+This has the advantage that the transport is owned by the client and will
+be closed automatically when the client is closed.
 
 <Note>
 

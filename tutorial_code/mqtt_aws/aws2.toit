@@ -27,20 +27,15 @@ CLIENT-KEY-DER ::= """
 -----END RSA PRIVATE KEY-----
 """
 
-create-aws-transport -> mqtt.Transport:
+main:
   parsed := x509.Certificate.parse CLIENT-CERTIFICATE-DER
   client-certificate := tls.Certificate parsed CLIENT-KEY-DER
-  return mqtt.TcpTransport.tls
+  client := mqtt.Client.tls
       --host=HOST
       --port=PORT
       --root-certificates=[ROOT-CERTIFICATE]
       --certificate=client-certificate
-
-main:
-  transport := create-aws-transport
-  client := mqtt.Client --transport=transport
   options := mqtt.SessionOptions --client-id=CLIENT-ID
   client.start --options=options
   client.publish TOPIC "hello".to-byte-array
   client.close
-  transport.close

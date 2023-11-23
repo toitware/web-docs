@@ -106,16 +106,13 @@ Open an `mqtt.toit` file, and watch it with Jaguar.
 Insert the following code:
 <!-- ANALYZE CODE -->
 ```toit
-import net
 import mqtt
 
 CLIENT-ID ::= ""  // Use a random client ID.
 HOST ::= "test.mosquitto.org"
 
 main:
-  network := net.open
-  transport := mqtt.TcpTransport network --host=HOST
-  client := mqtt.Client --transport=transport
+  client := mqtt.Client --host=HOST
   client.start --client-id=CLIENT-ID
 
   // Client is now connected.
@@ -158,7 +155,6 @@ Call the file `publish.toit` and insert the following code.
 
 <!-- ANALYZE CODE -->
 ```toit
-import net
 import mqtt
 import encoding.json
 
@@ -167,9 +163,7 @@ HOST ::= "test.mosquitto.org"
 TOPIC ::= "toit-mqtt/tutorial"
 
 main:
-  network := net.open
-  transport := mqtt.TcpTransport network --host=HOST
-  client := mqtt.Client --transport=transport
+  client := mqtt.Client --host=HOST
   client.start --client-id=CLIENT-ID
 
   payload := json.encode {
@@ -197,7 +191,6 @@ name to the one you used in the previous example.
 
 ```toit
 import mqtt
-import net
 import encoding.json
 
 CLIENT-ID ::= ""  // Use a random client ID.
@@ -205,9 +198,7 @@ HOST ::= "test.mosquitto.org"
 TOPIC ::= "toit-mqtt/tutorial"
 
 main:
-  network := net.open
-  transport := mqtt.TcpTransport network --host=HOST
-  client := mqtt.Client --transport=transport
+  client := mqtt.Client --host=HOST
   client.start --client-id=CLIENT-ID
 
   client.subscribe TOPIC:: | topic/string payload/ByteArray |
@@ -268,7 +259,6 @@ registered, they will be lost. To avoid this, you can register the
 subscription handler before connecting to the broker:
 
 <!-- RESET CODE -->
-<!-- HIDDEN CODE import net -->
 <!-- HIDDEN CODE import mqtt -->
 <!-- HIDDEN CODE import certificate-roots -->
 <!-- HIDDEN CODE import encoding.json -->
@@ -277,14 +267,12 @@ subscription handler before connecting to the broker:
 <!-- HIDDEN CODE TOPIC ::= "" -->
 ```
 main:
-  network := net.open
-  transport := mqtt.TcpTransport network --host=HOST
   routes := {
     TOPIC: :: | topic/string payload/ByteArray |
       decoded := json.decode payload
       print "Received value on '$topic': $decoded"
   }
-  client := mqtt.Client --transport=transport --routes=routes
+  client := mqtt.Client --host=HOST --routes=routes
   client.start --client-id=CLIENT-ID
   // Client is now connected and subscribed to the given routes.
 ```
@@ -307,7 +295,6 @@ Once we have the root certificates, the client's transport can be created as fol
 
 ```toit
 import mqtt
-import net
 import certificate-roots
 import encoding.json
 
@@ -317,16 +304,13 @@ TOPIC ::= "toit-mqtt/tutorial"
 PORT ::= 8886
 
 main:
-  network := net.open
-  transport := mqtt.TcpTransport.tls network --host=HOST --port=PORT
-      --root-certificates=[certificate-roots.ISRG-ROOT-X1]
-
   routes := {
     TOPIC: :: | topic/string payload/ByteArray |
       decoded := json.decode payload
       print "Received value on '$topic': $decoded"
   }
-  client := mqtt.Client --transport=transport --routes=routes
+  client := mqtt.Client.tls --routes=routes --host=HOST --port=PORT
+      --root-certificates=[certificate-roots.ISRG-ROOT-X1]
   client.start --client-id=CLIENT-ID
 
   while true:
