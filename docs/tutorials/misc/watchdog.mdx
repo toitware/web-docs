@@ -48,7 +48,7 @@ main:
   client.open
 
   // Create a watchdog.
-  dog := client.create "io.toit.docs/tutorial/my-dog"
+  dog := client.create "docs.toit.io/tutorial/my-dog"
 
   // Require a feeding every 60 seconds.
   dog.start --s=60
@@ -140,7 +140,7 @@ main:
   client := WatchdogServiceClient
   client.open  // Now connects to the shared watchdog provider.
 
-  dog := client.create "io.toit.docs/tutorial/my-dog"
+  dog := client.create "docs.toit.io/tutorial/my-dog"
   ...
 ```
 
