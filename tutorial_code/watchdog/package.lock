@@ -1,0 +1,9 @@
+sdk: ^2.0.0-alpha.118
+prefixes:
+  watchdog: toit-watchdog
+packages:
+  toit-watchdog:
+    url: github.com/toitware/toit-watchdog
+    name: watchdog
+    version: 1.2.0
+    hash: 61e70151f3623e60464e6bab8aa00825fd41f320
