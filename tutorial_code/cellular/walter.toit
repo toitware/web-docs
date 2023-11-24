@@ -27,6 +27,8 @@ main:
     cellular.CONFIG-RESET: [RESET, cellular.CONFIG-ACTIVE-LOW],
     cellular.CONFIG-POWER: POWER,
     cellular.CONFIG-UART-BAUD-RATE: BAUD,
+    // If your provider requires an APN, you can set it here.
+    // cellular.CONFIG-APN: "<your-apn>",
   }
 
   try:
