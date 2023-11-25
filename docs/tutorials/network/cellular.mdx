@@ -57,7 +57,8 @@ jag pkg install github.com/toitware/toit-cert-roots@v1
 ```
 
 ## Code
-Start a new Toit program `walter.toit` and watch it with Jaguar.
+Start a new Toit program `walter.toit` and watch it with Jaguar. If necessary,
+uncomment the `CONFIG-APN` line and set the correct APN for your provider.
 
 ``` toit
 import cellular.modules.sequans.monarch
@@ -89,6 +90,8 @@ main:
     cellular.CONFIG-RESET: [RESET, cellular.CONFIG-ACTIVE-LOW],
     cellular.CONFIG-POWER: POWER,
     cellular.CONFIG-UART-BAUD-RATE: BAUD,
+    // If your provider requires an APN, you can set it here.
+    // cellular.CONFIG-APN: "<your-apn>",
   }
 
   try:
@@ -134,7 +137,8 @@ connection is then not available to other containers.
 
 We can fix this, by installing the cellular provider in its own container.
 
-Create a new file `cellular.toit` with the following content:
+Create a new file `cellular.toit` with the following content. If necessary,
+uncomment the `CONFIG-APN` line and set the correct APN for your provider.
 
 ``` toit
 import net.cellular
@@ -159,6 +163,8 @@ class WalterCellularProvider extends monarch.MonarchService:
         cellular.CONFIG-RESET: [RESET, cellular.CONFIG-ACTIVE-LOW],
         cellular.CONFIG-POWER: POWER,
         cellular.CONFIG-UART-BAUD-RATE: BAUD,
+        // If your provider requires an APN, you can set it here.
+        // cellular.CONFIG-APN: "<your-apn>",
       }
     return super client config
 
