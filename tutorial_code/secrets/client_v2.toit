@@ -5,4 +5,5 @@
 import .secrets
 
 main:
-  print "Using the API_KEY now: $API-KEY"
+  secret-api-key := API-KEY  // Imported from secrets.
+  print "Using the API_KEY now: $secret-api-key"
