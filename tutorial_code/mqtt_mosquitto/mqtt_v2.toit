@@ -13,9 +13,9 @@ TOPIC ::= "toit-mqtt/tutorial"
 PORT ::= 8886
 
 main:
+  certificate-roots.install-common-trusted-roots
   network := net.open
   transport := mqtt.TcpTransport.tls network --host=HOST --port=PORT
-      --root-certificates=[certificate-roots.ISRG-ROOT-X1]
 
   routes := {
     TOPIC: :: | topic/string payload/ByteArray |

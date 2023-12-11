@@ -130,7 +130,7 @@ it with the following command. See the [packages](../../setup/packages)
 tutorial for details.
 
 ```shell
-jag pkg install github.com/toitware/toit-supabase@0.1
+jag pkg install github.com/toitware/toit-supabase@0.2
 ```
 
 <Note>
@@ -171,11 +171,11 @@ ANON-KEY ::= "<anon-key>"
 DEVICE-ID ::= "<device-id>"
 
 main:
+  certificate-roots.install-common-trusted-roots
   host := "$(PROJECT-ID).supabase.co"
   client := supabase.Client.tls
       --host=host
       --anon=ANON-KEY
-      --root-certificates=[certificate-roots.BALTIMORE-CYBERTRUST-ROOT]
 
   // We don't want to receive the inserted row, because we don't have
   // read access to the table.
