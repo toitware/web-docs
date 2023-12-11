@@ -85,10 +85,8 @@ Add the following code to the file:
 
 ``` toit
 import certificate-roots
-import net
-import net.x509
 import mqtt
-import mqtt.transport as mqtt
+import net.x509
 import tls
 
 HOST ::= "<YOUR AMAZON HOST>"
@@ -137,24 +135,16 @@ The `CLIENT-CERTIFICATE-DER` and `CLIENT-KEY-DER` are the certificate
 and private key that you downloaded earlier. You can copy and paste
 them into the file.
 
-### Creating the transport
+### Creating the client certificate
 As mentioned above, AWS IoT Core uses TLS with client certificates
 to authenticate devices. Add the following function that creates
-an MQTT transport with the correct settings:
+the client certificate:
 
 ``` toit
-create-aws-transport -> mqtt.Transport:
+create-aws-certificate -> tls.Certificate:
   parsed := x509.Certificate.parse CLIENT-CERTIFICATE-DER
-  client-certificate := tls.Certificate parsed CLIENT-KEY-DER
-  return mqtt.TcpTransport.tls
-      --host=HOST
-      --port=PORT
-      --certificate=client-certificate
+  return tls.Certificate parsed CLIENT-KEY-DER
 ```
-
-This function accepts a network interface and returns an MQTT transport.
-It parses the certificate and generates a TLS certificate object from it,
-and then creates a TLS transport with the appropriate settings.
 
 ### Connecting to the broker
 We can now connect to the broker. Add the following code to the `main` function:
@@ -162,8 +152,9 @@ We can now connect to the broker. Add the following code to the `main` function:
 ``` toit
 main:
   certificate-roots.install-common-trusted-roots
-  transport := create-aws-transport
-  client := mqtt.Client --transport=transport
+  client := mqtt.Client.tls
+      --host=HOST
+      --certificate=create-aws-certificate
   options := mqtt.SessionOptions --client-id=CLIENT-ID
   client.start --options=options
   client.publish TOPIC "hello".to-byte-array

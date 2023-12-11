@@ -3,26 +3,22 @@
 // be found in the LICENSE_BSD0 file.
 
 import mqtt
-import net
 import certificate-roots
 import encoding.json
 
 CLIENT-ID ::= "toit-tutorial-ID-2023-07-06"
 HOST ::= "test.mosquitto.org"
 TOPIC ::= "toit-mqtt/tutorial"
-PORT ::= 8886
 
 main:
   certificate-roots.install-common-trusted-roots
-  network := net.open
-  transport := mqtt.TcpTransport.tls network --host=HOST --port=PORT
 
   routes := {
     TOPIC: :: | topic/string payload/ByteArray |
       decoded := json.decode payload
       print "Received value on '$topic': $decoded"
   }
-  client := mqtt.Client --transport=transport --routes=routes
+  client := mqtt.Client.tls --host=HOST --routes=routes
   client.start --client-id=CLIENT-ID
 
   while true:

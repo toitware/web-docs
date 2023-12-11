@@ -3,14 +3,11 @@
 // be found in the LICENSE_BSD0 file.
 
 import certificate-roots
-import net
-import net.x509
 import mqtt
-import mqtt.transport as mqtt
+import net.x509
 import tls
 
 HOST ::= "<YOUR AMAZON HOST>"
-PORT ::= 8883
 
 CLIENT-ID ::= "sdk-nodejs-toit"
 TOPIC ::= "sdk/test/js"
@@ -27,18 +24,15 @@ CLIENT-KEY-DER ::= """
 -----END RSA PRIVATE KEY-----
 """
 
-create-aws-transport -> mqtt.Transport:
+create-aws-certificate -> tls.Certificate:
   parsed := x509.Certificate.parse CLIENT-CERTIFICATE-DER
-  client-certificate := tls.Certificate parsed CLIENT-KEY-DER
-  return mqtt.TcpTransport.tls
-      --host=HOST
-      --port=PORT
-      --certificate=client-certificate
+  return tls.Certificate parsed CLIENT-KEY-DER
 
 main:
   certificate-roots.install-common-trusted-roots
-  transport := create-aws-transport
-  client := mqtt.Client --transport=transport
+  client := mqtt.Client.tls
+      --host=HOST
+      --certificate=create-aws-certificate
   options := mqtt.SessionOptions --client-id=CLIENT-ID
   client.start --options=options
   client.publish TOPIC "hello".to-byte-array
