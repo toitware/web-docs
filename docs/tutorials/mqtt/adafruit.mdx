@@ -96,7 +96,7 @@ CLIENT-ID ::= ""
 main:
   certificate-roots.install-common-trusted-roots
   network := net.open
-  transport := mqtt.TcpTransport.tls network --host=ADAFRUIT-IO-host
+  transport := mqtt.TcpTransport.tls network --host=ADAFRUIT-IO-HOST
 
   /**
   // Alternatively, you can also connect without TLS, by using the
