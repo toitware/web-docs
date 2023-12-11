@@ -161,7 +161,7 @@ We can now connect to the broker. Add the following code to the `main` function:
 
 ``` toit
 main:
-  certificate-roots.AMAZON-ROOT-CA-1.install
+  certificate-roots.install-common-trusted-roots
   transport := create-aws-transport
   client := mqtt.Client --transport=transport
   options := mqtt.SessionOptions --client-id=CLIENT-ID

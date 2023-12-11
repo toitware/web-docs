@@ -9,7 +9,7 @@ import net
 URL ::= "https://script.google.com/macros/s/AKfycbyZqjODR6oskcJ8cdMZL_bfipPtz_GioQdFhEXYSRv3a98DzkEbP5ld85HsPZ7xov48NQ/exec" // <YOUR URL>"
 
 main:
-  certificate-roots.GTS-ROOT-R1.install
+  certificate-roots.install-common-trusted-roots
   network := net.open
   client := http.Client.tls network
 

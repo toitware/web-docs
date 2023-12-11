@@ -136,7 +136,7 @@ import net
 URL ::= "<YOUR URL>"
 
 main:
-  certificate-roots.GTS-ROOT-R1.install
+  certificate-roots.install-common-trusted-roots
   network := net.open
   client := http.Client.tls network
 
