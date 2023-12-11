@@ -11,7 +11,6 @@ import tls
 
 HOST ::= "<YOUR AMAZON HOST>"
 PORT ::= 8883
-ROOT-CERTIFICATE ::= certificate-roots.AMAZON-ROOT-CA-1
 
 CLIENT-ID ::= "sdk-nodejs-toit"
 TOPIC ::= "sdk/test/js"
@@ -34,10 +33,10 @@ create-aws-transport -> mqtt.Transport:
   return mqtt.TcpTransport.tls
       --host=HOST
       --port=PORT
-      --root-certificates=[ROOT-CERTIFICATE]
       --certificate=client-certificate
 
 main:
+  certificate-roots.AMAZON-ROOT-CA-1.install
   transport := create-aws-transport
   client := mqtt.Client --transport=transport
   options := mqtt.SessionOptions --client-id=CLIENT-ID

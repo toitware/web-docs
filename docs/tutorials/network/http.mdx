@@ -50,12 +50,11 @@ import encoding.json
 
 URL ::= "uselessfacts.jsph.pl"
 PATH ::= "/random.json?language=en"
-CERTIFICATE ::= certificate-roots.ISRG-ROOT-X1
 
 main:
+  certificate-roots.install-common-trusted-roots
   network := net.open
   client := http.Client.tls network
-      --root-certificates=[CERTIFICATE]
 
   request := client.get URL PATH
   decoded := json.decode-stream request.body

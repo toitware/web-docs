@@ -171,11 +171,11 @@ ANON-KEY ::= "<anon-key>"
 DEVICE-ID ::= "<device-id>"
 
 main:
+  certificate-roots.install-common-trusted-roots
   host := "$(PROJECT-ID).supabase.co"
   client := supabase.Client.tls
       --host=host
       --anon=ANON-KEY
-      --root-certificates=[certificate-roots.BALTIMORE-CYBERTRUST-ROOT]
 
   // We don't want to receive the inserted row, because we don't have
   // read access to the table.
