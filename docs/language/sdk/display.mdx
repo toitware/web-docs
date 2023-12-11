@@ -197,7 +197,6 @@ import font show *
 import font-x11-adobe.sans-14-bold
 import monitor show Mutex
 import mqtt
-import net
 
 import pictogrammers-icons.size-48 as icons
 
@@ -279,8 +278,7 @@ main:
   task:: weather-task icon-texture temperature-texture
 
 weather-task weather-icon/IconTexture temperature-texture/TextTexture:
-  transport := mqtt.TcpTransport net.open --host="127.0.0.1"
-  client := mqtt.Client --transport=transport
+  client := mqtt.Client --host="127.0.0.1"
   client.start --client-id="toit-client-id"
   client.subscribe "weather":: | topic/string payload/ByteArray |
     map := json.decode payload
