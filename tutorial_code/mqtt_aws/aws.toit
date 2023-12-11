@@ -36,7 +36,7 @@ create-aws-transport -> mqtt.Transport:
       --certificate=client-certificate
 
 main:
-  certificate-roots.AMAZON-ROOT-CA-1.install
+  certificate-roots.install-common-trusted-roots
   transport := create-aws-transport
   client := mqtt.Client --transport=transport
   options := mqtt.SessionOptions --client-id=CLIENT-ID

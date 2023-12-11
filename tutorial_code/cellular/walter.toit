@@ -37,7 +37,7 @@ main:
     network.close
 
 do-network-things network/net.Client:
-  certificate-roots.GTS-ROOT-R1.install
+  certificate-roots.install-common-trusted-roots
   client := http.Client.tls network
   request := client.get --uri="https://official-joke-api.appspot.com/random_joke"
   decoded := json.decode-stream request.body
