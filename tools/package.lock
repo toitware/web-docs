@@ -15,6 +15,7 @@ prefixes:
   ntp: pkg-ntp
   one_wire: toit-1-wire
   pictogrammers_icons: toit-icons-pictogrammers
+  pixel_display: toit-pixel-display
   pixel_strip: toit-pixel-strip
   ssd1306: toit-ssd1306
   supabase: toit-supabase
