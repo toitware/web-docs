@@ -85,7 +85,7 @@ example we use the sans10 font, which is a simple ASCII-only font
 that is built in to the Toit SDK and does not need to be
 imported with a package.
 
-In this example we build up a 'scene' consisting of only one text
+We build up a 'scene' consisting of only one text
 element, and immediately render it to the screen with `draw`.
 Afterwards we exit the program, which (depending on the driver)
 leaves the image on the screen.
@@ -146,21 +146,21 @@ import pixel-display.two-color show WHITE BLACK
 import .get-display  // Import file in current project, see above.
 
 main:
-  sans-10-bold ::= Font [
+  SANS-10-BOLD ::= Font [
     sans-10-bold.ASCII,
     sans-10-bold.LATIN-1-SUPPLEMENT]
-  sans-24-font ::= Font [
+  SANS-24-FONT ::= Font [
     sans-24-bold.ASCII,
     sans-24-bold.LATIN-1-SUPPLEMENT]
   display/PixelDisplay ::= get-display
 
   sans-10 := Style
-    --font = sans-10-bold
+    --font = SANS-10-BOLD
     --color = BLACK
     --align-right
 
   sans-24 := Style
-    --font = sans-24-font
+    --font = SANS-24-FONT
     --color = BLACK
     --align-center
 
