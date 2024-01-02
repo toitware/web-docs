@@ -224,7 +224,6 @@ import mqtt
 import pictogrammers-icons.size-48 as icons
 import pixel-display.two-color show *
 import pixel-display show *
-import png-display show *
 
 import .get-display  // Import file in current project, see above.
 
@@ -320,7 +319,7 @@ weather-task weather-icon/Label temperature-element/Label:
       temperature-element.label = "$(%.1f temp)°C"
       display.draw
 
-clock-task time-element/Label::
+clock-task time-element/Label:
   while true:
     now := (Time.now).local
     display-mutex.do:
