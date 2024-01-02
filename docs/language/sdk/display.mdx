@@ -2,7 +2,7 @@ import WeatherExample from "../../_images/display-example.png";
 
 # Display
 
-The Toit SDK includes support for writing text and printing icons on displays.
+The Toit SDK includes support for simple user interfaces on displays.
 We highlight in this section the basic functions of display use. You can also learn more about the different fonts available in the SDK by studying the [font basics](../fonts).
 
 These examples assume you have installed the [pixel_display](https://github.com/toitware/toit-pixel-display) package into
@@ -28,7 +28,7 @@ import i2c
 import ssd1306 show *
 import pixel-display show *
 
-get-display -> TwoColorPixelDisplay:
+get-display -> PixelDisplay:
   scl := gpio.Pin 4
   sda := gpio.Pin 5
   bus := i2c.Bus
@@ -42,79 +42,90 @@ get-display -> TwoColorPixelDisplay:
 
   driver := Ssd1306.i2c (bus.device Ssd1306.I2C-ADDRESS)
 
-  return TwoColorPixelDisplay driver
+  return PixelDisplay.two-color driver
+  // Alternatively: return PixelDisplay.two-color --portrait --inverted driver
 ```
 
 # Display architecture
 
-A display will be an instance of one of the following classes, which have
-most of the same methods:
+A display will be an subclass of `PixelDisplay`.  These are created with named
+constructors.
 
-`TwoColorPixelDisplay` for black/white displays.
+`PixelDisplay.two-color` for black/white displays.
 
-`ThreeColorPixelDisplay` for black/white/red displays (usually e-paper).
+`PixelDisplay.three-color` for black/white/red displays (usually e-paper).
 
-`FourGrayPixelDisplay` for 4-tone grayscale displays (usually e-paper).
+`PixelDisplay.four-gray` for 4-tone grayscale displays (usually e-paper).
 
-`TrueColorPixelDisplay` for color displays like the ones supported by the `color-tft` driver.
+`PixelDisplay.true-color` for color displays like the ones supported by the `color-tft` driver.
 
-A display maintains a list of objects that it is currently displaying.
-These objects are called `Texture`s. They are mutable objects that
-represent a shape on the display. For example a geometric shape or a
-piece of text. Together, the textures added to a display describe a
-scene.
+A display maintains a tree of objects that it is currently displaying.
+These objects are called `Element`s.  As in HTML, one of the popular
+elements is called `Div` and it is primarily used to group other
+elements. The main element for displaying text is called `Label`.
 
-To update the display, you add or remove textures, or modify the
-existing textures. When you have made your changes you update the
+Elements are mutable objects that represent a shape on the display. For example
+a geometric shape or a piece of text. Together, the elements added to a display
+describe a scene.
+
+To update the display, you add or remove elements, or modify the
+existing elements. When you have made your changes you update the
 physical display by calling the `draw` method on the display object.
 
-Normally you will import all the textures for your given color model
-into your namespace with an import like `import pixel-display.true-color show *`
+Normally you will import all the common elements
+into your namespace with an import like `import pixel-display show *`
+The `true-color` displays use web-like six-digit hex color codes in the style
+0xRRGGBB, while other displays have useful constants like `BLACK`,
+and `WHITE`, which can be imported with `import pixel-display.two-color show *`.
 
 ## Write with built-in sans font
 
-Let us start with a simple example using a text texture. In this
+Let us start with a simple example using a Label element. In this
 example we use the sans10 font, which is a simple ASCII-only font
 that is built in to the Toit SDK and does not need to be
 imported with a package.
 
-In this example we build up a 'scene' consisting of only one text
-texture, and immediately render it to the screen with `draw`.
-Afterwards we exit the program, which leaves the image on the screen.
+We build up a 'scene' consisting of only one text
+element, and immediately render it to the screen with `draw`.
+Afterwards we exit the program, which (depending on the driver)
+leaves the image on the screen.
 In this example there is no way to update the scene later, since
 the program has terminated.
 
 ```
 import font show *
-import pixel-display.texture show *
-import pixel-display.two-color show *  // Provides WHITE and BLACK.
 import pixel-display show *
+import pixel-display.two-color show *  // Provides WHITE and BLACK.
 
 import .get-display  // Import file in current project, see above.
 
-sans ::= Font.get "sans10"
-display ::= get-display
+SANS ::= Font.get "sans10"
+// Edit get-display.toit to get a rotated display.
+DISPLAY ::= get-display
+STYLE := Style --color=BLACK --font=SANS
 
 main:
-  context := display.context --landscape --color=BLACK --font=sans
-  display.text context 60 50 "Hello from Toit!"
-  display.draw
+  DISPLAY.background = WHITE
+  DISPLAY.add
+      Label --x=60 --y=50 --text="Hello from Toit!" --style=STYLE
+  DISPLAY.draw
+  sleep --ms=1000
 ```
 
-When creating a texture to add to the scene there are a huge
+When creating an element to add to the scene there are a huge
 number of parameters to specify. This includes the color, the
 orientation, the font, and the coordinate system. We combine
 almost all these parameters into an immutable object called a
-graphics context.
+style.
 
-In the above example we created a context that uses a landscape
-orientation and coordinates, draws in black, and uses the
-built-in sans10 font for text objects. Often, contexts are
-created from other contexts using the `with` method:
+In the above example we created a style that
+draws in black, and uses the
+built-in sans10 font for text objects.  Often styles are
+used with elements using maps that are reminiscent of CSS.
 
 ```
-  // Create a new context for white textures.
-  white-context := context.with --color=WHITE
+  // Create a new style for white elements.
+  white-style := Style --color=WHITE --font=SANS
 ```
 
 ## Using additional fonts
@@ -129,36 +140,34 @@ import specific fonts from `font-x11-adobe` with:
 import font show *
 import font-x11-adobe.sans-10-bold
 import font-x11-adobe.sans-24-bold
-import pixel-display.texture show*
+import pixel-display show *
 import pixel-display.two-color show WHITE BLACK
-import pixel-display show TwoColorPixelDisplay
 
 import .get-display  // Import file in current project, see above.
 
 main:
-  sans-10-bold ::= Font [
+  SANS-10-BOLD ::= Font [
     sans-10-bold.ASCII,
     sans-10-bold.LATIN-1-SUPPLEMENT]
-  sans-24-font ::= Font [
+  SANS-24-FONT ::= Font [
     sans-24-bold.ASCII,
     sans-24-bold.LATIN-1-SUPPLEMENT]
-  display ::= get-display
+  display/PixelDisplay ::= get-display
 
-  sans-10 := display.context
-    --landscape
-    --font = sans-10-bold
+  sans-10 := Style
+    --font = SANS-10-BOLD
     --color = BLACK
-    --alignment = TEXT-TEXTURE-ALIGN-RIGHT
+    --align-right
 
-  sans-24 := display.context
-    --landscape
-    --font = sans-24-font
+  sans-24 := Style
+    --font = SANS-24-FONT
     --color = BLACK
-    --alignment = TEXT-TEXTURE-ALIGN-CENTER
+    --align-center
 
-  context := display.context --landscape --color=BLACK
-  display.text sans-10 40 30 "Hello from"
-  display.text sans-24 18 65 "TOITWARE"
+  [
+      Label --style=sans-10 --x=40 --y=30 --text="Hello from",
+      Label --style=sans-24 --x=18 --y=65 --text="TOITWARE",
+  ].do: display.add it
   display.draw
 ```
 
@@ -169,16 +178,19 @@ Learn more about all available fonts [here](../fonts).
 All [Material Design](https://materialdesignicons.com/) icons are available for use in Toit programs.
 
 ```
-import pixel-display show TwoColorPixelDisplay
+import pixel-display show *
+import pixel-display.two-color show BLACK WHITE
 // Use "jag pkg install pictogrammers_icons" to get this package.
 import pictogrammers-icons.size-48 as icons
 
 import .get-display  // Import file in current project, see above.
 
 main:
-  display := get-display
-  context := display.context --landscape
-  icon := display.icon context 63 85 icons.HUMAN-SCOOTER
+  display/PixelDisplay := get-display
+  display.background = BLACK
+  // For this label we use `--icon` instead of `--text`.
+  display.add
+      Label --x=63 --y=85 --icon=icons.HUMAN-SCOOTER --color=WHITE
   display.draw
 ```
 
@@ -188,6 +200,17 @@ In order to update the display we can build up a scene, then create a loop
 that updates the scene as new data arrives. Here is a bigger example that
 subscribes to an MQTT topic for its weather information, and uses the
 local time to update a digital clock on the same display.
+
+This example also shows the use of a style built up with maps, to let
+multiple elements be styled with the same parameters.  We can use
+the syntax `--id="my-name"` to given an element a name, much like
+the HTML syntax `<div id="my-name">`.  Similarly, we can give an element a
+class with `--classes=["my-class"]`, which is analogous to
+the HTML syntax `<div class="my-class">`.  We don't use `--class` because
+that is a reserved keyword in Toit.
+
+A composite style like this for the entire display must be applied to the
+display with `display.set-styles [STYLE]` before the display is drawn.
 
 <img src={WeatherExample} alt="Weather station example screenshot" />
 
@@ -199,10 +222,8 @@ import monitor show Mutex
 import mqtt
 
 import pictogrammers-icons.size-48 as icons
-
 import pixel-display.two-color show *
-import pixel-display.texture show *
-import pixel-display show TwoColorPixelDisplay
+import pixel-display show *
 
 import .get-display  // Import file in current project, see above.
 
@@ -226,6 +247,9 @@ WMO-4501-ICONS ::= [
 // have access one at a time.
 display-mutex := Mutex
 
+WIDTH ::= 128
+HEIGHT ::= 64
+
 display := get-display
 
 main:
@@ -234,50 +258,56 @@ main:
     sans-14-bold.LATIN-1-SUPPLEMENT,  // Degree symbol.
   ]
 
-  // Build a scene with the metods `add`, `text`, `icon`,
-  // and `filled-rectangle`.
-
-  display.background = BLACK
-  context := display.context
-    --landscape
-    --color=WHITE
-    --font=sans-14-font
-  black-context := context.with --color=BLACK
-
-  // White circle as background of weather icon.  We are just
-  // using the window to draw a circle here, not as an actual
-  // window with its own textures.
+  // Circle as background of weather icon.
   DIAMETER ::= 56
   CORNER-RADIUS ::= DIAMETER / 2
+
+  display.background = BLACK
+
+  STYLE ::= Style
+      --class-map = {
+          "top": Style --x=0 --y=0 --w=WIDTH --h=HEIGHT
+              --background=BLACK
+              --border=(RoundedCornerBorder --radius=8),
+          "rounded": Style --x=68 --y=4
+              --w = DIAMETER
+              --h = DIAMETER
+              --border = RoundedCornerBorder --radius=CORNER-RADIUS
+              --background = WHITE,
+          "temp-box": Style --x=0 --y=0 --w=64 --h=32 --background=WHITE,
+          "clock-box": Style --x=0 --y=32 --w=64 --h=32 --background=BLACK,
+      }
+      --id-map = {
+          "icon": Style --x=(DIAMETER / 2) --y=(16 + DIAMETER / 2) --color=BLACK --align-center,
+          "temp": Style --x=32 --y=23 --font=sans-14-font --color=BLACK --align-center,
+          "time": Style --x=32 --y=23 --font=sans-14-font --color=WHITE --align-center,
+      }
+
+  // The Div element takes a list as a parameter, which allows you to
+  // specify the children that it contains.  This lets us build up
+  // a display with a syntactic tree of elements, and since Toit does
+  // not have a `new` keyword the result is a bit like a DSL.
   display.add
-    RoundedCornerWindow 68 4 DIAMETER DIAMETER
-      context.transform
-      CORNER-RADIUS
-      WHITE
-  // Icon is added after the white dot so it is in a higher layer.
-  icon-texture :=
-    display.icon black-context 72 48 icons.WEATHER-CLOUDY
+      Div.clipping --classes=["top"] [
+          Div.clipping --classes=["rounded"] [
+              Label --id="icon",
+          ],
+          Div --classes=["temp-box"] [
+              Label --id="temp",
+          ],
+          Div --classes=["clock-box"] [
+              Label --id="time",
+          ],
+      ]
 
-  // Temperature is black on white.
-  display.filled-rectangle context 0 0 64 32
-  temperature-context :=
-    black-context.with --alignment=TEXT-TEXTURE-ALIGN-CENTER
-  temperature-texture :=
-    display.text temperature-context 32 23 "??°C"
+  // This applies the styles to all the elements that have been added to the
+  // display.
+  display.set-styles [STYLE]
 
-  // Time is white on the black background, aligned by the
-  // center so it looks right relative to the temperature
-  // without having to zero-pad the hours.
-  time-context := context.with --alignment=TEXT-TEXTURE-ALIGN-CENTER
-  time-texture := display.text time-context 32 53 "??:??"
+  task --background:: clock-task (display.get-element-by-id "time")
+  task --background:: weather-task (display.get-element-by-id "icon") (display.get-element-by-id "temp")
 
-  // The scene is built, now start some tasks that will update
-  // the display.
-
-  task:: clock-task time-texture
-  task:: weather-task icon-texture temperature-texture
-
-weather-task weather-icon/IconTexture temperature-texture/TextTexture:
+weather-task weather-icon/Label temperature-element/Label:
   client := mqtt.Client --host="127.0.0.1"
   client.start --client-id="toit-client-id"
   client.subscribe "weather":: | topic/string payload/ByteArray |
@@ -286,15 +316,15 @@ weather-task weather-icon/IconTexture temperature-texture/TextTexture:
     temp := map["temperature_c"]
     display-mutex.do:
       weather-icon.icon = WMO-4501-ICONS[code]
-      temperature-texture.text = "$(%.1f temp)°C"
+      temperature-element.label = "$(%.1f temp)°C"
       display.draw
 
-clock-task time-texture:
+clock-task time-element/Label:
   while true:
     now := (Time.now).local
     display-mutex.do:
       // H:MM or HH:MM depending on time of day.
-      time-texture.text = "$now.h:$(%02d now.m)"
+      time-element.label = "$now.h:$(%02d now.m)"
       display.draw
     // Sleep this task until the next whole minute.
     sleep-time := 60 - now.s

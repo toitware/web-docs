@@ -46,13 +46,13 @@ dependencies:
     version: ^1.0.0
   pixel_display:
     url: github.com/toitware/toit-pixel-display
-    version: ^1.7.1
+    version: ^2.3.0
   pixel_strip:
     url: github.com/toitware/toit-pixel-strip
     version: ^0.3.0
   ssd1306:
     url: github.com/toitware/toit-ssd1306
-    version: ^1.6.0
+    version: ^2.0.1
   supabase:
     url: github.com/toitware/toit-supabase
     version: ^0.2.4
