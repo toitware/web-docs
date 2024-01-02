@@ -1,4 +1,4 @@
-sdk: ^2.0.0-alpha.120
+sdk: ^2.0.0-alpha.121
 prefixes:
   bme280: bme280-driver
   cellular: cellular
@@ -15,7 +15,6 @@ prefixes:
   ntp: pkg-ntp
   one_wire: toit-1-wire
   pictogrammers_icons: toit-icons-pictogrammers
-  pixel_display: toit-pixel-display
   pixel_strip: toit-pixel-strip
   ssd1306: toit-ssd1306
   supabase: toit-supabase
@@ -112,18 +111,25 @@ packages:
   toit-pixel-display:
     url: github.com/toitware/toit-pixel-display
     name: pixel_display
-    version: 1.7.1
-    hash: 09bc1b6cf0ae52385af5301a13935a06683a36cf
+    version: 2.3.0
+    hash: 4a6f7c4c30152ec3c80b6cbe765133ce9015dab0
+    prefixes:
+      png-tools: toit-png-tools
   toit-pixel-strip:
     url: github.com/toitware/toit-pixel-strip
     name: pixel_strip
     version: 0.3.0
     hash: 6afc86f08e0e751a58a4f56b119d5e14464a4762
+  toit-png-tools:
+    url: github.com/toitware/toit-png-tools
+    name: png-tools
+    version: 1.0.0
+    hash: ee472ac9d4333a138206f9d3a817d3c5432d6f87
   toit-ssd1306:
     url: github.com/toitware/toit-ssd1306
     name: ssd1306
-    version: 1.6.0
-    hash: 806c93972b733ff45e10a4eeeefa9a7e5e808c46
+    version: 2.0.1
+    hash: ee2e6e699daa86d961538775aaea642a839025b7
     prefixes:
       pixel_display: toit-pixel-display
   toit-supabase:

@@ -28,7 +28,7 @@ import i2c
 import ssd1306 show *
 import pixel-display show *
 
-get-display -> TwoColorPixelDisplay:
+get-display -> PixelDisplay:
   scl := gpio.Pin 4
   sda := gpio.Pin 5
   bus := i2c.Bus
