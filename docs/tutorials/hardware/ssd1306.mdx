@@ -143,7 +143,8 @@ This calls the constructor of the [Bus](https://libs.toit.io/i2c/class-Bus)
 class, passing in the named arguments.
 The display supports the "fast" mode of i2c which is why we can set the
 frequency to 400KHz (and not just 100KHz). The code would work the
-same way with 100KHz.
+same way with 100KHz.  Usually, 700kHz works too, and makes for slightly
+faster updates.
 
 We then instantiate an [Ssd1306](https://pkg.toit.io/github.com/toitware/toit-ssd1306@2.0.1/docs/ssd1306/class-Ssd1306) object by calling its i2c constructor.
 As argument it receives the i2c device with ID `Ssd1306.I2C-ADDRESS`.
