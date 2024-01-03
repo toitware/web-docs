@@ -40,7 +40,7 @@ the font.
 In the following example we assume the `font-x11-adobe` package has
 been installed in your project.
 
-<!-- HIDDEN CODE import pixel-display show TwoColorPixelDisplay -->
+<!-- HIDDEN CODE import pixel-display show * -->
 ```
 // Import the font and size that you need, and give it a name.
 import font-x11-adobe.sans-14-bold as s14b
@@ -52,27 +52,23 @@ import font show Font
 // case we have the coverage needed for Western Europe, plus
 // the Euro sign, which is in the CURRENCY-SYMBOLS block. We
 // call our subset of the font sans-10-bold.
-sans-14-bold ::= Font [s14b.ASCII, s14b.LATIN-1-SUPPLEMENT, s14b.CURRENCY-SYMBOLS]
+SANS-14-BOLD ::= Font [s14b.ASCII, s14b.LATIN-1-SUPPLEMENT, s14b.CURRENCY-SYMBOLS]
 
 // For this example we assume there exists a function `get-display` that
-// creates a TwoColorPixelDisplay.
-display ::= get-display
-
-// Create a graphics context that uses this font. Whenever we
-// add a text texture to a display using this context, the given
-// font will be used.
-context := display.context --landscape --font=sans-14-bold
+// creates a PixelDisplay.
+display := get-display
 
 // An example function that adds a text to a display.
 my-fish-adding-function:
 
   // Add the fish text to the display at coordinates (50, 50).
-  display.text context 50 50 "Ål, 3€/kg"
+  display.add
+      Label --x=50 --y=50 --text="Ål, 3€/kg" --font=SANS-14-BOLD
 
   // Update the display with the latest addition.
   display.draw
 ```
-<!-- HIDDEN CODE get-display -> TwoColorPixelDisplay?: return null -->
+<!-- HIDDEN CODE get-display -> PixelDisplay?: return null -->
 
 
 ## Available Fonts
