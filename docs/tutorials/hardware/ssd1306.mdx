@@ -54,11 +54,11 @@ The driver for the SSD1306 is not part of the standard Toit distribution,
 but must be downloaded as package. See the [packages](../../setup/packages)
 tutorial for details.
 
-We are using the [ssd1306](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-ssd1306@v1)
+We are using the [ssd1306](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-ssd1306@v2)
 package. To install it, run the following command in your project directory:
 
 ```bash
-jag pkg install github.com/toitware/toit-ssd1306@v1
+jag pkg install github.com/toitware/toit-ssd1306@v2
 ```
 
 <Note>
@@ -69,11 +69,11 @@ with the version is more explicit, and will make sure you get the right package.
 </Note>
 
 Similarly, install the
-[pixel-display package](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-pixel-display@v1)
+[pixel-display package](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoit-pixel-display@v2)
 to provide convenience methods to draw on the display:
 
 ```bash
-jag pkg install toitware/toit-pixel-display@v1
+jag pkg install toitware/toit-pixel-display@v2
 ```
 
 For information about how to use the display libraries,
@@ -115,44 +115,54 @@ main:
 
   device := bus.device Ssd1306.I2C-ADDRESS
   driver := Ssd1306.i2c device
-  display := TwoColorPixelDisplay driver
+  display := PixelDisplay.two-color driver
   display.background = BLACK
 
   sans := Font.get "sans10"
-  sans-context := display.context
-      --landscape
-      --font=sans
-      --color=WHITE
-  display.text sans-context 30 20 "Toit"
-  date := display.text sans-context 30 40 ""
-  time-text := display.text sans-context 30 60 ""
+  [
+    Label --x=30 --y=20 --text="Toit",
+    Label --x=30 --y=40 --id="date",
+    Label --x=30 --y=60 --id="time",
+  ].do: display.add it
+
+  display.set-styles [Style --font=sans --color=WHITE]
+
+  date/Label := display.get-element-by-id "date"
+  time/Label := display.get-element-by-id "time"
   while true:
     date.text = current-date
-    time-text.text = current-time
+    time.text = current-time
     display.draw
     sleep --ms=250
 ```
 
-As a first step we create an i2c bus object with:
+As a first step we create an [i2c](https://libs.toit.io/i2c/library-summary)
+bus object with:
 `i2c.Bus --sda=sda --scl=scl --frequency=frequency`.
-This calls the constructor of the `Bus` class, passing in the named arguments.
+This calls the constructor of the [Bus](https://libs.toit.io/i2c/class-Bus)
+class, passing in the named arguments.
 The display supports the "fast" mode of i2c which is why we can set the
 frequency to 400KHz (and not just 100KHz). The code would work the
-same way with 100KHz.
+same way with 100KHz.  Usually, 700kHz works too, and makes for slightly
+faster updates.
 
-We then instantiate a `Ssd1306` object by calling its i2c constructor.
+We then instantiate an [Ssd1306](https://pkg.toit.io/github.com/toitware/toit-ssd1306@2.0.1/docs/ssd1306/class-Ssd1306) object by calling its i2c constructor.
 As argument it receives the i2c device with ID `Ssd1306.I2C-ADDRESS`.
 The value of `Ssd1306.I2C-ADDRESS` is equal to 60, thus
 identifying the display on the bus.
 
-With the driver object we can then build a display object which
+With the driver object we can then build a
+[display](https://pkg.toit.io/github.com/toitware/toit-pixel-display@2.3.0/docs/pixel_display/pixel-display/class-PixelDisplay)
+object which
 gives us some useful methods to operate the display. We can set
 the background color to BLACK, and then use the WHITE constant
 to write later.
 
-Writing text is done by first finding a font (here `sans10`) and
-then creating a context with it. The context can then be used for
-the text function of the display.
+Writing text is done by adding
+[Label](https://pkg.toit.io/github.com/toitware/toit-pixel-display@2.3.0/docs/pixel_display/pixel-display/class-Label)
+elements to the display, then styling them with a
+[Style](https://pkg.toit.io/github.com/toitware/toit-pixel-display@2.3.0/docs/pixel_display/pixel-display/class-Style)
+object.  The style object sets the font and color for the Label elements.
 
 Note that operations on the display don't immediately interact
 with the physical display but build up a drawing queue/graph instead.
@@ -161,12 +171,9 @@ physical display.
 
 This has two major advantages. We can reuse the graph and simply
 update the parts that change. In our example we have a while-true
-loop that just updates the objects we received from the `display.text`
+loop that just updates the objects we received from the `get-element-by-id`
 calls. We could also call `move-to` on the object to move it
 somewhere.
-
-See the documentation of the
-TextTexture [here](https://pkg.toit.io/github.com/toitware/toit-pixel-display@1.6.0/docs/pixel_display/two_color/class-TextTexture)
 
 The program writes 3 lines:
 - `Toit`,
@@ -205,7 +212,7 @@ import pixel-display show *
 import pixel-display.two-color show *
 import ssd1306 show *
 
-get-display -> TwoColorPixelDisplay:
+get-display -> PixelDisplay:
   sda := gpio.Pin 26
   scl := gpio.Pin 25
   frequency := 400_000
@@ -218,14 +225,14 @@ get-display -> TwoColorPixelDisplay:
 
   device := bus.device Ssd1306.I2C-ADDRESS
   driver := Ssd1306.i2c device
-  return TwoColorPixelDisplay driver
+  return PixelDisplay.two-color driver
 
 main:
   display := get-display
   display.background = BLACK
 
-  context := display.context --landscape --color=WHITE
-  icon := display.icon context 0 50 icons.HUMAN-SCOOTER
+  icon := Label --x=0 --y=50 --icon=icons.HUMAN-SCOOTER --color=WHITE
+  display.add icon
   while true:
     80.repeat:
       icon.move-to it 50
@@ -236,7 +243,7 @@ main:
 
 The code starts again by creating the display. This time we moved
 the display-creation code into its own function
-(`get-display` which returns a `TwoColorPixelDisplay`).
+(`get-display` which returns a `PixelDisplay`).
 
 If your display is only a 32-line display you need to add the
 argument `--height=32` to the driver creation. In some cases
@@ -247,8 +254,10 @@ you also need to play with the following arguments:
   `LAYOUT-SEQUENTIAL-SWITCHED`, `LAYOUT-ALTERNATED`, or
   `LAYOUT-ALTERNATED-SWITCHED`.
 
-As before we create a context, which we can use to add the
-icon to the drawing queue. Inside the loop the
+For this simple example, we don't create a style object. We just
+pass the color to the constructor of the `Label`.
+
+We then add the icon-label to the display and start a loop. For each iteration, the
 position is updated before every draw. This makes the icon move
 from left to right over the display.
 
