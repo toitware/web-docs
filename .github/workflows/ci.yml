@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -90,7 +90,7 @@ jobs:
           tar c -zf $VERSION.$ARTIFACT_EXTENSION -C $BUILD_DIR/ .
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build
           retention-days: 2
@@ -109,7 +109,7 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build
 
@@ -123,13 +123,13 @@ jobs:
           echo ARTIFACT=$ARTIFACT >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v0
+        uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.INFRASTRUCTURE_SERVICE_ACCOUNT_JSON_KEY }}
           service_account: github-action@infrastructure-220307.iam.gserviceaccount.com
 
       - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0
+        uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: infrastructure-220307
 
