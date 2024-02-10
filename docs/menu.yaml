@@ -20,6 +20,8 @@ items:
             path: /getstarted/fleet/groups
           - name: Pods
             path: /getstarted/fleet/pods
+          - name: Workflows
+            path: /getstarted/fleet/workflows
   - name: Tutorials
     path: /tutorials
     icon: tutorials
