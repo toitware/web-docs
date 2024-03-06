@@ -53,6 +53,7 @@ PATH ::= "/random.json?language=en"
 
 main:
   certificate-roots.install-common-trusted-roots
+
   network := net.open
   client := http.Client.tls network
 
@@ -70,7 +71,11 @@ However, things are complicated by two facts:
 
 In order to verify the authenticity of the https server we need
 to have the certificate of the authenticity that signed the server's
-own certificate. In the case of https://uselessfacts.jsph.pl the root
+own certificate. For simplicity we just install the "common trusted roots"
+of the `certificate-roots` package. This is a set of root certificates
+that cover the majority of the internet.
+
+In the case of https://uselessfacts.jsph.pl the root
 authority is "ISRG Root X1". This information can be extracted by
 looking at the site's certificate in Chrome:
 
@@ -79,9 +84,8 @@ looking at the site's certificate in Chrome:
   alt="Certificate information in Chrome"
 />
 
-The `certificate-roots` package is maintained by Toitware and contains
-some of the most common roots. The included roots are the ones that are
-shipped with Mozilla's Firefox and should thus be safe to use.
+The `certificate-roots` package is maintained by Toitware and includes roots
+that are shipped with Mozilla's Firefox and should thus be safe to use.
 
 Decoding the given data as JSON is straightforward with the `decode-stream`
 functionality of the `json` library (imported with `encoding.json`).
