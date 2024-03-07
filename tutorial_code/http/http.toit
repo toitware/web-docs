@@ -12,6 +12,7 @@ PATH ::= "/random.json?language=en"
 
 main:
   certificate-roots.install-common-trusted-roots
+
   network := net.open
   client := http.Client.tls network
 
