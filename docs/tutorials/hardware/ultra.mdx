@@ -26,24 +26,27 @@ Connect the HC-SR04 as follows:
 - ECHO to an LED and then to pin 32. The anode (long leg) of the LED should be
   connected to the ECHO pin and the cathode (short leg) to pin 32.
 - Optionally, add a 10kΩ resistor (or higher) between pin 32 and GND.
+- Optionally, add a 100kΩ resistor (or higher) between pin 33 and GND.
 
-The HC-SR04 is designed to run on 5V (and is known to be flaky at lower
-voltages). The ESP32 (usually) has a 5V output (often labeled as VIN),
+The HC-SR04 is designed to run on 5V, and is known to be flaky at lower
+voltages. ESP32 boards usually have a 5V output, often labeled as VIN,
 but the ESP32 is not 5V tolerant on its inputs (depending on who you ask).
 This means that you should not connect the ECHO pin directly to the ESP32.
 Instead, we connect the ECHO pin to an LED and then to the ESP32. LEDs have
 a forward voltage drop of around 2V, so the voltage on the ECHO pin will
 be around 3V, which is safe for the ESP32. See the
 [ADC tutorial](../adc#led-voltage-drop) for a setup where we measure the
-LED voltage drop. The resistor is optional, but ensures that the
+LED voltage drop. The 10kΩ resistor is optional, but ensures that the
 LED is used in a linear regime where we can trust that the signal is
 correctly received by the ESP32 and where the voltage drop is
-around 2V.
+around 2V. The 100kΩ resistor is just a pull-down resistor that ensures
+that the TRIG pin isn't floating when not in use. When floating, the
+sensor could trigger, sometimes frequently, when our program isn't running.
 
 If you have an HC-SR04+ module, then you can connect the VCC to 3V3 instead
 and connect the ECHO pin directly to the ESP32. The "+" version of the
-HC-SR04 is designed to run on 3.3V. (Note that the "+" is not printed
-on the front of the module, but only on the back.)
+HC-SR04 is designed to run on 3.3V. Note that the "+" is not printed
+on the front of the module, but only on the back.
 
 <img
   src={UltraDiagram}
