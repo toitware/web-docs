@@ -125,7 +125,11 @@ main:
     Label --x=30 --y=60 --id="time",
   ].do: display.add it
 
-  display.set-styles [Style --font=sans --color=WHITE]
+  STYLE := Style
+      --type-map={
+          "label": Style --font=sans --color=WHITE,
+      }
+  display.set-styles [STYLE]
 
   date/Label := display.get-element-by-id "date"
   time/Label := display.get-element-by-id "time"
