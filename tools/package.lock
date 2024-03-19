@@ -17,6 +17,7 @@ prefixes:
   pictogrammers_icons: toit-icons-pictogrammers
   pixel_display: toit-pixel-display
   pixel_strip: toit-pixel-strip
+  qubitro: toit-qubitro
   ssd1306: toit-ssd1306
   supabase: toit-supabase
   telegram: toit-telegram
@@ -126,6 +127,14 @@ packages:
     name: png-tools
     version: 1.0.0
     hash: ee472ac9d4333a138206f9d3a817d3c5432d6f87
+  toit-qubitro:
+    url: github.com/kasperl/toit-qubitro
+    name: qubitro
+    version: 0.3.0
+    hash: 90ed5c8ed834152b558f80f0701cd30c7d6402a0
+    prefixes:
+      certificate_roots: toit-cert-roots
+      mqtt: mqtt
   toit-ssd1306:
     url: github.com/toitware/toit-ssd1306
     name: ssd1306

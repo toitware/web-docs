@@ -1,0 +1,28 @@
+sdk: ^2.0.0-alpha.100
+prefixes:
+  qubitro: toit-qubitro
+packages:
+  mqtt:
+    url: github.com/toitware/mqtt
+    name: mqtt
+    version: 2.7.0
+    hash: ae42b7f4949ec65512e845e7bef7e90a33a914d9
+  toit-artemis:
+    url: github.com/toitware/toit-artemis
+    name: artemis
+    version: 0.8.3
+    hash: c65898c512ec79173b523add1c8d13ec203b6e7e
+  toit-cert-roots:
+    url: github.com/toitware/toit-cert-roots
+    name: certificate_roots
+    version: 1.6.1
+    hash: 55d3be82ed53d8d332338b2de931865cf69fe48b
+  toit-qubitro:
+    url: github.com/kasperl/toit-qubitro
+    name: qubitro
+    version: 0.4.0
+    hash: 51dce189860a3d8224ed8ea233c5382b35358845
+    prefixes:
+      artemis: toit-artemis
+      certificate_roots: toit-cert-roots
+      mqtt: mqtt
