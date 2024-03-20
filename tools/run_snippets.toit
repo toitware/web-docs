@@ -42,6 +42,8 @@ THINGS-THAT-WONT-RUN-ON-SERVER ::= [
   "import system.containers",
   "import net.cellular",
   "import watchdog",
+  "import qubitro",
+  "import qubitro.service",
 ]
 
 main args -> none:

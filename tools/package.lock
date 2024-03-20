@@ -17,6 +17,7 @@ prefixes:
   pictogrammers_icons: toit-icons-pictogrammers
   pixel_display: toit-pixel-display
   pixel_strip: toit-pixel-strip
+  qubitro: toit-qubitro
   ssd1306: toit-ssd1306
   supabase: toit-supabase
   telegram: toit-telegram
@@ -35,8 +36,8 @@ packages:
   mqtt:
     url: github.com/toitware/mqtt
     name: mqtt
-    version: 2.6.0
-    hash: 8e09fb35c393e442305ee4578e5546c5c80735be
+    version: 2.7.0
+    hash: ae42b7f4949ec65512e845e7bef7e90a33a914d9
   pkg-cli:
     url: github.com/toitlang/pkg-cli
     name: cli
@@ -77,6 +78,11 @@ packages:
     name: one_wire
     version: 2.1.1
     hash: 54b96442d359b86bd5b8888ad07b9c9d38b82884
+  toit-artemis:
+    url: github.com/toitware/toit-artemis
+    name: artemis
+    version: 0.8.3
+    hash: c65898c512ec79173b523add1c8d13ec203b6e7e
   toit-cert-roots:
     url: github.com/toitware/toit-cert-roots
     name: certificate_roots
@@ -126,6 +132,15 @@ packages:
     name: png-tools
     version: 1.0.0
     hash: ee472ac9d4333a138206f9d3a817d3c5432d6f87
+  toit-qubitro:
+    url: github.com/kasperl/toit-qubitro
+    name: qubitro
+    version: 0.4.0
+    hash: 51dce189860a3d8224ed8ea233c5382b35358845
+    prefixes:
+      artemis: toit-artemis
+      certificate_roots: toit-cert-roots
+      mqtt: mqtt
   toit-ssd1306:
     url: github.com/toitware/toit-ssd1306
     name: ssd1306
