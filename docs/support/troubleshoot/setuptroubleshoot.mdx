@@ -2,10 +2,7 @@
 
 ## Problems flashing your ESP32
 
-<Expandable title="Do you have problems with the installing the firmware on your ESP32?">
-
-<Tabs>
-<Tab label="YES">
+<Expandable title="Problems with the installing the firmware on your ESP32?">
 
 - Some hardware models need physical interaction with the device during initial provisioning - like pushing a button.
 
@@ -20,21 +17,12 @@
 jag flash --baud 460800 --wifi-ssid="MY_SSID" --wifi-password="MY_PASSWORD"
 ```
 
-</Tab>
+</Expandable>
 
-<Tab label="NO">
+<Div> </ Div>
 
-If Jaguar cannot find your device after having flashed it, you may be running into a network issue. Check that you development
-machine is on the same network as the device and that no firewall is preventing the communications.
-You can help Jaguar to find your device by giving it the device's IP address
-(which is printed at boot time). For example:
-``` shell
-jag scan 192.168.1.42
-```
+<Expandable title="Jaguar can't find your device after flashing?">
 
-If you cannot solve or diagnose the issue, please reach out to the Toit engineering team through our [Discord chat](https://chat.toit.io).
-
-</Tab>
-</Tabs>
+If flashing is successful, but Jaguar can't find your device, have a look [here](../jagtroubleshoot).
 
 </Expandable>
