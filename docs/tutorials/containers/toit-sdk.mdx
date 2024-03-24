@@ -33,7 +33,7 @@ toit.compile -w hello.snapshot hello.toit
 Then add the snapshot to a firmware envelope.
 ``` shell
 # By using '-o' we don't modify the envelope but create a new one.
-firmware -e firmware.envelope -o hello.envelope container install hello hello.snapshot
+firmware -e firmware.envelope container install -o hello.envelope hello hello.snapshot
 ```
 
 The created envelope can be flashed to a device using the `flash` command.
