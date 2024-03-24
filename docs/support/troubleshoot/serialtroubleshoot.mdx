@@ -1,5 +1,9 @@
 # Serial connect
 
+## Serial cable and hubs
+
+Before attempting any of the following steps make sure you have a good quality USB cable that supports data transfer. Furthermore, avoid using USB hubs while troubleshooting.
+
 ## Problems with serial connection
 
 <Expandable title="Have you previously connected an ESP32 via a serial connection to your computer, for example using Arduino IDE or similar?">
@@ -28,10 +32,15 @@ Install the driver, _reboot your computer_ and you are ready to talk to your ESP
 
 ## Problems with the serial port
 
-<Expandable title="Do you have problems with detecting a serial port on your computer?">
+<Expandable title="Error: 'Could not open <PORT>, the port doesn't exist'">
 
-<Tabs>
-<Tab label="YES">
+This error message, may indicate that another program has opened the serial port. Close any other programs that might be using the serial port and try again.
+
+</Expandable>
+
+<Div></Div>
+
+<Expandable title="Problems with detecting a serial port on your computer?">
 
 The Jaguar CLI offers commands to help you connect your ESP32 via a serial connection.
 
@@ -57,15 +66,5 @@ jag monitor
 ```
 
 The monitoring can be stopped by `Ctrl+C`.
-
-</Tab>
-<Tab label="NO">
-
-If you have other problems or issues with getting your ESP32 setup with Toit, please reach out to the Toit engineering team. We are ready to help you get started using the Toit platform.
-
-The Toit community has a [Discord chat](https://chat.toit.io) where you can drop in and ask questions.
-
-</Tab>
-</Tabs>
 
 </Expandable>
