@@ -1,0 +1,41 @@
+# Jaguar
+
+## Problems with 'jag scan' not finding devices
+
+If `jag scan` doesn't find any devices, you can always specify the IP address of the ESP32 directly. This can be done by running the following command:
+
+``` sh
+jag scan <ip-address>
+```
+
+You can find a device's IP address by looking at the serial output of the ESP32.
+
+Providing an IP address directly to `jag scan` will let Jaguar try to contact the device directly. If found, it will make it the default device for future commands.
+
+<Expandable title="Are your computer and ESP32 on different networks?">
+
+Jaguar uses UDP broadcast packages to find devices on the network. If your computer and
+ESP32 are on different networks, the broadcast packages might not reach the ESP32.
+You can try to change your router settings, but usually it's just easier to provide
+the IP address of the ESP32 directly.
+
+</Expandable>
+
+<Div></Div>
+
+<Expandable title="Is your operating system Windows?">
+
+Some Windows users have reported that the Windows firewall or some antivirus blocks
+the UDP broadcast packages used by Jaguar to find devices on the network.
+
+You can try to disable the Windows firewall or antivirus to see if this is the issue.
+
+In most cases, it's easier to provide the IP address of the ESP32 directly.
+
+</Expandable>
+
+## Can't provide assets to `jag run -d host`
+
+When running on the local machine with `jag run -d host`, Jaguar doesn't
+support providing assets with `--assets`. This is a limitation of Jaguar
+and there is currently no workaround.
