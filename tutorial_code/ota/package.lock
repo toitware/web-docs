@@ -1,8 +1,9 @@
-sdk: ^2.0.0-alpha.79
+sdk: ^2.0.0-alpha.144
 prefixes:
   http: pkg-http
 packages:
   pkg-http:
     url: github.com/toitlang/pkg-http
-    version: 2.3.0
-    hash: 05ce2065a75813138d2c4ca1bab03e7a6f0541a2
+    name: http
+    version: 2.7.1
+    hash: 54a5bb458d9fc9305e839b878e6de3b456f5c4a6

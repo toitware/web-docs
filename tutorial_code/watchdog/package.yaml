@@ -1,4 +1,4 @@
 dependencies:
   watchdog:
     url: github.com/toitware/toit-watchdog
-    version: ^1.2.0
+    version: ^1.4.0

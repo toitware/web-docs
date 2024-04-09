@@ -5,7 +5,7 @@
 TOIT_SDK := /opt/toit-sdk
 TOIT_COMPILE := $(TOIT_SDK)/bin/toit.compile
 TOIT_FIRMWARE := $(TOIT_SDK)/tools/firmware
-VERSION := v2.0.0-alpha.90
+VERSION := $(shell $(TOIT_SDK)/bin/toit.lsp version)
 ENVELOPE_URL := https://github.com/toitlang/toit/releases/download/$(VERSION)/firmware-esp32.gz
 
 .PHONY: all
@@ -16,7 +16,7 @@ all: ota.bin
 firmware.envelope: firmware.envelope.gz
 	gunzip -c firmware.envelope.gz > firmware.envelope
 
-firmware.envelop.gz:
+firmware.envelope.gz:
 	curl -L -o $@ $(ENVELOPE_URL)
 
 %.snapshot: %.toit
@@ -26,6 +26,10 @@ ota.bin: validate.snapshot firmware.envelope
 	$(TOIT_FIRMWARE) -e firmware.envelope container install validate validate.snapshot
 	$(TOIT_FIRMWARE) -e firmware.envelope extract --format=binary -o ota.bin
 
-.PHONY:
+.PHONY: serve
 serve: ota.bin
 	python3 -m http.server 8000
+
+.PHONY: version
+version:
+	@echo $(VERSION)

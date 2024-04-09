@@ -1,4 +1,4 @@
-sdk: ^2.0.0-alpha.91
+sdk: ^2.0.0-alpha.144
 prefixes:
   certificate_roots: toit-cert-roots
   mqtt: mqtt
@@ -6,8 +6,8 @@ packages:
   mqtt:
     url: github.com/toitware/mqtt
     name: mqtt
-    version: 2.6.0
-    hash: 8e09fb35c393e442305ee4578e5546c5c80735be
+    version: 2.8.1
+    hash: 79c44885b4544257e1e2c94c9d1fb4c53e69fbbd
   toit-cert-roots:
     url: github.com/toitware/toit-cert-roots
     name: certificate_roots

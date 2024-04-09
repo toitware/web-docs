@@ -13,7 +13,7 @@ main:
   server.listen server-socket:: | request/http.RequestIncoming response-writer/http.ResponseWriter |
     if request.path == "/" or request.path == "/index.html":
       response-writer.headers.add "Content-Type" "text/html"
-      response-writer.write INDEX-HTML
+      response-writer.out.write INDEX-HTML
     else if request.path == "/ws":
       web-socket := server.web-socket request response-writer
       clients.add web-socket
