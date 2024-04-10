@@ -133,7 +133,7 @@ The paths are set up for a Linux system with the Toit SDK installed in
 TOIT_SDK := /opt/toit-sdk
 TOIT_COMPILE := $(TOIT_SDK)/bin/toit.compile
 TOIT_FIRMWARE := $(TOIT_SDK)/tools/firmware
-VERSION := v2.0.0-alpha.90
+VERSION := $(shell $(TOIT_SDK)/bin/toit.lsp version)
 ENVELOPE_URL := https://github.com/toitlang/toit/releases/download/$(VERSION)/firmware-esp32.gz
 
 .PHONY: all
@@ -144,7 +144,7 @@ all: ota.bin
 firmware.envelope: firmware.envelope.gz
 	gunzip -c firmware.envelope.gz > firmware.envelope
 
-firmware.envelop.gz:
+firmware.envelope.gz:
 	curl -L -o $@ $(ENVELOPE_URL)
 
 %.snapshot: %.toit
@@ -154,9 +154,13 @@ ota.bin: validate.snapshot firmware.envelope
 	$(TOIT_FIRMWARE) -e firmware.envelope container install validate validate.snapshot
 	$(TOIT_FIRMWARE) -e firmware.envelope extract --format=binary -o ota.bin
 
-.PHONY:
+.PHONY: serve
 serve: ota.bin
-	python3 -m http.server
+	python3 -m http.server 8000
+
+.PHONY: version
+version:
+	@echo $(VERSION)
 ```
 
 ## Serving the new firmware
@@ -188,14 +192,14 @@ desktop computer, as found in the previous step.
 <!-- ANALYZE CODE -->
 ``` toit
 import http
+import io
 import net
 import system.firmware
-import reader show Reader SizedReader
 
 UPDATE-URL := "http://<YOUR_IP>:8000/ota.bin"
 
-install-firmware reader/SizedReader -> none:
-  firmware-size := reader.size
+install-firmware reader/io.Reader -> none:
+  firmware-size := reader.content-size
   print "installing firmware with $firmware-size bytes"
   written-size := 0
   writer := firmware.FirmwareWriter 0 firmware-size
@@ -218,7 +222,7 @@ main:
   client := http.Client network
   try:
     response := client.get --uri=UPDATE-URL
-    install-firmware (response.body as SizedReader)
+    install-firmware response.body
   finally:
     client.close
     network.close
@@ -227,8 +231,8 @@ main:
 
 Note that the program expects the server to return a `Content-Length`
 header with the size of the firmware. Given this header, the
-`body` field of the response will be a `SizedReader`, giving us access
-to the size of the firmware. The program could also obtain the
+`body` field of the response will have the `content-size` field set, giving
+us access to the size of the firmware. The program could also obtain the
 firmware size in other ways.
 
 Flashing the firmware consists of three steps:

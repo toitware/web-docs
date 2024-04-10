@@ -76,8 +76,7 @@ serve-file request-path/string writer/http.ResponseWriter:
   writer.headers.add "Content-Length" "$(file.size path)"
   stream := file.Stream.for-read path
   try:
-    while chunk := stream.read:
-      writer.write chunk
+    writer.out.write-from stream.in
   finally:
     stream.close
 
@@ -86,7 +85,7 @@ serve-directory request-path/string writer/http.ResponseWriter:
   path := "./$request-path"
   stream := directory.DirectoryStream path
   writer.headers.add "Content-Type" "text/html"
-  writer.write """
+  writer.out.write """
     <!DOCTYPE html>
     <html>
     <head>
@@ -104,19 +103,19 @@ serve-directory request-path/string writer/http.ResponseWriter:
     prefix := request-path.trim --right "/"
     entry-request-path := "$prefix/$entry"
     if file.is-directory entry-path:
-      writer.write """
+      writer.out.write """
         <div class="directory">
           <a href="$entry-request-path">$entry/</a>
         </div>
       """
     else:
-      writer.write """
+      writer.out.write """
         <div class="file">
           <a href="$entry-request-path" download>$entry</a>
         </div>
       """
   stream.close
-  writer.write """
+  writer.out.write """
     </body>
     </html>
   """

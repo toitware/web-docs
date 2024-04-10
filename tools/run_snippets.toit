@@ -3,7 +3,6 @@
 import host.file
 import host.pipe
 import host.os
-import reader
 
 // Give it an .mdx file on the command line, and it writes the code
 // snippets to snippets.toit and tries to run them.
@@ -49,8 +48,8 @@ THINGS-THAT-WONT-RUN-ON-SERVER ::= [
 main args -> none:
   mdfile := args[0]
 
-  r := reader.BufferedReader
-    file.Stream.for-read mdfile
+  stream := file.Stream.for-read mdfile
+  r := stream.in
 
   s := State 0
 
@@ -116,6 +115,7 @@ main args -> none:
     s.add line
     if s.program.size != s.line-number: "Throw $s.program.size != $s.line-number"
   s.run
+  stream.close
 
 class State:
   code-segment-marker/string? := null
@@ -138,8 +138,7 @@ class State:
     program = List line-number: ""
 
   run:
-    // TODO(florian): reenable the `-Werror` flag if 'allow-warning' is true.
-    werror-flag := ""
+    werror-flag := allow-warning ? "" : "-Werror"
     toit-sdk := os.env.get "TOIT_SDK"
     if not toit-sdk:
       throw "TOIT_SDK environment variable not set"
@@ -149,6 +148,7 @@ class State:
     filename := snippet-filename ? snippet-filename : DEFAULT-OUTPUT
     snippet-filename = null
     snippet := file.Stream.for-write filename
+    snippet-writer := snippet.out
     mains := 0
     program.do: if it.starts-with "main": mains++
     if mains > 1 and not no-rename-main:
@@ -159,13 +159,13 @@ class State:
           "main$i$it[4..]"
         else:
           it
-    program.do: snippet.write "$it\n"
+    program.do: snippet-writer.write "$it\n"
     if not no-rename-main:
       if mains != 1:
-        snippet.write "main:\n"
+        snippet-writer.write "main:\n"
       if mains > 1:
         mains.repeat:
-          snippet.write "  main$it\n"
+          snippet-writer.write "  main$it\n"
     snippet.close
     result := ?
     if check-only:

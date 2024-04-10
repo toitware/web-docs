@@ -136,7 +136,6 @@ The last 6 bits of the result are unused, but to keep the code simple we treat t
 </Note>
 
 ```
-import binary
 import serial
 
 class SparkFunJoystick:
@@ -144,11 +143,9 @@ class SparkFunJoystick:
   // ...
 
   read-position_ reg/int -> float:
-    value := registers_.read-u16-be reg
-    // Move from uint16 range to int16 range.
-    value -= binary.INT16-MAX
+    value := registers_.read-i16-be reg
     // Perform floating-point division to get to [-1..1] range.
-    return value.to-float / binary.INT16-MAX
+    return value.to-float / int.MAX-16
 ```
 
 <!-- HIDDEN CODE   registers_/serial.Registers? := null -->
@@ -217,7 +214,6 @@ To improve responsibility, the sensor should be read at a higher frequency. Howe
 <!-- CODE FILENAME driver.toit -->
 
 ```
-import binary
 import serial
 
 class SparkFunJoystick:
@@ -259,10 +255,8 @@ class SparkFunJoystick:
 
   read-position_ reg/int -> float:
     value := registers_.read-u16-be reg
-    // Move from uint16 range to int16 range.
-    value -= binary.INT16-MAX
     // Perform floating-point division to get to [-1..1] range.
-    return value.to-float / binary.INT16-MAX
+    return value.to-float / int.MAX-16
 ```
 
 ### The Toit application running on your device

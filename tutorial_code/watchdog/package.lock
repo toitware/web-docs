@@ -5,5 +5,5 @@ packages:
   toit-watchdog:
     url: github.com/toitware/toit-watchdog
     name: watchdog
-    version: 1.2.0
-    hash: 61e70151f3623e60464e6bab8aa00825fd41f320
+    version: 1.4.0
+    hash: 3dccabf427af3a8ba3ef48429244ece0956fa684

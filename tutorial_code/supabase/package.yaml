@@ -4,4 +4,4 @@ dependencies:
     version: ^1.6.1
   supabase:
     url: github.com/toitware/toit-supabase
-    version: ^0.2.4
+    version: ^0.2.8

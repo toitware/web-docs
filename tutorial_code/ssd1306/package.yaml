@@ -4,7 +4,7 @@ dependencies:
     version: ^1.0.0
   pixel_display:
     url: github.com/toitware/toit-pixel-display
-    version: ^1.6.0
+    version: ^1.7.1
   ssd1306:
     url: github.com/toitware/toit-ssd1306
-    version: ^1.5.2
+    version: ^1.6.0
