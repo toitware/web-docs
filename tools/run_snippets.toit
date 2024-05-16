@@ -43,6 +43,7 @@ THINGS-THAT-WONT-RUN-ON-SERVER ::= [
   "import watchdog",
   "import qubitro",
   "import qubitro.service",
+  "import external",
 ]
 
 main args -> none:

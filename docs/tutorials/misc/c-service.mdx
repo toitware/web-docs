@@ -1,0 +1,363 @@
+# Communicating with C code
+In this tutorial we will learn how to communicate with C code from a Toit program.
+
+## Introduction
+Toit is a powerful language that can be used to write most programs. However, there
+are times when you need to use C code. This can be because you have a library that
+only exists in C, or because you need to do compute-intensive tasks that are better
+suited for C.
+
+The Toit framework provides a way to call C code from Toit. This is done by creating
+a C service that is built into the native firmware. Communication between
+the Toit program and the C service is done using a simple protocol that allows to
+send byte arrays back and forth.
+
+## Prerequisites
+C services need to be compiled into the native firmware. As such, we need to
+build a custom envelope. Make sure to have finished the
+[custom envelope tutorial](./custom-envelope) before continuing.
+
+## The C service
+The [template repository](https://github.com/toitlang/template-custom-envelope)
+already contains a C service that serves as a good starting point. If you
+compile the custom envelope with the service present, any Toit program
+can connect to it, and use it.
+
+We are not going to discuss the C code of the echo service in this tutorial, but
+feel free to look at it in the `components/echo` directory of the template repository.
+It is well documented and should be easy to understand.
+
+Here is the `echo.toit` program that is located in the `components/echo` directory:
+
+``` toit
+import system.external
+
+FUNCTION-ID ::= 0
+
+main:
+  echo := external.Client.open "toitlang.org/demo-echo"
+  echo.set-on-notify:: print "Got message: $it.to-string"
+  echo.notify "Hello, world!"
+  response := echo.request FUNCTION-ID #[1, 2, 3]
+  print "Got response: $response"
+  echo.close
+```
+
+The program connects to the `echo` service using the "toitlang.org/demo-echo" ID that
+the service used to register itself. It then registers a notification callback that
+prints any notification message it receives.
+
+The program sends two messages: one as a notification, where it doesn't
+necessarily expect a response, and one as a request.
+
+As the name suggests, the echo service is programmed to send back the messages it
+receives. If it is a notification, it sends back the message as a notification,
+and if it is a request, it sends back the message as a response.
+
+Let's give it a try:
+
+* Build the custom envelope with the echo service.
+  ``` shell
+  make # Builds the build/esp32/firmware.envelope
+  cp build/esp32/firmware.envelope my-envelope.envelope
+  ```
+* Build the echo Toit program and add it to the snapshot. The `toit` executable can be found in `build/host/sdk/bin`.
+  ``` shell
+  toit compile --snapshot -o echo.snapshot components/echo/echo.toit
+  toit tool firmware -e my-envelope.envelope container install echo echo.snapshot
+  ```
+* Flash the envelope to your device.
+  ``` shell
+  toit tool firmware -e my-envelope.envelope flash --port /dev/ttyUSB0
+  ```
+
+When the device starts you should see the following output:
+
+``` text
+Got message: Hello, world!
+Got response: #[0x01, 0x02, 0x03]
+```
+
+As you can see, the Toit program successfully communicated with the C service.
+
+## Qrcode service
+An echo service is nice, but not very useful. Let's create a more useful service
+that generates QR codes. As of 2024-05-15 there doesn't exist a QR-code library
+that is written in Toit, so we will use
+Espressif's [qrcode](https://components.espressif.com/components/espressif/qrcode)
+component that is written in C.
+
+### Toit qrcode service
+Create a new `toit-qrcode` directory next to the `echo` directory in the `components` folder.
+
+<Note>
+
+The ESP-IDF build system does not allow multiple components to have the same name. If you
+are just exposing an existing component, it is thus a good idea to prefix the component
+name with `toit-` to avoid conflicts. This also makes it clear that the component is
+specifically for Toit.
+
+</Note>
+
+Add the following `CMakeLists.txt` file to the `toit-qrcode` directory:
+
+``` cmake
+idf_component_register(
+  REQUIRES toit
+  SRCS qrcode.c
+  WHOLE_ARCHIVE
+)
+```
+
+Then add the following `qrcode.c` file to the `toit-qrcode` directory:
+
+``` c
+#include <toit/toit.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+static toit_err_t on_rpc_request(void* user_data, int sender, int function, toit_msg_request_handle_t handle, uint8_t* data, int length) {
+  // TODO: Implement the RPC handler.
+  toit_msg_request_fail(handle, "Not implemented");
+  return TOIT_ERR_SUCCESS;
+}
+
+static void __attribute__((constructor)) init() {
+  toit_msg_cbs_t cbs = {
+    .on_created = NULL,
+    .on_message = NULL,
+    .on_rpc_request = on_rpc_request,
+    .on_removed = NULL,
+  };
+  toit_msg_add_handler("toitlang.org/tutorial-qrcode", NULL, cbs);
+}
+```
+
+This is enough to create a new service that can be called from Toit.
+
+Here is a Toit program that uses the qrcode service. Let's add a qrcode.toit file:
+
+``` toit
+import system.external
+
+FUNCTION-ID ::= 0
+
+main:
+  qrcode := external.Client.open "toitlang.org/tutorial-qrcode"
+  response := qrcode.request FUNCTION-ID "https://toitlang.org".to-byte-array
+  print "Got response: $response"
+  qrcode.close
+```
+
+After building the custom envelope we can already start using it:
+
+``` shell
+make
+cp build/esp32/firmware.envelope my-envelope.envelope
+toit compile --snapshot -o qrcode.snapshot components/toit-qrcode/qrcode.toit
+toit tool firmware -e my-envelope.envelope container install qrcode qrcode.snapshot
+toit tool firmware -e my-envelope.envelope flash --port /dev/ttyUSB0
+```
+
+When the device starts you should see an exception with:
+
+``` text
+EXCEPTION error.
+Not implemented
+```
+
+That's the error string that the service sent back using the `toit_msg_request_fail` function.
+
+<Note>
+
+You are likely to see a "No such file..." followed with a `jag decode` instruction. Don't
+worry about that. Jaguar just couldn't find the `qrcode.snapshot` that
+we just created. You could copy the snapshot to the specificed location to make
+Jaguar happy and get a nice stacktrace.
+
+</Note>
+
+### Adding the qrcode library
+We are using Espressif's qrcode component which can be added to our project by adding
+the following `idf_component.yml` file to your qrcode folder:
+
+``` yaml
+dependencies:
+  espressif/qrcode: "^0.1.0~2"
+  idf:
+    version: ">=4.1.0"
+```
+
+If you have the ESP-IDF environment set up, you can also use the command that is
+given on the [component page](https://components.espressif.com/components/espressif/qrcode).
+
+### Implementing the qrcode service
+Now that the C library is added, we can implement the actual qrcode functionality.
+
+The qrcode API is described in the [qrcode.h](https://github.com/espressif/idf-extra-components/blob/5d01f78b7888cbbd874550ecf37152d5ec41ab50/qrcode/include/qrcode.h)
+file. As described there, We just need to include `qrcode.h`, and then call
+`esp_qrcode_generate` to generate the QR code. A few additional steps are then needed
+to convert the QR code to a byte array that can be sent back to the Toit program.
+
+Here is the updated `qrcode.c` file:
+
+``` c
+#include <toit/toit.h>
+#include <qrcode.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+
+toit_msg_request_handle_t current_handle;
+
+static void on_qrcode_generated(esp_qrcode_handle_t qrcode) {
+  int size = esp_qrcode_get_size(qrcode);
+  // 1 byte to store the size of the QR code.
+  // Then ceil(size * size / 8) bytes to store the data.
+  int data_size = 1 + (size * size + 7) / 8;
+  uint8_t* data = toit_malloc(data_size);
+  if (data == NULL) {
+    toit_msg_request_fail(current_handle, "Failed to allocate memory for QR code");
+    return;
+  }
+  memset(data, 0, data_size);
+  data[0] = size;
+  int bit_index = 8;
+  for (int x = 0; x < size; x++) {
+    for (int y = 0; y < size; y++) {
+      if (esp_qrcode_get_module(qrcode, x, y)) {
+        data[bit_index >> 3] |= 1 << (bit_index & 0x7);
+      }
+      bit_index++;
+    }
+  }
+  // Try to send the data, but don't free the data if there is an error.
+  toit_err_t err = toit_msg_request_reply(current_handle, data, data_size, false);
+  if (err != TOIT_ERR_SUCCESS) {
+    free(data);
+    printf("Failed to send QR code: %d\n", err);
+  }
+}
+
+static toit_err_t on_rpc_request(void* user_data, int sender, int function, toit_msg_request_handle_t handle, uint8_t* data, int length) {
+  current_handle = handle;
+  if (data[length - 1] != '\0') {
+    toit_msg_request_fail(handle, "Invalid request");
+    return TOIT_ERR_SUCCESS;
+  }
+  esp_qrcode_config_t config = {
+    .display_func = on_qrcode_generated,
+    .max_qrcode_version = 10,
+    .qrcode_ecc_level = ESP_QRCODE_ECC_LOW,
+  };
+  esp_err_t err = esp_qrcode_generate(&config, (const char*)data);
+  if (err == ESP_ERR_NO_MEM) {
+    toit_gc();
+    err = esp_qrcode_generate(&config, (const char*)data);
+  }
+  if (err != ESP_OK) {
+    toit_msg_request_fail(handle, "Failed to generate QR code");
+  }
+  return TOIT_ERR_SUCCESS;
+}
+
+static void __attribute__((constructor)) init() {
+  toit_msg_cbs_t cbs = TOIT_MSG_EMPTY_CBS();
+  cbs.on_rpc_request = on_rpc_request;
+  toit_msg_add_handler("toitlang.org/tutorial-qrcode", NULL, cbs);
+}
+```
+As documented by the qrcode library, the `on_qrcode_generated` callback (set in
+the `config` parameter to the generate function) is called when the QR code is ready.
+It contains a qrcode handle that can be used to get the size of the QR code and
+the individual modules (black or white) of the QR code. The rest of the
+`on_qrcode_generated` function is just converting the QR code to a byte array.
+and then sending that byte array back to the Toit program, using the
+`toit_msg_request_reply` function.
+
+The `on_rpc_request` function is called when the Toit program sends a request to
+the service. It then calls the `esp_qrcode_generate` function to generate the QR code.
+As parameter to the `esp_qrcode_generate` function we pass a `config` struct that
+contains the `on_qrcode_generated` callback. Unfortunately, the config struct does
+not have a `void*` user data field, so we need to use a global variable to store
+the current request handle.
+
+<Note>
+
+The config struct is hard-coded to use a max-qrcode version of 10 and a low error
+correction level. One could, for example, use the `function` parameter to the RPC
+handler to pass on of these values (or both) to the service.
+
+</Note>
+
+### Using the qrcode service
+Now that the service is implemented, we can use it from a Toit program. Here is
+the updated `qrcode.toit` program:
+
+``` toit
+import system.external
+
+FUNCTION-ID ::= 0
+
+main:
+  qrcode := external.Client.open "toitlang.org/tutorial-qrcode"
+  response := qrcode.request FUNCTION-ID ("https://toitlang.org".to-byte-array + #[0])
+  size := response[0]
+  bit-pos := 8
+  size.repeat: | x |
+    line := ""
+    size.repeat: | y |
+      byte := response[bit-pos >> 3]
+      bit := byte & (1 << (bit-pos & 7))
+      line += bit == 0 ? "  " : "██"
+      bit-pos++
+    print line
+  qrcode.close
+```
+
+This program sends a request to the qrcode service with the URL "https://toitlang.org". Note
+that we add a `0` byte at the end of the byte array. This is because the C code expects
+a null-terminated string.
+
+The service then responds with a byte array that contains the size of the QR code in the
+first byte, and then the QR code itself. The code then undoes the encoding that the C
+code did, and prints the QR code to the console.
+
+Here is the output of the program:
+
+``` text
+██████████████    ████      ██  ██  ██████████████
+██          ██  ████████      ██    ██          ██
+██  ██████  ██  ████    ██████      ██  ██████  ██
+██  ██████  ██    ████████████      ██  ██████  ██
+██  ██████  ██  ██  ██████  ██████  ██  ██████  ██
+██          ██    ██      ██████    ██          ██
+██████████████  ██  ██  ██  ██  ██  ██████████████
+                ██        ██  ████
+██████████  ████      ██  ██████  ████  ██  ████
+        ████    ██████  ██  ████    ██    ██  ████
+████████  ████    ██████████████    ████████  ████
+██      ████  ██    ████████      ██    ██  ██  ██
+    ██  ████████████      ██    ██
+██            ██████████  ████      ██████  ██████
+████  ██    ██        ████  ██  ████      ██    ██
+██████  ████            ██    ██  ████    ████████
+        ████████████████████    ██████████    ████
+                  ████  ████    ██      ██  ██
+██████████████  ████  ██████    ██  ██  ██      ██
+██          ██          ██  ██  ██      ████    ██
+██  ██████  ██  ██  ██        ██████████████████
+██  ██████  ██  ██      ████    ████████████  ██
+██  ██████  ██  ██  ██      ██            ██
+██          ██  ██  ██████  ████  ████████    ████
+██████████████  ██████  ██████    ████  ██  ██  ██
+```
+
+## Conclusion
+In this tutorial we learned how to communicate with C code from a Toit program.
+We looked at the simple echo service that just sends back the message it receives,
+and then we created a more complex qrcode service that generates QR codes.
