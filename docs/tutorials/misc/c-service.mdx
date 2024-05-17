@@ -1,5 +1,11 @@
 # Communicating with C code
 In this tutorial we will learn how to communicate with C code from a Toit program.
+We are going to add Espressif's
+[qrcode](https://components.espressif.com/components/espressif/qrcode)
+component as a C service that Toit code can then use.
+
+See [the demo repository](https://github.com/toitware/demo-custom-envelope) for
+the complete code.
 
 ## Introduction
 Toit is a powerful language that can be used to write most programs. However, there
@@ -125,12 +131,8 @@ static toit_err_t on_rpc_request(void* user_data, int sender, int function, toit
 }
 
 static void __attribute__((constructor)) init() {
-  toit_msg_cbs_t cbs = {
-    .on_created = NULL,
-    .on_message = NULL,
-    .on_rpc_request = on_rpc_request,
-    .on_removed = NULL,
-  };
+  toit_msg_cbs_t cbs = TOIT_MSG_EMPTY_CBS();
+  cbs.on_rpc_request = on_rpc_request;
   toit_msg_add_handler("toitlang.org/tutorial-qrcode", NULL, cbs);
 }
 ```
@@ -206,6 +208,7 @@ Here is the updated `qrcode.c` file:
 ``` c
 #include <toit/toit.h>
 #include <qrcode.h>
+#include <esp_log.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -214,17 +217,30 @@ Here is the updated `qrcode.c` file:
 
 toit_msg_request_handle_t current_handle;
 
+static void reply(void* data, int data_size) {
+  toit_err_t err = toit_msg_request_reply(current_handle, data, data_size, true);
+  if (err != TOIT_OK) {
+    ESP_LOGE("toit-qrcode", "Failed to send QR code: %d", err);
+  }
+}
+
+static void fail(const char* message) {
+  toit_err_t err = toit_msg_request_fail(current_handle, message);
+  if (err != TOIT_OK) {
+    ESP_LOGE("toit-qrcode", "Failed to send exception '%s': %d", message, err);
+  }
+}
+
 static void on_qrcode_generated(esp_qrcode_handle_t qrcode) {
   int size = esp_qrcode_get_size(qrcode);
   // 1 byte to store the size of the QR code.
   // Then ceil(size * size / 8) bytes to store the data.
   int data_size = 1 + (size * size + 7) / 8;
-  uint8_t* data = toit_malloc(data_size);
+  uint8_t* data = toit_calloc(1, data_size);
   if (data == NULL) {
-    toit_msg_request_fail(current_handle, "Failed to allocate memory for QR code");
+    fail("Failed to allocate memory for QR code");
     return;
   }
-  memset(data, 0, data_size);
   data[0] = size;
   int bit_index = 8;
   for (int x = 0; x < size; x++) {
@@ -235,19 +251,14 @@ static void on_qrcode_generated(esp_qrcode_handle_t qrcode) {
       bit_index++;
     }
   }
-  // Try to send the data, but don't free the data if there is an error.
-  toit_err_t err = toit_msg_request_reply(current_handle, data, data_size, false);
-  if (err != TOIT_ERR_SUCCESS) {
-    free(data);
-    printf("Failed to send QR code: %d\n", err);
-  }
+  reply(data, data_size);
 }
 
 static toit_err_t on_rpc_request(void* user_data, int sender, int function, toit_msg_request_handle_t handle, uint8_t* data, int length) {
   current_handle = handle;
-  if (data[length - 1] != '\0') {
-    toit_msg_request_fail(handle, "Invalid request");
-    return TOIT_ERR_SUCCESS;
+  if (data[length] != '\0') {
+    fail("Invalid request");
+    return TOIT_OK;
   }
   esp_qrcode_config_t config = {
     .display_func = on_qrcode_generated,
@@ -259,10 +270,8 @@ static toit_err_t on_rpc_request(void* user_data, int sender, int function, toit
     toit_gc();
     err = esp_qrcode_generate(&config, (const char*)data);
   }
-  if (err != ESP_OK) {
-    toit_msg_request_fail(handle, "Failed to generate QR code");
-  }
-  return TOIT_ERR_SUCCESS;
+  if (err != ESP_OK) fail("Failed to generate QR code");
+  return TOIT_OK;
 }
 
 static void __attribute__((constructor)) init() {
@@ -305,7 +314,7 @@ FUNCTION-ID ::= 0
 
 main:
   qrcode := external.Client.open "toitlang.org/tutorial-qrcode"
-  response := qrcode.request FUNCTION-ID ("https://toitlang.org".to-byte-array + #[0])
+  response := qrcode.request FUNCTION-ID "https://toitlang.org"
   size := response[0]
   bit-pos := 8
   size.repeat: | x |
@@ -320,8 +329,8 @@ main:
 ```
 
 This program sends a request to the qrcode service with the URL "https://toitlang.org". Note
-that we add a `0` byte at the end of the byte array. This is because the C code expects
-a null-terminated string.
+that we don't need to add a `0` byte at the end of the byte array. The messaging service
+guarantees that strings are 0-terminated when they arrive at the receiver.
 
 The service then responds with a byte array that contains the size of the QR code in the
 first byte, and then the QR code itself. The code then undoes the encoding that the C
