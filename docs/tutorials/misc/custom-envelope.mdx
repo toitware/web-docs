@@ -1,0 +1,160 @@
+# Creating a custom envelope
+Envelopes are Toit's way of packaging the native firmware and Toit containers
+together. After going through an extraction process, this is what is flashed to
+devices.
+
+Envelopes are designed to be modified, so that Toit containers can be added or
+removed from them. This approach makes it possible to download precompiled
+envelopes, where the native firmware has been built for you, and then add your
+own Toit containers to them.
+
+Toit already provides multiple envelopes at
+[the envelopes repository](https://github.com/toitlang/envelopes). However,
+if you need a different configuration of the native firmware, then you
+might need to create your own custom envelope.
+
+This tutorial will show you how to create a custom envelope.
+
+## Prerequisites
+Contrary to almost all other tutorials, this tutorial requires to compile
+C/C++ code. This means that you need to have a full build environment
+installed. See the [Toitlang's build instructions](https://github.com/toitlang/toit?tab=readme-ov-file#building) for more information.
+
+## Template
+To make it easier to create a custom envelope, we have created a template
+that you can use. The template is available at
+[the custom envelope template repository](https://github.com/toitlang/template-custom-envelope).
+
+<Note>
+
+The template repository is optimized for macOS and Linux. If you are using
+Windows, you might need to adjust some of the scripts.
+
+</Note>
+
+The following instructions summarize
+ [GitHub's cloning instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/duplicating-a-repository)
+to duplicate the repository.
+
+Start by creating a fresh repository on GitHub. Then run the following
+commands, replacing `your-owner/your-repo` with the name of your repository:
+
+``` shell
+git clone --bare https://github.com/toitlang/template-custom-envelope.git
+cd template-custom-envelope.git
+git push --mirror git@github.com:your-owner/your-repo.git
+cd ..
+rm -rf template-custom-envelope.git
+cd your-repo
+```
+
+### Configuring the template
+As the README of the template repository explains, you need to configure
+the template to match your needs. For this tutorial we assume that you are
+using an ESP32 (the default), and that you will modify license, and the CI
+action at a later point. We will also keep the echo-service in the components
+directory, for now. You should remove it if you don't need it. See
+the [c-service tutorial](./c-service) for more information.
+
+Update the toit SDK to your preferred version, and then initialize the submodules.
+The SDK version you want depends on your needs. If you want to use
+an installed [Jaguar](https://github.com/toitlang/jaguar), you should use the
+same SDK version as Jaguar uses. You can find its SDK version by running
+`jag version`. Once you know the version run the following commands:
+
+``` shell
+pushd toit
+git checkout YOUR_VERSION
+git submodule update --init --recursive
+popd
+```
+
+<Note>
+
+Toit snapshots are only compatible with the SDK version they were compiled with.
+Always make sure that the SDK version in the template matches the SDK version
+you are using.
+
+</Note>
+
+Run the init step, which will copy some files from the Toit repository:
+
+``` shell
+make init
+```
+
+## Changing the sdkconfig
+The most common reason to create a custom envelope is to change the
+`sdkconfig` file. This file is used by the ESP-IDF build system to configure
+the native firmware.
+
+To change the `sdkconfig` file, you can run:
+
+``` shell
+make menuconfig
+```
+
+This will open a menu where you can change the configuration. For example, you
+can disable Bluetooth support (to save memory and space), or change the default
+name of the device. Use '/' to search for a specific configuration. The
+bluetooth configuration would be `BT_ENABLED`, and the device name
+`LWIP_LOCAL_HOSTNAME` (for network) and `CONFIG_BT_NIMBLE_SVC_GAP_DEVICE_NAME` for
+Bluetooth.
+
+When you are done, save the configuration and exit the menu. This will trigger
+an automatic creation of `sdkconfig.defaults`. We recommend to commit both
+files (`sdkconfig` and `sdkconfig.defaults`) to your repository.
+
+Running `make diff` you should now see your changes compared to the default
+configuration of a Toit envelope.
+
+## Build
+To build the custom envelope, run:
+
+``` shell
+make
+```
+
+This will first build the Toit SDK for your platform, and then build the
+native firmware. The result is an `firmware.envelope` file in the `build/esp32`
+directory.
+
+### Jaguar
+If you have Jaguar installed, you can flash the envelope to your device by
+running the following command:
+
+``` shell
+jag flash build/esp32/firmware.envelope
+```
+
+### Containers
+You can add containers to the envelope and then flash it, or use it for OTA
+updates.
+
+We recommend to copy the envelope to a different name, so that you can keep
+the original envelope as a empty starting point. The `toit` executable can
+be found in `build/host/sdk/bin`.
+
+``` shell
+cp build/esp32/firmware.envelope my-envelope.envelope
+toit compile --snapshot -o hello.snapshot hello.toit
+toit tool firmware -e firmware-esp32 container install hello hello.snapshot
+```
+
+#### Flash
+Use the `firmware` tool to flash the envelope to your device. Adjust the port to your
+device's port. The `toit` executable can be found in `build/host/sdk/bin`:
+
+``` shell
+toit tool firmware -e my-envelope.envelope flash --port /dev/ttyUSB0
+```
+## GitHub action
+The template repository comes with a GitHub action that builds the envelope.
+You can adjust it, so that it uploads the created envelope to a release.
+
+We recommend to include the SDK version in the release name, so that you can
+easily find the correct envelope for a specific SDK version.
+
+## Conclusion
+This tutorial showed how to create a custom envelope. The template repository
+provides a good starting point, and you can adjust it to your needs.
