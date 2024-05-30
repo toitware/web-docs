@@ -7,6 +7,7 @@ TOIT_COMPILE := $(TOIT_SDK)/bin/toit.compile
 TOIT_FIRMWARE := $(TOIT_SDK)/tools/firmware
 VERSION := $(shell $(TOIT_SDK)/bin/toit.lsp version)
 ENVELOPE_URL := https://github.com/toitlang/toit/releases/download/$(VERSION)/firmware-esp32.gz
+WIFI_CREDENTIALS := {"wifi.ssid":"<my-ssid>","wifi.password":"<my-password>"}
 
 .PHONY: all
 all: ota.bin
@@ -24,6 +25,7 @@ firmware.envelope.gz:
 
 ota.bin: validate.snapshot firmware.envelope
 	$(TOIT_FIRMWARE) -e firmware.envelope container install validate validate.snapshot
+	$(TOIT_FIRMWARE) -e firmware.envelope property set wifi '$(WIFI_CREDENTIALS)'
 	$(TOIT_FIRMWARE) -e firmware.envelope extract --format=binary -o ota.bin
 
 .PHONY: serve
