@@ -263,9 +263,11 @@ need to bake the WiFi credentials into the OTA image. This can be done
 by adding a config file with the credentials to the extraction step.
 
 ``` makefile
+WIFI_CREDENTIALS := {"wifi.ssid":"<my-ssid>","wifi.password":"<my-password>"}
+
 ota.bin: validate.snapshot firmware.envelope
 	$(TOIT_FIRMWARE) -e firmware.envelope container install validate validate.snapshot
-	echo '{ "wifi": { "wifi.ssid": "myssid", "wifi.password": "mypassword" } }' > wifi.json
+	$(TOIT_FIRMWARE) -e firmware.envelope property set wifi '$(WIFI_CREDENTIALS)'
 	$(TOIT_FIRMWARE) -e firmware.envelope extract --format=binary -o ota.bin --config wifi.json
 ```
 
