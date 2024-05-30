@@ -257,6 +257,22 @@ the device through Jaguar to get the Jaguar service back.
 jag run ota.toit
 ```
 
+## WiFi
+Depending on how you have configured the network on your device, you might
+need to bake the WiFi credentials into the OTA image. This can be done
+by adding a config file with the credentials to the extraction step.
+
+``` makefile
+ota.bin: validate.snapshot firmware.envelope
+	$(TOIT_FIRMWARE) -e firmware.envelope container install validate validate.snapshot
+	echo '{ "wifi": { "wifi.ssid": "myssid", "wifi.password": "mypassword" } }' > wifi.json
+	$(TOIT_FIRMWARE) -e firmware.envelope extract --format=binary -o ota.bin --config wifi.json
+```
+
+We also recommend to only validate a new image once a network connection has been
+established. Otherwise, the device might be able to boot, but not connect to the
+network, and thus become unreachable.
+
 ## Conclusion
 We have seen how to update the firmware of the ESP32 over the air.
 
