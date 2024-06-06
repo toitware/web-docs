@@ -35,5 +35,5 @@ main:
       --certificate=create-aws-certificate
   options := mqtt.SessionOptions --client-id=CLIENT-ID
   client.start --options=options
-  client.publish TOPIC "hello".to-byte-array
+  client.publish TOPIC "hello"
   client.close

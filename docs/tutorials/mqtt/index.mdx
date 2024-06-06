@@ -172,8 +172,8 @@ main:
   client.close
 ```
 
-Note that the payload must be a byte array. If your data is a string, simply
-call `.to-byte-array` on it.
+Note that the payload must be an `io.Data`, which is typically a string or a
+byte array. If your data is neither, you need to convert it first.
 
 This program publishes a JSON object with the value `42` to the topic and then
 disconnects. Let's verify that the message was published by subscribing to the
