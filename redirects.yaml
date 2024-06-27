@@ -1,0 +1,7 @@
+# This is our custom implementation for 301 redirects in our webserver.
+redirects:
+  "/language/language": "/language"
+  "/language/language/": "/language"
+  "/language/sdk/sdk/": "/language/sdk"
+  "/troubleshoot": "/support"
+  "/tutorials/ble/basic": "/tutorials/ble"
