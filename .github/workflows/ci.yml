@@ -159,7 +159,7 @@ jobs:
   deploy:
     if: |
       github.event.inputs.deploy == 'true' ||
-      github.event_name == 'release'
+      github.event_name == 'release' && !github.event.release.prerelease
 
     # Only deploy if all tests passed.
     needs: [ci]
