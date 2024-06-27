@@ -169,7 +169,7 @@ jobs:
     steps:
       # No need to checkout the project, since all we need is to download the
       # build artifact from the build step.
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: build
           path: build
@@ -181,8 +181,9 @@ jobs:
       - name: Untar
         run: |
           cd build
-          tar x -zf $BUILD_VERSION.$ARTIFACT_EXTENSION
-          rm $BUILD_VERSION.$ARTIFACT_EXTENSION
+          VERSION=$(cat VERSION)
+          tar x -zf $VERSION.$ARTIFACT_EXTENSION
+          rm $VERSION.$ARTIFACT_EXTENSION
 
       # This seems to be the simplest way to publish to a separate branch.
       - name: Deploy
