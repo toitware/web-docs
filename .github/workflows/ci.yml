@@ -174,16 +174,16 @@ jobs:
           name: build
           path: build
 
-      - name: Disable Jekyll
-        run: |
-          touch build/.nojekyll
-
       - name: Untar
         run: |
           cd build
           VERSION=$(cat VERSION)
           tar x -zf $VERSION.$ARTIFACT_EXTENSION
           rm $VERSION.$ARTIFACT_EXTENSION
+
+      - name: Disable Jekyll
+        run: |
+          touch build/.nojekyll
 
       # This seems to be the simplest way to publish to a separate branch.
       - name: Deploy
@@ -194,4 +194,4 @@ jobs:
           publish_dir: ./build
           # Optional. This will create a CNAME file so GitHub Pages serves it
           # under this domain.
-          # cname: docs.toit.io
+          cname: docs.toit.io
