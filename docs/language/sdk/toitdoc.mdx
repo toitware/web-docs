@@ -8,14 +8,6 @@ Documentation should be helpful to the users of the element. Users can either be
 
 A consistent documentation helps to parse the comments and makes it easier to find relevant information when needed. Conventions (see below) make it furthermore possible to improve IDE support (the editing experience) and the generated documentation (as an HTML file).
 
-As a general rule, don't feel obligated to add comments, when there is nothing to say.
-In the following example, the comment does not add any information:
-
-```toit
-  /// Returns the size of this instance.
-  size -> int:
-```
-
 If preferred, or for completeness (if every other member has a comment), these comments may still be present.
 
 ## Syntax
@@ -134,8 +126,7 @@ Lines beginning with `#` (or multiple `#`s) are sections. The more `#`s the deep
 ### Links
 
 - `$foo` links to the element (member, class, global variable or global function) with the resolved name.
-- `$foo("foo.toit":id)` links to an element that is not in scope, but declared in the given file. Semantically, it's equivalent to searching for `id` in the scope introduced by importing "foo.toit".
-- `$foo x y` resolves to the element `foo` that takes 2 arguments.
+- `$(foo x y)` resolves to the element `foo` that takes 2 arguments.
 - URLs inside the comment are automatically linked: `http://www.example.com` or `file://foo.toit` don't need markers.
 
 ## Sections
@@ -204,7 +195,9 @@ Usually, this style of documentation does not require to refer to the commented 
 
 In instance members and constructors, use "this instance" when referring to `this`. For example, "Calls the given $block on each element of this instance". This convention has the advantage that the comment is still valid for subclasses (compared to the alternative of referring to the class name).
 
-Arguments should be referred to as "the given $arg-name". When it is clear that the text talks about a given argument, one may drop "given". When providing more information for arguments, start the paragraph with "The argument $arg-name ...". For substantial discussions of parameters consider a (additional) section "# Argument $arg-name".
+Parameters should be referred to as "the given $parameter-name". When it is clear that the text talks about a given parameter, one may drop "given". When providing more information for parameters, start the paragraph with "The parameter $parameter-name ...". For substantial discussions of parameters consider a (additional) section "# Parameter $parameter-name".
+
+When referring to parameter with a boolean default value make it clear when to pass the boolean flag. Either mention which value is the default, or preferential mention the case where the flage needs to be passed. For example, for a parameter `flag` with a false default value: "If $flag is true, then ... Otherwise, ...". Or "If $flag is true (the default), then ...".
 
 IDEs should eventually be able to provide contextual help. Specifically, when filling in an argument, editors can show the documentation for the current argument. It should do that by searching for references to `$arg-name`. If the documentation has a section with the argument, that's the documentation it should show. If not a sentence starting with "The argument $arg-name" would be shown. Finally, if neither exists, paragraphs linking to the argument are highlighted.
 
@@ -217,7 +210,7 @@ Overridden methods don't need any Toitdoc. Documentation is inherited. Users may
 Overloaded methods can either duplicate the documentation (if it's sufficiently different), or use one of the two following methods:
 
 1. Document one method (usually the most general one), and then use "Variant of $foo(foo a b c).", followed by a specific documentation.
-2. Document one method (usually the most general one) with an "# Overloaded" section. For all other methods, use the following pattern: "Variant of $foo(foo a b c).", and then add an "# Overloaded" section in the same comment. The Toitdoc generator takes the original comments and replaces the "Overloaded" section for each generated comment. (Or, more likely, generates an overloaded documentation as can be seen here: <https://en.cppreference.com/w/cpp/container/vector/push_back>).
+2. Document one method (usually the most general one) with an "# Overloaded" section. For all other methods, use the following pattern: "Variant of $foo(foo a b c).", and then add an "# Overloaded" section in the same comment. The Toitdoc generator will eventually take the original comments and replaces the "Overloaded" section for each generated comment. (Or, more likely, generates an overloaded documentation as can be seen here: <https://en.cppreference.com/w/cpp/container/vector/push_back>).
 
 Don't add implementation comments in Toitdocs. For example `TODO...` should be in a non-Toitdoc comment. Generally, the Toitdoc should come first, followed by implementation comments:
 
