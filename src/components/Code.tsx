@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import CodeBlock from "@toitware/code-block";
+import CodeBlock from "@toit/code-block";
 import * as React from "react";
 import { ReactNode, useRef, useState } from "react";
 import { FiCheck, FiCopy } from "react-icons/fi";
