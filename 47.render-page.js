@@ -6,7 +6,7 @@ exports.modules = {
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (true) // CommonJS
@@ -896,7 +896,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (true) // CommonJS
@@ -1121,7 +1121,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (true) // CommonJS

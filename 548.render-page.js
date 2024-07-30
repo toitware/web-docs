@@ -6,7 +6,7 @@ exports.modules = {
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (true) // CommonJS
@@ -107,7 +107,8 @@ exports.modules = {
     }
 
     function jsToken(stream, state, cx) {
-      if (stream.peek() == "<" && jsMode.expressionAllowed(stream, cx.state)) {
+      if (stream.peek() == "<" && !stream.match(/^<([^<>]|<[^>]*>)+,\s*>/, false) &&
+          jsMode.expressionAllowed(stream, cx.state)) {
         state.context = new Context(CodeMirror.startState(xmlMode, jsMode.indent(cx.state, "", "")),
                                     xmlMode, 0, state.context)
         jsMode.skipExpression(cx.state)

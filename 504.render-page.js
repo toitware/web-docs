@@ -6,7 +6,7 @@ exports.modules = {
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (true) // CommonJS
@@ -82,7 +82,7 @@ exports.modules = {
         var baseString = null;
         for (var i = from.line; i < end; ++i) {
           var line = self.getLine(i);
-          var whitespace = line.slice(0, firstNonWS(line));
+          var whitespace = line.search(nonWS) === -1 ? line : line.slice(0, firstNonWS(line));
           if (baseString == null || baseString.length > whitespace.length) {
             baseString = whitespace;
           }
