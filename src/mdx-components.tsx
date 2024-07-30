@@ -5,7 +5,7 @@
 import { MDXProviderComponentsProp } from "@mdx-js/react";
 import { Typography } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
-import { CodeBlock } from "@toitware/code-block";
+import { CodeBlock } from "@toit/code-block";
 import React from "react";
 import { Box, Boxes } from "./components/Boxes";
 import Code from "./components/Code";

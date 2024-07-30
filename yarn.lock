@@ -2010,10 +2010,10 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
 
-"@toitware/code-block@^0.4.2":
-  version "0.4.2"
-  resolved "https://npm.pkg.github.com/download/@toitware/code-block/0.4.2/41fef85a128a223fde8e91d105779018f000bde1#41fef85a128a223fde8e91d105779018f000bde1"
-  integrity sha512-7QWPQF/8u0oEYlQ2EZFB4nKfzV8PgAtY4OZK9UpXLzDlx/DO4NlRHB+mgO0+JyS2EyNZhWn4o1mDW96Wfoa0OQ==
+"@toit/code-block@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@toit/code-block/-/code-block-0.4.3.tgz#f77cd97b2cb6442722ca211f6c629a80caa5cad0"
+  integrity sha512-LanSOKsJshF3PxhgCCGZ9UFIAyRtGGHiscnFzH+a+LWx/krGd2pRDvAK0RChan+tr0iNtEtQ7YwbSk8MHeXwCw==
   dependencies:
     codemirror-theme-vars "^0.1.1"
     use-codemirror "^0.2.0"
@@ -3763,12 +3763,14 @@ coa@^2.0.2:
     q "^1.1.2"
 
 codemirror-theme-vars@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.npmjs.org/codemirror-theme-vars/-/codemirror-theme-vars-0.1.1.tgz"
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/codemirror-theme-vars/-/codemirror-theme-vars-0.1.2.tgz#60db6877d16a400809e919b9bec33d72dbab1dfa"
+  integrity sha512-WTau8X2q58b0SOAY9DO+iQVw8JKVEgyQIqArp2D732tcc+pobbMta3bnVMdQdmgwuvNrOFFr6HoxPRoQOgooFA==
 
 codemirror@^5.49.2:
-  version "5.64.0"
-  resolved "https://registry.npmjs.org/codemirror/-/codemirror-5.64.0.tgz"
+  version "5.65.17"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.65.17.tgz#00d71f34c3518471ae4c0de23a2f8bb39a6df6ca"
+  integrity sha512-1zOsUx3lzAOu/gnMAZkQ9kpIHcPYOc9y1Fbm2UVk5UBPkdq380nhkelG0qUwm1f7wPvTbndu9ZYlug35EwAZRQ==
 
 collapse-white-space@^1.0.2:
   version "1.0.6"
@@ -12181,7 +12183,8 @@ tsconfig-paths@^3.11.0:
 
 tslib@1.10.0:
   version "1.10.0"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-1.10.0.tgz"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
+  integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
 
 tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0:
   version "1.14.1"
@@ -12691,7 +12694,8 @@ url@^0.11.0:
 
 use-codemirror@^0.2.0:
   version "0.2.0"
-  resolved "https://registry.npmjs.org/use-codemirror/-/use-codemirror-0.2.0.tgz"
+  resolved "https://registry.yarnpkg.com/use-codemirror/-/use-codemirror-0.2.0.tgz#1bd06e679c40aa6ed2babf87f0d088b32fde250a"
+  integrity sha512-UwAwOz7Pe0gK414+muxE9lvzwAnj37pfoY5zqfoQ3e/e1LQ9kEOsMkKX0r73Jh2RXaFtgRUqSL4C8+oCaYZpcg==
   dependencies:
     codemirror "^5.49.2"
     tslib "1.10.0"
