@@ -37,7 +37,7 @@
     "@mui/material": "^5.2.0",
     "@raae/gatsby-remark-oembed": "^0.1.1",
     "@svgr/webpack": "^5.5.0",
-    "@toitware/code-block": "^0.4.2",
+    "@toit/code-block": "^0.4.3",
     "@types/color": "^3.0.1",
     "@types/flexsearch": "^0.7.2",
     "@types/mdx-js__react": "^1.5.3",
