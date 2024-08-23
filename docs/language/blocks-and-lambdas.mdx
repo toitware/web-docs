@@ -4,7 +4,7 @@ Toit provides two mechanisms for creating and passing around pieces of executabl
 code: blocks and lambdas. While they share some similarities, they have distinct
 characteristics, use cases, and performance implications.
 
-## Introduction to Blocks and Lambdas
+## Introduction to blocks and lambdas
 
 ### Blocks
 
@@ -42,13 +42,15 @@ While not as efficient as blocks, lambdas offer greater versatility.
 Example of a lambda:
 
 ```toit
-printer/Lambda? := null
+create-printer:
+  return (:: print it)
+
 main:
-  printer = :: print it
+  printer := create-printer
   [1, 2, 3].do: printer.call it
 ```
 
-## Key Differences
+## Key differences
 
 1. **Syntax**: Blocks use `:`, lambdas use `::`.
 2. **Return behavior**: Blocks can have non-local returns, lambdas cannot use `return` at all.
@@ -56,9 +58,9 @@ main:
 4. **Flexibility**: Lambdas can be stored in variables, fields, and collections, and returned from functions. Blocks cannot.
 5. **Efficiency**: Blocks are significantly more efficient than lambdas.
 
-## Blocks in Detail
+## Blocks in detail
 
-### Efficiency of Blocks
+### Efficiency of blocks
 
 Blocks are designed to be highly efficient in Toit. They are stack-allocated,
 which means they have minimal overhead in terms of memory usage and execution time.
@@ -511,9 +513,9 @@ Blocks are stack allocated, which is what makes them so efficient, but it also l
 - Lambdas cannot capture blocks.
 - Blocks cannot take blocks as arguments.
 
-## Lambdas in Detail
+## Lambdas in detail
 
-### Basic Use of Lambdas
+### Basic use of lambdas
 
 Lambdas are more versatile than blocks and can be used in a wider variety of
 situations, though at a cost of reduced efficiency compared to blocks:
@@ -534,7 +536,7 @@ In this example, we define a lambda that runs as a separate task, continuously
 printing a message. While less efficient than a block, a lambda is necessary here
 due to its ability to be stored and executed later.
 
-### Storing and Reusing Lambdas
+### Storing and reusing lambdas
 
 Unlike blocks, lambdas can be stored in variables, fields, and collections:
 
@@ -552,19 +554,19 @@ class WatchedBox:
     callbacks_.do: it.call new-value
 
 add-printer box/WatchedBox:
-  box.watch:: print "Was changed to $it."
+  box.watch:: print "was changed to $it"
 
 main:
   box := WatchedBox
   add-printer box
-  box.value = 499  // Prints "was changed to 499."
-  box.value = 42   // Prints "was changed to 42."
+  box.value = 499  // Prints "was changed to 499".
+  box.value = 42   // Prints "was changed to 42".
 ```
 
 This example demonstrates how lambdas can be stored in a list
 (`callbacks_`) and called later.
 
-### Lambda Arguments
+### Lambda arguments
 
 Like blocks, lambdas can take arguments. If a lambda takes a single argument,
 you can use `it` as the default parameter name:
@@ -617,7 +619,7 @@ A lambda is an object of type `Lambda`. You can store it in a variable, pass it
 as an argument, and call it later. The `call` method is used to execute the
 lambda.
 
-### Lambdas vs. blocks: choosing the right tool
+### Lambdas versus blocks: choosing the right tool
 
 Only the receiver of a callback can determine whether to use a block or a lambda. As
 a user, one has to follow the type declared in the method signature.
@@ -630,14 +632,14 @@ When writing functions that accept callbacks, consider the following guidelines:
 - Consider providing both block and lambda versions if you need to support both
   use cases. The lambda version can always redirect to the block version:
   ```
-  my-function callback:
-    my-function: callback.call it
-
   my-function [block]:
     block.call 42
 
+  my-function callback:
+    my-function: callback.call it
+
   main:
     // Both of these will print 42.
-    my-function:: print it
     my-function: print it
+    my-function:: print it
   ```
