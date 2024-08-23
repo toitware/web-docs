@@ -64,8 +64,8 @@ items:
         path: /language/objects-constructors-inheritance-interfaces
       - name: Strings
         path: /language/strings
-      - name: Blocks
-        path: /language/blocks
+      - name: Blocks and lambdas
+        path: /language/blocks-and-lambdas
       - name: Lists, byte arrays, sets and maps
         path: /language/listsetmap
       - name: Control flow

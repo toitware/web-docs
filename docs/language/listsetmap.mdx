@@ -24,7 +24,7 @@ There are two concrete implementations of `Set` and `Map`:
 `Set`/`Map` use the overwritable `==` operator to determine whether two keys
 are equal, whereas `IdentitySet`/`IdentityMap` use `identical`.
 
-See some examples of use of `List` and `Map` in the section [Toit blocks](../blocks).
+See some examples of use of `List` and `Map` in the section [Toit blocks](../blocks-and-lambdas).
 
 See also the documentation for the
 [List](https://libs.toit.io/core/collections/class-List),
@@ -176,7 +176,7 @@ Often there are more succinct ways to achieve the same with variations of the
 The full set of map methods is available in the [class
 documentation](https://libs.toit.io/core/collections/class-Map). See also the
 guide to [using named block
-parameters](../blocks#calling-functions-with-named-block-parameters)
+parameters](../blocks-and-lambdas#calling-functions-with-named-block-parameters)
 
 ## Functional methods
 
@@ -210,7 +210,7 @@ introduces the block argument to `any` does not get mistaken for the colon of th
 if-statement. The `any` method is often called `some` in functional languages.)
 
 Both of these examples made use of the
-[automatic block argument, `it`](../blocks#block-arguments).
+[automatic block argument, `it`](../blocks-and-lambdas#block-arguments).
 
 Similarly, Toit collections have the
 [`every`](<https://libs.toit.io/core/collections/class-Collection#every(1%2C1%2C0%2C)>)
@@ -224,8 +224,8 @@ method known from functional languages:
 The reduce method:
 
 (The example shows the use of a
-[block](../blocks) with [two named
-arguments](../blocks#block-arguments)).
+[block](../blocks-and-lambdas) with [two named
+arguments](../blocks-and-lambdas#block-arguments)).
 
 ```
   sum := collection.reduce: | a b | a + b
@@ -282,7 +282,7 @@ That example also illustrates that the value of the block (returned to the
 `map` method) is the result of the last statement. In this case one of the
 branches of the `if` will be the last statement, producing the return value.
 An alternative way to do this would be to use
-[continue.map](../blocks#local-return)
+[continue.map](../blocks-and-lambdas#local-return)
 
 We could also reduce it to an almost unreadable one-liner by putting an
 arbitrary expression in a string interpolation, surrounding it with `$(` and

@@ -1,10 +1,21 @@
-# Blocks
+# Blocks and Lambdas
 
-Blocks are a mechanism to conveniently and efficiently provide callbacks to
-functions. This mechanism is, for example, used for the methods `int.repeat`
-and `List.do`.
+Toit provides two mechanisms for creating and passing around pieces of executable
+code: blocks and lambdas. While they share some similarities, they have distinct
+characteristics, use cases, and performance implications.
 
-```
+## Introduction to blocks and lambdas
+
+### Blocks
+
+Blocks are a highly efficient mechanism to provide callbacks to functions. They are
+introduced with a colon `:` and are commonly used in the core libraries, for example
+with `int.repeat` and `List.do`. Blocks are very efficient and should be used
+liberally.
+
+Example of a block:
+
+```toit
 main:
   // Print the numbers from 1 to 10, one per line.
   10.repeat:
@@ -16,13 +27,46 @@ main:
 ```
 
 Here we used the automatic block argument, `it`, [see
-below](#block-arguments)
+below](#block-arguments).
 
 Syntactically `repeat` and `do` look like they are built-in to the language
 like `for` and `if` are, but they are actually normal methods that use the
 block feature.
 
-## Basic use of blocks
+### Lambdas
+
+Lambdas are more flexible function-like objects introduced with a double colon `::`.
+They can be stored in variables, passed as arguments, and returned from functions.
+While not as efficient as blocks, lambdas offer greater versatility.
+
+Example of a lambda:
+
+```toit
+create-printer:
+  return (:: print it)
+
+main:
+  printer := create-printer
+  [1, 2, 3].do: printer.call it
+```
+
+## Key differences
+
+1. **Syntax**: Blocks use `:`, lambdas use `::`.
+2. **Return behavior**: Blocks can have non-local returns, lambdas cannot use `return` at all.
+3. **Lifetime**: Blocks are tied to the current context and cannot outlive it. Lambdas can be stored and used later.
+4. **Flexibility**: Lambdas can be stored in variables, fields, and collections, and returned from functions. Blocks cannot.
+5. **Efficiency**: Blocks are significantly more efficient than lambdas.
+
+## Blocks in detail
+
+### Efficiency of blocks
+
+Blocks are designed to be highly efficient in Toit. They are stack-allocated,
+which means they have minimal overhead in terms of memory usage and execution time.
+This efficiency makes blocks the preferred choice for most callback scenarios.
+
+### Basic use of blocks
 
 Blocks are used extensively in the Toit standard library, so you need to know
 the basics of calling functions that accept blocks.
@@ -53,7 +97,7 @@ main:
   4.repeat: print "again"
 ```
 
-## Block arguments
+### Block arguments
 
 Blocks often receive arguments when they are called as callbacks. For instance,
 `List.do` iterates over a list and calls the block with every element. When the
@@ -120,13 +164,13 @@ If a block accepts multiple arguments, but you only need to refer to the first,
 then you can omit the naming and just use `it`. If there are parameters that
 you don't need, then you can use a wildcard `_` instead of giving them a name.
 
-## Returning from blocks and accessing variables
+### Returning from blocks and accessing variables
 
 Blocks look like they are built-in which makes it important that they also act
 like they are built-in. This means that returning from a block with `return`,
 or accessing local variables must just work.
 
-### Non-local return
+#### Non-local return
 
 The non-local return is the most common return from blocks. It is best explained based on an example:
 
@@ -157,7 +201,7 @@ doesn't just return from the block or `do`, it returns from `first-negative`.
 This means that we can short circuit the search when we find the first negative
 number.
 
-### Local return
+#### Local return
 
 In some situations, it is useful to do a local return. That is, to just return
 from the block. To do this, you use the `continue` keyword followed by a dot
@@ -190,7 +234,7 @@ Here the block given to `map` uses `continue` to do a local return of an odd
 value when it sees an even value. The snippet `continue.map` can be read as
 "continue in the `map` function".
 
-### Default return
+#### Default return
 
 The default return of a block is a local return. The block returns the value of
 the last statement in the block. For example
@@ -362,7 +406,7 @@ main:
 
 Now the intend is clear: you are `do`'ing something to the list which corresponds to visiting each element of the list.
 
-## Calling functions with named block parameters
+### Calling functions with named block parameters
 
 Block parameters can also be named. This is indicated in the function signature
 by enclosing the named parameter in brackets `[ ]` (the same as for other block
@@ -431,7 +475,7 @@ Unable to find 4
 
 Here we have formatted the arguments differently, so each of the block arguments are easily identified.
 
-## Blocks as values
+### Blocks as values
 
 Blocks are values in Toit which is why functions accept them as arguments. A
 block value is defined as a colon `:` followed by the body of the block which
@@ -459,24 +503,89 @@ Syntactically, it looks a bit cryptic when blocks are stored in local
 variables. However, the main purpose of blocks is to pass snippets of code to
 functions.
 
-Blocks aren't just "normal" functions as in other programming languages. They
-are much more efficient, but also come with some restrictions.
-
-### Restrictions
+#### Restrictions
 
 Blocks are stack allocated, which is what makes them so efficient, but it also limits where they can be used:
 
 - Blocks cannot be stored in instance fields, static class fields, and globals.
-
 - Blocks cannot be stored in any collection.
-
 - Blocks cannot be returned from functions and methods.
-
-- [Lambdas](../tasks) cannot capture blocks.
-
+- Lambdas cannot capture blocks.
 - Blocks cannot take blocks as arguments.
 
-## Defining functions that take block arguments
+## Lambdas in detail
+
+### Basic use of lambdas
+
+Lambdas are more versatile than blocks and can be used in a wider variety of
+situations, though at a cost of reduced efficiency compared to blocks:
+
+```toit
+start-task:
+  task::
+    3.repeat:
+      print "still running"
+      sleep --ms=300
+
+main:
+  start-task
+  print "task started"
+```
+
+In this example, we define a lambda that runs as a separate task, continuously
+printing a message. While less efficient than a block, a lambda is necessary here
+due to its ability to be stored and executed later.
+
+### Storing and reusing lambdas
+
+Unlike blocks, lambdas can be stored in variables, fields, and collections:
+
+```toit
+class WatchedBox:
+  value_/any := null
+  callbacks_/List ::= []
+
+  watch callback/Lambda:
+    callbacks_.add callback
+
+  value -> any: return value_
+  value= new-value:
+    value_ = new-value
+    callbacks_.do: it.call new-value
+
+add-printer box/WatchedBox:
+  box.watch:: print "was changed to $it"
+
+main:
+  box := WatchedBox
+  add-printer box
+  box.value = 499  // Prints "was changed to 499".
+  box.value = 42   // Prints "was changed to 42".
+```
+
+This example demonstrates how lambdas can be stored in a list
+(`callbacks_`) and called later.
+
+### Lambda arguments
+
+Like blocks, lambdas can take arguments. If a lambda takes a single argument,
+you can use `it` as the default parameter name:
+
+```toit
+main:
+  multiplier := :: it * 2
+  print (multiplier.call 21)  // Prints 42.
+```
+
+For multiple arguments, you need to declare them explicitly:
+
+```toit
+main:
+  adder := :: | a b | a + b
+  print (adder.call 20 22)  // Prints 42.
+```
+
+## Defining functions that take callbacks
 
 You can define your own functions that accept block arguments. You have already
 seen what the function signature should look like: block arguments must be
@@ -495,3 +604,42 @@ class int:
 ```
 
 Note: non-named block parameters have to be the last in the function signature.
+
+Similarly, you can define a function that takes a lambda as an argument:
+
+```
+call-lambda callback/Lambda:
+  callback.call 42
+
+main:
+  call-lambda:: print it
+```
+
+A lambda is an object of type `Lambda`. You can store it in a variable, pass it
+as an argument, and call it later. The `call` method is used to execute the
+lambda.
+
+### Lambdas versus blocks: choosing the right tool
+
+Only the receiver of a callback can determine whether to use a block or a lambda. As
+a user, one has to follow the type declared in the method signature.
+
+When writing functions that accept callbacks, consider the following guidelines:
+- Use blocks for short-lived, context-dependent callbacks that don't need to be
+  stored or returned. Blocks are significantly more efficient and should be the
+  default choice when possible.
+- Use lambdas when you need to store the function.
+- Consider providing both block and lambda versions if you need to support both
+  use cases. The lambda version can always redirect to the block version:
+  ```
+  my-function [block]:
+    block.call 42
+
+  my-function callback:
+    my-function: callback.call it
+
+  main:
+    // Both of these will print 42.
+    my-function: print it
+    my-function:: print it
+  ```
