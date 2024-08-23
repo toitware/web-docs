@@ -566,7 +566,7 @@ for each element using block structure:
 Here the statement is on a single line, so there is no need to use indentation.
 When using `names.do`, a method available on all
 [collections](./listsetmap), the [special variable
-`it`](./blocks#block-arguments) contains the individual elements from the list in
+`it`](./blocks-and-lambdas#block-arguments) contains the individual elements from the list in
 turn. If there are 5 elements in the `names` list, we will call `print` 5 times
 producing 5 separate lines of output.
 
@@ -778,7 +778,7 @@ have used:
       print "Hello, $names[i]"
 ```
 
-## Blocks
+## Blocks and lambdas
 
 We already saw the `repeat` method on integers and the `do` method on lists:
 
@@ -794,8 +794,7 @@ main:
 ```
 
 Syntactically they look like they are built in to the language like `if` and
-`for`, but they are actually perfectly normal methods on the List and Integer
-classes:
+`for`, but they are actually normal methods on the List and int classes:
 
 <!-- SKIP CODE -->
 
@@ -805,23 +804,60 @@ class List:
   do [block]:
     size.repeat: block.call this[it]
 
-class Integer:
+class int:
   // ...
   repeat [block]:
     for i := 0; i < this; i++:
       block.call i
 ```
 
-They are making use of a feature called [blocks](./blocks). These are
+They are making use of a feature called [blocks](./blocks-and-lambdas). These are
 snippets of code that can be passed down the stack as arguments to methods and
 functions. At the call site we precede the block with a colon, '`:`', and at
 the function definition we surround the parameter name with square brackets,
 '`[]`'. Often, there is one block parameter, it is in the final position and
 it is called `block`.
 
-## Blocks that return a value
+If a callback needs to survive the scope in which it is defined, we can't use
+blocks. Instead, we can use [lambdas](./blocks-and-lambdas#lambdas):
 
-A block can return a value each time it is run. This is used for example in the `filter` method on lists.
+```
+// Returns a function that adds n to its argument.
+add-n n:
+  return (:: it + n)
+```
+
+The syntax for lambdas is the same as for blocks, except that the we use `::`
+instead of `:`. The lambda above is a function that takes a single argument and
+returns the sum of that argument and `n`. We can use it like this:
+
+```
+main:
+  add-5 := add-n 5
+  print (add-5.call 10)
+```
+
+This will print `15`.
+
+## Blocks and lambdas with multiple arguments
+
+Blocks and lambdas can have parameters, just like methods. The parameters are
+listed after the `::` or `:`. Here is an example of a block with two parameters:
+
+```
+main:
+  map := { "Lars": 1, "Kasper": 2 }
+  map.do: | key value |
+    print "$key has value $value"
+```
+
+The block in the `do` method has two parameters, `key` and `value`. The `do`
+method will call the block with each key-value pair in the map.
+
+## Blocks and lambdas that return a value
+
+A block or lambda can return a value each time it is run. This is used for example
+in the `filter` method on lists.
 
 ```
 // Takes a list of words, and returns a new list with only the
