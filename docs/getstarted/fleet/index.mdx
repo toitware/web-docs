@@ -10,6 +10,11 @@ in the cloud &mdash; and the developer tooling to help orchestrate the devices. 
 possible to host your own broker, so all your data and code remains under your
 control.
 
+Artemis is designed to be [reliable](./reliability) and robust. Configuration is
+treated as code, and none of the servers are critical. As long as
+the configuration is stored in a reliable system (typically Git), Artemis
+can recover from a full loss of all servers.
+
 ---------------------
 
 # Installation
@@ -136,8 +141,8 @@ possible specification by putting the following content into the `my-pod.yaml` f
 
 $schema: https://toit.io/schemas/artemis/pod-specification/v1.json
 name: my-pod
-sdk-version: v2.0.0-alpha.160
-artemis-version: v0.24.0
+sdk-version: v2.0.0-alpha.163
+artemis-version: v0.25.0
 max-offline: 0s
 connections:
   - type: wifi
