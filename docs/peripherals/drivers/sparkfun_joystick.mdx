@@ -1,8 +1,10 @@
 # How to write a driver
 
-We are using the [SparkFun Qwiic Joystick](https://www.sparkfun.com/products/15168) as an example of how to write a driver - in the Toit language - for a sensor. The SparkFun Qwiic Joystick is a 2-axis joystick with a single button. Using a Qwiic connector, it's very simple to get the joystick connected.
+We are using the [SparkFun Qwiic Joystick](https://www.sparkfun.com/products/15168) as an example of how to write a driver for a sensor. The SparkFun Qwiic Joystick is a 2-axis joystick with a single button. Using a Qwiic connector, it's very simple to get the joystick connected.
 
 This guide will walk you through the steps of identifying how the sensor communicates and how to write a fully working driver for it.
+
+The completed package can be found in the [toit-qwiic-joystick repository](https://github.com/toitware/toit-qwiic-joystick).
 
 ## Approach
 
@@ -18,7 +20,7 @@ The Joystick features an `ATtiny85` microcontroller with a custom firmware. As d
 
 ## I2C setup
 
-We use a simple I<sup>2</sup>C setup, currently using pin `21` for `SDA` (blue) and pin `22` for `SCL` (yellow).
+We use a simple I<sup>2</sup>C setup, with pin `21` for `SDA` (blue) and pin `22` for `SCL` (yellow).
 
 ```
 import gpio
@@ -46,14 +48,16 @@ class Joystick:
     registers_ = device.registers
 ```
 
-The hookup guide has a table of I<sup>2</sup>C registers available in the custom firmware. At address `0x00` is the slave address assigned to the device (hard-coded to `0x20`).
-
 <Note>
 
 Most drivers turn on their devices in the constructor, and shut them down in a `close` method.
 Drivers that can be turned on or off repeatedly should instead have `on` and `off` methods.
 
 </Note>
+
+The hookup guide has a table of I<sup>2</sup>C registers available in the custom firmware. At address `0x00` is the slave address assigned to the device (hard-coded to `0x20`).
+
+For simplicity we didn't add a `close` method, but it's OK to have an empty one.
 
 ## Validate connectivity
 
@@ -65,7 +69,7 @@ By reading the `REG-DEFAULT-ADDRESS_` register, we can confirm the connectivity 
 <!-- HIDDEN CODE registers_ := null -->
 
 ```
-class SparkFunJoystick:
+class Joystick:
   static REG-DEFAULT-ADDRESS_ ::= 0x00
 
   // ...
@@ -106,7 +110,7 @@ We're going to expand the driver with 3 new methods:
 <!-- SKIP CODE -->
 
 ```
-class SparkFunJoystick:
+class Joystick:
 
   // ...
 
