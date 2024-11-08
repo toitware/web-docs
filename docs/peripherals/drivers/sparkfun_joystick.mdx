@@ -26,8 +26,8 @@ import i2c
 
 main:
   bus := i2c.Bus
-    --sda=gpio.Pin 21
-    --scl=gpio.Pin 22
+      --sda=gpio.Pin 21
+      --scl=gpio.Pin 22
 ```
 
 ## Driver skeleton
@@ -37,20 +37,23 @@ As all I<sup>2</sup>C/SPI drivers that work using registers, the driver starts w
 ```
 import serial
 
-class SparkFunJoystick:
+class Joystick:
   static I2C-ADDRESS ::= 0x20
 
   registers_/serial.Registers
 
   constructor device/serial.Device:
     registers_ = device.registers
-
-  on:
-
-  off:
 ```
 
 The hookup guide has a table of I<sup>2</sup>C registers available in the custom firmware. At address `0x00` is the slave address assigned to the device (hard-coded to `0x20`).
+
+<Note>
+
+Most drivers turn on their devices in the constructor, and shut them down in a `close` method.
+Drivers that can be turned on or off repeatedly should instead have `on` and `off` methods.
+
+</Note>
 
 ## Validate connectivity
 
@@ -61,17 +64,16 @@ By reading the `REG-DEFAULT-ADDRESS_` register, we can confirm the connectivity 
 
 ```
 class SparkFunJoystick:
+  static I2C-ADDRESS ::= 0x20
+
   static REG-DEFAULT-ADDRESS_ ::= 0x00
 
-  // ...
+  constructor device/serial.Device:
+    registers_ = device.registers
 
-  on:
     reg := registers_.read-u8 REG-DEFAULT-ADDRESS_
     if reg != I2C-ADDRESS: throw "INVALID_CHIP"
 ```
-
-<!-- HIDDEN CODE   registers_/serial.Registers? := null -->
-<!-- HIDDEN CODE   static I2C-ADDRESS ::= 0x20 -->
 
 With this added, we can validate the setup:
 
@@ -81,11 +83,9 @@ With this added, we can validate the setup:
 main:
   // ...
 
-  device := bus.device SparkFunJoystick.I2C-ADDRESS
+  device := bus.device Joystick.I2C-ADDRESS
 
-  joystick := SparkFunJoystick device
-
-  joystick.on
+  joystick := Joystick device
   print "SparkFunJoystick"
 ```
 
@@ -138,7 +138,7 @@ The last 6 bits of the result are unused, but to keep the code simple we treat t
 ```
 import serial
 
-class SparkFunJoystick:
+class Joystick:
 
   // ...
 
@@ -153,7 +153,7 @@ class SparkFunJoystick:
 With that in place, we can now finish the `horizontal` and `vertical` methods:
 
 ```
-  // Continuing class SparkFunJoystick:
+  // Continuing class Joystick:
   static REG-HORIZONTAL-POSITION_ ::= 0x03 // (to 0x04)
   static REG-VERTICAL-POSITION_ ::= 0x05 // (to 0x06)
 
@@ -169,7 +169,7 @@ With that in place, we can now finish the `horizontal` and `vertical` methods:
 Lastly, we need to implement the `pressed` method. We're simply going to read out the 1-byte register value and check for `0`, with `0` meaning pressed.
 
 ```
-  // Continuing class SparkFunJoystick:
+  // Continuing class Joystick:
   static REG-BUTTON-POSITION_ ::= 0x07
   // ...
 
@@ -185,13 +185,10 @@ Let's try it out:
 main:
   // ...
 
-  joystick.on
   while true:
     print "$joystick.horizontal - $joystick.vertical (pressed: $joystick.pressed)"
     sleep --ms=250
 ```
-
-This code will run until aborted (Ctrl-C).
 
 <Note>
 
@@ -201,7 +198,7 @@ As the joystick is moved around, it's possible to get an I<sup>2</sup>C error if
 
 <Note>
 
-To improve responsibility, the sensor should be read at a higher frequency. However no printing should be done at higher frequencies to avoid logging data building up.
+To improve responsibility, the sensor should be read at a higher frequency.
 
 </Note>
 
@@ -209,14 +206,14 @@ To improve responsibility, the sensor should be read at a higher frequency. Howe
 
 ### The driver
 
-**`driver.toit`**
+**`qwiic-joystick.toit`**
 
-<!-- CODE FILENAME driver.toit -->
+<!-- CODE FILENAME qwiic-joystick.toit -->
 
 ```
 import serial
 
-class SparkFunJoystick:
+class Joystick:
   static I2C-ADDRESS ::= 0x20
 
   static REG-DEFAULT-ADDRESS_::= 0x00
@@ -229,11 +226,8 @@ class SparkFunJoystick:
   constructor device/serial.Device:
     registers_ = device.registers
 
-  on:
     reg := registers_.read-u8 REG-DEFAULT-ADDRESS_
     if reg != I2C-ADDRESS: throw "INVALID_CHIP"
-
-  off:
 
   /**
   Returns the horizontal value in the range [-1..1].
@@ -267,20 +261,18 @@ class SparkFunJoystick:
 import gpio
 import i2c
 
-import .driver
+import .qwiic-joystick
 
 main:
   bus := i2c.Bus
-    --sda=gpio.Pin 21
-    --scl=gpio.Pin 22
+      --sda=gpio.Pin 21
+      --scl=gpio.Pin 22
 
-  device := bus.device SparkFunJoystick.I2C-ADDRESS
+  device := bus.device Joystick.I2C-ADDRESS
 
-  joystick := SparkFunJoystick device
+  joystick := Joystick device
 
-  joystick.on
   while true:
-    print "$joystick.horizontal - $joystick.vertical "
-        + "(pressed: $joystick.pressed)"
+    print "$joystick.horizontal - $joystick.vertical (pressed: $joystick.pressed)"
     sleep --ms=250
 ```
