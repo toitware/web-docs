@@ -61,12 +61,14 @@ By reading the `REG-DEFAULT-ADDRESS_` register, we can confirm the connectivity 
 
 <!-- RESET CODE -->
 <!-- HIDDEN CODE import serial -->
+<!-- HIDDEN CODE I2C-ADDRESS ::= 0x20 -->
+<!-- HIDDEN CODE registers_ := null -->
 
 ```
 class SparkFunJoystick:
-  static I2C-ADDRESS ::= 0x20
-
   static REG-DEFAULT-ADDRESS_ ::= 0x00
+
+  // ...
 
   constructor device/serial.Device:
     registers_ = device.registers
