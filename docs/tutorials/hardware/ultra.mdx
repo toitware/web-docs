@@ -1,5 +1,7 @@
-import UltraDiagram from "../../_images/hw_ff_ultra.png";
-import UltraSchematics from "../../_images/hw_ff_ultra_schem.png";
+import UltraLedDiagram from "../../_images/hw_ff_ultra-led.png";
+import UltraLedSchematics from "../../_images/hw_ff_ultra-led_schem.png";
+import UltraDividerDiagram from "../../_images/hw_ff_ultra-divider.png";
+import UltraDividerSchematics from "../../_images/hw_ff_ultra-divider_schem.png";
 
 # HC-SR04 - ultrasonic distance sensor
 The HC-SR04 is a popular ultrasonic distance sensor. It is cheap and easy to
@@ -20,45 +22,73 @@ starting this tutorial.
 
 ## Setup
 Connect the HC-SR04 as follows:
-- VCC to 5V/VIN.
+- VCC to 3.3V/VCC or 5V/VIN (see below).
 - GND to GND.
 - TRIG to pin 33.
-- ECHO to an LED and then to pin 32. The anode (long leg) of the LED should be
-  connected to the ECHO pin and the cathode (short leg) to pin 32.
-- Optionally, add a 10kΩ resistor (or higher) between pin 32 and GND.
+- ECHO to pin 32, but see paragraph below.
 - Optionally, add a 100kΩ resistor (or higher) between pin 33 and GND.
 
-The HC-SR04 is designed to run on 5V, and is known to be flaky at lower
-voltages. ESP32 boards usually have a 5V output, often labeled as VIN,
-but the ESP32 is not 5V tolerant on its inputs (depending on who you ask).
-This means that you should not connect the ECHO pin directly to the ESP32.
-Instead, we connect the ECHO pin to an LED and then to the ESP32. LEDs have
-a forward voltage drop of around 2V, so the voltage on the ECHO pin will
-be around 3V, which is safe for the ESP32. See the
-[ADC tutorial](../adc#led-voltage-drop) for a setup where we measure the
-LED voltage drop. The 10kΩ resistor is optional, but ensures that the
-LED is used in a linear regime where we can trust that the signal is
-correctly received by the ESP32 and where the voltage drop is
-around 2V. The 100kΩ resistor is just a pull-down resistor that ensures
+The 100kΩ resistor is just a pull-down resistor that ensures
 that the TRIG pin isn't floating when not in use. When floating, the
 sensor could trigger, sometimes frequently, when our program isn't running.
 
-If you have an HC-SR04+ module, then you can connect the VCC to 3V3 instead
-and connect the ECHO pin directly to the ESP32. The "+" version of the
-HC-SR04 is designed to run on 3.3V. Note that the "+" is not printed
-on the front of the module, but only on the back.
+There are multiple versions of the HC-SR04, each with different features
+and voltage requirements. The original HC-SR04 is designed to run on 5V,
+whereas the HC-SR04+ and the newer HC-SR04 from 2021 are designed to run
+on 3.3V, too.
+
+The HC-SR04+ can be identified by the "+" printed on the back of the module.
+The newer HC-SR04 can be identified by the year 2021 printed on the back.
+
+If you have the HC-SR04+ or the newer HC-SR04, then you can power the module
+with 3.3V, and you can connect the ECHO pin directly to the ESP32. If you
+have an original HC-SR04 module (without a "+"), then you should
+power it with 5V. Since the ESP32 is not 5V tolerant, you shouldn't connect
+the ECHO pin directly to the ESP32. There are two easy ways to reduce the
+voltage to a safe level:
+- Use an LED.
+- Implement a voltage devicer.
+
+LEDs have forward voltage drop of around 2V, so the voltage on the ECHO
+pin will be around 3V, which is safe for the ESP32. See the
+[ADC tutorial](../adc#led-voltage-drop) for a setup where we measure the
+LED voltage drop. The value of the 1kΩ resistor is relatively arbitrary,
+but ensures that the LED is used in a linear regime where we can trust that
+the signal is correctly received by the ESP32 and where the voltage drop is
+around 2V. It should, however, be at least 220Ω to ensure that the LED
+doesn't draw too much current.
 
 <img
-  src={UltraDiagram}
-  alt="HC-SR04 wiring diagram"
+  src={UltraLedDiagram}
+  alt="HC-SR04 wiring diagram with an LED"
 />
 
 <img
-  src={UltraSchematics}
-  alt="HC-SR04 schematics"
+  src={UltraLedSchematics}
+  alt="HC-SR04 schematics with an LED"
+/>
+
+A more typical way to reduce the voltage is to use a voltage divider.
+A voltage divider is a simple circuit that divides the voltage depending
+on the resistors used. We suggest to use a 1kΩ and a 680Ω resistor, which
+yields a voltage of around 3V on the ECHO pin. Using two similar resistors
+would also work but would yield a voltage of around 2.5V, which is close to
+the lower limit of the ESP32's detection limit for input-high (2.475V).
+
+<img
+  src={UltraDividerDiagram}
+  alt="HC-SR04 wiring diagram with a voltage divider"
+/>
+
+<img
+  src={UltraDividerSchematics}
+  alt="HC-SR04 schematics with a voltage divider"
 />
 
 ## Measuring by hand
+This section is mostly for educational purposes. If you just want to
+measure distances, you should use the hardware driver described below.
+
 Conceptually, the HC-SR04 works as follows: after receiving a pulse on
 the TRIG pin (of ~10us), it sends out an ultrasonic pulse. At that moment
 it sets the ECHO pin high and waits for an echo. The moment it receives
