@@ -33,7 +33,7 @@ necessary, and click on "Create new project".
 
 Wait until the project is completely set up (this may take a few minutes), then
 go to the "Project Settings" (gear icon) tab. In the "General" section, you will find
-the "Reference ID" (also known as "project id"). In the "API" section,
+the "Reference ID" (also known as "project id"). In the "Data API" section,
 you will find anon key.
 
 You will need both of these values later.
@@ -82,7 +82,7 @@ Click on "+ New query" (blank query) and enter the following SQL statements.
 
 ``` sql
 CREATE TABLE devices (
-  id uuid PRIMARY KEY
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid()
 );
 
 ALTER TABLE devices ENABLE ROW LEVEL SECURITY;
@@ -106,20 +106,30 @@ CREATE POLICY "Enable insert to everyone"
 
 Click on `RUN` (or press `Ctrl+Enter`) to execute the statements.
 
-You should now have two tables in your project.
+You should now have two tables in your project. You can see them in
+the Table Editor (under `https://supabase.com/dashboard/project/<project-id>/editor`).
 
 ## Preparation
-Create a fresh UUID for the device ID. You can generate one
-[online](https://www.uuidgenerator.net/) or with the `uuidgen` command
-on Linux.
+Let's add a new device into the `devices` table. You can either
+specify a device ID yourself, or let the DB generate one for you.
 
-Add this device ID to the `devices` table. You can do this with the
-online table editor, or with the following SQL statement (replace
-`<device-id>` with the device ID):
+In the first case the SQL statement would look like this:
 
 ``` sql
 INSERT INTO devices (id) VALUES ('<device-id>');
 ```
+You can, of course, also use the table editor to add a new row with
+that value.
+
+In the second case, you can just use the default action which will
+generate a new UUID for you. The SQL statement would look like this:
+
+``` sql
+INSERT INTO devices DEFAULT VALUES;
+```
+
+We will refer to the new device ID as `<device-id>` in the following
+sections.
 
 ## Toit program
 Now we can write the Toit program that will send sensor values to Supabase.
@@ -130,7 +140,7 @@ it with the following command. See the [packages](../../setup/packages)
 tutorial for details.
 
 ```shell
-jag pkg install github.com/toitware/toit-supabase@0.2
+jag pkg install github.com/toitware/toit-supabase@0.3
 ```
 
 <Note>
@@ -167,20 +177,21 @@ import supabase
 TABLE ::= "temperatures"
 PROJECT-ID ::= "<project-id>"
 ANON-KEY ::= "<anon-key>"
+URI ::= "https://$(PROJECT-ID).supabase.co"
 
 DEVICE-ID ::= "<device-id>"
 
 main:
   certificate-roots.install-common-trusted-roots
   host := "$(PROJECT-ID).supabase.co"
-  client := supabase.Client.tls
-      --host=host
+  client := supabase.Client
+      --uri=URI
       --anon=ANON-KEY
 
   // We don't want to receive the inserted row, because we don't have
   // read access to the table.
   client.rest.insert TABLE --no-return-inserted {
-    "device-id": DEVICE-ID,
+    "device_id": DEVICE-ID,
     "temperature": 42.0,
   }
 
@@ -188,9 +199,6 @@ main:
 ```
 
 The program uses the `supabase.Client` class to connect to Supabase.
-Since the project needs to be accessed with TLS (https), we need to provide
-the root certificate for the connection. We do this with the
-`certificate-roots.BALTIMORE-CYBERTRUST-ROOT` constant.
 
 This program will send a sensor value of 42.0 to the `temperatures` table
 in your Supabase project. It will use the device ID that you entered into

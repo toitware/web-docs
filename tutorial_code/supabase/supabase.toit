@@ -8,14 +8,15 @@ import supabase
 TABLE ::= "temperatures"
 PROJECT-ID ::= "<project-id>"
 ANON-KEY ::= "<anon-key>"
+URI ::= "https://$(PROJECT-ID).supabase.co"
 
 DEVICE-ID ::= "<device-id>"
 
 main:
   certificate-roots.install-common-trusted-roots
   host := "$(PROJECT-ID).supabase.co"
-  client := supabase.Client.tls
-      --host=host
+  client := supabase.Client
+      --uri=URI
       --anon=ANON-KEY
 
   // We don't want to receive the inserted row, because we don't have

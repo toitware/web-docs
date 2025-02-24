@@ -1,28 +1,28 @@
-sdk: ^2.0.0-alpha.144
+sdk: ^2.0.0-alpha.150
 prefixes:
-  certificate_roots: toit-cert-roots
+  certificate-roots: toit-cert-roots
   supabase: toit-supabase
 packages:
   pkg-host:
     url: github.com/toitlang/pkg-host
     name: host
-    version: 1.15.1
-    hash: ff187c2c19d695e66c3dc1d9c09b4dc6bec09088
+    version: 1.15.3
+    hash: 62393e8522b77eafbafe60b9817935266117daf6
   pkg-http:
     url: github.com/toitlang/pkg-http
     name: http
-    version: 2.7.1
-    hash: 54a5bb458d9fc9305e839b878e6de3b456f5c4a6
+    version: 2.8.0
+    hash: 81754d64fe466cd00cc494ec515da8749bf04975
   toit-cert-roots:
     url: github.com/toitware/toit-cert-roots
-    name: certificate_roots
-    version: 1.6.1
-    hash: 55d3be82ed53d8d332338b2de931865cf69fe48b
+    name: certificate-roots
+    version: 1.8.0
+    hash: 369a0b36e813e37d6248990de59964020644ab50
   toit-supabase:
     url: github.com/toitware/toit-supabase
     name: supabase
-    version: 0.2.8
-    hash: 168ddb448e71e91431e71121958c32aaf4c1ef02
+    version: 0.3.1
+    hash: bcf10850b0fae0592bb0af6563fb994cececb8f9
     prefixes:
       host: pkg-host
       http: pkg-http
