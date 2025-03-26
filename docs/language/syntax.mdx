@@ -68,7 +68,7 @@ Identifiers are names that identify globals, locals, functions, classes, librari
 
 - Identifier names can contain only letters, numbers, dashes (-) and underscores (\_), but cannot contain
   spaces. Dashes must be enclosed by letters or numbers. Dashes are equated with underscores. That is,
-  `foo-bar` and `foo_bar` refere to the same entity. When possible, prefer dashes.
+  `foo-bar` and `foo_bar` refer to the same entity. When possible, prefer dashes.
 - Identifiers need to start with a letter or an underscore (\_), but not with a number. The following characters can be alphanumeric or underscore.
 - Toit identifiers are case-sensitive.
 - Identifier names cannot be the same as keywords and built-in functions in Toit.
@@ -76,13 +76,14 @@ Identifiers are names that identify globals, locals, functions, classes, librari
 The following Toit keywords cannot be used for naming identifiers:
 
 ```txt
-as          abstract       assert
-break       class          continue
-else        false          finally
-for         if             import
-export      null           return
-static      true           try
-while       or     and     not
+and         as          abstract
+assert      break       class
+continue    else        export
+false       finally     for
+if          import      is
+not         null        or
+return      static      true
+try         while
 ```
 
 In addition to these keywords, there are some "pseudo keywords" - like
