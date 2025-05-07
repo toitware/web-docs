@@ -365,14 +365,14 @@ jag run -d host morse_test.toit
 
 ```shell
 # In the test directory:
-toit.pkg init
-toit.pkg install --local --name=morse-tutorial ..
+toit pkg init
+toit pkg install --local --name=morse-tutorial ..
 ```
 
 The test should then execute successfully by running it locally:
 
 ```shell
-toit.run morse_test.toit
+toit morse_test.toit
 ```
 </Tab>
 </Tabs>
@@ -403,7 +403,7 @@ dependencies:
     version: ^1.0.0
 ```
 
-You normally don't need to worry about them, as they are automatically added when running `jag pkg install <dependency>` or `toit.pkg install <dependency>`.
+You normally don't need to worry about them, as they are automatically added when running `jag pkg install <dependency>` or `toit pkg install <dependency>`.
 
 ## Publishing to the Toit package registry
 
@@ -423,7 +423,7 @@ Once published successfully, the registry will distribute a description of the p
 </Tab>
 <Tab label="toitlang.org">
 
-Once published successfully, the registry will distribute a description of the package so that anyone can start using the package with a simple `toit.pkg install`.
+Once published successfully, the registry will distribute a description of the package so that anyone can start using the package with a simple `toit pkg install`.
 </Tab>
 </Tabs>
 

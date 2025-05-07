@@ -3,9 +3,8 @@
 # be found in the LICENSE_BSD0 file.
 
 TOIT_SDK := /opt/toit-sdk
-TOIT_COMPILE := $(TOIT_SDK)/bin/toit.compile
-TOIT_FIRMWARE := $(TOIT_SDK)/tools/firmware
-VERSION := $(shell $(TOIT_SDK)/bin/toit.lsp version)
+TOIT := $(TOIT_SDK)/bin/toit
+VERSION := $(shell $(TOIT) version)
 ENVELOPE_URL := https://github.com/toitlang/toit/releases/download/$(VERSION)/firmware-esp32.gz
 WIFI_CREDENTIALS := {"wifi.ssid":"<my-ssid>","wifi.password":"<my-password>"}
 
@@ -21,12 +20,12 @@ firmware.envelope.gz:
 	curl -L -o $@ $(ENVELOPE_URL)
 
 %.snapshot: %.toit
-	$(TOIT_COMPILE) -w $@ $<
+	$(TOIT) compile --snapshot -o $@ $<
 
 ota.bin: validate.snapshot firmware.envelope
-	$(TOIT_FIRMWARE) -e firmware.envelope container install validate validate.snapshot
-	$(TOIT_FIRMWARE) -e firmware.envelope property set wifi '$(WIFI_CREDENTIALS)'
-	$(TOIT_FIRMWARE) -e firmware.envelope extract --format=binary -o ota.bin
+	$(TOIT) tool firmware -e firmware.envelope container install validate validate.snapshot
+	$(TOIT) tool firmware -e firmware.envelope property set wifi '$(WIFI_CREDENTIALS)'
+	$(TOIT) tool firmware -e firmware.envelope extract --format=binary -o ota.bin
 
 .PHONY: serve
 serve: ota.bin
