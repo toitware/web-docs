@@ -10,9 +10,9 @@ Archlinux with `yay -S toit` (in which case the SDK can be found in
 [build from source](https://github.com/toitlang/toit). When building
 locally, the SDK is located at `build/host/sdk`.
 
-This tutorial assumes that Toit's firmware tool is
-available as `firmware`. This tool can be found in the SDK
-at `$SDK/tools/firmware`.
+This tutorial assumes that Toit's executable is
+available as `toit`. This tool can be found in the SDK
+at `$SDK/bin/toit`.
 
 It also assumes that a Toit firmware envelope is available as
 `firmware.envelope`. In a local build it is located at
@@ -20,25 +20,22 @@ It also assumes that a Toit firmware envelope is available as
 a corresponding firmware envelope available for download
 (for example `firmware-esp32.gz`).
 
-Finally, it assumes that the Toit compiler is available as `toit.compile`.
-This tool can be found in the SDK at `$SDK/bin/toit.compile`.
-
 ## Instructions
 Start by building a snapshot of the program you want to install.
 
 ``` shell
-toit.compile -w hello.snapshot hello.toit
+toit compile --snapshot -o hello.snapshot hello.toit
 ```
 
 Then add the snapshot to a firmware envelope.
 ``` shell
 # By using '-o' we don't modify the envelope but create a new one.
-firmware -e firmware.envelope container install -o hello.envelope hello hello.snapshot
+toit tool firmware -e firmware.envelope container install -o hello.envelope hello hello.snapshot
 ```
 
 The created envelope can be flashed to a device using the `flash` command.
 ``` shell
-firmware -e hello.envelope flash --port /dev/ttyUSB0 --baud 921600
+toit tool firmware -e hello.envelope flash --port /dev/ttyUSB0 --baud 921600
 ```
 
 When the device boots up, it will run the installed container.

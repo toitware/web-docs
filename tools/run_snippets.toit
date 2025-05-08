@@ -143,9 +143,7 @@ class State:
     toit-sdk := os.env.get "TOIT_SDK"
     if not toit-sdk:
       throw "TOIT_SDK environment variable not set"
-    toitc := "$toit-sdk/bin/toit.compile"
-    toitvm := "$toit-sdk/bin/toit.run"
-    kebabify := "$toit-sdk/tools/kebabify"
+    toit := "$toit-sdk/bin/toit"
     filename := snippet-filename ? snippet-filename : DEFAULT-OUTPUT
     snippet-filename = null
     snippet := file.Stream.for-write filename
@@ -170,11 +168,11 @@ class State:
     snippet.close
     result := ?
     if check-only:
-      result = pipe.system "$toitc --analyze $werror-flag $filename"
+      result = pipe.system "$toit analyze $werror-flag $filename"
     else:
-      result = pipe.system "$toitvm $werror-flag $filename"
+      result = pipe.system "$toit run $werror-flag -- $filename"
     before-kebabify := file.read-content filename
-    pipe.system "$kebabify code $filename --toitc $toitc"
+    pipe.system "$toit tool kebabify code $filename"
     after-kebabify := file.read-content filename
     if before-kebabify != after-kebabify:
       throw "Kebabify changed the file $filename"

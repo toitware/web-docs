@@ -19,8 +19,8 @@ first.
 A new firmware consists of updating a Toit firmware envelope with
 the desired containers and to build a binary image out of it.
 We will provide the necessary steps to create a new firmware, but
-you might need to update your setup to have the required tools
-(`toit.compile` and `firmware`) accessible. See the
+you might need to update your setup to have the required tool
+(`toit`) accessible. See the
 [containers tutorial](../../containers/toit-sdk) for how to
 set up your environment, and for more information on how containers
 and envelopes work.
@@ -108,8 +108,8 @@ You should now have a file called `firmware-esp32`.
 Compile the validate program to a snapshot and add it to the envelope:
 
 ``` shell
-toit.compile -w validate.snapshot validate.toit
-firmware -e firmware-esp32 container install validate validate.snapshot
+toit compile --snapshot -o validate.snapshot validate.toit
+toit tool firmware -e firmware-esp32 container install validate validate.snapshot
 ```
 
 Optionally, add other containers to the envelope.
@@ -117,7 +117,7 @@ Optionally, add other containers to the envelope.
 Run the `firmware` tool again to extract a binary image from the envelope:
 
 ``` shell
-firmware -e firmware-esp32 extract --format=binary -o ota.bin
+toit tool firmware -e firmware-esp32 extract --format=binary -o ota.bin
 ```
 
 ### Makefile
@@ -131,9 +131,8 @@ The paths are set up for a Linux system with the Toit SDK installed in
 
 ``` makefile
 TOIT_SDK := /opt/toit-sdk
-TOIT_COMPILE := $(TOIT_SDK)/bin/toit.compile
-TOIT_FIRMWARE := $(TOIT_SDK)/tools/firmware
-VERSION := $(shell $(TOIT_SDK)/bin/toit.lsp version)
+TOIT := $(TOIT_SDK)/bin/toit
+VERSION := $(shell $(TOIT) version)
 ENVELOPE_URL := https://github.com/toitlang/toit/releases/download/$(VERSION)/firmware-esp32.gz
 
 .PHONY: all
@@ -148,11 +147,11 @@ firmware.envelope.gz:
 	curl -L -o $@ $(ENVELOPE_URL)
 
 %.snapshot: %.toit
-	$(TOIT_COMPILE) -w $@ $<
+	$(TOIT) compile --snapshot -o $@ $<
 
 ota.bin: validate.snapshot firmware.envelope
-	$(TOIT_FIRMWARE) -e firmware.envelope container install validate validate.snapshot
-	$(TOIT_FIRMWARE) -e firmware.envelope extract --format=binary -o ota.bin
+	$(TOIT) tool firmware -e firmware.envelope container install validate validate.snapshot
+	$(TOIT) tool firmware -e firmware.envelope extract --format=binary -o ota.bin
 
 .PHONY: serve
 serve: ota.bin

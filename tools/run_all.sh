@@ -20,6 +20,6 @@ do
        $name != "../docs/language/imports.mdx" ]
   then
     echo $name
-    "$TOIT_SDK/bin/toit.run" run_snippets.toit $name
+    "$TOIT_SDK/bin/toit" run run_snippets.toit -- $name
   fi
 done
