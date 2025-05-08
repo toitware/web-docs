@@ -265,9 +265,9 @@ by adding a config file with the credentials to the extraction step.
 WIFI_CREDENTIALS := {"wifi.ssid":"<my-ssid>","wifi.password":"<my-password>"}
 
 ota.bin: validate.snapshot firmware.envelope
-	$(TOIT_FIRMWARE) -e firmware.envelope container install validate validate.snapshot
-	$(TOIT_FIRMWARE) -e firmware.envelope property set wifi '$(WIFI_CREDENTIALS)'
-	$(TOIT_FIRMWARE) -e firmware.envelope extract --format=binary -o ota.bin
+	$(TOIT) tool firmware -e firmware.envelope container install validate validate.snapshot
+	$(TOIT) tool firmware -e firmware.envelope property set wifi '$(WIFI_CREDENTIALS)'
+	$(TOIT) tool firmware -e firmware.envelope extract --format=binary -o ota.bin
 ```
 
 We also recommend to only validate a new image once a network connection has been
