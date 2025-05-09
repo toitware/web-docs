@@ -49,24 +49,24 @@ jag container uninstall hello
 
 ## Disabling Jaguar
 Sometimes it can be useful or necessary to
-[disable Jaguar](https://github.com/toitlang/jaguar#temporarily-disabling-jaguar)
+[disable Jaguar's WiFi](https://github.com/toitlang/jaguar?tab=readme-ov-file#temporarily-disabling-jaguars-wifi)
 when running a specific container.
 
-This can be done by installing the container with the `-D jag.disabled`
+This can be done by installing the container with the `-D jag.wifi=false`
 flag:
 
 ``` shell
-jag container install -D jag.disabled hello hello.toit
+jag container install -D jag.wifi=false hello hello.toit
 ```
 
 At the next boot this gives the container 10 seconds to run before Jaguar
-is started. If 10 seconds is not enough, you can specify a different
+starts its WiFi. If 10 seconds is not enough, you can specify a different
 timeout with `-D jag.timeout=<duration>`, where `<duration>` is a
 duration string like `10s` or `1m`.
 
 Example:
 ``` shell
-jag container install -D jag.disabled -D jag.timeout=1m hello hello.toit
+jag container install -D jag.wifi=false -D jag.timeout=1m hello hello.toit
 ```
 
 ### Use cases
