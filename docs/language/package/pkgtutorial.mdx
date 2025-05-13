@@ -43,11 +43,13 @@ Here are the common steps for creating a package:
 
 ## Develop Code
 
-In this section we write the Morse code library. We are simplifying the code a lot, so that it fits into the tutorial.
+In this section we write the Morse code library. We are simplifying the code a lot, so that it
+fits into the tutorial.
 
 Usually, the code for a package is initially developed as part of an application. This can be a simple example
 program, or a bigger existing application. Once the code looks ready for other developers, the code that should
-become a package must be moved to its own repository. Indeed, a package is identified by its repository URL (together with its version number).
+become a package must be moved to its own repository. Indeed, a package is identified by its repository URL
+(together with its version number).
 
 All package code lives in the `src` directory of the repository.
 
@@ -102,15 +104,49 @@ emit symbols --dot-duration [--on] [--off]:
       sleep dot-duration * (SPACE-LETTER-FACTOR_ - 1)
 ```
 
-There is much more functionality we could add, but for the purpose of this tutorial we are happy now. The next step is to polish the package.
+There is much more functionality we could add, but for the purpose of this tutorial
+we are happy now. The next step is to polish the package.
+
+## Package.yaml
+
+A package must have a `package.yaml` file at the root of the package.
+
+Since we are going to add a LICENSE file (see below) we don't need to worry about a "license" entry.
+However, we need to add the "name" and "description" entries.
+
+```yaml
+name: morse-package-tutorial
+description: A tutorial version of the Morse package. Not intended for use as package.
+```
+
+### Dependencies
+
+We don't use dependencies in this package, but for completeness sake here is an example of how we would add one:
+
+```yaml
+dependencies:
+  prefix1:
+    url: github.com/toitware/toit-morse
+    version: ^1.0.0
+  prefix2:
+    url: github.com/toitware/toit-fahrenheit
+    version: ^1.0.0
+```
+
+You normally don't need to worry about them, as they are automatically added when
+running `jag pkg install <dependency>` or `toit pkg install <dependency>`.
 
 ## Polishing
 
-It's always a good idea to polish code, but for code that is published for external developers that it's even more the case.
+It's always a good idea to polish code, but for code that is published for external
+developers that it's even more the case.
 
 ### License
 
-Packages should have a license. We recommend a [permissive free software license](https://en.wikipedia.org/wiki/Permissive_software_license), such as MIT, or BSD for packages that are published publicly. This is not a requirement, but more restrictive licenses are often avoided and would lead to fewer users of a package.
+Packages should have a license. We recommend a
+[permissive free software license](https://en.wikipedia.org/wiki/Permissive_software_license),
+such as MIT, or BSD for packages that are published publicly. This is not a requirement,
+but more restrictive licenses are often avoided and would lead to fewer users of a package.
 
 For our tutorial we use the MIT license. Our LICENSE file thus has the following text in it:
 
@@ -150,7 +186,8 @@ You should also add copyright headers to the source files.
 
 Packages (and generally all repositories) should have a `README.md` file describing the package.
 
-We recommend to have a title `# <package-name>` (or similar), followed by a paragraph that makes sense on its own and describes the project. The first paragraph should start as if preceded by "This is a package containing".
+We recommend to have the title followed by a paragraph that makes sense on its own and describes
+the project. The first paragraph should start as if preceded by "This is a package containing".
 
 For the tutorial we add the following `README.md` (again, simplified to save space):
 
@@ -186,7 +223,10 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 
 ### Types
 
-Toit doesn't require any types, but we strongly recommend to add some on API boundaries of a package. It helps new users to understand the package more easily, and also helps the IDE for exploratory development where users use auto-completion and similar IDE features to discover a package.
+Toit doesn't require any types, but we strongly recommend to add some on API boundaries
+of a package. It helps new users to understand the package more easily, and also helps
+the IDE for exploratory development where users use auto-completion and similar IDE features
+to discover a package.
 
 In our example we will change the signatures of the two exposed functions:
 
@@ -251,7 +291,8 @@ emit symbols/List --dot-duration/Duration [--on] [--off] -> none:
 
 ### Examples
 
-Examples are a good way to introduce users to the functionality of the package, and should thus contain typical code with lots of documentation.
+Examples are a good way to introduce users to the functionality of the package,
+and should thus contain typical code with lots of documentation.
 
 A typical use case would be to emit morse on a GPIO pin (`examples/gpio.toit`):
 
@@ -294,14 +335,17 @@ relying on the uploaded package (which would be a bit circular), we use the pack
 ```shell
 # In the examples directory:
 jag pkg init
-jag pkg install --local --prefix=morse-tutorial ..
+jag pkg install --local ..
 ```
 
-This creates a `package.lock` file mapping the prefix "morse-tutorial" to the package at location `..`.
+The first command creates a `package.yaml` and `package.lock` file in the current directory.
+The second command installs the package from the local directory `..` into the current directory.
 
 <Note>
 
-We use `jag pkg init` to ensure that the `package.lock` file is created in the current directory. If we just used `jag pkg install`, we would risk adding a new dependency to our package and not to the example.
+We use `jag pkg init` to ensure that the `package.lock` file is created in the current directory.
+If we just used `jag pkg install`, we would risk adding a new dependency to our package and not
+to the example.
 
 </Note>
 </Tab>
@@ -309,15 +353,18 @@ We use `jag pkg init` to ensure that the `package.lock` file is created in the c
 
 ```shell
 # In the examples directory:
-toit.pkg init
-toit.pkg install --local --name=morse-tutorial ..
+toit pkg init
+toit pkg install --local ..
 ```
 
-This creates a `package.lock` file mapping the prefix "morse-tutorial" to the package at location `..`.
+The first command creates a `package.yaml` and `package.lock` file in the current directory.
+The second command installs the package from the local directory `..` into the current directory.
 
 <Note>
 
-We use `toit.pkg init` to ensure that the `package.lock` file is created in the current directory. If we just used `toit.pkg install`, we would risk adding a new dependency to our package and not to the example.
+We use `toit pkg init` to ensure that the `package.lock` file is created in the current directory.
+If we just used `toit pkg install`, we would risk adding a new dependency to our package and not
+to the example.
 
 </Note>
 </Tab>
@@ -325,7 +372,9 @@ We use `toit.pkg init` to ensure that the `package.lock` file is created in the 
 
 ### Tests
 
-Toit doesn't have a testing framework, yet. For now, developers need to write their tests without much help from the Toit framework. We recommend to simply write executables that use the `expect` library to test the package. Tests should live in the `tests` folder.
+Toit doesn't have a testing framework, yet. For now, developers need to write their tests without
+much help from the Toit framework. We recommend to simply write executables that use the `expect`
+library to test the package. Tests should live in the `tests` folder.
 
 Here is a simple test (`tests/morse_test.toit`) for ensuring that an 'a' is correctly translated:
 
@@ -352,8 +401,10 @@ Similarly to the examples, it's necessary to install the local package to be abl
 ```shell
 # In the test directory:
 jag pkg init
-jag pkg install --local --name=morse-tutorial ..
+jag pkg install --local ..
 ```
+
+See the examples section above for an explanation of the commands.
 
 The test should then execute successfully by running it locally:
 
@@ -366,8 +417,10 @@ jag run -d host morse_test.toit
 ```shell
 # In the test directory:
 toit pkg init
-toit pkg install --local --name=morse-tutorial ..
+toit pkg install --local ..
 ```
+
+See the examples section above for an explanation of the commands.
 
 The test should then execute successfully by running it locally:
 
@@ -377,53 +430,32 @@ toit morse_test.toit
 </Tab>
 </Tabs>
 
-## Package.yaml
-
-A package must have a `package.yaml` file at the root of the package.
-
-Since we already added a license, we don't need to worry about the license. However, we need to add the
-"name" and "description" entries.
-
-```yaml
-name: morse_package_tutorial
-description: A tutorial version of the Morse package. Not intended for use as package.
-```
-
-### Dependencies
-
-We don't use dependencies in this package, but for completeness sake here is an example of how we would add one:
-
-```yaml
-dependencies:
-  prefix1:
-    url: github.com/toitware/toit-morse
-    version: ^1.0.0
-  prefix2:
-    url: github.com/toitware/toit-fahrenheit
-    version: ^1.0.0
-```
-
-You normally don't need to worry about them, as they are automatically added when running `jag pkg install <dependency>` or `toit pkg install <dependency>`.
-
 ## Publishing to the Toit package registry
 
-Toit packages are downloaded from the original sources, and (if published publicly) must be accessible through a public Git repository. The URL of the Git repository is part of the ID of a package (together with its version tag). As such, we advise to use the one of the following choices as repository name:
-* "toit-" followed by the package name.
-* the package name, or
+Toit packages are downloaded from the original sources, and (if published publicly) must be
+accessible through a public Git repository. The URL of the Git repository is part of the ID
+of a package (together with its version tag). As such, we advise to use the one of the following
+choices as repository name:
+* "toit-" followed by the package name, or
+* the package name
 
-The easiest way to publish a package is to upload the sources to GitHub and to use the [publish action](https://github.com/toitlang/action-publish).
+The easiest way to publish a package is to upload the sources to GitHub and to use the
+[publish action](https://github.com/toitlang/action-publish).
 
 At each release it automatically takes the version number and informs the Toit package registry about the new
-release. Just make sure that the version is of the form `v1.0.0` (or similar). Version numbers follow [semantic versioning](https://semver.org) and tags must be valid semver versions with a prefixed 'v'.
+release. Just make sure that the version is of the form `v1.0.0` (or similar). Version numbers follow
+[semantic versioning](https://semver.org) and tags must be valid semver versions with a prefixed 'v'.
 
 <Tabs>
 <Tab label="Jaguar">
 
-Once published successfully, the registry will distribute a description of the package so that anyone can start using the package with a simple `jag pkg install`.
+Once published successfully, the registry will distribute a description of the package so that
+anyone can start using the package with a simple `jag pkg install`.
 </Tab>
 <Tab label="toitlang.org">
 
-Once published successfully, the registry will distribute a description of the package so that anyone can start using the package with a simple `toit pkg install`.
+Once published successfully, the registry will distribute a description of the package so that
+anyone can start using the package with a simple `toit pkg install`.
 </Tab>
 </Tabs>
 
