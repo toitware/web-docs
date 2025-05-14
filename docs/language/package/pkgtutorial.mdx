@@ -315,7 +315,7 @@ It assumes that pin 23 is connected to an LED (and an appropriate resistor).
 LED-PIN ::= 23
 
 main:
-  pin := gpio.Pin.out LED-PIN
+  pin := gpio.Pin --output LED-PIN
 
   10.repeat:
     morse-tutorial.emit
