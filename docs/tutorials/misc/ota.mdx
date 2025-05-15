@@ -274,6 +274,13 @@ We also recommend to only validate a new image once a network connection has bee
 established. Otherwise, the device might be able to boot, but not connect to the
 network, and thus become unreachable.
 
+## Encrypted OTA
+Since the firmware is downloaded by a normal Toit program, developers have the option
+of manipulating the data before it is written to the flash. This makes it possible to
+encrypt the firmware before it is downloaded. See the
+[encrypted OTA demo](https://github.com/toitware/demo-encrypted-ota) for an example.
+
+
 ## Conclusion
 We have seen how to update the firmware of the ESP32 over the air.
 
