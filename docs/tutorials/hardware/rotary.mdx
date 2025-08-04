@@ -91,7 +91,7 @@ main:
   // Set up the pins and the counter.
   clk := gpio.Pin CLK-PIN
   dt := gpio.Pin DT-PIN
-  sw := gpio.Pin SW-PIN
+  sw := gpio.Pin SW-PIN --input --pull-down
 
   // Since we only need one channel, we can just configure the channel while
   // creating the pulse counter. If multiple channels are changing a
@@ -106,7 +106,7 @@ main:
   // Start the counter.
   counter.start
 
-  last-count = counter.value
+  last-count := counter.value
 
   while true:
     // Read the current count.
@@ -114,7 +114,7 @@ main:
 
     // If the count has changed, print the new value.
     if current-count != last-count:
-      direction := (count > last-count) ? "clockwise" : "counter-clockwise"
+      direction := (current-count > last-count) ? "clockwise" : "counter-clockwise"
       print "Rotated $direction: $current-count"
 
     if sw.get == 0:
