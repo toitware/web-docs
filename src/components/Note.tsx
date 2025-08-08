@@ -73,14 +73,15 @@ export function Note({ children, title, type = "info" }: Props): JSX.Element {
     <Wrapper type={type}>
       {title && (
         <Title>
-          {type == "info" && <InfoIcon />}
-          {type == "warning" && <WarningIcon />}
+          {type == "info" && <InfoIcon data-testid="info-icon" />}
+          {type == "warning" && <WarningIcon data-testid="warning-icon" />}
           {title}
         </Title>
       )}
       <Body>
-        {!title && type == "info" && <InfoIcon />}
-        {!title && type == "warning" && <WarningIcon />}
+        {!title && type == "info" && <InfoIcon data-testid="info-icon" />}
+        {!title &&
+          type == "warning" && <WarningIcon data-testid="warning-icon" />}
         <BodyContent>{children}</BodyContent>
       </Body>
     </Wrapper>
