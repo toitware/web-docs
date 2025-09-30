@@ -1,6 +1,6 @@
 # ESP-NOW
 ESP-NOW is a proprietary protocol developed by Espressif for
-low-power, connectionless communication between ESP32 devices.
+low-power, connection-less communication between ESP32 devices.
 
 In this tutorial we will set up two ESP32 where one will send
 messages, and the other will receive them.
@@ -48,8 +48,8 @@ messages, the implementation ensures that the PHY layer has
 received the message, but there is no guarantee that the message
 is processed by the receiving device.
 
-ESP-NOW only supports 20 peers, although one of them can be the
-broadcast address, which represents all devices in range.
+ESP-NOW only supports 20 peers, although one can also communicate with
+all devices in range by using the broadcast address.
 
 By default only 7 keys can be used. This can be changed in the
 sdkconfig, but that requires building a custom envelope.
@@ -106,10 +106,11 @@ main:
     sleep --ms=1000
 ```
 
-The program starts by creating a service, followed by adding the broadcast
-address as a peer. This is necessary since ESP-NOW can only send data to
-peers that have been added to the peer list. This includes the broadcast
-address, which is just a special address that represents all devices in range.
+The program starts by creating a service, followed by adding a new peer.
+We are using the broadcast address, thus communicating with all peers in
+range. ESP-NOW can only send data to peers that have been added to the peer
+list. This includes the broadcast address, which is just a special address
+that represents all devices in range.
 
 The program then simply sends a message every second.
 
