@@ -48,8 +48,9 @@ messages, the implementation ensures that the PHY layer has
 received the message, but there is no guarantee that the message
 is processed by the receiving device.
 
-ESP-NOW only supports 20 peers, although one can also communicate with
-all devices in range by using the broadcast address.
+ESP-NOW only supports 20 peers, although one peer-slot can be used
+to communicate with all devices in range by specifying the broadcast
+address.
 
 By default only 7 keys can be used. This can be changed in the
 sdkconfig, but that requires building a custom envelope.
