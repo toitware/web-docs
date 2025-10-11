@@ -1,0 +1,259 @@
+# ESP-NOW
+ESP-NOW is a proprietary protocol developed by Espressif for
+low-power, connection-less communication between ESP32 devices.
+
+In this tutorial we will set up two ESP32 where one will send
+messages, and the other will receive them.
+
+## Prerequisites
+We assume that you have set up your development environment as described
+in [the IDE tutorial](../../setup/ide).
+
+We also assume that you have flashed your device with Jaguar and that
+you are familiar with running Toit programs on it.
+If not, have a look at the [Hello world](../../setup/firstprogram) tutorial.
+
+<Note>
+
+When working with two devices, you will need to tell Jaguar which
+USB port to use.
+
+When using `jag monitor` you have to use the `--port` option to specify
+the port the ESP32 device is connected to. For example:
+
+``` shell
+jag monitor --port COM3          # Windows.
+jag monitor --port /dev/ttyUSB0  # Linux and macOS.
+```
+
+</Note>
+
+## Introduction
+
+ESP-NOW can be seen as a replacement for Wifi, where devices don't
+need to connect to an access point, but can communicate directly with
+each other. Its range is typically better than Wifi, but it has
+lower data rates.
+
+Devices can either communicate by broadcasting messages to all
+devices in range, or by sending messages to specific devices using
+their MAC address. In both cases, a key can be used to encrypt the
+messages.
+
+## Limitations
+
+Messages are at most 1470 bytes long. For broadcast messages there
+is no guarantee that messages are correctly delivered. For direct
+messages, the implementation ensures that the PHY layer has
+received the message, but there is no guarantee that the message
+is processed by the receiving device.
+
+ESP-NOW only supports 20 peers, although one peer-slot can be used
+to communicate with all devices in range by specifying the broadcast
+address.
+
+By default only 7 keys can be used. This can be changed in the
+sdkconfig, but that requires building a custom envelope.
+
+In theory, ESP-NOW can run at the same times as Wifi, but Toit
+does not currently support this. If Wifi is enabled the following
+error will be raised when trying to create an ESP-NOW service:
+
+``` plain
+EXCEPTION error.
+ALREADY_IN_USE
+  0: espnow-create_            <sdk>/esp32/espnow.toit:336:3
+  ...
+```
+
+Since Jaguar automatically connects to Wifi when it starts up,
+we need to tell Jaguar to disable Wifi when running the programs.
+You can do this by `jag run` with `-Djag.wifi=false`. This disables
+Wifi while the given program is running. To make sure that the device is
+reachable, Jaguar sets a timeout of 10 seconds, after which the program
+is killed and Wifi is re-enabled. If you need more time, you can also
+pass the `-Djag.timeout=<duration>` option. For example, to run a
+program for 60 seconds, you can use `-Djag.timeout=1m`.
+
+A complete command line could look like this:
+
+``` shell
+jag run -Djag.wifi=false -Djag.timeout=1m sender.toit
+```
+
+## Broadcasting
+
+In this example we will set up one device to send broadcast messages
+and another device to receive them.
+
+### Sender
+
+Create a new file `sender.toit` and put the following code into it:
+
+```toit
+import esp32.espnow
+
+main:
+  service := espnow.Service
+  service.add-peer espnow.BROADCAST-ADDRESS
+
+  counter := 0
+  while true:
+    message := "hello $counter"
+    service.send message
+        --address=espnow.BROADCAST-ADDRESS
+    print "Sent datagram."
+    counter++
+    sleep --ms=1000
+```
+
+The program starts by creating a service, followed by adding a new peer.
+We are using the broadcast address, thus communicating with all peers in
+range. ESP-NOW can only send data to peers that have been added to the peer
+list. This includes the broadcast address, which is just a special address
+that represents all devices in range.
+
+The program then simply sends a message every second.
+
+Since no key was specified, the messages are sent unencrypted.
+
+You can run the program using:
+
+``` shell
+jag run -Djag.wifi=false sender.toit
+```
+
+Remember that Jaguar will kill the program after 10 seconds unless you
+specify a longer timeout using `-Djag.timeout=<duration>`.
+
+### Receiver
+
+Create a new file `receiver.toit` and put the following code into it:
+
+```toit
+import esp32.espnow
+
+main:
+  service := espnow.Service
+
+  while true:
+    message := service.receive
+    sender := message.address
+    data := message.data.to-string
+    print "Received datagram from $sender: $data"
+```
+
+This program also starts by creating an ESP-NOW service.
+It then enters an infinite loop where it waits for messages to arrive.
+When a message is received, it prints the sender's address and the
+message data.
+
+### Running the programs
+
+Typically, you have 4 terminal windows open:
+1. `jag monitor --port /dev/ttyUSB0` to monitor the sender.
+2. `jag monitor --port /dev/ttyUSB1` to monitor the receiver.
+3. `jag run -d <name-of-sender> -Djag.wifi=false sender.toit` to run the sender.
+4. `jag run -d <name-of-receiver> -Djag.wifi=false receiver.toit` to run the receiver.
+
+
+## Direct communication
+
+Instead of broadcasting messages, devices can also send messages
+directly to each other using their MAC address. We will also
+use keys to encrypt the messages in this example.
+
+### Sender
+Create a new file `sender-direct.toit` and put the following code into it:
+
+```toit
+import esp32.espnow
+
+PEER ::= espnow.Address.parse "c4:dd:57:5b:f5:3c"
+
+PMK ::= espnow.Key.from-string "pmk1234567890123"
+LMK ::= espnow.Key.from-string "lmk1234567890123"
+
+main:
+  service := espnow.Service --key=PMK
+  service.add-peer PEER --key=LMK
+
+  counter := 0
+  while true:
+    message := "hello $counter"
+    service.send message --address=PEER
+    print "Sent datagram."
+    counter++
+    sleep --ms=1000
+```
+
+Since we are sending messages directly to a specific device, we need to
+add the device as a peer using its MAC address. You need to replace the
+address in the code above with the actual address of your receiver device.
+If you ran the previous broadcast example, you already have the address
+of the receiver. You can just run the same program with roles reversed to
+get the address of the sender.
+
+ESP-NOW uses two types of keys: a primary key (PMK) and a local
+key (LMK). The PMK is used to encrypt the LMKs and is shared between
+all devices. The LMK is used to encrypt the actual messages and is
+specific to paired devices. If no LMK is used, then the communication is
+unencrypted, even if one or both devices have a PMK.
+
+If a communication is encrypted, then the receiver also must add the
+sender as a peer, so it can specify the LMK to decrypt the messages.
+
+Before starting the program, we need to start the receiver. This is
+because ESP-NOW senders require the receivers of direct connections
+to be online. Otherwise, an exception is thrown. Note, however,
+that the absence of an exception does not guarantee that the message
+was handled by the receiver.
+
+### Receiver
+
+Create a new file `receiver-direct.toit` and put the following code into it:
+
+```toit
+import esp32.espnow
+
+PEER ::= espnow.Address.parse "c4:dd:57:5b:f3:a8"
+
+PMK ::= espnow.Key.from-string "pmk1234567890123"
+LMK ::= espnow.Key.from-string "lmk1234567890124"
+
+main:
+  service := espnow.Service --key=PMK
+  service.add-peer PEER --key=LMK
+
+  while true:
+    message := service.receive
+    sender := message.address
+    data := message.data.to-string
+    print "Received datagram from $sender: $data"
+```
+
+As before, we need to add the keys to encrypt the connection.
+Since we are using a LMK, we also need to add the sender as a peer.
+The rest of the program is unchanged.
+
+### Running the programs
+
+Make sure to start the receiver first, and then the sender. Typically,
+you have 4 terminal windows open:
+1. `jag monitor --port /dev/ttyUSB0` to monitor the sender.
+2. `jag monitor --port /dev/ttyUSB1` to monitor the receiver.
+3. `jag run -d <name-of-receiver> -Djag.wifi=false receiver-direct.toit` to run the receiver.
+4. `jag run -d <name-of-sender> -Djag.wifi=false sender-direct.toit` to run the sender.
+
+## Data rates
+
+ESP-NOW supports different data rates. Slower rates typically have
+a better range, while faster rates have a shorter range.
+
+The default configuration of ESP-NOW is set to use `RATE-1M-L`,
+corresponding to 1 Mbps with a long preamble. There are some faster
+modes available (like
+[RATE-48M](https://libs.toit.io/esp32/espnow/library-summary#RATE-48M)),
+or you can use a lower rate (like
+[RATE-LORA-250K](https://libs.toit.io/esp32/espnow/library-summary#RATE-LORA-250K))
+which has a longer range.
