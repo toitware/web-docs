@@ -389,8 +389,8 @@ import morse-tutorial show *
 import expect show *
 
 main:
-  encoded := encode_string "a"
-  expect-list-equals [DOT, DASH, SPACE_LETTER] encoded
+  encoded := encode-string "a"
+  expect-list-equals [DOT, DASH, SPACE-LETTER] encoded
 ```
 
 Similarly to the examples, it's necessary to install the local package to be able to use it first:

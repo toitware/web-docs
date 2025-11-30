@@ -173,7 +173,7 @@ class MyDevice extends OneRegisterDevice:
 
   get-contrast -> int:
     reg := read-register
-    return reg & CONTRAST_MASK_
+    return reg & CONTRAST-MASK_
 
   set-brightness brightness/int -> none:
     reg := read-register
