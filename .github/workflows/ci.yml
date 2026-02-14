@@ -53,6 +53,11 @@ jobs:
         with:
           submodules: recursive
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+
       - name: Install
         env:
           GITHUB_NPM_TOKEN: ${{ secrets.LEON_GITHUB_NPM_PAT }}

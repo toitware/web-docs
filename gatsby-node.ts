@@ -46,24 +46,22 @@ export const createPages: GatsbyNode["createPages"] = async ({ graphql, actions,
   const docsTemplate = path.resolve(`src/components/layout/MdxLayout.tsx`);
 
   // Variables can be added as the second function parameter
-  const result = await graphql<MdxGraphType>(
-    `
-      query {
-        allMdx(filter: { fileAbsolutePath: { regex: "//docs//" } }) {
-          nodes {
-            id
-            slug
-            excerpt
-            rawBody
-            headings {
-              value
-              depth
-            }
+  const result = await graphql<MdxGraphType>(`
+    query {
+      allMdx(filter: { fileAbsolutePath: { regex: "//docs//" } }) {
+        nodes {
+          id
+          slug
+          excerpt
+          rawBody
+          headings {
+            value
+            depth
           }
         }
       }
-    `
-  );
+    }
+  `);
 
   if (result.errors || !result.data) {
     reporter.panicOnBuild('🚨  ERROR: Loading "createPages" query');
