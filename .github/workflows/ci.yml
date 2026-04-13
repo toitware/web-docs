@@ -114,7 +114,7 @@ jobs:
 
       - name: Dispatch dev-deployment
         if: github.ref == 'refs/heads/master'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.LEON_REPOSITORY_DISPATCH }}
           script: |
