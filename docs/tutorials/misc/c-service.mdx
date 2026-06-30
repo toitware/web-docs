@@ -88,10 +88,19 @@ As you can see, the Toit program successfully communicated with the C service.
 
 ## Qrcode service
 An echo service is nice, but not very useful. Let's create a more useful service
-that generates QR codes. As of 2024-05-15 there doesn't exist a QR-code library
-that is written in Toit, so we will use
+that generates QR codes. We will use
 Espressif's [qrcode](https://components.espressif.com/components/espressif/qrcode)
 component that is written in C.
+
+<Note>
+
+These days you can generate QR codes directly in Toit with the
+[qr](https://pkg.toit.io/package/github.com%2Flightbug-io%2Ftoit-qr) package, so
+you would not normally reach for a C component just for this. We still use the C
+`qrcode` component here because this tutorial is about communicating with C code,
+and a QR-code generator makes for a realistic example.
+
+</Note>
 
 ### Toit qrcode service
 Create a new `toit-qrcode` directory next to the `echo` directory in the `components` folder.
