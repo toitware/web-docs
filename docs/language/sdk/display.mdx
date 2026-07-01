@@ -23,14 +23,13 @@ pins and bus you are using to connect your display.
 Example contents of `get_display.toit`
 <!-- CODE FILENAME get_display.toit -->
 ```
-import gpio
 import i2c
 import ssd1306 show *
 import pixel-display show *
 
 get-display -> PixelDisplay:
-  scl := gpio.Pin 4
-  sda := gpio.Pin 5
+  scl := 4
+  sda := 5
   bus := i2c.Bus
     --sda=sda
     --scl=scl

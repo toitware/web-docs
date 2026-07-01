@@ -2,14 +2,12 @@
 // Use of this source code is governed by a Zero-Clause BSD license that can
 // be found in the LICENSE_BSD0 file.
 
-import gpio
 import pixel-strip show PixelStrip
 
 PIXELS ::= 12
 
 main:
-  pin := gpio.Pin 13
-  strip := PixelStrip.uart PIXELS --pin=pin
+  strip := PixelStrip.uart PIXELS --pin=13
 
   r := ByteArray PIXELS
   g := ByteArray PIXELS

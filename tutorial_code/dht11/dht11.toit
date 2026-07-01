@@ -3,13 +3,11 @@
 // be found in the LICENSE_BSD0 file.
 
 import dhtxx
-import gpio
 
 GPIO-PIN-NUM ::=  32
 
 main:
-  pin := gpio.Pin GPIO-PIN-NUM
-  driver := dhtxx.Dht11 pin
+  driver := dhtxx.Dht11 GPIO-PIN-NUM
 
   (Duration --ms=500).periodic:
     print driver.read

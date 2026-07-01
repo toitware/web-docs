@@ -2,16 +2,13 @@
 // Use of this source code is governed by a Zero-Clause BSD license that can
 // be found in the LICENSE_BSD0 file.
 
-import gpio
 import hc-sr04
 
 TRIGGER ::= 33
 ECHO ::= 32
 
 main:
-  trigger := gpio.Pin TRIGGER
-  echo := gpio.Pin ECHO
-  sensor := hc-sr04.Driver --echo=echo --trigger=trigger
+  sensor := hc-sr04.Driver --echo=ECHO --trigger=TRIGGER
 
   while true:
     distance := sensor.read-distance

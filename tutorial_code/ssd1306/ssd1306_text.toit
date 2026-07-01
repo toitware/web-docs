@@ -3,7 +3,6 @@
 // be found in the LICENSE_BSD0 file.
 
 import font show *
-import gpio
 import i2c
 import pixel-display show *
 import pixel-display.two-color show *
@@ -18,8 +17,8 @@ current-time:
   return "$(%02d now.h):$(%02d now.m):$(%02d now.s)"
 
 main:
-  sda := gpio.Pin 26
-  scl := gpio.Pin 25
+  sda := 26
+  scl := 25
   frequency := 400_000
 
   bus := i2c.Bus --sda=sda --scl=scl --frequency=frequency

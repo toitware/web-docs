@@ -162,7 +162,7 @@ is thus more precise and uses less CPU.
 
 Install the package as usual with `jag pkg install`:
 ``` shell
-jag pkg install github.com/lask/toit-hc-sr04@v2
+jag pkg install github.com/lask/toit-hc-sr04@v2.3
 ```
 
 See the [package tutorial](../../setup/packages) for more information
@@ -171,16 +171,13 @@ about packages.
 We can now simplify the code:
 
 ``` toit
-import gpio
 import hc-sr04
 
 TRIGGER ::= 33
 ECHO ::= 32
 
 main:
-  trigger := gpio.Pin TRIGGER
-  echo := gpio.Pin ECHO
-  sensor := hc-sr04.Driver --echo=echo --trigger=trigger
+  sensor := hc-sr04.Driver --echo=ECHO --trigger=TRIGGER
 
   while true:
     distance := sensor.read-distance

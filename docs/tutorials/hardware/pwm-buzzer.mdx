@@ -32,7 +32,6 @@ Connect the buzzer as follows:
 Create a `buzzer.toit` file and watch it with Jaguar:
 
 ``` toit
-import gpio
 import gpio.pwm
 
 buzz pin --frequency --ms:
@@ -43,11 +42,10 @@ buzz pin --frequency --ms:
   generator.close
 
 main:
-  buzzer := gpio.Pin 14
+  buzzer := 14
   20.repeat:
     buzz buzzer --frequency=800 --ms=500
     buzz buzzer --frequency=1600 --ms=500
-  buzzer.close
 ```
 
 

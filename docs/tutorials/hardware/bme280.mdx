@@ -57,14 +57,13 @@ Create a new file `bme280.toit` and start `jag watch bme280.toit` to run
 the program whenever you save.
 
 ```toit
-import gpio
 import i2c
 import bme280
 
 main:
   bus := i2c.Bus
-    --sda=gpio.Pin 26
-    --scl=gpio.Pin 25
+    --sda=26
+    --scl=25
 
   // Use 'I2C-ADDRESS' if your device has address 0x76 (118).
   // Use 'I2C-ADDRESS-ALT' if your device has address 0x77 (119).

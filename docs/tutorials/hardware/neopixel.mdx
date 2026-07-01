@@ -52,7 +52,7 @@ We are using the [pixel_strip](https://pkg.toit.io/package/github.com%2Ftoitware
 package. To install it, run the following command in your project directory:
 
 ```bash
-jag pkg install github.com/toitware/toit-pixel-strip@v1.3
+jag pkg install github.com/toitware/toit-pixel-strip@v1.4
 ```
 
 <Note>
@@ -68,14 +68,12 @@ Open a new file and save it as `neopixel.toit`,and watch it with Jaguar.
 Insert the following program:
 
 ```toit
-import gpio
 import pixel-strip show PixelStrip
 
 PIXELS ::= 12
 
 main:
-  pin := gpio.Pin 13
-  strip := PixelStrip.uart PIXELS --pin=pin
+  strip := PixelStrip.uart PIXELS --pin=13
 
   r := ByteArray PIXELS
   g := ByteArray PIXELS

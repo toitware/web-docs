@@ -48,12 +48,11 @@ and to list their addresses.
 Write an `i2c.toit` file and watch it with Jaguar:
 
 ```toit
-import gpio
 import i2c
 
 main:
-  scl := gpio.Pin 25
-  sda := gpio.Pin 26
+  scl := 25
+  sda := 26
   frequency := 100_000
 
   bus := i2c.Bus --sda=sda --scl=scl --frequency=frequency

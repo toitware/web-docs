@@ -98,30 +98,25 @@ the frequency and the duty cycle, and it will emit the needed square wave.
 Here is the program that uses the PWM peripheral:
 
 ```toit
-import gpio
 import gpio.pwm
 
 main:
-  led := gpio.Pin 32
   generator := pwm.Pwm --frequency=400
-  channel := generator.start led
+  channel := generator.start 32
   channel.set-duty-factor 0.5
   sleep --ms=10_000
   channel.close
   generator.close
-  led.close
 ```
 
 A third of the code is just closing the resources we use (all the `close`
 calls). The more interesting lines are in the beginning:
 <!-- RESET CODE -->
-<!-- HIDDEN CODE import gpio -->
 <!-- HIDDEN CODE import gpio.pwm -->
 <!-- HIDDEN CODE main: -->
-<!-- HIDDEN CODE   led := gpio.Pin 32 -->
 ```
   generator := pwm.Pwm --frequency=400
-  channel := generator.start led
+  channel := generator.start 32
   channel.set-duty-factor 0.5
 ```
 
@@ -133,13 +128,11 @@ We can now play with the duty factor:
 
 <!-- RESET CODE -->
 ```toit
-import gpio
 import gpio.pwm
 
 main:
-  led := gpio.Pin 32
   generator := pwm.Pwm --frequency=400
-  channel := generator.start led
+  channel := generator.start 32
   duty-percent := 0
   step := 1
   while true:

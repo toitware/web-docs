@@ -38,7 +38,7 @@ We are using the [dhtxx](https://pkg.toit.io/package/github.com%2Ftoitware%2Ftoi
 in your project directory:
 
 ```bash
-jag pkg install github.com/toitware/toit-dhtxx@v1
+jag pkg install github.com/toitware/toit-dhtxx@v1.11
 ```
 
 <Note>
@@ -53,13 +53,11 @@ Write and Jaguar-watch the following `dht11.toit` program:
 
 ```
 import dhtxx
-import gpio
 
 GPIO-PIN-NUM ::=  32
 
 main:
-  pin := gpio.Pin GPIO-PIN-NUM
-  driver := dhtxx.Dht11 pin
+  driver := dhtxx.Dht11 GPIO-PIN-NUM
 
   (Duration --ms=1000).periodic:
     print driver.read
