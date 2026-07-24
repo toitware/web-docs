@@ -68,7 +68,7 @@
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.2.0",
-    "sharp": "^0.32.6",
+    "sharp": "^0.35.0",
     "typescript": "^5.9.3",
     "webpack": "^5.104.1"
   },
