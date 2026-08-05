@@ -42,7 +42,7 @@ jobs:
         run: |
           export TOIT_SDK=${{ steps.setup-toit.outputs.toit-install-dir }}/toit
           cd tools
-          $TOIT_SDK/bin/toit.pkg install
+          $TOIT_SDK/bin/toit pkg install
           ./run_all.sh
 
   ci:
