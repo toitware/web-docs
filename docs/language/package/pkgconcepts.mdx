@@ -8,9 +8,9 @@ Code that is not intended to be used by other projects is simply called a "progr
 
 When a program uses a package, that dependency is registered in the program's yaml file `package.yaml` and lock file `package.lock`. The latter is where the mapping from `prefix` to package is stored. Programs have concrete dependencies. All their dependent packages are resolved to a specific version, not a range of versions. These versions are written in the lock file.
 
-When a developer calls `jag pkg install` or `toit.pkg install` they always get the same packages. A team of developers working on the same project will thus work with the exact same versions.
+When a developer calls `jag pkg install` or `toit pkg install` they always get the same packages. A team of developers working on the same project will thus work with the exact same versions.
 
-Both files must be located at the root of the project. Certain commands (like `pkg install`) automatically create these file if one doesn't exist yet. Be careful, as they are created in the current directory, which might not be the root directory. It is a good idea to initialize a new project with `jag pkg init` or `toit.pkg init` to create the files in the root directory.
+Both files must be located at the root of the project. Certain commands (like `pkg install`) automatically create these file if one doesn't exist yet. Be careful, as they are created in the current directory, which might not be the root directory. It is a good idea to initialize a new project with `jag pkg init` or `toit pkg init` to create the files in the root directory.
 
 <Note>
 
@@ -56,15 +56,15 @@ you could clone it from Github, then update your your `package.yaml` and `packag
 <Tab label="Jaguar">
 
 ```shell
-jag pkg remove font_clock
-jag pkg install --local --name=font_clock ../../toit-font-clock
+jag pkg uninstall font_clock
+jag pkg install --local --prefix=font_clock ../../toit-font-clock
 ```
 </Tab>
 <Tab label="toitlang.org">
 
 ```shell
-toit.pkg remove font_clock
-toit.pkg install --local --name=font_clock ../../toit-font-clock
+toit pkg uninstall font_clock
+toit pkg install --local --prefix=font_clock ../../toit-font-clock
 ```
 </Tab>
 </Tabs>
@@ -97,7 +97,7 @@ jag pkg install
 <Tab label="toitlang.org">
 
 ```shell
-toit.pkg install
+toit pkg install
 ```
 </Tab>
 </Tabs>
@@ -183,7 +183,7 @@ A registry collects descriptions of available packages. Conceptually it's a data
 
 Most of the time, developers only work with the public [github.com/toitware/registry](https://github.com/toitware/registry) registry. However, TPM supports multiple registries. Companies are free to create their own private registries and use them instead of, or in addition to, the public Toit registry.
 
-Similar to packages, registries also exist in two variants: Git and local registries. Git registries are added to TPM with a Git-URL, and can be synchronized with `jag pkg sync` or `toit.pkg sync` (see the [quick start](../pkgguide) section for more).
+Similar to packages, registries also exist in two variants: Git and local registries. Git registries are added to TPM with a Git-URL, and can be synchronized with `jag pkg sync` or `toit pkg sync` (see the [quick start](../pkgguide) section for more).
 
 Local registries are just pointers to a path that contains descriptions.
 
