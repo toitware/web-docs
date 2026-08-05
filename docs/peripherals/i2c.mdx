@@ -9,8 +9,8 @@ import i2c
 
 main:
   bus := i2c.Bus
-    --sda=21
-    --scl=22
+      --sda=21
+      --scl=22
 ```
 
 Each device must have a unique address. The address can be found in the datasheet for the selected peripheral - it's an 7-bit integer.
@@ -22,8 +22,8 @@ import i2c
 
 main:
   bus := i2c.Bus
-    --sda=21
-    --scl=22
+      --sda=21
+      --scl=22
 
   device := bus.device 0x76
 ```
@@ -34,9 +34,9 @@ The default frequency of the I<sup>2</sup>C bus is 400kHz in Toit. This can be c
 
 ```
   i2c.Bus
-    --sda=21
-    --scl=22
-    --frequency=100000
+      --sda=21
+      --scl=22
+      --frequency=100000
 ```
 
 Remember that when changing the frequency, the associated pull-up resistors may have to be changed as well.

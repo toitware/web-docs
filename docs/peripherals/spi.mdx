@@ -9,9 +9,9 @@ import spi
 
 main:
   bus := spi.Bus
-    --miso=12
-    --mosi=13
-    --clock=14
+      --miso=12
+      --mosi=13
+      --clock=14
 ```
 
 When communicating with a device, a unique chip-select Pin is used to signal when the chip in question is addressed. In addition, it's important to not select a device frequency that exceeds the capabilities of device. The maximum frequency can be found in the datasheet for the selected peripheral.
@@ -23,11 +23,11 @@ import spi
 
 main:
   bus := spi.Bus
-    --miso=12
-    --mosi=13
-    --clock=14
+      --miso=12
+      --mosi=13
+      --clock=14
 
   device := bus.device
-    --cs=15
-    --frequency=10_000_000
+      --cs=15
+      --frequency=10_000_000
 ```

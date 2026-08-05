@@ -23,9 +23,9 @@ main:
   */
 
   options := mqtt.SessionOptions
-    --client-id = CLIENT-ID
-    --username = ADAFRUIT-IO-USERNAME
-    --password = ADAFRUIT-IO-KEY
+      --client-id = CLIENT-ID
+      --username = ADAFRUIT-IO-USERNAME
+      --password = ADAFRUIT-IO-KEY
 
   client.start --options=options
 

@@ -7,8 +7,8 @@ import bme280
 
 main:
   bus := i2c.Bus
-    --sda=26
-    --scl=25
+      --sda=26
+      --scl=25
 
   // Use 'I2C_ADDRESS' if your device has address 0x76 (118).
   // Use 'I2C_ADDRESS_ALT' if your device has address 0x77 (119).
