@@ -22,7 +22,7 @@ installs the package 'morse'.
 
 The Toit package manager (henceforth TPM) is integrated with the
 [Toit SDK](https://toitlang.org/).
-All of its commands start with the `toit pkg` command.
+When invoked through the standalone SDK, its commands start with `toit pkg`.
 For example:
 
 ```shell
@@ -109,9 +109,9 @@ shared with other developers who want to work with the same application or
 package. However the `.packages` directory is local and should not be
 committed. For git, `.packages/` should be added to your `.gitignore` file.
 
-Before being able to use a program or package on a different computer one
-has to run `jag pkg install` or `toit pkg install` to
-download the packages that are specified in the lock file.
+Before using a program or package on a different computer, run the package
+manager's `install` command to download the packages specified in the lock
+file.
 
 ## Good practice
 

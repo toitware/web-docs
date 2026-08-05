@@ -116,12 +116,10 @@ of an import finds a folder, Toit tries to find a file with the same
 name as the last segment instead.
 
 Say, we want to use the [morse package](https://github.com/toitware/toit-morse).
-When installing this package
-with `jag pkg install github.com/toitware/toit-morse`,
-(or with `toit pkg ...`) the package manager
-downloads the sources and adds a mapping from the package's name `morse` to
-the location it downloaded the sources. Specifically, the mapping points to
-the `src` folder of the package.
+When installing this package with the package manager—for example, with
+`jag pkg install github.com/toitware/toit-morse`—it downloads the sources and
+adds a mapping from the package's name `morse` to the location of the downloaded
+sources. Specifically, the mapping points to the `src` folder of the package.
 
 <Note>
 If you are using Jaguar, you should use
