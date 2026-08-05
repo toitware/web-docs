@@ -31,9 +31,9 @@ get-display -> PixelDisplay:
   scl := 4
   sda := 5
   bus := i2c.Bus
-    --sda=sda
-    --scl=scl
-    --frequency=800_000
+      --sda=sda
+      --scl=scl
+      --frequency=800_000
 
   devices := bus.scan
   if not devices.contains Ssd1306.I2C-ADDRESS:
@@ -154,14 +154,14 @@ main:
   display/PixelDisplay ::= get-display
 
   sans-10 := Style
-    --font = SANS-10-BOLD
-    --color = BLACK
-    --align-right
+      --font = SANS-10-BOLD
+      --color = BLACK
+      --align-right
 
   sans-24 := Style
-    --font = SANS-24-FONT
-    --color = BLACK
-    --align-center
+      --font = SANS-24-FONT
+      --color = BLACK
+      --align-center
 
   [
       Label --style=sans-10 --x=40 --y=30 --text="Hello from",
