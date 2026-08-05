@@ -1,8 +1,14 @@
+sdk: ^2.0.0-alpha.196
 prefixes:
-  bme280: bme280-driver
+  bme280: github.com/toitware/bme280-driver-1
 packages:
-  bme280-driver:
+  github.com/toitware/bme280-driver-1:
+    hash: ca9c6451532139d506299fba8c0915cd3001982e
+    prefixes:
+      sensors: github.com/toitware/toit-sensors-1
     url: github.com/toitware/bme280-driver
-    name: bme280
+    version: 1.2.0
+  github.com/toitware/toit-sensors-1:
+    hash: f9f5662a0f21016259ff6907419e54d00223714a
+    url: github.com/toitware/toit-sensors
     version: 1.0.0
-    hash: 65b88ac19a5e2b48627a2dbae6d7757ae45c502c

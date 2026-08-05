@@ -2,13 +2,11 @@
 // Use of this source code is governed by a Zero-Clause BSD license that can
 // be found in the LICENSE_BSD0 file.
 
-import gpio
 import gpio.pwm
 
 main:
-  led := gpio.Pin 32
   generator := pwm.Pwm --frequency=400
-  channel := generator.start led
+  channel := generator.start 32
   duty-percent := 0
   step := 1
   while true:

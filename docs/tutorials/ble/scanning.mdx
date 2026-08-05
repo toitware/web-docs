@@ -21,7 +21,7 @@ Here the scan will run indefinitely.
 A scan can be used to create a list of remote devices that match a criteria, e.g. implement a specific service. A service is identified by a UUID with a select few services
 being assigned by [Bluetooth SIG](https://www.bluetooth.com/specifications/assigned-numbers/). As an example, the 16-bit UUID `0x180F` represents a battery service.
 
-The following example shows how to scan for 3 seconds for the addresses of remote devices that implement a battery service.
+The following example shows how to scan for 3 seconds for the identifiers of remote devices that implement a battery service.
 
 ```toit
 import ble
@@ -33,13 +33,13 @@ main:
   adapter := ble.Adapter
   central := adapter.central
 
-  addresses := []
+  identifiers := []
 
   central.scan --duration=SCAN-DURATION: | device/ble.RemoteScannedDevice |
-    if device.data.service-classes.contains BATTERY-SERVICE:
-      addresses.add device.address
+    if device.data.services.contains BATTERY-SERVICE:
+      identifiers.add device.identifier
 
-  print addresses
+  print identifiers
 ```
 
 ## Example: Mobile phone as a BLE device

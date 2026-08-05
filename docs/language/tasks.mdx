@@ -111,11 +111,10 @@ The advantage of tasks in comparison with threads is that they take turns. To
 take an oversimplified example:
 
 ```
-import gpio
 import gpio.adc as gpio
 
 // The analog input is connected to pin 17.
-ADC1 ::= gpio.Adc (gpio.Pin.in 17)
+ADC1 ::= gpio.Adc 17
 
 class VoltageStatus:
   mv /int := 0

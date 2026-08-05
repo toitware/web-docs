@@ -76,8 +76,8 @@ main:
   s7 /string := "$(%0.3f 1.2) $(%0.2f PI)"
   print s7  // => "1.200 3.14"
   //or
-  print (f.stringify 3)
-  print (PI.stringify 2)
+  print (f.to-string --precision=3)
+  print (PI.to-string --precision=2)
 
   // Convert an integer to a floating point number
   f2 /float := i.to-float

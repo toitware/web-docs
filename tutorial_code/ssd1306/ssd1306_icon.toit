@@ -3,15 +3,14 @@
 // be found in the LICENSE_BSD0 file.
 
 import pictogrammers-icons.size-48 as icons
-import gpio
 import i2c
 import pixel-display show *
 import pixel-display.two-color show *
 import ssd1306 show *
 
-get-display -> TwoColorPixelDisplay:
-  sda := gpio.Pin 26
-  scl := gpio.Pin 25
+get-display -> PixelDisplay:
+  sda := 26
+  scl := 25
   frequency := 400_000
 
   bus := i2c.Bus --sda=sda --scl=scl --frequency=frequency
@@ -22,14 +21,14 @@ get-display -> TwoColorPixelDisplay:
 
   device := bus.device Ssd1306.I2C-ADDRESS
   driver := Ssd1306.i2c device
-  return TwoColorPixelDisplay driver
+  return PixelDisplay.two-color driver
 
 main:
   display := get-display
   display.background = BLACK
 
-  context := display.context --landscape --color=WHITE
-  icon := display.icon context 0 50 icons.HUMAN-SCOOTER
+  icon := Label --x=0 --y=50 --icon=icons.HUMAN-SCOOTER --color=WHITE
+  display.add icon
   while true:
     80.repeat:
       icon.move-to it 50

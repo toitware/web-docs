@@ -691,6 +691,6 @@ in the first clause of a `for`, `if`, or `while` statement.
   while data := reader.read:
     // data was not null.
 
-  if parsed := (int.parse str --on-error=: null):
+  if parsed := (int.parse str --if-error=: null):
     // parsed is not null and thus a valid number.
 ```

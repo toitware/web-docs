@@ -1,9 +1,14 @@
-sdk: ^2.0.0-alpha.1
+sdk: ^2.0.0-alpha.196
 prefixes:
-  hc_sr04: toit-hc-sr04
+  hc_sr04: github.com/lask/toit-hc-sr04-2
 packages:
-  toit-hc-sr04:
+  github.com/lask/toit-hc-sr04-2:
+    hash: 9a6eb8a69b1dd27351d2ee4994366b584c6d1535
+    prefixes:
+      sensors: github.com/toitware/toit-sensors-1
     url: github.com/lask/toit-hc-sr04
-    name: hc_sr04
-    version: 2.1.1
-    hash: da8389adec9f012999c385b69bc42e26e19b51fa
+    version: 2.3.0
+  github.com/toitware/toit-sensors-1:
+    hash: f9f5662a0f21016259ff6907419e54d00223714a
+    url: github.com/toitware/toit-sensors
+    version: 1.0.0

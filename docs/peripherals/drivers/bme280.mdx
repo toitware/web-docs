@@ -29,13 +29,12 @@ A detailed description of adding sensors using the Qwiic cable can be found [her
 First we're going to set up the I<sup>2</sup>C bus so we can connect the device:
 
 ```
-import gpio
 import i2c
 
 main:
   bus := i2c.Bus
-    --sda=gpio.Pin 21
-    --scl=gpio.Pin 22
+      --sda=21
+      --scl=22
 ```
 
 With the bus configured, we can specify how to address the BME280 device on the bus.
@@ -95,14 +94,13 @@ Program measuring temperature, relative humidity, and atmospheric pressure
   with a BME280.
 */
 
-import gpio
 import i2c
 import bme280
 
 main:
   bus := i2c.Bus
-    --sda=gpio.Pin 21
-    --scl=gpio.Pin 22
+      --sda=21
+      --scl=22
 
   device := bus.device bme280.I2C-ADDRESS-ALT
 

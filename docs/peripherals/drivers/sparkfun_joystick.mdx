@@ -23,13 +23,12 @@ The Joystick features an `ATtiny85` microcontroller with a custom firmware. As d
 We use a simple I<sup>2</sup>C setup, with pin `21` for `SDA` (blue) and pin `22` for `SCL` (yellow).
 
 ```
-import gpio
 import i2c
 
 main:
   bus := i2c.Bus
-      --sda=gpio.Pin 21
-      --scl=gpio.Pin 22
+      --sda=21
+      --scl=22
 ```
 
 ## Driver skeleton
@@ -264,15 +263,14 @@ class Joystick:
 **`main.toit`**
 
 ```
-import gpio
 import i2c
 
 import .qwiic-joystick
 
 main:
   bus := i2c.Bus
-      --sda=gpio.Pin 21
-      --scl=gpio.Pin 22
+      --sda=21
+      --scl=22
 
   device := bus.device Joystick.I2C-ADDRESS
 

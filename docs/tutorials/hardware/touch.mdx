@@ -27,12 +27,10 @@ Create a new file `touch.toit` and start `jag watch touch.toit` to
 run the program whenever you save.
 
 ```toit
-import gpio
 import gpio.touch as gpio
 
 main:
-  pin := gpio.Pin 32
-  touch := gpio.Touch pin
+  touch := gpio.Touch 32
 
   while true:
     print (touch.read --raw)
@@ -47,12 +45,10 @@ Take a value that is in the seen range (for example 800) and use
 it in the following program as threshold.
 
 ```toit
-import gpio
 import gpio.touch as gpio
 
 main:
-  pin := gpio.Pin 32
-  touch := gpio.Touch pin
+  touch := gpio.Touch 32
 
   touch.threshold = 800
 
@@ -72,7 +68,6 @@ production and stored in the device's flash memory. You can also
 do this calibration dynamically:
 
 ```
-import gpio
 import gpio.touch as gpio
 
 ITERATIONS := 100
@@ -88,8 +83,7 @@ calibrate touch/gpio.Touch:
   touch.threshold = threshold
 
 main:
-  pin := gpio.Pin 32
-  touch := gpio.Touch pin
+  touch := gpio.Touch 32
 
   calibrate touch
 

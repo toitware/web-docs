@@ -15,7 +15,7 @@ Typically a rotary encoder has two output signals:
 These two signals create square-wave pulses as you rotate the knob:
 
 **Clockwise rotation:  (CLK leads DT)**
-```
+```text
 CLK:   ┌───┐   ┌───┐
      ──┘   └───┘   └───┘
 DT:      ┌───┐   ┌───┐
@@ -23,7 +23,7 @@ DT:      ┌───┐   ┌───┐
 ```
 
 **Counter-clockwise rotation:  (DT leads CLK)**
-```
+```text
 CLK:     ┌───┐   ┌───┐
      ────┘   └───┘   └───┘
 DT:    ┌───┐   ┌───┐
@@ -88,16 +88,14 @@ DT-PIN ::= 33
 SW-PIN ::= 25
 
 main:
-  // Set up the pins and the counter.
-  clk := gpio.Pin CLK-PIN
-  dt := gpio.Pin DT-PIN
+  // Set up the switch pin and the counter.
   sw := gpio.Pin SW-PIN --input --pull-down
 
   // Since we only need one channel, we can just configure the channel while
   // creating the pulse counter. If multiple channels are changing a
   // counter (unit), then we would need to create a list of channels and pass
   // that to the pulse-counter.Unit constructor.
-  counter := Unit clk --control-pin=dt
+  counter := Unit CLK-PIN --control-pin=DT-PIN
       --on-positive-edge=Channel.EDGE-INCREMENT
       --on-negative-edge=Channel.EDGE-DECREMENT
       --when-control-low=Channel.CONTROL-KEEP

@@ -1,22 +1,26 @@
+sdk: ^2.0.0-alpha.196
 prefixes:
-  pictogrammers_icons: toit-icons-pictogrammers
-  pixel_display: toit-pixel-display
-  ssd1306: toit-ssd1306
+  pictogrammers_icons: github.com/toitware/toit-icons-pictogrammers-1
+  pixel_display: github.com/toitware/toit-pixel-display-2
+  ssd1306: github.com/toitware/toit-ssd1306-2
 packages:
-  toit-icons-pictogrammers:
-    url: github.com/toitware/toit-icons-pictogrammers
-    name: pictogrammers_icons
-    version: 1.0.0
+  github.com/toitware/toit-icons-pictogrammers-1:
     hash: 5ac660cc480d5da1fec72e1b24d425ce978419b7
-  toit-pixel-display:
-    url: github.com/toitware/toit-pixel-display
-    name: pixel_display
-    version: 1.7.1
-    hash: 09bc1b6cf0ae52385af5301a13935a06683a36cf
-  toit-ssd1306:
-    url: github.com/toitware/toit-ssd1306
-    name: ssd1306
-    version: 1.6.0
-    hash: 806c93972b733ff45e10a4eeeefa9a7e5e808c46
+    url: github.com/toitware/toit-icons-pictogrammers
+    version: 1.0.0
+  github.com/toitware/toit-pixel-display-2:
+    hash: 59a4be9f0e6aa2321c6a032da44776f59af364b5
     prefixes:
-      pixel_display: toit-pixel-display
+      png-tools: github.com/toitware/toit-png-tools-1
+    url: github.com/toitware/toit-pixel-display
+    version: 2.11.0
+  github.com/toitware/toit-png-tools-1:
+    hash: ee472ac9d4333a138206f9d3a817d3c5432d6f87
+    url: github.com/toitware/toit-png-tools
+    version: 1.0.0
+  github.com/toitware/toit-ssd1306-2:
+    hash: 444a71ef89a06674c7df5d24754663ec9aeae267
+    prefixes:
+      pixel_display: github.com/toitware/toit-pixel-display-2
+    url: github.com/toitware/toit-ssd1306
+    version: 2.1.0

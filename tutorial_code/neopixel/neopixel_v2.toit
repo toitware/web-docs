@@ -6,7 +6,6 @@
 Implements a color wheel animation on a NeoPixel strip.
 */
 
-import gpio
 import pixel-strip show PixelStrip
 
 WHEEL := [
@@ -34,8 +33,7 @@ lerp a/int b/int t/float -> int:
   return (a + t * (b - a)).to-int
 
 main:
-  pin := gpio.Pin 13
-  strip := PixelStrip.uart PIXELS --pin=pin
+  strip := PixelStrip.uart PIXELS --pin=13
 
   r := ByteArray PIXELS
   g := ByteArray PIXELS

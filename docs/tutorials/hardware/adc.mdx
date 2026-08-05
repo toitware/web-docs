@@ -55,12 +55,10 @@ case the voltage between the two resistors should be 1.65V.
 Let's test this. Write (and Jaguar-`watch`) the following program:
 
 ``` toit
-import gpio
 import gpio.adc
 
 main:
-  pin := gpio.Pin 34
-  adc := adc.Adc pin
+  adc := adc.Adc 34
   256.repeat:
     print adc.get
     sleep --ms=500
