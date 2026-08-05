@@ -22,11 +22,11 @@ installs the package 'morse'.
 
 The Toit package manager (henceforth TPM) is integrated with the
 [Toit SDK](https://toitlang.org/).
-All of its commands start with the `toit.pkg` command.
+When invoked through the standalone SDK, its commands start with `toit pkg`.
 For example:
 
 ```shell
-toit.pkg install github.com/toitware/toit-morse
+toit pkg install github.com/toitware/toit-morse
 ```
 
 installs the package 'morse'.
@@ -77,15 +77,15 @@ It's also possible to view the list of all available packages in the [package re
 The name of the package must be non-ambiguous, and thus might need a qualifier. Since TPM doesn't have a single namespace, many packages can have a similar short name. This is by design (as it allows decentralized and private packages), but it might sometimes require to be a little bit more specific when installing a package. For example, `jag pkg install utils` might not be specific enough to uniquely identify a package, and a more qualified name, such as `jag pkg install some_company/utils` could be necessary.
 </Tab>
 <Tab label="toitlang.org">
-Toit programmers synchronize this repository, giving them access to all the descriptions in that registry. This is done through the `toit.pkg sync` command which simply pulls the latest changes.
+Toit programmers synchronize this repository, giving them access to all the descriptions in that registry. This is done through the `toit pkg sync` command which simply pulls the latest changes.
 
-With all the descriptions, Toit programmers can find the package they want. The `toit.pkg search <keyword>` command searches for relevant packages.
+With all the descriptions, Toit programmers can find the package they want. The `toit pkg search <keyword>` command searches for relevant packages.
 Note that searching or browsing packages is done locally in the synchronized registries.
-Developers can then install any of the packages by writing `toit.pkg install <package>`.
+Developers can then install any of the packages by writing `toit pkg install <package>`.
 
 It's also possible to view the list of all available packages in the [package registry web-site](https://pkg.toit.io/packages) or search for a specific package by its name.
 
-The name of the package must be non-ambiguous, and thus might need a qualifier. Since TPM doesn't have a single namespace, many packages can have a similar short name. This is by design (as it allows decentralized and private packages), but it might sometimes require to be a little bit more specific when installing a package. For example, `toit.pkg install utils` might not be specific enough to uniquely identify a package, and a more qualified name, such as `toit.pkg install some_company/utils` could be necessary.
+The name of the package must be non-ambiguous, and thus might need a qualifier. Since TPM doesn't have a single namespace, many packages can have a similar short name. This is by design (as it allows decentralized and private packages), but it might sometimes require to be a little bit more specific when installing a package. For example, `toit pkg install utils` might not be specific enough to uniquely identify a package, and a more qualified name, such as `toit pkg install some_company/utils` could be necessary.
 </Tab>
 </Tabs>
 
@@ -109,9 +109,9 @@ shared with other developers who want to work with the same application or
 package. However the `.packages` directory is local and should not be
 committed. For git, `.packages/` should be added to your `.gitignore` file.
 
-Before being able to use a program or package on a different computer one
-has to run `jag pkg install` or `toit.pkg install` to
-download the packages that are specified in the lock file.
+Before using a program or package on a different computer, run the package
+manager's `install` command to download the packages specified in the lock
+file.
 
 ## Good practice
 
