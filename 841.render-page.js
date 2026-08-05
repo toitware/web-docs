@@ -2,8 +2,8 @@ exports.id = 841;
 exports.ids = [841];
 exports.modules = {
 
-/***/ 5841:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5841
+(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: https://codemirror.net/5/LICENSE
@@ -11,7 +11,8 @@ exports.modules = {
 (function(mod) {
   if (true) // CommonJS
     mod(__webpack_require__(5237));
-  else {}
+  else // removed by dead control flow
+{}
 })(function(CodeMirror) {
   "use strict";
 
@@ -156,7 +157,7 @@ exports.modules = {
 });
 
 
-/***/ })
+/***/ }
 
 };
 ;
