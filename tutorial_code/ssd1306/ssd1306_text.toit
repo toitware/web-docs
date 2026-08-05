@@ -29,19 +29,26 @@ main:
 
   device := bus.device Ssd1306.I2C-ADDRESS
   driver := Ssd1306.i2c device
-  display := TwoColorPixelDisplay driver
+  display := PixelDisplay.two-color driver
   display.background = BLACK
 
   sans := Font.get "sans10"
-  sans-context := display.context
-      --landscape
-      --font=sans
-      --color=WHITE
-  display.text sans-context 30 20 "Toit"
-  date := display.text sans-context 30 40 ""
-  time-text := display.text sans-context 30 60 ""
+  [
+    Label --x=30 --y=20 --text="Toit",
+    Label --x=30 --y=40 --id="date",
+    Label --x=30 --y=60 --id="time",
+  ].do: display.add it
+
+  STYLE ::= Style
+      --type-map={
+          "label": Style --font=sans --color=WHITE,
+      }
+  display.set-styles [STYLE]
+
+  date/Label := display.get-element-by-id "date"
+  time/Label := display.get-element-by-id "time"
   while true:
     date.text = current-date
-    time-text.text = current-time
+    time.text = current-time
     display.draw
     sleep --ms=250

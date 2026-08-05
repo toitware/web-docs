@@ -1,67 +1,67 @@
 dependencies:
   bme280:
     url: github.com/toitware/bme280-driver
-    version: ^1.0.0
+    version: ^1.2.0
   cellular:
     url: github.com/toitware/cellular
-    version: ^2.2.3
+    version: ^2.8.0
   certificate_roots:
     url: github.com/toitware/toit-cert-roots
-    version: ^1.6.1
+    version: ^1.11.0
   cli:
     url: github.com/toitlang/pkg-cli
-    version: ^1.8.0
+    version: ^2.17.0
   dhtxx:
     url: github.com/toitware/toit-dhtxx
-    version: ^1.4.0
+    version: ^1.11.0
   ds18b20:
     url: github.com/toitware/toit-ds18b20
-    version: ^2.1.0
+    version: ^2.2.0
   font_x11_adobe:
     url: github.com/toitlang/pkg-font-x11-adobe
-    version: ^0.1.0
+    version: ~0.1.0
   hc_sr04:
     url: github.com/lask/toit-hc-sr04
-    version: ^2.1.1
+    version: ^2.3.0
   host:
     url: github.com/toitlang/pkg-host
-    version: ^1.15.1
+    version: ^1.19.0
   http:
     url: github.com/toitlang/pkg-http
-    version: ^2.7.2
+    version: ^2.12.0
   morse:
     url: github.com/toitware/toit-morse
     version: ^1.0.6
   mqtt:
     url: github.com/toitware/mqtt
-    version: ^2.9.0
+    version: ^2.13.1
   ntp:
     url: github.com/toitlang/pkg-ntp
     version: ^1.1.0
   one_wire:
     url: github.com/toitware/toit-1-wire
-    version: ^2.2.0
+    version: ^2.6.0
   pictogrammers_icons:
     url: github.com/toitware/toit-icons-pictogrammers
     version: ^1.0.0
   pixel_display:
     url: github.com/toitware/toit-pixel-display
-    version: ^2.8.0
+    version: ^2.11.0
   pixel_strip:
     url: github.com/toitware/toit-pixel-strip
-    version: ^0.3.0
+    version: ^1.4.0
   qubitro:
     url: github.com/kasperl/toit-qubitro
-    version: ^0.4.1
+    version: ~0.4.1
   ssd1306:
     url: github.com/toitware/toit-ssd1306
-    version: ^2.0.1
+    version: ^2.1.0
   supabase:
     url: github.com/toitware/toit-supabase
-    version: ^0.3.1
+    version: ~0.3.1
   telegram:
     url: github.com/floitsch/toit-telegram
-    version: ^0.5.3
+    version: ~0.5.3
   watchdog:
     url: github.com/toitware/toit-watchdog
-    version: ^1.4.0
+    version: ^1.4.1

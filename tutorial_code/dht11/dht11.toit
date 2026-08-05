@@ -9,5 +9,5 @@ GPIO-PIN-NUM ::=  32
 main:
   driver := dhtxx.Dht11 GPIO-PIN-NUM
 
-  (Duration --ms=500).periodic:
+  (Duration --ms=1000).periodic:
     print driver.read

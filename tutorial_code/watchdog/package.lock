@@ -1,9 +1,8 @@
 sdk: ^2.0.0-alpha.118
 prefixes:
-  watchdog: toit-watchdog
+  watchdog: github.com/toitware/toit-watchdog-1
 packages:
-  toit-watchdog:
+  github.com/toitware/toit-watchdog-1:
+    hash: 2621b25fca45f4f91c0b951f3658f3c18821edc4
     url: github.com/toitware/toit-watchdog
-    name: watchdog
-    version: 1.4.0
-    hash: 3dccabf427af3a8ba3ef48429244ece0956fa684
+    version: 1.4.1

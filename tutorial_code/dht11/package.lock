@@ -1,9 +1,14 @@
-sdk: ^2.0.0-alpha.1
+sdk: ^2.0.0-alpha.196
 prefixes:
-  dhtxx: toit-dhtxx
+  dhtxx: github.com/toitware/toit-dhtxx-1
 packages:
-  toit-dhtxx:
+  github.com/toitware/toit-dhtxx-1:
+    hash: e698231a28d781efac10c3dc30b63d8f1a16cba8
+    prefixes:
+      sensors: github.com/toitware/toit-sensors-1
     url: github.com/toitware/toit-dhtxx
-    name: dhtxx
-    version: 1.4.0
-    hash: bf69ad9ac348324803caf8919cf7e9f34aa3d343
+    version: 1.11.0
+  github.com/toitware/toit-sensors-1:
+    hash: f9f5662a0f21016259ff6907419e54d00223714a
+    url: github.com/toitware/toit-sensors
+    version: 1.0.0

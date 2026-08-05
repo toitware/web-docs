@@ -33,8 +33,15 @@ import host.os
 DEFAULT-OUTPUT ::= "snippet.toit"
 
 THINGS-THAT-WONT-RUN-ON-SERVER ::= [
+  "import bme280",
+  "import dhtxx",
+  "import ds18b20",
   "import gpio",
+  "import hc-sr04",
+  "import i2c",
+  "import spi",
   "import pixel-display",
+  "import pixel-strip",
   "import mqtt",
   "import ble",
   "import esp32",
@@ -171,9 +178,9 @@ class State:
       result = pipe.system "$toit analyze $werror-flag $filename"
     else:
       result = pipe.system "$toit run $werror-flag -- $filename"
-    before-kebabify := file.read-content filename
+    before-kebabify := file.read-contents filename
     pipe.system "$toit tool kebabify code $filename"
-    after-kebabify := file.read-content filename
+    after-kebabify := file.read-contents filename
     if before-kebabify != after-kebabify:
       throw "Kebabify changed the file $filename"
     check-only = false

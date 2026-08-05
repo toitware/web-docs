@@ -8,7 +8,7 @@ import pixel-display show *
 import pixel-display.two-color show *
 import ssd1306 show *
 
-get-display -> TwoColorPixelDisplay:
+get-display -> PixelDisplay:
   sda := 26
   scl := 25
   frequency := 400_000
@@ -21,14 +21,14 @@ get-display -> TwoColorPixelDisplay:
 
   device := bus.device Ssd1306.I2C-ADDRESS
   driver := Ssd1306.i2c device
-  return TwoColorPixelDisplay driver
+  return PixelDisplay.two-color driver
 
 main:
   display := get-display
   display.background = BLACK
 
-  context := display.context --landscape --color=WHITE
-  icon := display.icon context 0 50 icons.HUMAN-SCOOTER
+  icon := Label --x=0 --y=50 --icon=icons.HUMAN-SCOOTER --color=WHITE
+  display.add icon
   while true:
     80.repeat:
       icon.move-to it 50
