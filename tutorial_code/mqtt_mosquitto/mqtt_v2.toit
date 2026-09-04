@@ -8,6 +8,7 @@ import encoding.json
 
 CLIENT-ID ::= "toit-tutorial-ID-2023-07-06"
 HOST ::= "test.mosquitto.org"
+PORT ::= 8886
 TOPIC ::= "toit-mqtt/tutorial"
 
 main:
@@ -18,7 +19,7 @@ main:
       decoded := json.decode payload
       print "Received value on '$topic': $decoded"
   }
-  client := mqtt.Client.tls --host=HOST --routes=routes
+  client := mqtt.Client.tls --host=HOST --port=PORT --routes=routes
   client.start --client-id=CLIENT-ID
 
   while true:
