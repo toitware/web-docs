@@ -125,12 +125,16 @@ subscription handler before connecting to the broker:</p><div class="css-11qzdws
   // Client is now connected and subscribed to the given routes.</pre></div><a class="css-9wnevo"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></a><div class="css-15lita4"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg></div></div><h2 class="MuiTypography-root MuiTypography-h2 css-1mu5h4c" id="tls" style="position:relative"><a class="table-of-contents-icon before" href="/tutorials/mqtt/#tls" aria-label="tls permalink"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>TLS</h2><p class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-yqlc5a">For secure connections to the broker, we need to use TLS. For that we need
 root certificates which are then used to authenticate the server.</p><p class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-yqlc5a">If you haven&#x27;t already, install the certificate-roots package with</p><div class="css-11qzdws"><div class="css-1da5tgo"><pre class="vars css-3ogwq8" data-testid="code-container">jag pkg install github.com/toitware/toit-cert-roots@v1</pre></div><a class="css-9wnevo"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></a><div class="css-15lita4"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg></div></div><p class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-yqlc5a">In some cases, the certificate might be given by the server and should be pasted into
 the sources.</p><p class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-yqlc5a">Once we have the root certificates, the client can be created with the <code>tls</code>
-named constructor as follows:</p><div class="css-11qzdws"><div class="css-1da5tgo"><pre class="vars css-3ogwq8" data-testid="code-container">import mqtt
+named constructor. The default TLS port, 8883, uses a certificate signed by
+Mosquitto&#x27;s own certificate authority. Port 8886 uses a certificate issued by
+Let&#x27;s Encrypt that can be verified with the common trusted roots, so we select
+that port explicitly:</p><div class="css-11qzdws"><div class="css-1da5tgo"><pre class="vars css-3ogwq8" data-testid="code-container">import mqtt
 import certificate-roots
 import encoding.json
 
 CLIENT-ID ::= &quot;toit-tutorial-ID-2023-07-06&quot;
 HOST ::= &quot;test.mosquitto.org&quot;
+PORT ::= 8886
 TOPIC ::= &quot;toit-mqtt/tutorial&quot;
 
 main:
@@ -141,7 +145,7 @@ main:
       decoded := json.decode payload
       print &quot;Received value on &#x27;$topic&#x27;: $decoded&quot;
   }
-  client := mqtt.Client.tls --host=HOST --routes=routes
+  client := mqtt.Client.tls --host=HOST --port=PORT --routes=routes
   client.start --client-id=CLIENT-ID
 
   while true:
