@@ -38,16 +38,16 @@ The driver for the BME280 is not part of the standard Toit distribution,
 but must be downloaded as package. See the [packages](../../setup/packages)
 tutorial for details.
 
-We are using the [bme280](https://pkg.toit.io/package/github.com%2Ftoitware%2Fbme280-driver@v1)
+We are using the [bmx280](https://pkg.toit.io/package/github.com%2Ftoit-pkg%2Ftoit-bmx280@v1)
 package. To install it, run the following command in your project directory:
 
 ```bash
-jag pkg install github.com/toitware/bme280-driver@v1
+jag pkg install github.com/toit-pkg/toit-bmx280@v1
 ```
 
 <Note>
 
-You can probably just write `jag pkg install bme280`, but the full ID together
+You can probably just write `jag pkg install bmx280`, but the full ID together
 with the version is more explicit, and will make sure you get the right package.
 
 </Note>
@@ -58,7 +58,7 @@ the program whenever you save.
 
 ```toit
 import i2c
-import bme280
+import bmx280
 
 main:
   bus := i2c.Bus
@@ -67,9 +67,9 @@ main:
 
   // Use 'I2C-ADDRESS' if your device has address 0x76 (118).
   // Use 'I2C-ADDRESS-ALT' if your device has address 0x77 (119).
-  device := bus.device bme280.I2C-ADDRESS
+  device := bus.device bmx280.I2C-ADDRESS
 
-  driver := bme280.Driver device
+  driver := bmx280.Driver device
 
   print "$driver.read-temperature C"
   print "$driver.read-pressure Pa"
@@ -81,7 +81,7 @@ main:
 
 The program first instantiates an I2C bus object, which it uses to
 get a handle to the device with the BME280 address. It then passes
-this device to the BME280 driver. At that point the driver
+this device to the BMX280 driver. At that point the driver
 configures the sensor.
 
 When `read-temperature`, `read-pressure` and `read-huminity`

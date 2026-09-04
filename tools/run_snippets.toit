@@ -34,6 +34,7 @@ DEFAULT-OUTPUT ::= "snippet.toit"
 
 THINGS-THAT-WONT-RUN-ON-SERVER ::= [
   "import bme280",
+  "import bmx280",
   "import dhtxx",
   "import ds18b20",
   "import gpio",
