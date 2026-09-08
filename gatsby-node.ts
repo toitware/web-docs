@@ -4,6 +4,8 @@ import fs from "fs";
 import { Actions, CreatePagesArgs, GatsbyNode } from "gatsby";
 import yaml from "js-yaml";
 import path from "path";
+import { siteMetadata } from "./gatsby-config";
+import { readRedirects, validateRedirects, writeRedirectPages } from "./src/utils/redirects";
 
 type SearchDocument = {
   id: string;
@@ -145,7 +147,20 @@ export const createPages: GatsbyNode["createPages"] = async ({ graphql, actions,
       reporter.panicOnBuild(`🚨  ERROR: The path ${entry.path} does not have a corresponding .md file`);
     }
   }
+  const redirects = readRedirects("./static/redirects.yaml");
+  validateRedirects(redirects, ["/", ...allMdPaths]);
+  for (const { fromPath, toPath } of redirects) {
+    for (const variant of [fromPath, `${fromPath}/`]) {
+      actions.createRedirect({ fromPath: variant, toPath, isPermanent: true, redirectInBrowser: true });
+    }
+  }
   await createSearchNode({ searchDocuments, createNode, createNodeId });
+};
+
+export const onPostBuild: GatsbyNode["onPostBuild"] = () => {
+  // GitHub Pages does not consume Gatsby's server redirect configuration.
+  // Emit standalone HTML for direct visits, including crawlers without JS.
+  writeRedirectPages(readRedirects("./static/redirects.yaml"), "./public", siteMetadata.siteUrl);
 };
 
 const SEARCH_NODE_TYPE = `SiteSearch`;
