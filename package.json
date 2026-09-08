@@ -5,7 +5,8 @@
   "scripts": {
     "develop": "gatsby develop",
     "start": "gatsby develop",
-    "build": "gatsby build",
+    "build": "gatsby build && yarn check:links",
+    "check:links": "python3 tools/check_links.py",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "lint": "eslint '**/*.{js,ts,tsx}' --max-warnings=0",

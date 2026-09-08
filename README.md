@@ -50,7 +50,14 @@ use this: `yarn develop -H 0.0.0.0`
 
 ### `yarn build`
 
-Builds the app for production to the `build` folder.<br />
+Builds the app for production to the `public` folder, generates redirect pages,
+and checks internal link destinations. The link check requires Python 3.
+
+### `yarn check:links`
+
+Checks links in an existing `public` build without accessing the network.
+Missing internal page or file destinations fail the check. External links and
+fragment identifiers are not checked.
 
 ### `yarn serve`
 
@@ -109,3 +116,22 @@ Content of tab 2
 The sidebar navigation on the left is defined in `docs/menu.yaml`.
 
 You can look at `src/@types/index.d.ts` for all valid properties.
+
+# Links and redirects
+
+Use root-relative paths for internal documentation links, for example
+`[Tasks](/language/tasks)`, to avoid errors when pages move or change depth.
+
+When a page moves, add its old path and current destination to
+`static/redirects.yaml`. Both trailing-slash variants are handled automatically.
+The build rejects redirects that replace existing pages or target missing pages
+(including redirect chains).
+
+The map generates Gatsby browser redirects and standalone HTML redirect pages
+for GitHub Pages. The HTML uses an immediate meta refresh and a canonical link;
+JavaScript also preserves query strings and fragments. These are HTML redirects,
+not HTTP 301 responses. Preview deployments redirect within their own origin.
+Redirect pages are excluded from the sitemap and search index.
+
+Only add redirects with a clear replacement. Retired Toit v1 platform features
+without an equivalent should continue to return 404.
