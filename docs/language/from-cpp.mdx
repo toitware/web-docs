@@ -1,0 +1,130 @@
+# Toit for C and C++ programmers
+
+For readers familiar with native code, memory management, and threads. Toit
+runs in a virtual machine with garbage-collected objects. The main adjustment
+is how you reason about memory, resources, and concurrency.
+See [Toit for programmers](/language/toitversus) for calls, types, and collections.
+
+## Memory is managed; resources still need cleanup
+
+Objects are references to managed values. You do not use `malloc`, `free`,
+`new`, or `delete`, or perform pointer arithmetic. Use a `ByteArray` to hold
+binary data and library APIs to access hardware.
+
+Garbage collection reclaims unreachable objects, but its timing does not give
+you C++ destructor semantics. Use `try:` with `finally:` to explicitly close a
+resource. This matters when a file, socket, or peripheral must be released
+before the surrounding operation returns.
+
+<Expandable title="Example: cleanup runs when an operation throws">
+
+```toit
+main:
+  error := catch:
+    try:
+      print "Using resource"
+      throw "Operation failed"
+    finally:
+      print "Cleanup runs here"
+  if error:
+    print "Handled: $error"
+```
+
+Expected output:
+
+```text
+Using resource
+Cleanup runs here
+Handled: Operation failed
+```
+
+Replace the cleanup message with the resource API's close operation in real
+code. See [exception handling](/language/exceptions).
+
+</Expandable>
+
+## Types are runtime contracts
+
+Annotations are optional and checked at runtime. `/int` is a signed 64-bit
+integer, not a target-dependent machine `int`. `/float` is a floating-point
+value. A typed variable does not accept `null` unless its type has a `?` suffix.
+Analysis catches many errors, but you should not assume every type mismatch is
+a compilation error.
+
+`:=` declares a mutable binding, `=` assigns, and `::=` declares a final binding.
+Finality does not make the referenced object immutable. For fixed-width binary
+protocol fields, use [byte arrays](/language/listsetmap) and encoding APIs rather
+than depending on object layout or C struct packing.
+
+## Classes are constructed by calling them
+
+Toit uses indentation in place of braces. Arguments are separated by spaces,
+and parentheses group nested expressions. Calling a class constructs an object:
+`counter := Counter`. Zero-argument calls need no parentheses, so `counter.read`
+invokes `read` rather than producing a method pointer.
+
+Use a lambda, `:: counter.read`, when you want to store a call for later.
+Use `:` blocks for scoped iteration. A `return` inside a block returns from the
+enclosing function, unlike a C++ lambda; a `::` lambda has its own return scope.
+
+<Expandable title="Example: return from a library iteration">
+
+<!-- RESET CODE -->
+
+```toit
+first-positive values:
+  values.do: |value|
+    if value > 0:
+      return value
+  return null
+
+main:
+  print (first-positive [-1, 0, 4, 8])
+```
+
+This prints `4`. The `do` method implements iteration while the block retains
+the enclosing function's return behavior.
+
+</Expandable>
+
+## Tasks cooperate within a program
+
+Each task has a call stack, but tasks in a program share objects and take turns
+running. They switch at yielding operations, such as waiting for I/O or sleeping.
+Ordinary functions can wait, so sequential code can handle concurrent activities
+without a callback at every operation.
+
+This is different from preemptive threads. A computation that does not yield
+cannot be interrupted by another task in the same program; a loop that never
+yields also starves those tasks. Shared-state operations spanning a wait may
+still need synchronization. Do not assume a helper cannot yield just because
+its call looks ordinary.
+
+<Expandable title="Example: two tasks with independent loops">
+
+<!-- RESET CODE -->
+
+```toit
+report label/string delay/int -> none:
+  2.repeat:
+    sleep --ms=delay
+    print label
+
+main:
+  task:: report "Fast" 10
+  task:: report "Slow" 25
+```
+
+Each task prints twice. The waits let the other task progress; the exact timing
+is not a real-time guarantee. See [tasks](/language/tasks).
+
+</Expandable>
+
+## Libraries replace headers
+
+Each `.toit` file is an importable library. There are no separate header files
+for declarations. `import .helpers` imports a sibling library; SDK libraries
+are imported by name. Package dependencies are resolved before execution.
+
+Continue with [imports](/language/imports), [packages](/language/package/pkgguide),
+and the [peripheral guides](/peripherals) for device APIs.

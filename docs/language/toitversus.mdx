@@ -1,159 +1,188 @@
-# Language comparison
+# Toit for programmers
 
-<Tabs noPadding>
-<Tab label="Toit vs Python">
+This guide assumes you know variables, functions, classes, and collections in
+another language. It focuses on the choices that change how you write programs.
+For a step-by-step first program, use the [beginner tutorial](/language/beginner).
 
-<table><tr><th></th><th>Toit</th><th>Python</th></tr>
-<tr><td>Current object</td><td><pre>this</pre></td><td><pre>self</pre></td></tr>
-<tr><td>Single line comments</td><td><pre>//</pre></td><td><pre>#</pre></td></tr>
-<tr><td>Logical 'and', 'or' and 'not' operators</td><td><pre>and or not</pre></td><td><pre>and or not</pre></td></tr>
-<tr><td>Shift left, right, unsigned right</td><td><pre>&lt;&lt;  >>  >>></pre></td><td><pre>&lt;&lt; >> (no unsigned shift)</pre></td></tr>
-<tr><td>Integer division</td><td><pre>/ (on integer types)</pre></td><td><pre>//</pre></td></tr>
-<tr><td>Integer sizes</td><td><pre>64</pre></td><td><pre>(arbitrary)</pre></td></tr>
-<tr><td>Statement grouping</td><td><pre>(indent)</pre></td><td><pre>(indent)</pre></td></tr>
-<tr><td>Define a class Foo that inherits from Bar</td><td><pre>class Foo extends Bar:</pre></td><td><pre>class Foo(Bar):</pre></td></tr>
-<tr><td>Define constructor for class Foo</td><td><pre>constructor x:</pre></td><td><pre>def __init__(self, x):</pre></td></tr>
-<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><pre>constructor x:&#10;  super x</pre></td><td><pre>def __init__(self, x):&#10;  super(Bar, self).__init__(x)</pre></td></tr>
-<tr><td>Constructor that assigns to fields</td><td><pre>constructor .x:</pre></td><td><pre>def __init__(self, x):&#10;  self.x = x</pre></td></tr>
-<tr><td>Check object has type</td><td><pre>bar is Foo</pre></td><td><pre>isinstance(bar, Foo)</pre></td></tr>
-<tr><td>Check object does not have type</td><td><pre>bar is not Foo</pre></td><td><pre>not isinstance(bar, Foo)</pre></td></tr>
-<tr><td>Call a method foo with two arguments</td><td><pre>foo x y</pre></td><td><pre>foo(x, y)</pre></td></tr>
-<tr><td>Declare a member variable in a class</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>self.x = null</pre></td></tr>
-<tr><td>Declare a local variable in a method</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>x = null</pre></td></tr>
-<tr><td>Define a constant</td><td><pre>X ::= 0</pre></td><td><pre></pre></td></tr>
-<tr><td>Define a constant in a class</td><td><pre>static X ::= 0</pre></td><td><pre></pre></td></tr>
-<tr><td>Define a top-level function</td><td><pre>foo x y:</pre></td><td><pre>def foo(x, y):</pre></td></tr>
-<tr><td>Define an instance method in a class</td><td><pre>foo x y:</pre></td><td><pre>def foo(self, x, y):</pre></td></tr>
-<tr><td>Define a static method in a class</td><td><pre>static foo x y</pre></td><td><pre></pre></td></tr>
-<tr><td>If statement</td><td><pre>if condition:</pre></td><td><pre>if condition:</pre></td></tr>
-<tr><td>Fixed loop</td><td><pre>end.repeat: | i |</pre></td><td><pre>for i in range(end):</pre></td></tr>
-<tr><td>Three-part for loop</td><td><pre>for i := 0; i &lt; end; i++:</pre></td><td><pre></pre></td></tr>
-<tr><td>Iterate over collection</td><td><pre>collection.do: | x |</pre></td><td><pre>for x in collection:</pre></td></tr>
-<tr><td>While loop</td><td><pre>while condition:</pre></td><td><pre>while condition:</pre></td></tr>
-<tr><td>Import local from library</td><td><pre>import .library</pre></td><td><pre></pre></td></tr>
-<tr><td>Import from library</td><td><pre>import library</pre></td><td><pre>import library</pre></td></tr>
-<tr><td>Import into current namespace</td><td><pre>import library show *</pre></td><td><pre>from library import *</pre></td></tr>
-<tr><td>Print/log</td><td><pre>print "Hello"</pre></td><td><pre>print("Hello")</pre></td></tr>
-<tr><td>Print with interpolation</td><td><pre>print "Hello $name"</pre></td><td><pre>print("Hello %s" %(name))</pre></td></tr>
-<tr><td>Interpolate with padding</td><td><pre>print "Hello $(%9s name)"</pre></td><td><pre>print("Hello %9s", %(name))</pre></td></tr>
-</table>
+For comparisons with your own language, see [JavaScript and TypeScript](/language/from-javascript),
+[Python](/language/from-python), or [C and C++](/language/from-cpp).
 
-</Tab>
-<Tab label="Toit vs C++">
+## The differences that matter
 
-<table>
-<tr><th></th><th><pre>Toit</pre></th><th><pre>C++</pre></th></tr>
-<tr><td>Current object</td><td><pre>this</pre></td><td><pre>this</pre></td></tr>
-<tr><td>Single line comments</td><td><pre>//</pre></td><td><pre>//</pre></td></tr>
-<tr><td>Logical 'and', 'or' and 'not' operators</td><td><pre>and or not</pre></td><td><pre>&& || ! (or and or not)</pre></td></tr>
-<tr><td>Shift left, right, unsigned right</td><td><pre>&lt;&lt;  >>  >>></pre></td><td><pre>&lt;&lt; >> >>  (on unsigned type)</pre></td></tr>
-<tr><td>Integer division</td><td><pre>/ (on integer types)</pre></td><td><pre>/ (on integer type)</pre></td></tr>
-<tr><td>Integer sizes</td><td><pre>64</pre></td><td><pre>8/16/32/64...</pre></td></tr>
-<tr><td>Statement grouping</td><td><pre>(indent)</pre></td><td><pre>{}</pre></td></tr>
-<tr><td>Define a class Foo that inherits from Bar</td><td><pre>class Foo extends Bar:</pre></td><td><pre>class Foo : public Bar &#123;</pre></td></tr>
-<tr><td>Define constructor for class Foo</td><td><pre>constructor x:</pre></td><td><pre>Foo(int x) &#123;</pre></td></tr>
-<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><pre>constructor x:&#10;  super x</pre></td><td><pre>Foo(int x) : Bar(x) &#123;</pre></td></tr>
-<tr><td>Constructor that assigns to fields</td><td><pre>constructor .x:</pre></td><td><pre>Foo(int x) : x(x) &#123;</pre></td></tr>
-<tr><td>Check object has type</td><td><pre>bar is Foo</pre></td><td><pre>(dynamic_cast&lt;Foo*>(bar) != null)</pre></td></tr>
-<tr><td>Check object does not have type</td><td><pre>bar is not Foo</pre></td><td><pre>(dynamic_cast&lt;Foo*>(bar) == null)</pre></td></tr>
-<tr><td>Call a method foo with two arguments</td><td><pre>foo x y</pre></td><td><pre>foo(x, y);</pre></td></tr>
-<tr><td>Declare a member variable in a class</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>int x;&#10;int x = 0;</pre></td></tr>
-<tr><td>Declare a local variable in a method</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>int x;&#10;int x = 0;</pre></td></tr>
-<tr><td>Define a constant</td><td><pre>X ::= 0</pre></td><td><pre>const int X = 0;</pre></td></tr>
-<tr><td>Define a constant in a class</td><td><pre>static X ::= 0</pre></td><td><pre>static const int X = 0;</pre></td></tr>
-<tr><td>Define a top-level function</td><td><pre>foo x y:</pre></td><td><pre>int foo(int x, int y) &#123;</pre></td></tr>
-<tr><td>Define an instance method in a class</td><td><pre>foo x y:</pre></td><td><pre>int foo(int x, int y) &#123;</pre></td></tr>
-<tr><td>Define a static method in a class</td><td><pre>static foo x y</pre></td><td><pre>static int foo(int x, int y) &#123;</pre></td></tr>
-<tr><td>If statement</td><td><pre>if condition:</pre></td><td><pre>if (condition) &#123;</pre></td></tr>
-<tr><td>Fixed loop</td><td><pre>end.repeat:</pre></td><td><pre>i |                    | for (int i = 0; i &lt; end; i++) &#123;</pre></td></tr>
-<tr><td>Three-part expression loop</td><td><pre>for i := 0; i &lt; end; i++:</pre></td><td><pre>for (int i = 0; i &lt; end; i++) &#123;</pre></td></tr>
-<tr><td>Iterate over collection</td><td><pre>collection.do:</pre></td><td><pre>x |                 | for (auto x : collection) &#123;</pre></td></tr>
-<tr><td>While loop</td><td><pre>while condition:</pre></td><td><pre>while (condition) &#123;</pre></td></tr>
-<tr><td>Import local from library</td><td><pre>import .library</pre></td><td><pre>#include "file"</pre></td></tr>
-<tr><td>Import from library</td><td><pre>import library</pre></td><td><pre>#include &lt;file></pre></td></tr>
-<tr><td>Import into current namespace</td><td><pre>import library show *</pre></td><td><pre>#include &lt;file> using namespace file;</pre></td></tr>
-<tr><td>Print/log</td><td><pre>print "Hello"</pre></td><td><pre>cout &lt;&lt; "Hello\n"</pre></td></tr>
-<tr><td>Print with interpolation</td><td><pre>print "Hello $name"</pre></td><td><pre>cout &lt;&lt; "Hello " &lt;&lt; name &lt;&lt; "\n";</pre></td></tr>
-<tr><td>Interpolate with padding</td><td><pre>print "Hello $(%9s name)"</pre></td><td><pre>printf("Hello %9s\n", name);</pre></td></tr>
-</table>
+| Choice in Toit | Consequence for your code |
+| --- | --- |
+| Calls use spaces; zero-argument methods need no parentheses | `sensor.read` calls a method. Wrap a call in parentheses when passing its result to another call. |
+| Optional types are enforced at runtime | An annotation is a contract, not just editor metadata. Untyped code still runs, and type errors can still occur at runtime. |
+| Blocks and lambdas are distinct | Use blocks for scoped iteration and control flow; use lambdas when code must be stored for later. Their `return` behavior differs. |
+| Objects have declared fields and methods | Use classes for structured objects and maps for dynamic keys. |
+| Tasks have their own stacks and cooperate | Waiting code reads sequentially, but calls can yield and shared state can change while you wait. |
+| Memory is garbage collected | You do not free objects; you still explicitly release resources such as open files. |
 
-</Tab>
-<Tab label="Toit vs Java">
+## Read calls before translating syntax
 
-<table>
-<tr><th></th><th><pre>Toit</pre></th><th><pre>Java</pre></th></tr>
-<tr><td>Current object</td><td><pre>this</pre></td><td><pre>this</pre></td></tr>
-<tr><td>Single line comments</td><td><pre>//</pre></td><td><pre>//</pre></td></tr>
-<tr><td>Logical 'and', 'or' and 'not' operators</td><td><pre>and or not</pre></td><td><pre>&& || !</pre></td></tr>
-<tr><td>Shift left, right, unsigned right</td><td><pre>&lt;&lt;  >>  >>></pre></td><td><pre>&lt;&lt; >> >>></pre></td></tr>
-<tr><td>Integer division</td><td><pre>/ (on integer types)</pre></td><td><pre>/ (on integer type)</pre></td></tr>
-<tr><td>Integer sizes</td><td><pre>64</pre></td><td><pre>8/16/32/64</pre></td></tr>
-<tr><td>Statement grouping</td><td><pre>(indent)</pre></td><td><pre>{}</pre></td></tr>
-<tr><td>Define a class Foo that inherits from Bar</td><td><pre>class Foo extends Bar:</pre></td><td><pre>public class Foo extends Bar &#123;</pre></td></tr>
-<tr><td>Define constructor for class Foo</td><td><pre>constructor x:</pre></td><td><pre>public Foo(int x) &#123;</pre></td></tr>
-<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><pre>constructor x:&#10;  super x</pre></td><td><pre>public Foo(int x) &#123;&#10;  super(x);</pre></td></tr>
-<tr><td>Constructor that assigns to fields</td><td><pre>constructor .x:</pre></td><td><pre>Foo(int x) &#123;&#10;  field_x = x;</pre></td></tr>
-<tr><td>Check object has type</td><td><pre>bar is Foo</pre></td><td><pre>bar instanceof Foo</pre></td></tr>
-<tr><td>Check object does not have type</td><td><pre>bar is not Foo</pre></td><td><pre>!(bar instanceof Foo)</pre></td></tr>
-<tr><td>Call a method foo with two arguments</td><td><pre>foo x y</pre></td><td><pre>foo(x, y);</pre></td></tr>
-<tr><td>Declare a member variable in a class</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>int x;&#10;int x = 0;</pre></td></tr>
-<tr><td>Declare a local variable in a method</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>int x;&#10;int x = 0;</pre></td></tr>
-<tr><td>Define a constant</td><td><pre>X ::= 0</pre></td><td><pre></pre></td></tr>
-<tr><td>Define a constant in a class</td><td><pre>static X ::= 0</pre></td><td><pre>public static final int X = 0;</pre></td></tr>
-<tr><td>Define a top-level function</td><td><pre>foo x y:</pre></td><td><pre></pre></td></tr>
-<tr><td>Define an instance method in a class</td><td><pre>foo x y:</pre></td><td><pre>public int foo(int x, int y) &#123;</pre></td></tr>
-<tr><td>Define a static method in a class</td><td><pre>static foo x y</pre></td><td><pre>public static int foo(int x, int y) &#123;</pre></td></tr>
-<tr><td>If statement</td><td><pre>if condition:</pre></td><td><pre>if (condition) &#123;</pre></td></tr>
-<tr><td>Fixed loop</td><td><pre>end.repeat: | i |</pre></td><td><pre>for (int i = 0; i &lt; end; i++) &#123;</pre></td></tr>
-<tr><td>Three-part expression loop</td><td><pre>for i := 0; i &lt; end; i++:</pre></td><td><pre>for (int i = 0; i &lt; end; i++) &#123;</pre></td></tr>
-<tr><td>Iterate over collection</td><td><pre>collection.do: | x |</pre></td><td><pre>for (Foo x : collection) &#123;</pre></td></tr>
-<tr><td>While loop</td><td><pre>while condition:</pre></td><td><pre>while (condition) &#123;</pre></td></tr>
-<tr><td>Import local from library</td><td><pre>import .library</pre></td><td><pre></pre></td></tr>
-<tr><td>Import from library</td><td><pre>import library</pre></td><td><pre></pre></td></tr>
-<tr><td>Import into current namespace</td><td><pre>import library show *</pre></td><td><pre>import com.example.Class;</pre></td></tr>
-<tr><td>Print/log</td><td><pre>print "Hello"</pre></td><td><pre>System.out.println("Hello");</pre></td></tr>
-<tr><td>Print with interpolation</td><td><pre>print "Hello $name"</pre></td><td><pre>System.out.printf("Hello %s\n, name);</pre></td></tr>
-<tr><td>Interpolate with padding</td><td><pre>print "Hello $(%9s name)"</pre></td><td><pre>System.out.printf("Hello %9s\n, name);</pre></td></tr>
-</table>
+<Expandable title="Example: calls and declarations">
 
-</Tab>
-<Tab label="Toit vs JavaScript">
+```toit
+add a/int b/int -> int:
+  return a + b
 
-<table>
-<tr><th></th><th><pre>Toit</pre></th><th><pre>JavaScript</pre></th></tr>
-<tr><td>Current object</td><td><pre>this</pre></td><td><pre>this</pre></td></tr>
-<tr><td>Single line comments</td><td><pre>//</pre></td><td><pre>//</pre></td></tr>
-<tr><td>Logical 'and', 'or' and 'not' operators</td><td><pre>and or not</pre></td><td><pre>&& || !</pre></td></tr>
-<tr><td>Shift left, right, unsigned right</td><td><pre>&lt;&lt;  >>  >>></pre></td><td><pre>&lt;&lt; >> >>></pre></td></tr>
-<tr><td>Integer division</td><td><pre>/ (on integer types)</pre></td><td><pre>Math.trunc(x / y)</pre></td></tr>
-<tr><td>Integer sizes</td><td><pre>64</pre></td><td><pre>32, 53</pre></td></tr>
-<tr><td>Statement grouping</td><td><pre>(indent)</pre></td><td><pre>{}</pre></td></tr>
-<tr><td>Define a class Foo that inherits from Bar</td><td><pre>class Foo extends Bar:</pre></td><td><pre>class Foo extends Bar &#123;</pre></td></tr>
-<tr><td>Define constructor for class Foo</td><td><pre>constructor x:</pre></td><td><pre>constructor(x) &#123;</pre></td></tr>
-<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><pre>constructor x:&#10;  super x</pre></td><td><pre>constructor(x) &#123;&#10;  super(x);</pre></td></tr>
-<tr><td>Constructor that assigns to fields</td><td><pre>constructor .x:</pre></td><td><pre>constructor(x) &#123;&#10;  this.x = x</pre></td></tr>
-<tr><td>Check object has type</td><td><pre>bar is Foo</pre></td><td><pre>bar instanceof Foo</pre></td></tr>
-<tr><td>Check object does not have type</td><td><pre>bar is not Foo</pre></td><td><pre>!(bar instanceof Foo)</pre></td></tr>
-<tr><td>Call a method foo with two arguments</td><td><pre>foo x y</pre></td><td><pre>foo(x, y)</pre></td></tr>
-<tr><td>Declare a member variable in a class</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>this.x = null</pre></td></tr>
-<tr><td>Declare a local variable in a method</td><td><pre>x := null&#10;x := ?&#10;x/int := 0&#10;x/int := ?</pre></td><td><pre>var x = null</pre></td></tr>
-<tr><td>Define a constant</td><td><pre>X ::= 0</pre></td><td><pre>const X = 0</pre></td></tr>
-<tr><td>Define a constant in a class</td><td><pre>static X ::= 0</pre></td><td><pre></pre></td></tr>
-<tr><td>Define a top-level function</td><td><pre>foo x y:</pre></td><td><pre>function foo(x, y) &#123;</pre></td></tr>
-<tr><td>Define an instance method in a class</td><td><pre>foo x y:</pre></td><td><pre>foo(x, y) &#123;</pre></td></tr>
-<tr><td>Define a static method in a class</td><td><pre>static foo x y</pre></td><td><pre></pre></td></tr>
-<tr><td>If statement</td><td><pre>if condition:</pre></td><td><pre>if (condition) &#123;</pre></td></tr>
-<tr><td>Fixed loop</td><td><pre>end.repeat: | i |</pre></td><td><pre>for (var i = 0; i &lt; end; i++) &#123;</pre></td></tr>
-<tr><td>Three-part expression loop</td><td><pre>for i := 0; i &lt; end; i++:</pre></td><td><pre>for (var i = 0; i &lt; end; i++) &#123;</pre></td></tr>
-<tr><td>Iterate over collection</td><td><pre>collection.do: | x |</pre></td><td><pre>for (var x in collection) &#123;</pre></td></tr>
-<tr><td>While loop</td><td><pre>while condition:</pre></td><td><pre>while (condition) &#123;</pre></td></tr>
-<tr><td>Import local from library</td><td><pre>import .library</pre></td><td><pre></pre></td></tr>
-<tr><td>Import from library</td><td><pre>import library</pre></td><td><pre>var library = require('library');</pre></td></tr>
-<tr><td>Import into current namespace</td><td><pre>import library show *</pre></td><td><pre></pre></td></tr>
-<tr><td>Print/log</td><td><pre>print "Hello"</pre></td><td><pre>console.log("Hello")</pre></td></tr>
-<tr><td>Print with interpolation</td><td><pre>print "Hello $name"</pre></td><td><pre>console.log("Hello " + name + "\n")</pre></td></tr>
-<tr><td>Interpolate with padding</td><td><pre>print "Hello $(%9s name)"</pre></td><td><pre></pre></td></tr>
-</table>
+main:
+  reading-count := 3
+  reading-count = reading-count + 1
+  print (add reading-count 2)
+```
 
-</Tab>
-</Tabs>
+</Expandable>
+
+This prints `6`. `:=` declares a mutable variable; `=` assigns to one.
+`::=` declares a final binding, which does not make the referenced object
+immutable. Toit uses two-space indentation and allows hyphens in names:
+`reading-count` is one identifier, while `reading - count` is subtraction.
+
+`add reading-count 2` calls `add` with two arguments. Commas separate elements
+in collection literals, but do not separate call arguments. Parentheses group
+expressions: `print (add reading-count 2)` passes the result to `print`.
+Arithmetic binds more tightly than calls, so `add 1 2 * 3` means `add 1 (2 * 3)`.
+
+A bare method name invokes it: `clock.read` is a call, not a function value.
+This also lets a field getter become a computed method without changing callers.
+Named arguments are explicit at both ends: `sleep --ms=100`.
+See [syntax](/language/syntax) for precedence and declarations.
+
+## Types are optional, but checked
+
+The `/int` parameters and `-> int` return annotation above specify runtime
+checks. An omitted annotation permits dynamic values. Analysis helps find
+mistakes before execution, but does not turn Toit into a language where every
+type error is rejected before running.
+
+Types are non-nullable by default; `string?` accepts a string or `null`.
+Use annotations on interfaces and fields to document and enforce expectations.
+See [types](/language/definitions#type).
+
+Only `false` and `null` are falsy. Zero, empty strings, and empty collections
+are truthy. Integers are signed 64-bit values; integer division truncates toward
+zero. `5 / 2` is `2`, while `5 / 2.0` is `2.5`. These rules matter when porting
+default expressions, emptiness checks, and calculations.
+
+## Blocks are part of control flow
+
+<!-- RESET CODE -->
+
+<Expandable title="Example: return from an iteration block">
+
+```toit
+first-positive values:
+  values.do: |value|
+    if value > 0:
+      return value
+  return null
+
+main:
+  print (first-positive [-2, 0, 7, 9])
+```
+
+</Expandable>
+
+This prints `7`: `return` inside the block returns from `first-positive`.
+A block's last expression supplies its result to its caller; it does not need
+`return`. This makes library methods such as `do`, `map`, and `repeat` work
+like control structures. Blocks cannot be saved in fields or returned for later
+use, allowing their lifetime to stay within the enclosing call.
+
+A lambda starts with `::`, can outlive the call that creates it, and has its own
+return scope:
+
+<!-- RESET CODE -->
+
+<Expandable title="Example: a stored lambda">
+
+```toit
+make-adder amount/int -> Lambda:
+  return :: |value| value + amount
+
+main:
+  add-five := make-adder 5
+  print (add-five.call 3)
+```
+
+</Expandable>
+
+This prints `8`. Use this form for stored callbacks. To pass a method for later
+execution, wrap its call in a lambda. Read [blocks and lambdas](/language/blocks-and-lambdas)
+for block parameters and local exits such as `continue.do`.
+
+## Classes define the shape of objects
+
+<!-- RESET CODE -->
+
+<Expandable title="Example: a class with a mutable field">
+
+```toit
+class Counter:
+  value/int := 0
+
+  increment -> none:
+    value = value + 1
+
+main:
+  counter := Counter
+  counter.increment
+  print counter.value
+```
+
+</Expandable>
+
+This prints `1`. Calling the class constructs an instance, without `new`.
+Fields are declared in the class; methods can refer to them without a `this.`
+prefix. A trailing underscore marks a private member. For data with keys chosen
+at runtime, use a map such as `{"temperature": 23}` and access it with brackets.
+See [classes and interfaces](/language/objects-constructors-inheritance-interfaces).
+
+## Waiting suspends a task
+
+<!-- RESET CODE -->
+
+<Expandable title="Example: waiting in a background task">
+
+```toit
+main:
+  task::
+    sleep --ms=10
+    print "Background task finished"
+  print "Main task continues"
+```
+
+</Expandable>
+
+Toit tasks have independent stacks and share the program's objects. Waiting
+operations such as `sleep` suspend the current task so another can run. Ordinary
+functions can wait without an `async` declaration or an `await` at each caller.
+This lets device and network code use ordinary loops and calls.
+
+Scheduling within a program is cooperative. A CPU loop that never yields starves
+other tasks. Conversely, a call that waits can allow another task to change shared
+state; inspect library behavior when reasoning about an update spanning calls.
+Tasks are not parallel threads and are distinct from independently running
+containers. See [tasks and synchronization](/language/tasks).
+
+## Errors and resources need explicit handling
+
+`throw` raises an exception. `catch:` runs a block and returns the thrown value,
+or `null` on success. `try:` with `finally:` performs cleanup, including when
+execution leaves through an exception. There is no combined `try`/`catch` syntax.
+
+Garbage collection reclaims unreachable memory, but does not replace explicit
+resource cleanup. Pair resource acquisition with the API's close operation in
+`finally`. See [exception handling](/language/exceptions).
+
+## Files are libraries
+
+Each `.toit` file is a library. `import .helpers` imports a sibling file;
+`import math` imports an SDK library. The core library is available automatically.
+Imports and package dependencies are resolved before execution, so organizing a
+program does not require runtime module loading.
+
+Continue with [imports](/language/imports), the [package quick start](/language/package/pkgguide),
+or the [language reference](/language/reference). To run the examples locally,
+follow the setup at the start of the [beginner tutorial](/language/beginner).

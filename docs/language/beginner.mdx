@@ -1,0 +1,344 @@
+# Beginner tutorial
+
+This tutorial assumes no Toit knowledge and explains the programming concepts
+it uses. You will build a program that reports temperatures, first with a few
+statements, then with a function and a class. You only need a computer; the
+readings are sample data, so no sensor or ESP32 is required.
+
+Already comfortable programming? Start with [Toit for programmers](/language/toitversus).
+
+Examples are collapsed so you can read the explanation first. Expand each one
+when you are ready to run it. Unless stated otherwise, each example is a complete
+program: replace the contents of your file rather than appending it.
+
+## 1. Run your first program
+
+Install the [Toit SDK](https://github.com/toitlang/toit#readme) and make sure
+`toit --help` works in your terminal. If you already use Jaguar, its bundled SDK
+is available as `jag toit`; substitute `jag toit run` for `toit run` below.
+
+Create a plain-text file named `report.toit`. The program starts at `main:`.
+Statements indented by two spaces underneath it form the body of `main`.
+`print` displays a value in the terminal, and text between double quotes is a
+*string*.
+
+<Expandable title="Example: your first program and how to run it">
+
+```toit
+main:
+  print "Temperature report"
+```
+
+In the terminal, change to the directory containing `report.toit`, then run:
+
+```sh
+toit run report.toit
+```
+
+Expected output:
+
+```text
+Temperature report
+```
+
+</Expandable>
+
+Change the message and run the command again. If the terminal cannot find `toit`,
+check the SDK installation and your `PATH`. If it cannot find the file, check
+your current directory. If the compiler reports an error, start at the first
+reported file and line, and check the spelling and indentation.
+
+## 2. Name values and change them
+
+A *variable* gives a value a name. Write `temperature := 21` to declare one,
+then `temperature = 24` to change it. The distinction catches accidental
+redeclarations and assignments to names that do not exist.
+
+`$temperature` inside a string inserts the variable's value. Use `$(...)` for
+a longer expression. Names can contain hyphens: `reading-count` is one name.
+Use spaces around subtraction, as in `temperature - 2`.
+
+<Expandable title="Example: variables, assignment, and interpolation">
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  temperature := 21
+  print "First reading: $temperature C"
+  temperature = temperature + 3
+  print "Next reading: $temperature C"
+```
+
+Expected output:
+
+```text
+First reading: 21 C
+Next reading: 24 C
+```
+
+</Expandable>
+
+Try changing the starting temperature. Predict both output lines before running.
+
+## 3. Make a decision
+
+An `if` statement runs its indented body only when its condition is true.
+An `else` body runs otherwise. Comparisons such as `>=` (greater than or equal
+to) and `==` (equal to) produce boolean values: `true` or `false`.
+Use `==` to compare, and `=` to assign.
+
+<Expandable title="Example: decide whether a reading is warm">
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  temperature := 24
+  if temperature >= 25:
+    print "Warm"
+  else:
+    print "Comfortable"
+```
+
+This prints `Comfortable`. Change the value to `25` and it prints `Warm`.
+
+</Expandable>
+
+## 4. Process a list
+
+A *list* stores several values in order: `[21, 26, 24]`. `readings.size` gives
+its length, and `readings[0]` gives the first element; indexes start at zero.
+
+`readings.do:` runs the indented code once per element. That code is a *block*.
+`|temperature|` names the element for each run. The block can read and change
+variables declared in its enclosing function.
+
+<Expandable title="Example: count the warm readings">
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  readings := [21, 26, 24]
+  warm-count := 0
+  readings.do: |temperature|
+    if temperature >= 25:
+      warm-count = warm-count + 1
+  print "$warm-count of $(readings.size) readings are warm"
+```
+
+This prints `1 of 3 readings are warm`.
+
+</Expandable>
+
+Add `28` to the list and check that the output becomes
+`2 of 4 readings are warm`. Try the empty list, `[]`, too.
+
+To repeat a known number of times, use `3.repeat:`. To repeat as long as a
+condition holds, use `while condition:`. See [control flow](/language/loops)
+when you need these alternatives.
+
+## 5. Put reusable work in a function
+
+A *function* names an operation. Parameters are names for the values it receives;
+`return` gives a result back to the caller. A function definition sits at the
+same indentation as `main`, not inside it.
+
+Define `count-warm readings --limit=25:` to accept readings and an optional named
+parameter. Call it with `count-warm readings --limit=24`. Spaces separate call
+arguments; Toit does not put commas or parentheses around the argument list.
+Parentheses group a nested call, as in `print (count-warm readings)`.
+
+<Expandable title="Example: reuse a function with different limits">
+
+<!-- RESET CODE -->
+
+```toit
+count-warm readings --limit=25:
+  count := 0
+  readings.do: |temperature|
+    if temperature >= limit:
+      count = count + 1
+  return count
+
+main:
+  readings := [21, 26, 24]
+  print (count-warm readings)
+  print (count-warm readings --limit=24)
+```
+
+Expected output:
+
+```text
+1
+2
+```
+
+</Expandable>
+
+A `return` inside a `do` block would leave the whole function immediately.
+Here it belongs after the loop, so we count every reading before returning.
+
+## 6. Handle an empty input
+
+Our report should include an average. Adding the readings gives a total;
+dividing by the count gives the average. Toit's integer division discards the
+fraction, so convert the total with `to-float` before dividing.
+
+There is no average of an empty list. We will represent that absence with
+`null` and test for it before printing. Only `null` and `false` are falsy in
+Toit: a valid average of zero still passes `if average`.
+
+<Expandable title="Example: compute an average, including empty input">
+
+<!-- RESET CODE -->
+
+```toit
+average-of readings -> float?:
+  if readings.size == 0:
+    return null
+  total := 0
+  readings.do: |temperature|
+    total = total + temperature
+  return total.to-float / readings.size
+
+main:
+  average := average-of [21, 26, 25]
+  if average:
+    print "Average: $average C"
+  else:
+    print "No readings"
+```
+
+This prints `Average: 24.0 C`. Replace the list with `[]` to get `No readings`.
+The `-> float?` annotation says that the result is a floating-point number or
+`null`. Toit checks type annotations at runtime; they also help the editor
+explain your code.
+
+</Expandable>
+
+## 7. Finish the report with a class
+
+A *class* groups data with operations on that data. Each *object* made from a
+class has its own fields. A *method* is a function attached to an object.
+
+Our `TemperatureReport` will hold a list of readings and a warm threshold. Its
+`print-summary` method will use the two functions we already wrote. This is
+useful when we want several reports with different data and thresholds.
+
+Fields are declared in the class. In `constructor .readings_ --limit=25:`,
+`.readings_` automatically stores the first argument in that field. The named
+parameter is assigned explicitly to `limit_`. The `_` suffix marks these fields
+private. `:= ?` requires the constructor to initialize the mutable field.
+
+<Expandable title="Complete program: temperature report">
+
+<!-- RESET CODE -->
+
+```toit
+count-warm readings/List --limit/int=25 -> int:
+  count := 0
+  readings.do: |temperature/int|
+    if temperature >= limit:
+      count = count + 1
+  return count
+
+average-of readings/List -> float?:
+  if readings.size == 0:
+    return null
+  total := 0
+  readings.do: |temperature/int|
+    total = total + temperature
+  return total.to-float / readings.size
+
+class TemperatureReport:
+  readings_/List
+  limit_/int := ?
+
+  constructor .readings_ --limit/int=25:
+    limit_ = limit
+
+  print-summary -> none:
+    average := average-of readings_
+    if not average:
+      print "No readings"
+      return
+    warm-count := count-warm readings_ --limit=limit_
+    print "Readings: $(readings_.size)"
+    print "Average: $average C"
+    print "Warm readings: $warm-count"
+
+main:
+  report := TemperatureReport [21, 26, 25]
+  report.print-summary
+  empty-report := TemperatureReport []
+  empty-report.print-summary
+```
+
+Run it with `toit run report.toit`. Expected output:
+
+```text
+Readings: 3
+Average: 24.0 C
+Warm readings: 2
+No readings
+```
+
+</Expandable>
+
+`TemperatureReport [21, 26, 25]` constructs an object.
+`report.print-summary` calls its method without parentheses. `/List` and `/int`
+are type annotations; `-> none` says the method does not return a value.
+The `readings_` field cannot be reassigned, but its list can still be changed.
+
+## 8. Check your understanding
+
+Try these changes to the complete program:
+
+1. Set the report's limit to `26`. The warm count should become `1`.
+2. Use `[0, 0]`. The average should be `0.0`, not `No readings`.
+3. Add a function that finds the highest reading, returning `null` for an empty list.
+
+<Expandable title="Solution: find the highest reading">
+
+<!-- RESET CODE -->
+
+```toit
+highest-of readings/List -> int?:
+  if readings.size == 0:
+    return null
+  highest := readings[0]
+  readings.do: |temperature/int|
+    if temperature > highest:
+      highest = temperature
+  return highest
+
+main:
+  print (highest-of [21, 26, 25])
+  print (highest-of [])
+```
+
+Expected output:
+
+```text
+26
+null
+```
+
+</Expandable>
+
+## Continue from here
+
+You can now run a program, name and update values, make decisions, process a
+list, write a function, handle missing data, and build an object.
+
+To grow the program, move the helper functions to another file using
+[imports](/language/imports). Learn [maps and other collections](/language/listsetmap)
+for data with keys, [exceptions](/language/exceptions) for failed operations, and
+[tasks](/language/tasks) for concurrent activities. These are topic guides you
+can consult when needed.
+
+For a device project, follow [Run on your device](/getstarted/device), then the
+[first LED tutorial](/tutorials/hardware/led). To revisit an unfamiliar construct,
+use the [language reference](/language/reference).

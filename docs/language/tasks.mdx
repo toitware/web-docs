@@ -1,16 +1,18 @@
 # Tasks
 
+This guide assumes you can read Toit functions, loops, and lambdas. It explains
+cooperative scheduling and then covers synchronization primitives. For an
+orientation from another language, read [Toit for programmers](/language/toitversus).
+
 ## Introduction
 
-Some languages, like Java or C#, have multiple threads running at the same
-time. These are separate control flows that can manipulate each other's data.
-Because there can be different threads using the same objects, it is easy to
-make programming mistakes called race conditions.
+Concurrent activities need independent control flow. JavaScript's async/await,
+for example, lets code wait for promises while other work proceeds. Toit uses
+tasks with independent call stacks: ordinary functions can wait without an
+`async` declaration or an `await` expression at each call site.
 
-Other languages, like JavaScript, have only one thread. This is very limiting
-in that your program constantly has to return to an _event loop_, which makes
-it much harder to program. Your code must be written in a _non-blocking_ style
-with no long-running loops.
+Tasks within a Toit program share objects and run cooperatively. This simplifies
+updates that do not yield, but shared state can still change while a task waits.
 
 ## Tasks
 
@@ -58,11 +60,9 @@ In this example, we can see that tasks or threads simplify the programming
 considerably. One LED is flashing once per second, while the other is flashing
 every 246ms. To code this in one loop, we would have to write a program that
 switched the LEDs at the times 0, 123, 246, 369, 492, 500, 615ms etc.
-Alternatively to code this in an event-driven language like JavaScript, we
-would have to remove all the loops and instead use a state machine with
-scheduled callbacks to perform the LED switching and update variables that
-represent state (in this case to track whether the next callback should switch
-on or off).
+JavaScript can express similar loops using async functions and awaited timers.
+In Toit, the waiting operation suspends an ordinary call stack, so helpers and
+their callers do not need async/await syntax.
 
 ## Cooperative scheduling
 
@@ -105,7 +105,6 @@ exists. While it is calculating, it doesn't wait for anything (yield), and so
 no other tasks can run. As soon as the uncooperative task starts running it hogs
 the CPU and prevents other tasks from running, stopping 'my-starved-task' from
 emitting messages (if it ever did so).
-task will stop appearing.
 
 The advantage of tasks in comparison with threads is that they take turns. To
 take an oversimplified example:
