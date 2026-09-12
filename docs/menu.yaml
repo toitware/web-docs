@@ -48,38 +48,55 @@ items:
     path: /language
     icon: language
     children:
-      - name: Common conversions
-        path: /language/typeconversion
-      - name: Definitions
-        path: /language/definitions
-      - name: Language comparison
+      - name: Toit for programmers
         path: /language/toitversus
-      - name: Style guide
-        path: /language/style
-      - name: Syntax fundamentals
-        path: /language/syntax
-      - name: Imports
-        path: /language/imports
-      - name: Classes
-        path: /language/objects-constructors-inheritance-interfaces
-      - name: Strings
-        path: /language/strings
-      - name: Blocks and lambdas
-        path: /language/blocks-and-lambdas
-      - name: Lists, byte arrays, sets and maps
-        path: /language/listsetmap
-      - name: Control flow
-        path: /language/loops
-      - name: Booleans
-        path: /language/booleans
-      - name: Mathematics
-        path: /language/math
-      - name: Bitwise operations
-        path: /language/bitmask
-      - name: Tasks
-        path: /language/tasks
-      - name: Exception handling
-        path: /language/exceptions
+        children:
+          - name: For JavaScripters
+            path: /language/from-javascript
+          - name: For Python programmers
+            path: /language/from-python
+          - name: For C and C++ programmers
+            path: /language/from-cpp
+      - name: Beginner lessons
+        path: /language/beginner
+        children:
+          - name: Lists and functions
+            path: /language/beginner/lists-and-functions
+          - name: Objects
+            path: /language/beginner/objects
+      - name: Language reference
+        path: /language/reference
+        children:
+          - name: Common conversions
+            path: /language/typeconversion
+          - name: Definitions
+            path: /language/definitions
+          - name: Style guide
+            path: /language/style
+          - name: Syntax fundamentals
+            path: /language/syntax
+          - name: Imports
+            path: /language/imports
+          - name: Classes
+            path: /language/objects-constructors-inheritance-interfaces
+          - name: Strings
+            path: /language/strings
+          - name: Blocks and lambdas
+            path: /language/blocks-and-lambdas
+          - name: Lists, byte arrays, sets and maps
+            path: /language/listsetmap
+          - name: Control flow
+            path: /language/loops
+          - name: Booleans
+            path: /language/booleans
+          - name: Mathematics
+            path: /language/math
+          - name: Bitwise operations
+            path: /language/bitmask
+          - name: Tasks
+            path: /language/tasks
+          - name: Exception handling
+            path: /language/exceptions
       - name: SDK
         path: /language/sdk
         children:

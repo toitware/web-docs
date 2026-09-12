@@ -1,0 +1,120 @@
+# Toit for Python programmers
+
+For readers comfortable writing Python functions and classes. Toit's indentation
+will look familiar, but calls, control flow, and values have different rules.
+This page highlights those differences. For the full language introduction,
+read [Toit for programmers](/language/toitversus), which explains each feature
+directly and draws comparisons with C/C++, JavaScript, Python, and Java/Kotlin.
+
+## Indentation is familiar; calls are different
+
+Toit uses two spaces per level, `//` for comments, and hyphens in names.
+Define `greet name:` and call it as `greet "Ada"`. A zero-argument call is just
+`greet`. Parentheses group expressions instead of enclosing every argument list.
+Use `:=` to declare a variable and `=` to assign it again.
+
+Fields and zero-argument methods use the same access syntax: `name.trim` calls
+a method. Wrap a call in `::` to defer it; invoke that lambda with `.call`.
+
+```toit
+greet name/string --greeting/string="Hello" -> none:
+  print "$greeting $name"
+
+main:
+  greet "Ada"
+  greet "Grace" --greeting="Welcome"
+```
+
+This prints `Hello Ada` and `Welcome Grace`.
+
+## Test emptiness explicitly
+
+Only `false` and `null` are falsy in Toit. Zero, empty strings, and empty
+collections are truthy. Port Python's `if items:` as `if items.size != 0:`
+when the intent is to check for elements. `null` represents an absent value,
+like Python's `None`.
+
+Toit has signed 64-bit integers, rather than Python's arbitrary-precision
+integers. Integer `/` truncates toward zero: `-5 / 2` is `-2`, whereas Python's
+floor division `-5 // 2` is `-3`. Use a float operand for a fractional result.
+
+<!-- RESET CODE -->
+
+```toit
+describe items:
+  if items:
+    print "The list exists"
+  if items.size == 0:
+    print "The list is empty"
+
+main:
+  describe []
+  print (-5 / 2)
+  print (5 / 2.0)
+```
+
+Expected output:
+
+```text
+The list exists
+The list is empty
+-2
+2.5
+```
+
+## Iteration blocks can return from their function
+
+Use `items.do: |item|` to iterate, and `items.map: |item|` to transform a list.
+The block's last expression is its result. A `return` inside a block leaves the
+surrounding function, making it useful for searches and early exits.
+A block cannot be stored for later execution; use a `::` lambda for that.
+
+<!-- RESET CODE -->
+
+```toit
+first-long words:
+  words.do: |word|
+    if word.size > 4:
+      return word
+  return null
+
+main:
+  print (first-long ["cat", "horse", "rabbit"])
+```
+
+This prints `horse`. Use `continue.do` to skip an iteration without returning
+from the function. Read [blocks and lambdas](/language/blocks-and-lambdas).
+
+## Declare fields and use runtime type contracts
+
+Toit classes declare their fields; methods do not add attributes dynamically.
+Use maps for dynamic keys. `{:}` is an empty map and `{}` is an empty set.
+Methods do not declare a `self` parameter, and can refer to fields directly.
+`constructor .name:` stores the argument in the declared field.
+
+Annotations use `/`, as in `name/string`; they are enforced at runtime, unlike
+ordinary Python type hints. `string?` also accepts `null`.
+See [classes](/language/objects-constructors-inheritance-interfaces) and
+[types](/language/definitions#type).
+
+## Ordinary functions can wait
+
+Toit tasks retain their call stacks while waiting for I/O. You do not need an
+`async def`/`await` chain to suspend an activity. `task::` starts a task;
+`sleep --ms=100` suspends the current one. Within a program, tasks share objects
+and cooperate, rather than executing as parallel threads.
+
+A loop without yielding prevents other tasks from running. A waiting library
+call can let shared state change before it returns. Read [tasks](/language/tasks)
+for synchronization and examples.
+
+## Exceptions and imports have their own syntax
+
+Use `throw` to raise an exception, `catch:` to capture one, and `try:` with
+`finally:` for cleanup. Each file is a library; `import .helpers` imports a sibling
+file. Continue with [exceptions](/language/exceptions), [imports](/language/imports),
+and the [package quick start](/language/package/pkgguide).
+
+For additional examples of call grouping, string interpolation, defaults, and
+block control flow, expand the example collections in
+[Toit for programmers](/language/toitversus).

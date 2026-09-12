@@ -1,0 +1,194 @@
+# Objects
+
+This is lesson 3 of the [beginner tutorial](/language/beginner). Start with
+[lists and functions](/language/beginner/lists-and-functions) if you have not
+yet written a function or used `do` to process a list.
+
+The previous lesson kept each room's name, readings, and warm limit separately.
+We will now group them, so we can pass a room's whole report around as one value.
+
+## Keep related values together
+
+An *object* can hold several named values. These values are called its *fields*.
+A *class* describes the fields its objects have and the operations they support.
+Our class will be named `TemperatureReport`.
+
+The *constructor* runs when a new object is created. Here it receives three
+arguments and stores them in the new object's fields:
+
+```toit
+class TemperatureReport:
+  room := ""
+  readings := []
+  limit := 25
+
+  constructor room readings limit:
+    this.room = room
+    this.readings = readings
+    this.limit = limit
+
+main:
+  report := TemperatureReport "Kitchen" [21, 26] 25
+  print report.room
+  print report.readings
+```
+
+Expected output:
+
+```text
+Kitchen
+[21, 26]
+```
+
+`TemperatureReport "Kitchen" [21, 26] 25` creates an object and runs its
+constructor with those three values. `this` refers to the object being created:
+in `this.room = room`, the left side is its field and the right side is the
+constructor's argument. `report.room` reads that object's `room` field.
+
+Change the room name or the readings and run again. Then create a second report
+and print both room names. Each object keeps its own field values.
+
+## Put an operation on the object
+
+A function inside a class is called a *method*. It can use the object's fields,
+so callers do not need to pass the room, readings, and limit each time.
+
+The `print-report` method below uses what we learned in the previous lessons:
+printing a string, iterating over a list, and making a decision.
+
+<!-- RESET CODE -->
+
+```toit
+class TemperatureReport:
+  room := ""
+  readings := []
+  limit := 25
+
+  constructor room readings limit:
+    this.room = room
+    this.readings = readings
+    this.limit = limit
+
+  print-report:
+    print room
+    readings.do: |temperature|
+      if temperature >= limit:
+        print "$temperature C: Warm"
+      else:
+        print "$temperature C: Comfortable"
+
+main:
+  kitchen := TemperatureReport "Kitchen" [21, 26] 25
+  bedroom := TemperatureReport "Bedroom" [22, 24] 23
+  kitchen.print-report
+  bedroom.print-report
+```
+
+Expected output:
+
+```text
+Kitchen
+21 C: Comfortable
+26 C: Warm
+Bedroom
+22 C: Comfortable
+24 C: Warm
+```
+
+Calling `kitchen.print-report` uses the kitchen object's fields. Calling
+`bedroom.print-report` uses the bedroom object's fields. The method takes no
+arguments, so its name is all we need to call it.
+
+## Handle a room without readings
+
+An empty list currently produces only the room heading. We can make the report
+clearer by printing `No readings` when there are none.
+
+The list's `size` gives the number of values it contains. `readings.size == 0`
+asks whether that number is zero. Use `==` to compare values; a single `=` is
+an assignment, as in the constructor.
+
+<!-- RESET CODE -->
+
+```toit
+class TemperatureReport:
+  room := ""
+  readings := []
+  limit := 25
+
+  constructor room readings limit:
+    this.room = room
+    this.readings = readings
+    this.limit = limit
+
+  print-report:
+    print room
+    if readings.size == 0:
+      print "No readings"
+      return
+    readings.do: |temperature|
+      if temperature >= limit:
+        print "$temperature C: Warm"
+      else:
+        print "$temperature C: Comfortable"
+
+main:
+  kitchen := TemperatureReport "Kitchen" [21, 26] 25
+  bedroom := TemperatureReport "Bedroom" [] 23
+  kitchen.print-report
+  bedroom.print-report
+```
+
+This prints the kitchen report, then:
+
+```text
+Bedroom
+No readings
+```
+
+`return` stops the method immediately and resumes execution after the call.
+Here there is no reason to continue into the loop once we know the list is empty.
+The kitchen report still reaches the loop because its list is not empty.
+
+## Practice
+
+Add readings to the bedroom report and check that `No readings` disappears.
+Then create a third report for another room. You should only need to add its
+creation and method call under `main`; the class can stay the same.
+
+<Expandable title="A shorter constructor, once the explicit version is familiar">
+
+Toit lets a constructor parameter initialize a field directly by prefixing its
+name with a dot. This version stores the same three arguments:
+
+<!-- RESET CODE -->
+
+```toit
+class TemperatureReport:
+  room := ""
+  readings := []
+  limit := 25
+
+  constructor .room .readings .limit:
+
+main:
+  report := TemperatureReport "Kitchen" [21, 26] 25
+  print report.room
+```
+
+The constructor body is empty because the field assignments are expressed in
+its parameters. This is shorthand for the explicit assignments used above.
+
+</Expandable>
+
+## Continue when you need more
+
+You can now build a program using variables, decisions, lists, functions,
+and objects. You do not need to learn every feature before using these tools.
+
+The [programmer's tour](/language/toitversus) introduces function results, type
+annotations, collection transformations, error handling, imports, and tasks.
+It assumes the concepts you have now practiced, but moves more quickly.
+Use the [language reference](/language/reference) to look up an individual
+feature. For hardware, continue with [Run on your device](/getstarted/device)
+and the [first LED tutorial](/tutorials/hardware/led).

@@ -1,0 +1,246 @@
+# Toit for JavaScripters
+
+For JavaScript and TypeScript programmers who already know functions, objects,
+and asynchronous code. This page highlights assumptions to revisit when moving
+to Toit. For the full language introduction, read
+[Toit for programmers](/language/toitversus), which explains each feature directly
+and draws comparisons with C/C++, JavaScript, Python, and Java/Kotlin.
+
+Each Toit example is a complete program you can run using the
+[local setup](/language/beginner#1-run-your-first-program).
+
+## Calls do not produce function references
+
+`console.log(value)` becomes `print value`. A zero-argument method is invoked
+by naming it: `name.trim` calls `trim`. To capture work for later, write a lambda
+such as `:: name.trim`, then invoke it with `.call`.
+
+Use `:=` for a mutable declaration and `=` for reassignment. `::=` makes a
+binding final, like `const`; it does not freeze the object. Names use
+`kebab-case`, and blocks are delimited by indentation.
+
+```toit
+main:
+  names ::= [" Ada "]
+  names.add " Grace "
+  show-names := ::
+    names.do: |name|
+      print name.trim
+  show-names.call
+```
+
+This prints `Ada` and `Grace` on separate lines. The final `names` binding
+still refers to a mutable list.
+
+Named arguments are part of the signature: `sleep --ms=100`. They are not an
+options object. Parentheses group nested calls, as in `print (int.parse "42")`.
+See [syntax](/language/syntax).
+
+## Strings interpolate with `$`
+
+Use `"Hello $name"` or `"Hello $(name.trim)"` in place of a template literal's
+`${name}` expression. Toit uses ordinary double quotes for interpolated strings.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  name := "Ada"
+  print "Hello $name"             // Prints Hello Ada.
+  print "Name length: $name.size"  // Prints Name length: 3.
+```
+
+Dot access and indexing are included in the interpolation. Parentheses delimit
+it: `"$(name).size"` produces `Ada.size`. See the
+[interpolation examples](/language/toitversus#string-interpolation)
+for an expandable collection covering boundaries, expressions, and formatting.
+
+## Blocks are not arrow functions
+
+The `:` in `values.do: |value|` introduces a block. Like a callback passed to
+`forEach`, it runs for each element, but its control flow is different:
+`return` leaves the enclosing function, not just the iteration.
+
+The last expression gives a block its value. Use `continue.do` to skip to the
+next iteration. Use `::` for a lambda that can be stored or returned. A lambda
+uses its final expression as its result and cannot contain an explicit `return`.
+This distinction lets library iteration behave like a loop while supporting
+callbacks with a longer lifetime.
+
+<!-- RESET CODE -->
+
+```toit
+find-long-name names:
+  names.do: |name|
+    if name.size > 4:
+      return name
+  return null
+
+main:
+  print (find-long-name ["Ada", "Grace", "Linus"])
+```
+
+This prints `Grace`. A `return` inside a JavaScript `forEach` callback would
+only return from that callback. Here it ends `find-long-name`.
+
+See [blocks and lambdas](/language/blocks-and-lambdas) for parameters and lifetime
+rules.
+
+## Waiting does not require async functions
+
+In JavaScript, [`async` functions return promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function),
+and `await` suspends their execution until a promise settles. In Toit, ordinary
+functions can wait. The task keeps its call stack while another task runs;
+callers do not need an `async` marker or an `await` expression.
+
+Start a concurrent activity with `task::`. Within one program, tasks share
+objects and run cooperatively. They do not run in parallel. A busy loop without
+a yielding operation prevents other tasks from progressing.
+
+<!-- RESET CODE -->
+
+```toit
+announce-later message/string -> none:
+  sleep --ms=10
+  print message
+
+main:
+  task:: announce-later "Background done"
+  print "Main continues"
+```
+
+`announce-later` waits without any special function declaration. The main task
+can continue while the background task is asleep.
+
+The tradeoff is that yield points are not marked at each call site. A library
+call that waits can allow another task to modify shared objects. Check APIs and
+use [synchronization](/language/tasks#synchronizing-between-tasks-with-monitors)
+when an operation must remain consistent across waits. JavaScript's async/await
+also supports sequential-looking loops; the difference here is how waiting
+propagates through ordinary calls.
+
+## Zero and empty strings are truthy
+
+JavaScript treats zero and the empty string as falsy; see
+[MDN's truthiness rules](https://developer.mozilla.org/en-US/docs/Glossary/Truthy).
+Toit treats only `false` and `null` as falsy. There is no separate `undefined`
+value. `and`, `or`, and `not` replace `&&`, `||`, and `!`.
+
+This affects defaults: `value or fallback` preserves `0` and `""`, but replaces
+`false`. Check `value == null` when a boolean `false` must also be preserved.
+Check `.size == 0` when you mean an empty collection or string.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  print (0 or 10)
+  print (("" or "fallback").size)
+  print (null or "fallback")
+```
+
+Expected output:
+
+```text
+0
+0
+fallback
+```
+
+## Numbers distinguish integers from floats
+
+Toit has signed 64-bit `int` values and floating-point `float` values.
+`5 / 2` is `2`, and `5 / 2.0` is `2.5`. When translating an average or a ratio
+from JavaScript, ensure a floating-point operand is present if you need the
+fraction. Convert text explicitly with `int.parse` or `float.parse` and use
+string interpolation to format a value as text.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  total := 5
+  count := 2
+  print (total / count)
+  print (total.to-float / count)
+  print (int.parse "42")
+```
+
+Expected output:
+
+```text
+2
+2.5
+42
+```
+
+See [numbers](/language/math) and [conversions](/language/typeconversion).
+
+## Choose a class or a map
+
+Toit objects have fields declared in their classes. You cannot build their
+shape by assigning arbitrary new properties. Use a class for a known structure
+and a map for dynamic keys. `{"name": "Ada"}` is a map; access it as
+`person["name"]`, not `person.name`. `{:}` is an empty map; `{}` is an empty set.
+
+Create an instance by calling its class, without `new`. A constructor parameter
+such as `.name` initializes the corresponding field. Within methods, `this`
+refers to the receiver; wrapping a call in a lambda is the way to defer it.
+
+<!-- RESET CODE -->
+
+```toit
+class Person:
+  name/string
+
+  constructor .name:
+
+  greet -> none:
+    print "Hello $name"
+
+main:
+  person := Person "Ada"
+  greet-later := :: person.greet
+  greet-later.call
+  labels := {"name": person.name}
+  print labels["name"]
+```
+
+This prints `Hello Ada`, followed by `Ada`.
+
+TypeScript users should also note that Toit annotations such as `/string` are
+checked at runtime. They are not erased type declarations. A nullable string
+is `string?`. See [types](/language/definitions#type) and
+[classes](/language/objects-constructors-inheritance-interfaces).
+
+## Catching errors returns a value
+
+`catch:` runs a block and returns the thrown value or `null` if nothing was
+thrown. Use `try:` with `finally:` for cleanup. This is different syntax from
+JavaScript's `try`/`catch`/`finally` statement.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  error := catch:
+    print (int.parse "not a number")
+  if error:
+    print "Please enter an integer"
+```
+
+This prints `Please enter an integer`.
+
+Exceptions are values; strings are common. For your own error protocols, throw
+a truthy value so the usual `if error` check detects it. Read
+[exception handling](/language/exceptions) for cleanup and error propagation.
+
+## Modules and packages are resolved before running
+
+Each file is a library. `import .helpers` imports a neighboring `helpers.toit`;
+SDK imports use names such as `import math`. Package dependencies are declared
+in `package.yaml` and resolved versions live in `package.lock`.
+
+JavaScript packages cannot be imported as Toit libraries. Continue with
+[imports](/language/imports) and the [package quick start](/language/package/pkgguide)
+to structure a project and add Toit dependencies.

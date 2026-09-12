@@ -1,0 +1,215 @@
+# Lists and functions
+
+This is lesson 2 of the [beginner tutorial](/language/beginner). It assumes you
+have run the first lesson's examples and can use a variable, print a string,
+and make a decision with `if`.
+
+We will first report several temperatures, then give the reporting operation a
+name so we can reuse it. Keep using `report.toit`; each example replaces the
+whole file.
+
+## Store several readings
+
+A *list* holds values in order. Square brackets surround its values, and commas
+separate them. Here is a list containing three temperatures:
+
+```toit
+main:
+  readings := [21, 26, 24]
+  print readings
+```
+
+This prints `[21, 26, 24]`. Add `28` after `24`, separated by a comma, and run
+it again. You should see four values in the printed list.
+
+## Do something for each reading
+
+We want to print each temperature on its own line. `readings.do:` runs a piece
+of code once for each value in the list:
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  readings := [21, 26, 24]
+  readings.do: |temperature|
+    print "Temperature: $temperature C"
+```
+
+The output is:
+
+```text
+Temperature: 21 C
+Temperature: 26 C
+Temperature: 24 C
+```
+
+`|temperature|` gives a name to the value for the current run. On the first run
+it is `21`, on the second `26`, and on the third `24`. The indented code after
+`do:` is called a *block*. Here that block contains one instruction.
+
+Add another reading and check that it produces another output line. Try `[]`,
+an empty list. There are no values to process, so the block does not run and
+nothing is printed.
+
+## Add a decision for each reading
+
+The block can contain several instructions. Put the first lesson's decision
+inside it:
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  readings := [21, 26, 24]
+  readings.do: |temperature|
+    if temperature >= 25:
+      print "$temperature C: Warm"
+    else:
+      print "$temperature C: Comfortable"
+```
+
+Expected output:
+
+```text
+21 C: Comfortable
+26 C: Warm
+24 C: Comfortable
+```
+
+Notice the indentation. The `if` and `else` belong to the block. Their `print`
+instructions are indented one level further, because each belongs to one side
+of the decision.
+
+Try `[25, 10]`. Predict both messages, then run the program.
+
+## Give the operation a name
+
+We might want to report a temperature from somewhere other than this list.
+A *function* lets us name an operation and call it wherever we need it.
+
+We already have a function, `main`. Add another called `print-reading`:
+
+<!-- RESET CODE -->
+
+```toit
+print-reading temperature:
+  if temperature >= 25:
+    print "$temperature C: Warm"
+  else:
+    print "$temperature C: Comfortable"
+
+main:
+  print-reading 21
+  print-reading 26
+```
+
+This prints:
+
+```text
+21 C: Comfortable
+26 C: Warm
+```
+
+The two lines under `main` *call* the function. Each call runs its body using
+the supplied temperature. In `print-reading 21`, the supplied value `21` is
+an *argument*. The name `temperature` in the function definition is a *parameter*.
+
+`print-reading` contains a hyphen because that is a normal part of a Toit name.
+The function definitions start at the left edge of the file; their bodies are
+indented. Defining `print-reading` does not run it. A call runs it.
+
+Add `print-reading 25` under `main` and check the result.
+
+## Combine the function and the list
+
+The list block can call the function for every reading. The function keeps
+the reporting instructions in one place:
+
+<!-- RESET CODE -->
+
+```toit
+print-reading temperature:
+  if temperature >= 25:
+    print "$temperature C: Warm"
+  else:
+    print "$temperature C: Comfortable"
+
+main:
+  readings := [21, 26, 24]
+  readings.do: |temperature|
+    print-reading temperature
+```
+
+The output is the same three-line report as before. To change how temperatures
+are reported, edit `print-reading`. To change which temperatures are reported,
+edit the list in `main`.
+
+## Pass a second argument
+
+Different reports may use different limits. Add a second parameter, `limit`,
+so callers can choose it:
+
+<!-- RESET CODE -->
+
+```toit
+print-reading temperature limit:
+  if temperature >= limit:
+    print "$temperature C: Warm"
+  else:
+    print "$temperature C: Comfortable"
+
+main:
+  readings := [21, 26, 24]
+  readings.do: |temperature|
+    print-reading temperature 24
+```
+
+Now both `26` and `24` are reported as warm. Spaces separate the call's arguments:
+the first is the temperature, and the second is the limit. Commas belong between
+the values in a list, not between a function's arguments.
+
+## Practice
+
+Create two lists named `kitchen` and `bedroom`. Print a room heading, then report
+that room's readings. Use a limit of `25` for the kitchen and `23` for the bedroom.
+
+<Expandable title="Solution: report two rooms">
+
+<!-- RESET CODE -->
+
+```toit
+print-reading temperature limit:
+  if temperature >= limit:
+    print "$temperature C: Warm"
+  else:
+    print "$temperature C: Comfortable"
+
+main:
+  kitchen := [21, 26]
+  bedroom := [22, 24]
+  print "Kitchen"
+  kitchen.do: |temperature|
+    print-reading temperature 25
+  print "Bedroom"
+  bedroom.do: |temperature|
+    print-reading temperature 23
+```
+
+Expected output:
+
+```text
+Kitchen
+21 C: Comfortable
+26 C: Warm
+Bedroom
+22 C: Comfortable
+24 C: Warm
+```
+
+</Expandable>
+
+This is a useful stopping point: you can process a collection and reuse code.
+When you are ready, continue with [objects](/language/beginner/objects) to keep
+each room's settings and readings together. To try the language on hardware,
+follow [Run on your device](/getstarted/device).
