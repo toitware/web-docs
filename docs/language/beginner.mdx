@@ -7,9 +7,8 @@ readings are sample data, so no sensor or ESP32 is required.
 
 Already comfortable programming? Start with [Toit for programmers](/language/toitversus).
 
-Examples are collapsed so you can read the explanation first. Expand each one
-when you are ready to run it. Unless stated otherwise, each example is a complete
-program: replace the contents of your file rather than appending it.
+Each example is a complete program: replace the contents of your file rather
+than appending it. The exercise solution is collapsed so you can try it first.
 
 ## 1. Run your first program
 
@@ -21,8 +20,6 @@ Create a plain-text file named `report.toit`. The program starts at `main:`.
 Statements indented by two spaces underneath it form the body of `main`.
 `print` displays a value in the terminal, and text between double quotes is a
 *string*.
-
-<Expandable title="Example: your first program and how to run it">
 
 ```toit
 main:
@@ -41,8 +38,6 @@ Expected output:
 Temperature report
 ```
 
-</Expandable>
-
 Change the message and run the command again. If the terminal cannot find `toit`,
 check the SDK installation and your `PATH`. If it cannot find the file, check
 your current directory. If the compiler reports an error, start at the first
@@ -57,8 +52,6 @@ redeclarations and assignments to names that do not exist.
 `$temperature` inside a string inserts the variable's value. Use `$(...)` for
 a longer expression. Names can contain hyphens: `reading-count` is one name.
 Use spaces around subtraction, as in `temperature - 2`.
-
-<Expandable title="Example: variables, assignment, and interpolation">
 
 <!-- RESET CODE -->
 
@@ -77,8 +70,6 @@ First reading: 21 C
 Next reading: 24 C
 ```
 
-</Expandable>
-
 Try changing the starting temperature. Predict both output lines before running.
 
 ## 3. Make a decision
@@ -87,8 +78,6 @@ An `if` statement runs its indented body only when its condition is true.
 An `else` body runs otherwise. Comparisons such as `>=` (greater than or equal
 to) and `==` (equal to) produce boolean values: `true` or `false`.
 Use `==` to compare, and `=` to assign.
-
-<Expandable title="Example: decide whether a reading is warm">
 
 <!-- RESET CODE -->
 
@@ -103,8 +92,6 @@ main:
 
 This prints `Comfortable`. Change the value to `25` and it prints `Warm`.
 
-</Expandable>
-
 ## 4. Process a list
 
 A *list* stores several values in order: `[21, 26, 24]`. `readings.size` gives
@@ -113,8 +100,6 @@ its length, and `readings[0]` gives the first element; indexes start at zero.
 `readings.do:` runs the indented code once per element. That code is a *block*.
 `|temperature|` names the element for each run. The block can read and change
 variables declared in its enclosing function.
-
-<Expandable title="Example: count the warm readings">
 
 <!-- RESET CODE -->
 
@@ -129,8 +114,6 @@ main:
 ```
 
 This prints `1 of 3 readings are warm`.
-
-</Expandable>
 
 Add `28` to the list and check that the output becomes
 `2 of 4 readings are warm`. Try the empty list, `[]`, too.
@@ -149,8 +132,6 @@ Define `count-warm readings --limit=25:` to accept readings and an optional name
 parameter. Call it with `count-warm readings --limit=24`. Spaces separate call
 arguments; Toit does not put commas or parentheses around the argument list.
 Parentheses group a nested call, as in `print (count-warm readings)`.
-
-<Expandable title="Example: reuse a function with different limits">
 
 <!-- RESET CODE -->
 
@@ -175,8 +156,6 @@ Expected output:
 2
 ```
 
-</Expandable>
-
 A `return` inside a `do` block would leave the whole function immediately.
 Here it belongs after the loop, so we count every reading before returning.
 
@@ -189,8 +168,6 @@ fraction, so convert the total with `to-float` before dividing.
 There is no average of an empty list. We will represent that absence with
 `null` and test for it before printing. Only `null` and `false` are falsy in
 Toit: a valid average of zero still passes `if average`.
-
-<Expandable title="Example: compute an average, including empty input">
 
 <!-- RESET CODE -->
 
@@ -216,8 +193,6 @@ The `-> float?` annotation says that the result is a floating-point number or
 `null`. Toit checks type annotations at runtime; they also help the editor
 explain your code.
 
-</Expandable>
-
 ## 7. Finish the report with a class
 
 A *class* groups data with operations on that data. Each *object* made from a
@@ -231,8 +206,6 @@ Fields are declared in the class. In `constructor .readings_ --limit=25:`,
 `.readings_` automatically stores the first argument in that field. The named
 parameter is assigned explicitly to `limit_`. The `_` suffix marks these fields
 private. `:= ?` requires the constructor to initialize the mutable field.
-
-<Expandable title="Complete program: temperature report">
 
 <!-- RESET CODE -->
 
@@ -284,8 +257,6 @@ Average: 24.0 C
 Warm readings: 2
 No readings
 ```
-
-</Expandable>
 
 `TemperatureReport [21, 26, 25]` constructs an object.
 `report.print-summary` calls its method without parentheses. `/List` and `/int`

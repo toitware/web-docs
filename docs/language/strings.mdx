@@ -357,9 +357,9 @@ main:
 ```
 
 The variable after the dollar sign is turned into a string
-by calling its `stringify` method. The variable stops at
-the first non-alpha-numeric character, but the expression
-can be extended using dot or `[]` notation:
+by calling its `stringify` method. Interpolation follows Toit identifier rules,
+including hyphens and underscores, and can include member access and indexing
+using dot or `[]` notation:
 
 ```
 main:
@@ -371,10 +371,10 @@ main:
   print "Level $list[1], the band."  // >> Level 42, the band.
 ```
 
-If the variable is followed immediately by alphanumeric
-characters or we want a more complicated interpolation
-expression we can put parentheses, `()`, around an arbitrary
-expression:
+To separate interpolation from literal text that could be read as part of the
+expression, or to interpolate a more complicated expression, put parentheses
+around the expression. For example, `"$(name)-sensor"` keeps the hyphen and
+`sensor` outside the interpolated name:
 
 ```
 main:

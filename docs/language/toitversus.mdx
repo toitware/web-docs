@@ -20,8 +20,6 @@ For comparisons with your own language, see [JavaScript and TypeScript](/languag
 
 ## Read calls before translating syntax
 
-<Expandable title="Example: calls and declarations">
-
 ```toit
 add a/int b/int -> int:
   return a + b
@@ -31,8 +29,6 @@ main:
   reading-count = reading-count + 1
   print (add reading-count 2)
 ```
-
-</Expandable>
 
 This prints `6`. `:=` declares a mutable variable; `=` assigns to one.
 `::=` declares a final binding, which does not make the referenced object
@@ -49,9 +45,141 @@ This also lets a field getter become a computed method without changing callers.
 Named arguments are explicit at both ends: `sleep --ms=100`.
 See [syntax](/language/syntax) for precedence and declarations.
 
+<Expandable title="More examples: call grouping, continuation lines, and named arguments">
+
+Each numbered case illustrates a different call rule. This is a complete program.
+
+<!-- RESET CODE -->
+
+```toit
+add a/int b/int -> int:
+  return a + b
+
+label value/int --prefix/string="Value" --loud/bool=false -> string:
+  text := "$prefix: $value"
+  return loud ? "$text!" : text
+
+main:
+  // 1. Arithmetic binds more tightly than the call. Prints 7.
+  print (add 1 2 * 3)
+
+  // 2. Parentheses make a call's result an operand. Prints 9.
+  print ((add 1 2) * 3)
+
+  // 3. Each continuation line supplies one argument. Prints 3.
+  print
+      add 1
+          2
+
+  // 4. Omitted named arguments use defaults. Prints Value: 3.
+  print (label 3)
+
+  // 5. A bare boolean flag means true. Prints Count: 3!.
+  print (label 3 --prefix="Count" --loud)
+
+  // 6. The no- prefix passes false. Prints Count: 3.
+  print (label 3 --prefix="Count" --no-loud)
+```
+
+In case 3, putting `1 2` together on one continuation line would make it one
+expression, not two arguments. A continuation line can itself be a nested call.
+
+</Expandable>
+
+## String interpolation
+
+Double-quoted strings support `$name` and `$(expression)` interpolation:
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  name := "Ada"
+  print "Hello $name"                  // Prints Hello Ada.
+  print "Next reading: $(21 + 1) C"    // Prints Next reading: 22 C.
+```
+
+Interpolation includes member access and indexing: `"$name.size"` inserts the
+size, while `"$(name).size"` inserts the name followed by literal `.size`.
+Hyphens can belong to identifiers, so use `"$(name)-sensor"` when you want a
+literal suffix. Formatting goes inside the parentheses, as in `"$(%.2f 3.14159)"`.
+
+<Expandable title="12 more interpolation examples: boundaries, expressions, and formatting">
+
+**Member access and boundaries.** Dot access can call a zero-argument method;
+parentheses determine where interpolation ends.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  name := "Ada"
+  padded := " Ada "
+
+  // 1. Read a member. Prints 3.
+  print "$name.size"
+
+  // 2. Keep the suffix literal. Prints Ada.size.
+  print "$(name).size"
+
+  // 3. Invoke a method. Prints Ada.
+  print "$padded.trim"
+
+  // 4. Follow interpolation with a hyphen. Prints Ada-sensor.
+  print "$(name)-sensor"
+```
+
+**Indexing and expressions.** Use parentheses for calls and arithmetic, and
+escape the dollar sign when it should be printed literally.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  readings := [21, 26]
+  count := 3
+
+  // 5. Index into a list. Prints First: 21.
+  print "First: $readings[0]"
+
+  // 6. Evaluate arithmetic. Prints Next: 4.
+  print "Next: $(count + 1)"
+
+  // 7. Evaluate a call with an argument. Prints Parsed: 42.
+  print "Parsed: $(int.parse "42")"
+
+  // 8. Print a literal dollar sign. Prints $3.
+  print "\$$count"
+```
+
+**Formatting.** Each format specifier is next to its value. Delimiters make
+padding visible in the last example.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  // 9. Limit fractional digits. Prints 3.14.
+  print "$(%.2f 3.14159)"
+
+  // 10. Format hexadecimal. Prints 0x2a.
+  print "0x$(%x 42)"
+
+  // 11. Pad with zeros. Prints 0x0d.
+  print "0x$(%02x 13)"
+
+  // 12. Pad to a decimal width. Prints >   7<.
+  print ">$(%4d 7)<"
+```
+
+See [strings](/language/strings#string-interpolation) for more formatting options
+and the string representation rules.
+
+</Expandable>
+
 ## Types are optional, but checked
 
-The `/int` parameters and `-> int` return annotation above specify runtime
+The `/int` parameters and `-> int` return annotation on `add` specify runtime
 checks. An omitted annotation permits dynamic values. Analysis helps find
 mistakes before execution, but does not turn Toit into a language where every
 type error is rejected before running.
@@ -65,11 +193,47 @@ are truthy. Integers are signed 64-bit values; integer division truncates toward
 zero. `5 / 2` is `2`, while `5 / 2.0` is `2.5`. These rules matter when porting
 default expressions, emptiness checks, and calculations.
 
-## Blocks are part of control flow
+<Expandable title="More examples: defaults, guarded access, and integer division">
+
+These expressions distinguish missing data from empty data. The helper shows
+how the same expression handles both `null` and an empty list.
 
 <!-- RESET CODE -->
 
-<Expandable title="Example: return from an iteration block">
+```toit
+describe value:
+  print (value or "fallback")
+  print (value and value.size)
+
+main:
+  // Null takes the fallback and skips member access. Prints fallback, null.
+  describe null
+
+  // An empty list is truthy. Prints [], 0.
+  describe []
+
+  // Zero is preserved by or. Prints 0.
+  print (0 or 10)
+
+  // False is replaced by or. Prints fallback.
+  print (false or "fallback")
+
+  // Integer division truncates toward zero. Prints -2.
+  print (-5 / 2)
+
+  // A float operand preserves the fraction. Prints -2.5.
+  print (-5 / 2.0)
+```
+
+`and` returns the last evaluated operand; it does not always return a boolean.
+In `describe`, a truthy argument must support `.size`. Guarding against absence
+does not check whether an object has the member you want.
+
+</Expandable>
+
+## Blocks are part of control flow
+
+<!-- RESET CODE -->
 
 ```toit
 first-positive values:
@@ -82,20 +246,16 @@ main:
   print (first-positive [-2, 0, 7, 9])
 ```
 
-</Expandable>
-
 This prints `7`: `return` inside the block returns from `first-positive`.
 A block's last expression supplies its result to its caller; it does not need
 `return`. This makes library methods such as `do`, `map`, and `repeat` work
 like control structures. Blocks cannot be saved in fields or returned for later
 use, allowing their lifetime to stay within the enclosing call.
 
-A lambda starts with `::`, can outlive the call that creates it, and has its own
-return scope:
+A lambda starts with `::` and can outlive the call that creates it. Its final
+expression supplies its result; it cannot contain an explicit `return`:
 
 <!-- RESET CODE -->
-
-<Expandable title="Example: a stored lambda">
 
 ```toit
 make-adder amount/int -> Lambda:
@@ -106,17 +266,53 @@ main:
   print (add-five.call 3)
 ```
 
-</Expandable>
-
 This prints `8`. Use this form for stored callbacks. To pass a method for later
 execution, wrap its call in a lambda. Read [blocks and lambdas](/language/blocks-and-lambdas)
 for block parameters and local exits such as `continue.do`.
 
-## Classes define the shape of objects
+<Expandable title="More examples: block results, skipping iterations, and lambda returns">
+
+**Use the last expression as a block's result.** An explicit `return` here would
+leave `main` instead of supplying one mapped value.
 
 <!-- RESET CODE -->
 
-<Expandable title="Example: a class with a mutable field">
+```toit
+main:
+  doubled := [1, 2, 3].map: it * 2
+  print doubled  // Prints [2, 4, 6].
+```
+
+**Skip an iteration with `continue.do`.** The function continues after the loop.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  [1, 2, 3].do: |value|
+    if value == 2: continue.do
+    print value
+  print "Done"  // Output is 1, 3, then Done on separate lines.
+```
+
+**Use a lambda's final expression as its result.** Code after the lambda call
+still runs. An explicit `return` inside the lambda is a compiler error.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  classify := :: |value|
+    value < 0 ? "negative" : "non-negative"
+  print (classify.call -1)  // Prints negative.
+  print "Still in main"
+```
+
+</Expandable>
+
+## Classes define the shape of objects
+
+<!-- RESET CODE -->
 
 ```toit
 class Counter:
@@ -131,8 +327,6 @@ main:
   print counter.value
 ```
 
-</Expandable>
-
 This prints `1`. Calling the class constructs an instance, without `new`.
 Fields are declared in the class; methods can refer to them without a `this.`
 prefix. A trailing underscore marks a private member. For data with keys chosen
@@ -143,8 +337,6 @@ See [classes and interfaces](/language/objects-constructors-inheritance-interfac
 
 <!-- RESET CODE -->
 
-<Expandable title="Example: waiting in a background task">
-
 ```toit
 main:
   task::
@@ -152,8 +344,6 @@ main:
     print "Background task finished"
   print "Main task continues"
 ```
-
-</Expandable>
 
 Toit tasks have independent stacks and share the program's objects. Waiting
 operations such as `sleep` suspend the current task so another can run. Ordinary

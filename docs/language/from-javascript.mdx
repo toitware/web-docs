@@ -3,8 +3,7 @@
 For JavaScript and TypeScript programmers who already know functions, objects,
 and asynchronous code. Read this to identify assumptions you need to change;
 use [Toit for programmers](/language/toitversus) for the shared language overview.
-Expand the examples when you want to try a rule. Each Toit example is a complete
-program you can run using the [local setup](/language/beginner#1-run-your-first-program).
+Each Toit example is a complete program you can run using the [local setup](/language/beginner#1-run-your-first-program).
 
 ## Calls do not produce function references
 
@@ -15,8 +14,6 @@ such as `:: name.trim`, then invoke it with `.call`.
 Use `:=` for a mutable declaration and `=` for reassignment. `::=` makes a
 binding final, like `const`; it does not freeze the object. Names use
 `kebab-case`, and blocks are delimited by indentation.
-
-<Expandable title="Example: calls, final bindings, and stored callbacks">
 
 ```toit
 main:
@@ -31,11 +28,28 @@ main:
 This prints `Ada` and `Grace` on separate lines. The final `names` binding
 still refers to a mutable list.
 
-</Expandable>
-
 Named arguments are part of the signature: `sleep --ms=100`. They are not an
 options object. Parentheses group nested calls, as in `print (int.parse "42")`.
 See [syntax](/language/syntax).
+
+## Strings interpolate with `$`
+
+Use `"Hello $name"` or `"Hello $(name.trim)"` in place of a template literal's
+`${name}` expression. Toit uses ordinary double quotes for interpolated strings.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  name := "Ada"
+  print "Hello $name"             // Prints Hello Ada.
+  print "Name length: $name.size"  // Prints Name length: 3.
+```
+
+Dot access and indexing are included in the interpolation. Parentheses delimit
+it: `"$(name).size"` produces `Ada.size`. See the
+[interpolation examples](/language/toitversus#string-interpolation)
+for an expandable collection covering boundaries, expressions, and formatting.
 
 ## Blocks are not arrow functions
 
@@ -44,11 +58,10 @@ The `:` in `values.do: |value|` introduces a block. Like a callback passed to
 `return` leaves the enclosing function, not just the iteration.
 
 The last expression gives a block its value. Use `continue.do` to skip to the
-next iteration. Use `::` for a lambda that can be stored or returned; `return`
-in a lambda exits that lambda. This distinction lets library iteration behave
-like a loop while supporting callbacks with a longer lifetime.
-
-<Expandable title="Example: return from a search inside an iteration">
+next iteration. Use `::` for a lambda that can be stored or returned. A lambda
+uses its final expression as its result and cannot contain an explicit `return`.
+This distinction lets library iteration behave like a loop while supporting
+callbacks with a longer lifetime.
 
 <!-- RESET CODE -->
 
@@ -66,8 +79,6 @@ main:
 This prints `Grace`. A `return` inside a JavaScript `forEach` callback would
 only return from that callback. Here it ends `find-long-name`.
 
-</Expandable>
-
 See [blocks and lambdas](/language/blocks-and-lambdas) for parameters and lifetime
 rules.
 
@@ -81,8 +92,6 @@ callers do not need an `async` marker or an `await` expression.
 Start a concurrent activity with `task::`. Within one program, tasks share
 objects and run cooperatively. They do not run in parallel. A busy loop without
 a yielding operation prevents other tasks from progressing.
-
-<Expandable title="Example: wait in an ordinary helper function">
 
 <!-- RESET CODE -->
 
@@ -98,8 +107,6 @@ main:
 
 `announce-later` waits without any special function declaration. The main task
 can continue while the background task is asleep.
-
-</Expandable>
 
 The tradeoff is that yield points are not marked at each call site. A library
 call that waits can allow another task to modify shared objects. Check APIs and
@@ -119,8 +126,6 @@ This affects defaults: `value or fallback` preserves `0` and `""`, but replaces
 `false`. Check `value == null` when a boolean `false` must also be preserved.
 Check `.size == 0` when you mean an empty collection or string.
 
-<Expandable title="Example: defaults preserve zero and empty text">
-
 <!-- RESET CODE -->
 
 ```toit
@@ -138,8 +143,6 @@ Expected output:
 fallback
 ```
 
-</Expandable>
-
 ## Numbers distinguish integers from floats
 
 Toit has signed 64-bit `int` values and floating-point `float` values.
@@ -147,8 +150,6 @@ Toit has signed 64-bit `int` values and floating-point `float` values.
 from JavaScript, ensure a floating-point operand is present if you need the
 fraction. Convert text explicitly with `int.parse` or `float.parse` and use
 string interpolation to format a value as text.
-
-<Expandable title="Example: preserve the fraction in an average">
 
 <!-- RESET CODE -->
 
@@ -169,8 +170,6 @@ Expected output:
 42
 ```
 
-</Expandable>
-
 See [numbers](/language/math) and [conversions](/language/typeconversion).
 
 ## Choose a class or a map
@@ -183,8 +182,6 @@ and a map for dynamic keys. `{"name": "Ada"}` is a map; access it as
 Create an instance by calling its class, without `new`. A constructor parameter
 such as `.name` initializes the corresponding field. Within methods, `this`
 refers to the receiver; wrapping a call in a lambda is the way to defer it.
-
-<Expandable title="Example: structured objects and dynamic keys">
 
 <!-- RESET CODE -->
 
@@ -207,8 +204,6 @@ main:
 
 This prints `Hello Ada`, followed by `Ada`.
 
-</Expandable>
-
 TypeScript users should also note that Toit annotations such as `/string` are
 checked at runtime. They are not erased type declarations. A nullable string
 is `string?`. See [types](/language/definitions#type) and
@@ -219,8 +214,6 @@ is `string?`. See [types](/language/definitions#type) and
 `catch:` runs a block and returns the thrown value or `null` if nothing was
 thrown. Use `try:` with `finally:` for cleanup. This is different syntax from
 JavaScript's `try`/`catch`/`finally` statement.
-
-<Expandable title="Example: handle invalid input">
 
 <!-- RESET CODE -->
 
@@ -233,8 +226,6 @@ main:
 ```
 
 This prints `Please enter an integer`.
-
-</Expandable>
 
 Exceptions are values; strings are common. For your own error protocols, throw
 a truthy value so the usual `if error` check detects it. Read

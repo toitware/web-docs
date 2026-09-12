@@ -14,8 +14,6 @@ Use `:=` to declare a variable and `=` to assign it again.
 Fields and zero-argument methods use the same access syntax: `name.trim` calls
 a method. Wrap a call in `::` to defer it; invoke that lambda with `.call`.
 
-<Expandable title="Example: a function with a named parameter">
-
 ```toit
 greet name/string --greeting/string="Hello" -> none:
   print "$greeting $name"
@@ -27,8 +25,6 @@ main:
 
 This prints `Hello Ada` and `Welcome Grace`.
 
-</Expandable>
-
 ## Test emptiness explicitly
 
 Only `false` and `null` are falsy in Toit. Zero, empty strings, and empty
@@ -39,8 +35,6 @@ like Python's `None`.
 Toit has signed 64-bit integers, rather than Python's arbitrary-precision
 integers. Integer `/` truncates toward zero: `-5 / 2` is `-2`, whereas Python's
 floor division `-5 // 2` is `-3`. Use a float operand for a fractional result.
-
-<Expandable title="Example: emptiness and division">
 
 <!-- RESET CODE -->
 
@@ -66,16 +60,12 @@ The list is empty
 2.5
 ```
 
-</Expandable>
-
 ## Iteration blocks can return from their function
 
 Use `items.do: |item|` to iterate, and `items.map: |item|` to transform a list.
 The block's last expression is its result. A `return` inside a block leaves the
 surrounding function, making it useful for searches and early exits.
 A block cannot be stored for later execution; use a `::` lambda for that.
-
-<Expandable title="Example: an early return during a search">
 
 <!-- RESET CODE -->
 
@@ -92,8 +82,6 @@ main:
 
 This prints `horse`. Use `continue.do` to skip an iteration without returning
 from the function. Read [blocks and lambdas](/language/blocks-and-lambdas).
-
-</Expandable>
 
 ## Declare fields and use runtime type contracts
 
@@ -124,3 +112,7 @@ Use `throw` to raise an exception, `catch:` to capture one, and `try:` with
 `finally:` for cleanup. Each file is a library; `import .helpers` imports a sibling
 file. Continue with [exceptions](/language/exceptions), [imports](/language/imports),
 and the [package quick start](/language/package/pkgguide).
+
+For additional examples of call grouping, string interpolation, defaults, and
+block control flow, expand the example collections in
+[Toit for programmers](/language/toitversus).

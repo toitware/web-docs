@@ -78,6 +78,15 @@ The documentation pages are written in `.mdx` which are
 [markdown](https://www.markdownguide.org/basic-syntax/) files that can also
 import react components.
 
+## Examples in documentation
+
+Keep examples visible when they introduce a concept or the surrounding text
+explains them. A reader should not have to expand code to follow the argument.
+For experienced readers, state the rule concisely and show one or two examples.
+Use `<Expandable title="More examples: ...">` for supplementary collections that
+explore variations and edge cases, with output or comments explaining each case.
+Keep exercise solutions collapsed so readers can try the exercise first.
+
 ## Components
 
 There are multiple components to make the content more engaging:

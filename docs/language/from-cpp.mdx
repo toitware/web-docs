@@ -16,8 +16,6 @@ you C++ destructor semantics. Use `try:` with `finally:` to explicitly close a
 resource. This matters when a file, socket, or peripheral must be released
 before the surrounding operation returns.
 
-<Expandable title="Example: cleanup runs when an operation throws">
-
 ```toit
 main:
   error := catch:
@@ -41,8 +39,6 @@ Handled: Operation failed
 Replace the cleanup message with the resource API's close operation in real
 code. See [exception handling](/language/exceptions).
 
-</Expandable>
-
 ## Types are runtime contracts
 
 Annotations are optional and checked at runtime. `/int` is a signed 64-bit
@@ -65,9 +61,8 @@ invokes `read` rather than producing a method pointer.
 
 Use a lambda, `:: counter.read`, when you want to store a call for later.
 Use `:` blocks for scoped iteration. A `return` inside a block returns from the
-enclosing function, unlike a C++ lambda; a `::` lambda has its own return scope.
-
-<Expandable title="Example: return from a library iteration">
+enclosing function, unlike a C++ lambda. A Toit `::` lambda uses its final
+expression as its result and cannot contain an explicit `return`.
 
 <!-- RESET CODE -->
 
@@ -85,8 +80,6 @@ main:
 This prints `4`. The `do` method implements iteration while the block retains
 the enclosing function's return behavior.
 
-</Expandable>
-
 ## Tasks cooperate within a program
 
 Each task has a call stack, but tasks in a program share objects and take turns
@@ -99,8 +92,6 @@ cannot be interrupted by another task in the same program; a loop that never
 yields also starves those tasks. Shared-state operations spanning a wait may
 still need synchronization. Do not assume a helper cannot yield just because
 its call looks ordinary.
-
-<Expandable title="Example: two tasks with independent loops">
 
 <!-- RESET CODE -->
 
@@ -118,8 +109,6 @@ main:
 Each task prints twice. The waits let the other task progress; the exact timing
 is not a real-time guarantee. See [tasks](/language/tasks).
 
-</Expandable>
-
 ## Libraries replace headers
 
 Each `.toit` file is an importable library. There are no separate header files
@@ -128,3 +117,7 @@ are imported by name. Package dependencies are resolved before execution.
 
 Continue with [imports](/language/imports), [packages](/language/package/pkgguide),
 and the [peripheral guides](/peripherals) for device APIs.
+
+For additional examples of call grouping, string interpolation, defaults, and
+block control flow, expand the example collections in
+[Toit for programmers](/language/toitversus).
