@@ -1,315 +1,205 @@
 # Beginner tutorial
 
-This tutorial assumes no Toit knowledge and explains the programming concepts
-it uses. You will build a program that reports temperatures, first with a few
-statements, then with a function and a class. You only need a computer; the
-readings are sample data, so no sensor or ESP32 is required.
+These lessons are for someone new to programming. You will write a temperature
+report using sample readings, so you need a computer but no sensor or ESP32.
+If you already program, start with [Toit for programmers](/language/toitversus).
 
-Already comfortable programming? Start with [Toit for programmers](/language/toitversus).
+You should be comfortable creating a text file and opening a terminal. The
+terminal is where you type the command that runs your program. We explain the
+programming concepts as they appear.
 
-Each example is a complete program: replace the contents of your file rather
-than appending it. The exercise solution is collapsed so you can try it first.
+| Lesson | What you will make |
+| --- | --- |
+| 1. Your first program, on this page | Report whether one temperature is warm. |
+| [2. Lists and functions](/language/beginner/lists-and-functions) | Report several readings using one reusable operation. |
+| [3. Objects](/language/beginner/objects) | Keep a room's name and readings together. Continue here when you are ready. |
+
+Each example is a complete program. Replace the contents of your file rather
+than appending the example to the previous one. Run it after each change.
 
 ## 1. Run your first program
 
-Install the [Toit SDK](https://github.com/toitlang/toit#readme) and make sure
-`toit --help` works in your terminal. If you already use Jaguar, its bundled SDK
-is available as `jag toit`; substitute `jag toit run` for `toit run` below.
+Install the [Toit SDK](https://github.com/toitlang/toit#readme), which includes
+the tools to run Toit programs. Check the installation by typing `toit --help`
+in a terminal. It should display instructions for the command.
+If you already have Jaguar installed, use `jag toit` instead of `toit` in these
+commands; you do not need to connect a device.
 
-Create a plain-text file named `report.toit`. The program starts at `main:`.
-Statements indented by two spaces underneath it form the body of `main`.
-`print` displays a value in the terminal, and text between double quotes is a
-*string*.
+In a text editor, create a file named `report.toit` containing these two lines:
 
 ```toit
 main:
   print "Temperature report"
 ```
 
-In the terminal, change to the directory containing `report.toit`, then run:
+The two spaces before `print` matter. Use spaces, not the Tab key.
+Save the file, open a terminal in the directory containing it, and type:
 
 ```sh
 toit run report.toit
 ```
 
-Expected output:
+You should see:
 
 ```text
 Temperature report
 ```
 
-Change the message and run the command again. If the terminal cannot find `toit`,
-check the SDK installation and your `PATH`. If it cannot find the file, check
-your current directory. If the compiler reports an error, start at the first
-reported file and line, and check the spelling and indentation.
+`main:` marks where the program starts. The indented line underneath it is an
+instruction: `print` displays the text between the double quotes. Text written
+this way is called a *string*. The quotes are part of the program, but are not
+printed.
 
-## 2. Name values and change them
+Change `Temperature report` to `Kitchen report`, save, and run the command
+again. The new message should appear. The program runs the saved version of
+your file, so remember to save before running.
 
-A *variable* gives a value a name. Write `temperature := 21` to declare one,
-then `temperature = 24` to change it. The distinction catches accidental
-redeclarations and assignments to names that do not exist.
+<Expandable title="If the program does not run">
 
-`$temperature` inside a string inserts the variable's value. Use `$(...)` for
-a longer expression. Names can contain hyphens: `reading-count` is one name.
-Use spaces around subtraction, as in `temperature - 2`.
+If the terminal cannot find `toit`, revisit the SDK installation instructions.
+If it cannot find `report.toit`, check that the terminal is open in the directory
+where you saved the file. If Toit reports a problem in the program, start with
+the first reported line. Compare the spelling, quotes, colon, and indentation
+with the example.
+
+</Expandable>
+
+## 2. Give a value a name
+
+We want the report to include a temperature. We could print `21` directly, but
+naming it lets us use the same value in several places.
+
+A *variable* is a name for a value. `temperature := 21` creates a variable named
+`temperature` with the value `21`. The `:=` introduces that new name.
 
 <!-- RESET CODE -->
 
 ```toit
 main:
   temperature := 21
-  print "First reading: $temperature C"
-  temperature = temperature + 3
-  print "Next reading: $temperature C"
+  print temperature
 ```
 
-Expected output:
+This prints `21`. There are no quotes around `temperature`: we want its value,
+not the word “temperature”. Instructions run from top to bottom, so the variable
+is created before `print` uses it.
+
+Change `21` to `24`, save, and run again. Then try `print "temperature"` and
+compare the output. Put `print temperature` back before continuing.
+
+## 3. Change the value
+
+Once a variable exists, use `=` to replace its value. Use `:=` only when
+introducing the name.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  temperature := 21
+  print temperature
+  temperature = 24
+  print temperature
+```
+
+The output is:
 
 ```text
-First reading: 21 C
-Next reading: 24 C
+21
+24
 ```
 
-Try changing the starting temperature. Predict both output lines before running.
+The first `print` uses the value at that point in the program. Changing the
+variable later does not change text that has already been printed.
 
-## 3. Make a decision
+You can calculate a new value from the old one. Replace `temperature = 24`
+with `temperature = temperature + 3`. Toit first adds three to the current
+value, then stores the result. The output should stay the same.
 
-An `if` statement runs its indented body only when its condition is true.
-An `else` body runs otherwise. Comparisons such as `>=` (greater than or equal
-to) and `==` (equal to) produce boolean values: `true` or `false`.
-Use `==` to compare, and `=` to assign.
+Try adding five instead. Predict the second line before running the program.
+
+## 4. Put the value in a message
+
+To print a label and a value together, put `$temperature` inside a string.
+Toit replaces it with the variable's value. This is called *interpolation*.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  temperature := 21
+  print "Temperature: $temperature C"
+```
+
+This prints:
+
+```text
+Temperature: 21 C
+```
+
+Change the value to `24`. You only need to change the line that sets the
+temperature; the message uses that value automatically.
+
+## 5. Decide what to print
+
+Our program should say “Warm” when the temperature is at least 25 degrees.
+Otherwise, it should say “Comfortable”. The question “is this temperature at
+least 25?” is written as `temperature >= 25`.
 
 <!-- RESET CODE -->
 
 ```toit
 main:
   temperature := 24
+  print "Temperature: $temperature C"
   if temperature >= 25:
     print "Warm"
   else:
     print "Comfortable"
 ```
 
-This prints `Comfortable`. Change the value to `25` and it prints `Warm`.
-
-## 4. Process a list
-
-A *list* stores several values in order: `[21, 26, 24]`. `readings.size` gives
-its length, and `readings[0]` gives the first element; indexes start at zero.
-
-`readings.do:` runs the indented code once per element. That code is a *block*.
-`|temperature|` names the element for each run. The block can read and change
-variables declared in its enclosing function.
-
-<!-- RESET CODE -->
-
-```toit
-main:
-  readings := [21, 26, 24]
-  warm-count := 0
-  readings.do: |temperature|
-    if temperature >= 25:
-      warm-count = warm-count + 1
-  print "$warm-count of $(readings.size) readings are warm"
-```
-
-This prints `1 of 3 readings are warm`.
-
-Add `28` to the list and check that the output becomes
-`2 of 4 readings are warm`. Try the empty list, `[]`, too.
-
-To repeat a known number of times, use `3.repeat:`. To repeat as long as a
-condition holds, use `while condition:`. See [control flow](/language/loops)
-when you need these alternatives.
-
-## 5. Put reusable work in a function
-
-A *function* names an operation. Parameters are names for the values it receives;
-`return` gives a result back to the caller. A function definition sits at the
-same indentation as `main`, not inside it.
-
-Define `count-warm readings --limit=25:` to accept readings and an optional named
-parameter. Call it with `count-warm readings --limit=24`. Spaces separate call
-arguments; Toit does not put commas or parentheses around the argument list.
-Parentheses group a nested call, as in `print (count-warm readings)`.
-
-<!-- RESET CODE -->
-
-```toit
-count-warm readings --limit=25:
-  count := 0
-  readings.do: |temperature|
-    if temperature >= limit:
-      count = count + 1
-  return count
-
-main:
-  readings := [21, 26, 24]
-  print (count-warm readings)
-  print (count-warm readings --limit=24)
-```
-
-Expected output:
+This prints:
 
 ```text
-1
-2
+Temperature: 24 C
+Comfortable
 ```
 
-A `return` inside a `do` block would leave the whole function immediately.
-Here it belongs after the loop, so we count every reading before returning.
+`if` asks the question. When the answer is yes, the program runs the further
+indented instruction below it. When the answer is no, it runs the instruction
+below `else:` instead. Only one of the two messages is printed.
 
-## 6. Handle an empty input
+The comparison is called a *condition*. Its result is `true` for yes or `false`
+for no. Those two values are called *booleans*.
 
-Our report should include an average. Adding the readings gives a total;
-dividing by the count gives the average. Toit's integer division discards the
-fraction, so convert the total with `to-float` before dividing.
+Try temperatures of `25` and `30`. Both should print `Warm`. Try `20`, which
+should print `Comfortable`. You have now checked values below, at, and above
+the threshold.
 
-There is no average of an empty list. We will represent that absence with
-`null` and test for it before printing. Only `null` and `false` are falsy in
-Toit: a valid average of zero still passes `if average`.
+## Practice before continuing
+
+Change the report so that it describes a freezer: print `Freezing` when the
+temperature is below zero, and `Not freezing` otherwise. Use `<` for “less than”.
+Check the program with `-5`, `0`, and `5`.
+
+<Expandable title="Solution: check for freezing temperatures">
 
 <!-- RESET CODE -->
 
 ```toit
-average-of readings -> float?:
-  if readings.size == 0:
-    return null
-  total := 0
-  readings.do: |temperature|
-    total = total + temperature
-  return total.to-float / readings.size
-
 main:
-  average := average-of [21, 26, 25]
-  if average:
-    print "Average: $average C"
+  temperature := -5
+  if temperature < 0:
+    print "Freezing"
   else:
-    print "No readings"
+    print "Not freezing"
 ```
 
-This prints `Average: 24.0 C`. Replace the list with `[]` to get `No readings`.
-The `-> float?` annotation says that the result is a floating-point number or
-`null`. Toit checks type annotations at runtime; they also help the editor
-explain your code.
-
-## 7. Finish the report with a class
-
-A *class* groups data with operations on that data. Each *object* made from a
-class has its own fields. A *method* is a function attached to an object.
-
-Our `TemperatureReport` will hold a list of readings and a warm threshold. Its
-`print-summary` method will use the two functions we already wrote. This is
-useful when we want several reports with different data and thresholds.
-
-Fields are declared in the class. In `constructor .readings_ --limit=25:`,
-`.readings_` automatically stores the first argument in that field. The named
-parameter is assigned explicitly to `limit_`. The `_` suffix marks these fields
-private. `:= ?` requires the constructor to initialize the mutable field.
-
-<!-- RESET CODE -->
-
-```toit
-count-warm readings/List --limit/int=25 -> int:
-  count := 0
-  readings.do: |temperature/int|
-    if temperature >= limit:
-      count = count + 1
-  return count
-
-average-of readings/List -> float?:
-  if readings.size == 0:
-    return null
-  total := 0
-  readings.do: |temperature/int|
-    total = total + temperature
-  return total.to-float / readings.size
-
-class TemperatureReport:
-  readings_/List
-  limit_/int := ?
-
-  constructor .readings_ --limit/int=25:
-    limit_ = limit
-
-  print-summary -> none:
-    average := average-of readings_
-    if not average:
-      print "No readings"
-      return
-    warm-count := count-warm readings_ --limit=limit_
-    print "Readings: $(readings_.size)"
-    print "Average: $average C"
-    print "Warm readings: $warm-count"
-
-main:
-  report := TemperatureReport [21, 26, 25]
-  report.print-summary
-  empty-report := TemperatureReport []
-  empty-report.print-summary
-```
-
-Run it with `toit run report.toit`. Expected output:
-
-```text
-Readings: 3
-Average: 24.0 C
-Warm readings: 2
-No readings
-```
-
-`TemperatureReport [21, 26, 25]` constructs an object.
-`report.print-summary` calls its method without parentheses. `/List` and `/int`
-are type annotations; `-> none` says the method does not return a value.
-The `readings_` field cannot be reassigned, but its list can still be changed.
-
-## 8. Check your understanding
-
-Try these changes to the complete program:
-
-1. Set the report's limit to `26`. The warm count should become `1`.
-2. Use `[0, 0]`. The average should be `0.0`, not `No readings`.
-3. Add a function that finds the highest reading, returning `null` for an empty list.
-
-<Expandable title="Solution: find the highest reading">
-
-<!-- RESET CODE -->
-
-```toit
-highest-of readings/List -> int?:
-  if readings.size == 0:
-    return null
-  highest := readings[0]
-  readings.do: |temperature/int|
-    if temperature > highest:
-      highest = temperature
-  return highest
-
-main:
-  print (highest-of [21, 26, 25])
-  print (highest-of [])
-```
-
-Expected output:
-
-```text
-26
-null
-```
+This prints `Freezing`. With `0` or `5`, it prints `Not freezing`.
 
 </Expandable>
 
-## Continue from here
-
-You can now run a program, name and update values, make decisions, process a
-list, write a function, handle missing data, and build an object.
-
-To grow the program, move the helper functions to another file using
-[imports](/language/imports). Learn [maps and other collections](/language/listsetmap)
-for data with keys, [exceptions](/language/exceptions) for failed operations, and
-[tasks](/language/tasks) for concurrent activities. These are topic guides you
-can consult when needed.
-
-For a device project, follow [Run on your device](/getstarted/device), then the
-[first LED tutorial](/tutorials/hardware/led). To revisit an unfamiliar construct,
-use the [language reference](/language/reference).
+You have a complete program that stores a reading, includes it in a message,
+and chooses a description. Continue with
+[lists and functions](/language/beginner/lists-and-functions) to report several
+readings without copying the same instructions for each one.

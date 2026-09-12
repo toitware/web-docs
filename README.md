@@ -78,6 +78,19 @@ The documentation pages are written in `.mdx` which are
 [markdown](https://www.markdownguide.org/basic-syntax/) files that can also
 import react components.
 
+## Audiences for language documentation
+
+The programmer's tour is the complete first introduction for people who already
+program. Explain Toit directly, then use C/C++, JavaScript, Python, or Java/Kotlin
+comparisons where useful. Familiarity with every comparison language is not a
+prerequisite. Keep essential content in one reading path; language-specific
+pages highlight differences and link into it. Reference pages cover detailed
+rules rather than carrying missing parts of the introduction.
+
+Beginner lessons assume no programming knowledge. Introduce concepts when a
+concrete example needs them, with time to run and modify the program before
+adding another concept. Split lessons at useful stopping points.
+
 ## Examples in documentation
 
 Keep examples visible when they introduce a concept or the surrounding text

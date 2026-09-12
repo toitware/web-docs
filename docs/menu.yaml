@@ -48,8 +48,6 @@ items:
     path: /language
     icon: language
     children:
-      - name: Beginner tutorial
-        path: /language/beginner
       - name: Toit for programmers
         path: /language/toitversus
         children:
@@ -59,6 +57,13 @@ items:
             path: /language/from-python
           - name: For C and C++ programmers
             path: /language/from-cpp
+      - name: Beginner lessons
+        path: /language/beginner
+        children:
+          - name: Lists and functions
+            path: /language/beginner/lists-and-functions
+          - name: Objects
+            path: /language/beginner/objects
       - name: Language reference
         path: /language/reference
         children:

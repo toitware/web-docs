@@ -1,11 +1,22 @@
 # Toit for programmers
 
-This guide assumes you know variables, functions, classes, and collections in
-another language. It focuses on the choices that change how you write programs.
-For a step-by-step first program, use the [beginner tutorial](/language/beginner).
+This is a complete first tour for readers who already program in another
+language. It introduces Toit's syntax, values, functions, objects, libraries,
+and concurrency. Familiar concepts get a short explanation; features such as
+blocks and cooperative tasks get more space.
 
-For comparisons with your own language, see [JavaScript and TypeScript](/language/from-javascript),
-[Python](/language/from-python), or [C and C++](/language/from-cpp).
+Read it in order, or use the table of contents to skip familiar topics. We use
+C/C++, JavaScript, Python, and Java/Kotlin as points of comparison. You do not
+need to know all of them: each section explains the Toit behavior directly.
+Optional example collections explore variations without interrupting the main
+explanation.
+
+You can run the complete examples on your computer using the
+[local setup](/language/beginner#1-run-your-first-program); no hardware is required.
+If you are new to programming, use the [beginner lessons](/language/beginner).
+The language-specific guides for [JavaScript](/language/from-javascript),
+[Python](/language/from-python), and [C/C++](/language/from-cpp) highlight what to
+watch for when coming from those languages.
 
 ## The differences that matter
 
@@ -19,6 +30,13 @@ For comparisons with your own language, see [JavaScript and TypeScript](/languag
 | Memory is garbage collected | You do not free objects; you still explicitly release resources such as open files. |
 
 ## Read calls before translating syntax
+
+A program starts in `main`. Functions and classes can be declared at the top
+level; there is no need for a wrapper class. Indentation groups statements,
+with two spaces per level. Comments start with `//`, or use `/* ... */` for
+multiple lines. Java programmers can define `main` and other functions directly
+in a file, as in Kotlin. The `/int` and `-> int` annotations below specify parameter
+and return types; they can be omitted.
 
 ```toit
 add a/int b/int -> int:
@@ -86,6 +104,36 @@ expression, not two arguments. A continuation line can itself be a nested call.
 
 </Expandable>
 
+## Functions and scope
+
+Define parameters after the function name. Positional parameters can have
+default values; named parameters have a `--` prefix in both the definition and
+the call. Use `return` for a function's result. A function without a result can
+be annotated `-> none`.
+
+<!-- RESET CODE -->
+
+```toit
+greet name/string="World" --greeting/string="Hello" -> string:
+  return "$greeting $name"
+
+main:
+  print (greet)                         // Prints Hello World.
+  print (greet "Ada" --greeting="Hi")    // Prints Hi Ada.
+```
+
+C/C++ and JavaScript programmers should notice that named arguments are part
+of the call's syntax, not fields in an options object. A boolean named argument
+can be passed as `--verbose` for true or `--no-verbose` for false. Toit supports
+overloading by argument count and names, rather than selecting overloads by
+parameter types.
+
+A local name belongs to its enclosing scope. A top-level variable is a global;
+its initializer runs on first access. Use `::=` for a final binding and
+uppercase names for constants, for example `MAX-READINGS ::= 100`. Finality
+prevents reassignment, not mutation of the referenced object. These rules also
+apply to fields, which we will use in the classes section.
+
 ## String interpolation
 
 Double-quoted strings support `$name` and `$(expression)` interpolation:
@@ -103,6 +151,17 @@ Interpolation includes member access and indexing: `"$name.size"` inserts the
 size, while `"$(name).size"` inserts the name followed by literal `.size`.
 Hyphens can belong to identifiers, so use `"$(name)-sensor"` when you want a
 literal suffix. Formatting goes inside the parentheses, as in `"$(%.2f 3.14159)"`.
+
+Strings are immutable UTF-8 text. Unlike Python's character indexing or
+JavaScript's UTF-16 code-unit indexing, Toit's string offsets are byte offsets:
+`"é".size` is `2`. Indexing at a character boundary returns its Unicode code
+point; indexing at a continuation byte returns `null`. Slices must end at
+character boundaries. Use `text.do --runes:` to iterate over code points instead
+of treating every byte offset as a character.
+
+Use triple double quotes for multiline strings, `\n` for a newline, and `\$`
+for a literal dollar sign. Single quotes denote a code point: `'A'` is the
+integer `65`, not a one-character string.
 
 <Expandable title="12 more interpolation examples: boundaries, expressions, and formatting">
 
@@ -185,13 +244,37 @@ mistakes before execution, but does not turn Toit into a language where every
 type error is rejected before running.
 
 Types are non-nullable by default; `string?` accepts a string or `null`.
-Use annotations on interfaces and fields to document and enforce expectations.
+Use annotations on function signatures and fields to document and enforce
+expectations. Unlike TypeScript annotations or ordinary Python type hints,
+these annotations constrain values at runtime. `any` accepts any value,
+including `null`; `none` marks a function with no result. Kotlin readers will
+recognize the nullable `?` suffix; C++ readers should distinguish a nullable
+object reference from a pointer they can dereference or perform arithmetic on.
+Local types are often inferred by the editor and need not be written out.
+
+Use `value is Type` to test a type, and `value as Type` for a checked cast.
+The cast does not convert the value; use conversion methods such as `to-float`
+or parsing functions such as `int.parse` for that.
 See [types](/language/definitions#type).
+
+## Numbers, booleans, and operators
 
 Only `false` and `null` are falsy. Zero, empty strings, and empty collections
 are truthy. Integers are signed 64-bit values; integer division truncates toward
 zero. `5 / 2` is `2`, while `5 / 2.0` is `2.5`. These rules matter when porting
 default expressions, emptiness checks, and calculations.
+
+Arithmetic uses `+`, `-`, `*`, `/`, and `%`; comparisons use `==`, `!=`, `<`,
+`<=`, `>`, and `>=`. `and`, `or`, and `not` are the logical operators.
+Unlike Java and Kotlin, a condition does not require a boolean value: the
+truthiness rules above apply. `and` and `or` short-circuit and return an operand,
+which makes `name or "World"` a useful default when `name` is nullable. Check `.size == 0` for emptiness.
+
+Integers have a fixed range, unlike Python integers. Floats are double precision.
+Hexadecimal and binary literals use `0x` and `0b`; separate digits with `_`, as
+in `0xffff_ffff`. Bitwise operations use `&`, `|`, `^`, `~`, `<<`, `>>`, and
+`>>>`; the last is an unsigned right shift. See [numbers](/language/math) and
+[bitwise operations](/language/bitmask) for the detailed rules.
 
 <Expandable title="More examples: defaults, guarded access, and integer division">
 
@@ -233,6 +316,14 @@ does not check whether an object has the member you want.
 
 ## Blocks are part of control flow
 
+Blocks let ordinary methods implement control structures. The `:` following
+`values.do` passes a block, and `|value|` names its parameter. The block can
+read and update variables in the surrounding function. For a short block with
+one parameter, `it` is an implicit parameter name, as in `values.do: print it`.
+
+Unlike a JavaScript `forEach` callback or a C++ lambda, a Toit block can return
+from the function in which it was written:
+
 <!-- RESET CODE -->
 
 ```toit
@@ -251,6 +342,49 @@ A block's last expression supplies its result to its caller; it does not need
 `return`. This makes library methods such as `do`, `map`, and `repeat` work
 like control structures. Blocks cannot be saved in fields or returned for later
 use, allowing their lifetime to stay within the enclosing call.
+
+### Write a method that accepts a block
+
+A block parameter is written in square brackets. Invoke it with `.call`, passing
+its arguments in the usual way. The caller's local variables remain accessible
+while the called method runs:
+
+<!-- RESET CODE -->
+
+```toit
+with-offset offset/int [action]:
+  return action.call offset
+
+main:
+  base := 10
+  result := with-offset 5: |offset|
+    base + offset
+  print result  // Prints 15.
+```
+
+The final expression `base + offset` supplies the block's result to
+`action.call`. The `return` in `with-offset` then returns that result to `main`.
+These are different from putting `return` inside the block, which would leave
+`main` itself.
+
+### Lifetime explains the low cost
+
+Blocks can be passed down through calls, but cannot escape into fields,
+collections, globals, or return values. A lambda cannot capture a block. Those
+restrictions keep the referenced locals alive for every use of the block.
+
+For C/C++ readers, the VM representation helps explain the design: a block
+reference is a small integer encoding a position relative to the stack base.
+Loading that reference pushes a value; it does not allocate a heap closure to
+copy the captured locals. This is an implementation explanation, not a promise
+about instruction counts. C++ lambdas can also avoid heap allocation; the key
+Toit distinction is that the language enforces a separate lifetime for blocks.
+
+That makes blocks a practical default for scoped callbacks, including iteration
+and resource-management helpers. Use the parameter form required by the API:
+`[action]` expects a block, whereas a stored callback needs a lambda.
+
+### Lambdas can outlive the call
 
 A lambda starts with `::` and can outlive the call that creates it. Its final
 expression supplies its result; it cannot contain an explicit `return`:
@@ -310,28 +444,326 @@ main:
 
 </Expandable>
 
+## Conditions and loops
+
+`if`, `else if`, `else`, and `while` work as you would expect, with indentation
+in place of braces. A conditional expression uses `condition ? yes : no`.
+Python readers should note that Toit also has a C-style `for` loop.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  for i := 0; i < 4; i++:
+    if i == 1: continue
+    print i  // Prints 0, 2, and 3.
+
+  remaining := 3
+  while remaining > 0:
+    remaining -= 1
+    if remaining == 1: break
+  print remaining  // Prints 1.
+```
+
+`break` and `continue` apply to `for` and `while`. For a fixed number of
+repetitions, prefer `3.repeat:`; for collections, prefer `values.do:`. These
+are methods taking blocks, so skip an iteration with `continue.repeat` or
+`continue.do`. To exit a search early, use a block's non-local `return`, as
+in `first-positive` above. See [control flow](/language/loops).
+
+## Collections and binary data
+
+Lists, maps, and sets are built in. Their elements can have different types;
+`List` itself does not declare a type parameter for its elements. Use typed
+block parameters or checks where element types matter.
+
+| Value | Literal | Common operations |
+| --- | --- | --- |
+| List | `[1, 2, 3]`; empty `[]` | `values[0]`, `values.add 4`, `values.size` |
+| Map | `{"name": "Ada"}`; empty `{:}` | `labels["name"]`, `labels["name"] = "Grace"` |
+| Set | `{1, 2, 3}`; empty `{}` | `seen.add 4`, `seen.contains 4` |
+| Byte array | `#[0, 127, 255]`; empty `#[]` | `bytes[0]`, `bytes.size` |
+
+Python readers should note the empty map/set distinction. JavaScript readers
+should use maps for dynamic keys and classes for structured objects. C/C++
+readers should use byte arrays and encoding APIs for binary data, rather than
+assuming an object has a C struct's memory layout.
+
+Use slices such as `values[1..3]` for a range with an inclusive start and an
+exclusive end. A map lookup using brackets throws if the key is missing;
+`labels.get "name"` returns `null` when absent. Use `--if-absent` when you need
+a different fallback.
+
+### Transform and combine values with blocks
+
+`map` transforms each element; `filter` selects elements; `reduce` combines
+elements into one value. Their blocks supply results through their final
+expressions. `do` is for performing an action on each element.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  readings := [21, 26, 25]
+  warm := readings.filter: it >= 25
+  labels := readings.map: "$it C"
+  total := readings.reduce --initial=0: |sum reading| sum + reading
+  print warm                            // Prints [26, 25].
+  print (labels.join ", ")               // Prints 21 C, 26 C, 25 C.
+  print (total.to-float / readings.size)  // Prints 24.0.
+```
+
+The initial value makes this reduction valid for an empty list, but computing
+an average still requires an explicit policy for empty input. `reduce` without
+an initial value requires a nonempty collection. Other useful operations are
+`any` and `every`, which test predicates without constructing a filtered list.
+
+<Expandable title="More examples: map defaults, mutation, and byte encoding">
+
+<!-- RESET CODE -->
+
+```toit
+import io
+
+main:
+  counts := {"warm": 2}
+  print (counts.get "cold")  // Prints null.
+  print (counts.get "cold" --if-absent=: 0)  // Prints 0; no entry added.
+  counts.update "cold" --init=0: it + 1
+  print counts["cold"]  // Prints 1.
+
+  names ::= ["Ada"]
+  names.add "Grace"  // A final binding still refers to a mutable list.
+  print names.size   // Prints 2.
+
+  bytes := ByteArray 4 --initial=0
+  io.LITTLE-ENDIAN.put-uint32 bytes 0 0x1234
+  print (io.LITTLE-ENDIAN.uint32 bytes 0)  // Prints 4660.
+```
+
+`--if-absent` computes a fallback without inserting it. The `--init` form of
+`update` creates a missing entry before updating it. Encoding methods specify
+width and byte order explicitly. See [collections](/language/listsetmap).
+
+</Expandable>
+
 ## Classes define the shape of objects
+
+A class declares fields and methods. Construct an instance by calling its class,
+without `new`. In a constructor, `.value_` stores the corresponding argument
+in the field. Elsewhere, methods can refer to fields directly; `this` names
+the receiver explicitly when needed.
 
 <!-- RESET CODE -->
 
 ```toit
 class Counter:
-  value/int := 0
+  value_/int := ?
+
+  constructor .value_=0:
+
+  value -> int: return value_
 
   increment -> none:
-    value = value + 1
+    value_ += 1
 
 main:
-  counter := Counter
+  counter := Counter 4
   counter.increment
-  print counter.value
+  print counter.value  // Prints 5.
 ```
 
-This prints `1`. Calling the class constructs an instance, without `new`.
-Fields are declared in the class; methods can refer to them without a `this.`
-prefix. A trailing underscore marks a private member. For data with keys chosen
-at runtime, use a map such as `{"temperature": 23}` and access it with brackets.
-See [classes and interfaces](/language/objects-constructors-inheritance-interfaces).
+`:= ?` declares a mutable field that the constructor must initialize.
+A typed field without `:=`, such as `name/string`, is final and must also be
+initialized by the constructor. A trailing underscore marks a private member.
+Use private fields when callers should go through methods instead of updating
+the representation directly.
+
+`counter.value` invokes a zero-argument getter. Public fields have accessors
+with the same call syntax, so you can replace a field with a computed getter
+without changing readers. A setter is defined as `value= new-value:` and called
+with `counter.value = new-value`. Kotlin readers will recognize the property-like
+call syntax; Java readers do not need a separate `getValue()` convention.
+
+### Inheritance, interfaces, and constructors
+
+A class can extend one superclass and implement multiple interfaces. Interfaces
+must be implemented explicitly: a class does not acquire an interface type
+just because it has matching methods. This differs from TypeScript's structural
+typing and Python's usual duck typing, and will be familiar from Java/Kotlin.
+
+<!-- RESET CODE -->
+
+```toit
+interface Described:
+  description -> string
+
+class Device implements Described:
+  name_/string
+
+  constructor .name_:
+
+  description -> string: return name_
+
+class Sensor extends Device:
+  constructor name/string:
+    super name
+
+  description -> string:
+    return "Sensor: $(super)"
+
+main:
+  device/Described := Sensor "Kitchen"
+  print device.description  // Prints Sensor: Kitchen.
+```
+
+In a constructor, `super` calls the superclass constructor. In an overriding
+method, it calls the superclass implementation of that same method; do not
+translate a JavaScript `super.description()` into `super.description`.
+
+Use `abstract class` when you want shared implementation with abstract methods
+that subclasses must provide. Use `static` for methods and fields on the class
+rather than its instances. Named constructors, such as `Counter.from-reading`,
+give creation paths meaningful names. A factory constructor returns an existing
+object or an object of another implementation rather than initializing a new
+instance of its own class.
+
+<Expandable title="More examples: a setter and a named constructor">
+
+<!-- RESET CODE -->
+
+```toit
+class Counter:
+  value_/int := 0
+
+  constructor:
+
+  constructor.from-reading reading/int:
+    value_ = reading
+
+  value -> int: return value_
+
+  value= new-value/int:
+    if new-value < 0: throw "Negative count"
+    value_ = new-value
+
+main:
+  counter := Counter.from-reading 4
+  counter.value = 5
+  print counter.value  // Prints 5.
+```
+
+The setter validates an assignment without changing its syntax at the call
+site. See [classes and interfaces](/language/objects-constructors-inheritance-interfaces)
+for static members, factories, and constructor initialization rules.
+
+</Expandable>
+
+## Errors and resources need explicit handling
+
+`throw` raises an exception. Exceptions are values; strings are common, and
+objects are useful when a caller needs to distinguish kinds of failure.
+`catch:` runs a block and returns the thrown value, or `null` on success.
+The result is the exception, not the block's final expression.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  value := 0
+  error := catch:
+    value = int.parse "invalid"
+  if error:
+    print "Expected an integer"
+  else:
+    print "Read $value"
+```
+
+This prints `Expected an integer`. Throw a truthy value when using `if error`
+to detect failure. `try:` with `finally:` performs cleanup, including when
+execution leaves through an exception or a return. There is no combined
+`try`/`catch` syntax; put a `try`/`finally` inside a `catch` when both are needed.
+
+Garbage collection reclaims unreachable memory. Unlike C++ destructors, it
+does not provide deterministic resource cleanup. Put a resource's close
+operation in `finally`, or use a library's scoped helper when one is available.
+
+<Expandable title="More examples: cleanup before handling a failure">
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  error := catch:
+    try:
+      print "Using resource"
+      throw "Read failed"
+    finally:
+      print "Close resource here"
+  if error:
+    print "Handled: $error"
+```
+
+The cleanup line runs before the handler prints the error. In real code,
+replace the cleanup message with the resource's close operation. See
+[exception handling](/language/exceptions).
+
+</Expandable>
+
+## Files are libraries
+
+Each `.toit` file is a library. Imports go at the top of the file. `import math`
+imports an SDK library and makes its members available through the `math`
+prefix. The core library, including `print`, `List`, and `int`, is available
+automatically.
+
+<!-- RESET CODE -->
+
+```toit
+import math
+
+main:
+  print (math.sqrt 9.0)  // Prints 3.0.
+```
+
+`import .helpers` imports a sibling `helpers.toit`. Local imports make names
+available without a prefix by default, whereas SDK and package imports use a
+prefix. Use `as` to choose one explicitly, or `show` to select names. Unlike
+C/C++, declarations do not need separate header files.
+
+<Expandable title="Example: split a program across two files">
+
+Save these files in the same directory. Run `toit run main.toit`.
+
+**helpers.toit**
+
+<!-- RESET CODE -->
+<!-- CODE FILENAME helpers.toit -->
+
+```toit
+label name/string -> string:
+  return "Sensor: $name"
+```
+
+**main.toit**
+
+<!-- RESET CODE -->
+<!-- CODE FILENAME main.toit -->
+
+```toit
+import .helpers as helpers
+
+main:
+  print (helpers.label "Kitchen")  // Prints Sensor: Kitchen.
+```
+
+</Expandable>
+
+Libraries distributed separately from the SDK are packages. Dependencies are
+declared in `package.yaml`, and `package.lock` records resolved versions.
+Imports are resolved before execution. Follow the
+[package quick start](/language/package/pkgguide) to add a dependency, and
+[imports](/language/imports) for namespace and path rules.
 
 ## Waiting suspends a task
 
@@ -348,7 +780,10 @@ main:
 Toit tasks have independent stacks and share the program's objects. Waiting
 operations such as `sleep` suspend the current task so another can run. Ordinary
 functions can wait without an `async` declaration or an `await` at each caller.
-This lets device and network code use ordinary loops and calls.
+This lets device and network code use ordinary loops and calls. JavaScript
+and Python programmers can think of the sequential style of async/await,
+with the difference that waiting works through ordinary functions and callers.
+Kotlin readers do not need a `suspend` marker on each waiting function either.
 
 Scheduling within a program is cooperative. A CPU loop that never yields starves
 other tasks. Conversely, a call that waits can allow another task to change shared
@@ -356,23 +791,10 @@ state; inspect library behavior when reasoning about an update spanning calls.
 Tasks are not parallel threads and are distinct from independently running
 containers. See [tasks and synchronization](/language/tasks).
 
-## Errors and resources need explicit handling
+## Continue with a project
 
-`throw` raises an exception. `catch:` runs a block and returns the thrown value,
-or `null` on success. `try:` with `finally:` performs cleanup, including when
-execution leaves through an exception. There is no combined `try`/`catch` syntax.
-
-Garbage collection reclaims unreachable memory, but does not replace explicit
-resource cleanup. Pair resource acquisition with the API's close operation in
-`finally`. See [exception handling](/language/exceptions).
-
-## Files are libraries
-
-Each `.toit` file is a library. `import .helpers` imports a sibling file;
-`import math` imports an SDK library. The core library is available automatically.
-Imports and package dependencies are resolved before execution, so organizing a
-program does not require runtime module loading.
-
-Continue with [imports](/language/imports), the [package quick start](/language/package/pkgguide),
-or the [language reference](/language/reference). To run the examples locally,
-follow the setup at the start of the [beginner tutorial](/language/beginner).
+You now have the language tools to read and write a Toit program: calls,
+values, blocks, collections, objects, errors, imports, and tasks. Use the
+[language reference](/language/reference) for rules and APIs as you need them.
+To work with hardware, follow [Run on your device](/getstarted/device) and
+then a [hardware or networking tutorial](/tutorials).

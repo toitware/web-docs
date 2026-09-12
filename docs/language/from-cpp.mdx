@@ -1,9 +1,10 @@
 # Toit for C and C++ programmers
 
-For readers familiar with native code, memory management, and threads. Toit
-runs in a virtual machine with garbage-collected objects. The main adjustment
-is how you reason about memory, resources, and concurrency.
-See [Toit for programmers](/language/toitversus) for calls, types, and collections.
+For readers familiar with native code, memory management, and threads. This
+page highlights the move to managed objects and cooperative tasks. For the full
+language introduction, read [Toit for programmers](/language/toitversus), which
+explains each feature directly and draws comparisons with C/C++, JavaScript,
+Python, and Java/Kotlin.
 
 ## Memory is managed; resources still need cleanup
 
@@ -59,6 +60,20 @@ and parentheses group nested expressions. Calling a class constructs an object:
 `counter := Counter`. Zero-argument calls need no parentheses, so `counter.read`
 invokes `read` rather than producing a method pointer.
 
+## Blocks provide scoped control flow
+
+Blocks are central to Toit APIs. A block can use and update the enclosing
+function's locals and can return from that function. A method accepts a block
+using a parameter such as `[action]`, then invokes it with `action.call`.
+This lets library methods behave like control structures.
+
+Block references encode stack-relative positions as small integers; passing
+one does not require allocating a heap closure for the captured variables.
+The language enforces the corresponding lifetime: blocks cannot escape into
+fields, globals, collections, or return values. C++ lambdas can also avoid heap
+allocation, but Toit distinguishes blocks from longer-lived callbacks in its
+parameter syntax.
+
 Use a lambda, `:: counter.read`, when you want to store a call for later.
 Use `:` blocks for scoped iteration. A `return` inside a block returns from the
 enclosing function, unlike a C++ lambda. A Toit `::` lambda uses its final
@@ -78,7 +93,9 @@ main:
 ```
 
 This prints `4`. The `do` method implements iteration while the block retains
-the enclosing function's return behavior.
+the enclosing function's return behavior. The shared tour shows
+[how to write block-taking methods](/language/toitversus#write-a-method-that-accepts-a-block)
+and explains the lifetime and result rules in more detail.
 
 ## Tasks cooperate within a program
 
