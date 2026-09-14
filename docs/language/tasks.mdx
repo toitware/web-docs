@@ -248,3 +248,103 @@ The Mailbox can send multiple messages between tasks. Like the latch (and
 unlike the Channel) it doesn't have the ability to buffer messages. The
 receiver (consumer) must acknowledge each message with a response, sent with
 the `reply` method.
+
+## Writing your own monitors
+
+The classes in `import monitor` are themselves written with the `monitor`
+keyword. You can use it to write your own synchronization objects. A monitor is
+declared like a class, but with `monitor` instead of `class`:
+
+```
+monitor BoundedQueue:
+  items_ /Deque := Deque
+  capacity_ /int
+
+  constructor .capacity_:
+
+  /// Adds $item to the queue, blocking while the queue is full.
+  put item -> none:
+    await: items_.size < capacity_
+    items_.add item
+
+  /// Removes and returns the oldest item, blocking while the queue is empty.
+  take -> any:
+    await: not items_.is-empty
+    return items_.remove-first
+
+  size -> int:
+    return items_.size
+
+main:
+  queue := BoundedQueue 2
+
+  task::
+    5.repeat:
+      queue.put it
+      print "Produced $it"
+
+  task::
+    5.repeat:
+      sleep --ms=100
+      print "Consumed $queue.take"
+```
+
+### Locking
+
+Every public method of a monitor holds a lock on the monitor instance while it
+runs. Only one task at a time can be inside a public method of a given
+instance; other tasks calling public methods on the same instance wait until
+the lock is released.
+
+Since tasks only switch at yield points, you rarely need a lock for code that
+doesn't yield. Monitors become important when a method needs to wait for
+something, or when it calls code that might yield, such as `print` or I/O.
+
+Private methods (names ending with `_`) do not take the lock. They are meant to
+be called from public methods that already hold it.
+
+<Note type="warning">
+
+The lock is not reentrant. A public method that calls another public method on
+the same monitor deadlocks. Move the shared code into a private method instead:
+
+```
+monitor Counter:
+  count_ /int := 0
+
+  increment -> none:
+    increment_
+
+  add-two -> none:
+    // Calling `increment` here would deadlock.
+    increment_
+    increment_
+
+  increment_ -> none:
+    count_++
+```
+
+</Note>
+
+### Waiting with `await`
+
+Inside a monitor method, `await: condition` blocks the task until the
+condition block evaluates to true. While waiting, the lock is released, so
+other tasks can call methods on the monitor and change its state. When the
+condition becomes true, the task re-acquires the lock and continues.
+
+In the `BoundedQueue` example above, `take` waits for an item, and `put`
+waits for free space. Each call to `put` or `take` changes the state, which
+lets the waiting task in the other method continue.
+
+The condition is only re-evaluated after a public method on the same monitor
+instance has run. It should therefore only depend on the state of the monitor
+itself. The condition must not change any state.
+
+If the task has a deadline, for example because it runs inside `with-timeout`,
+`await` throws `DEADLINE_EXCEEDED` when the deadline is reached. Use
+`try-await --deadline=...` to get a boolean result instead of an exception.
+
+### Restrictions
+
+A monitor cannot have a super class, and monitors should not be extended.
