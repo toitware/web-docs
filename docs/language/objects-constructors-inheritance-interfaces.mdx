@@ -1,5 +1,7 @@
 # Classes
 
+<span id="classes-in-toit" />
+
 In Toit, everything is an object, including things that may be non-object
 "primitive types" in other languages. For example, an [integer](../math)
 is an object, and has methods like `abs`:
@@ -213,6 +215,37 @@ main:
     turtle.turn 90      // >> I turned 90 degrees.
   print "The turtle has travelled $(turtle.mileage)mm."
 ```
+
+## Mixins
+
+A class extends one superclass, but it can add reusable behavior with `with`.
+A mixin contributes methods and fields without becoming another superclass.
+An abstract mixin can require methods that the applying class must provide:
+
+<!-- RESET CODE -->
+
+```toit
+abstract mixin Printable:
+  abstract description -> string
+
+  print-description -> none:
+    print description
+
+class Device extends Object with Printable:
+  name/string
+
+  constructor .name:
+
+  description -> string: return name
+
+main:
+  device := Device "Kitchen"
+  device.print-description  // Prints Kitchen.
+```
+
+`Printable` supplies `print-description`; `Device` supplies the required
+`description`. Multiple mixins are listed after `with`, separated by spaces.
+This offers shared implementation while keeping a single superclass chain.
 
 ## Constructors
 

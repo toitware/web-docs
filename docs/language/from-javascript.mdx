@@ -1,0 +1,350 @@
+# Toit for JavaScripters
+
+For JavaScript and TypeScript programmers who already know functions, objects,
+and asynchronous code. This page highlights assumptions to revisit when moving
+to Toit. For the full language introduction, read
+[Toit for programmers](/language/toitversus), which explains each feature directly
+and draws comparisons with C/C++, JavaScript, Python, and Java/Kotlin.
+
+Each Toit example is a complete program you can run using the
+[local setup](/language/beginner#1-run-your-first-program).
+
+<span id="calls-do-not-produce-function-references" />
+
+## Calling functions and methods
+
+`console.log(value)` becomes `print value`: spaces separate the arguments.
+When one call supplies an argument to another, group it with parentheses:
+`print (int.parse "42")`.
+
+A zero-argument method is called by naming it. In this example, `name.trim`
+calls `trim` and returns a string:
+
+```toit
+main:
+  name := " Ada "
+  print name.trim
+```
+
+This prints `Ada`. Toit uses indentation to group statements, with two spaces
+per level. Names for variables and functions use `kebab-case`.
+
+## Variables and final bindings
+
+Use `:=` to introduce a local variable and `=` to reassign it. Toit normally
+uses mutable locals, even when a particular variable is only assigned once.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  count := 1
+  count++
+  print count  // Prints 2.
+```
+
+`::=` declares a final binding, like JavaScript's `const`: the binding cannot
+be reassigned, but the object can still change. Prefer final bindings for fields
+and globals when reassignment is unnecessary. A common field declaration is
+`name/string`, which also makes the field final; we will use it in the class
+example below.
+
+## Named arguments
+
+Named arguments are part of a function's signature and its calls. They are
+written with `--`; they are not properties of an options object:
+
+<!-- RESET CODE -->
+
+```toit
+greet name --greeting="Hello":
+  print "$greeting $name"
+
+main:
+  greet "Ada"
+  greet "Grace" --greeting="Welcome"
+```
+
+This prints `Hello Ada`, then `Welcome Grace`. The default is used when the
+argument is omitted. Positional parameters can have defaults too.
+See [syntax](/language/syntax) for more call examples.
+
+## Strings interpolate with `$`
+
+Use `"Hello $name"` or `"Hello $(name.trim)"` in place of a template literal's
+`${name}` expression. Toit uses ordinary double quotes for interpolated strings.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  name := "Ada"
+  print "Hello $name"             // Prints Hello Ada.
+  print "Name length: $name.size"  // Prints Name length: 3.
+```
+
+Dot access and indexing are included in the interpolation. Parentheses delimit
+it: `"$(name).size"` produces `Ada.size`. See the
+[interpolation examples](/language/toitversus#string-interpolation)
+for an expandable collection covering boundaries, expressions, and formatting.
+
+## Blocks are not arrow functions
+
+The `:` in `values.do: |value|` introduces a block. Like a callback passed to
+`forEach`, it runs for each element, but its control flow is different:
+`return` leaves the enclosing function, not just the iteration.
+
+The last expression gives a block its value. Use `continue.do` to skip to the
+next iteration. Use `::` for a lambda that can be stored or returned. A lambda
+uses its final expression as its result and cannot contain an explicit `return`.
+This distinction lets library iteration behave like a loop while supporting
+callbacks with a longer lifetime.
+
+<!-- RESET CODE -->
+
+```toit
+find-long-name names:
+  names.do: |name|
+    if name.size > 4:
+      return name
+  return null
+
+main:
+  print (find-long-name ["Ada", "Grace", "Linus"])
+```
+
+This prints `Grace`. This exit from the surrounding function is called a
+*non-local return*. A `return` inside a JavaScript `forEach` callback would
+only return from that callback. Here it ends `find-long-name`.
+
+See [blocks and lambdas](/language/blocks-and-lambdas) for parameters and lifetime
+rules.
+
+## Waiting does not require async functions
+
+In JavaScript, [`async` functions return promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function),
+and `await` suspends their execution until a promise settles. In Toit, ordinary
+functions can wait. The task keeps its call stack while another task runs;
+callers do not need an `async` marker or an `await` expression.
+
+Start a concurrent activity with `task::`. Within one program, tasks share
+objects and run cooperatively. They do not run in parallel. A busy loop without
+a yielding operation prevents other tasks from progressing.
+
+<!-- RESET CODE -->
+
+```toit
+announce-later message/string -> none:
+  sleep --ms=10
+  print message
+
+main:
+  task:: announce-later "Background done"
+  print "Main continues"
+```
+
+`announce-later` waits without any special function declaration. The main task
+can continue while the background task is asleep.
+
+The tradeoff is that yield points are not marked at each call site. A library
+call that waits can allow another task to modify shared objects. Check APIs and
+use [synchronization](/language/tasks#synchronizing-between-tasks-with-monitors)
+when an operation must remain consistent across waits. JavaScript's async/await
+also supports sequential-looking loops; the difference here is how waiting
+propagates through ordinary calls.
+
+## Zero and empty strings are truthy
+
+JavaScript treats zero and the empty string as falsy; see
+[MDN's truthiness rules](https://developer.mozilla.org/en-US/docs/Glossary/Truthy).
+Toit treats only `false` and `null` as falsy. There is no separate `undefined`
+value. `and`, `or`, and `not` replace `&&`, `||`, and `!`.
+
+This affects defaults: `value or fallback` preserves `0` and `""`, but replaces
+`false`. Check `value == null` when a boolean `false` must also be preserved.
+Check `.size == 0` when you mean an empty collection or string.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  print (0 or 10)
+  print (("" or "fallback").size)
+  print (null or "fallback")
+```
+
+Expected output:
+
+```text
+0
+0
+fallback
+```
+
+## Numbers distinguish integers from floats
+
+Toit has signed 64-bit `int` values and floating-point `float` values.
+`5 / 2` is `2`, and `5 / 2.0` is `2.5`. When translating an average or a ratio
+from JavaScript, ensure a floating-point operand is present if you need the
+fraction. Convert text explicitly with `int.parse` or `float.parse` and use
+string interpolation to format a value as text.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  total := 5
+  count := 2
+  print (total / count)
+  print (total.to-float / count)
+  print (int.parse "42")
+```
+
+Expected output:
+
+```text
+2
+2.5
+42
+```
+
+See [numbers](/language/math) and [conversions](/language/typeconversion).
+
+## Choose a class or a map
+
+Toit objects have fields declared in their classes. You cannot build their
+shape by assigning arbitrary new properties. Use a class for a known structure
+and a map for dynamic keys. `{"name": "Ada"}` is a map; access it as
+`person["name"]`, not `person.name`. `{:}` is an empty map; `{}` is an empty set.
+
+Create an instance by calling its class, without `new`. A constructor parameter
+such as `.name` initializes the corresponding field. Within methods, `this`
+refers to the receiver. Unlike JavaScript, fields and methods are already in
+scope inside a method: write `name` or `greet` without `this.`.
+
+<!-- RESET CODE -->
+
+```toit
+class Person:
+  name/string
+
+  constructor .name:
+
+  greet -> none:
+    print "Hello $name"
+
+main:
+  person := Person "Ada"
+  person.greet
+  labels := {"name": person.name}
+  print labels["name"]
+```
+
+This prints `Hello Ada`, followed by `Ada`.
+
+## Types are checked at runtime
+
+Toit lets you choose where to add type annotations. A parameter uses `/Type`,
+and a return type uses `-> Type`. Here both arguments and the result must be
+integers:
+
+<!-- RESET CODE -->
+
+```toit
+add a/int b/int -> int:
+  return a + b
+
+main:
+  print (add 2 3)  // Prints 5.
+  value/any := "3"
+  error := catch: add 2 value
+  if error:
+    print "Expected integers"
+```
+
+The `any` annotation allows `value` to hold any kind of value. Passing it to
+`add` checks whether it is an integer. Unlike TypeScript's erased annotations,
+Toit annotations check actual values when the program runs. The second call fails its check and prints `Expected
+integers`. The analyzer catches some mistakes before execution, but not every
+type error. Omitting an annotation allows dynamic values; `any` explicitly
+accepts any value, including `null`.
+
+### Nullable values
+
+Types exclude `null` by default. Add `?` to allow it: `string?` means a string
+or `null`. This is useful for a value that may be absent:
+
+<!-- RESET CODE -->
+
+```toit
+greet name/string? -> none:
+  print "Hello $(name or "World")"
+
+main:
+  greet "Ada"
+  greet null
+```
+
+This prints `Hello Ada`, then `Hello World`. `none` marks a function with no
+result. A nullable value can be passed to a non-nullable parameter, but its
+runtime value must satisfy that parameter's check; see
+[nullable assignments](/language/toitversus#nullable-types-and-assignments).
+
+### Interfaces are explicit
+
+TypeScript can accept an object because its shape matches an interface.
+In Toit, the class must declare `implements` as well as provide the methods:
+
+<!-- RESET CODE -->
+
+```toit
+interface Named:
+  name -> string
+
+class Person implements Named:
+  name/string
+
+  constructor .name:
+
+main:
+  person/Named := Person "Ada"
+  print person.name
+```
+
+The public field supplies the `name` getter required by the interface. Use
+`value is Type` to test a type, or `value as Type` for a checked cast. A cast
+does not convert text to a number; use `int.parse` for that.
+See [types](/language/definitions#type) and
+[classes](/language/objects-constructors-inheritance-interfaces).
+
+## Catching errors returns a value
+
+`catch:` runs a block and returns the thrown value or `null` if nothing was
+thrown. Use `try:` with `finally:` for cleanup. This is different syntax from
+JavaScript's `try`/`catch`/`finally` statement.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  error := catch:
+    print (int.parse "not a number")
+  if error:
+    print "Please enter an integer"
+```
+
+This prints `Please enter an integer`.
+
+Exceptions are values; strings are common. For your own error protocols, throw
+a truthy value so the usual `if error` check detects it. Read
+[exception handling](/language/exceptions) for cleanup and error propagation.
+
+## Modules and packages are resolved before running
+
+Each file is a library. `import .helpers` imports a neighboring `helpers.toit`;
+SDK imports use names such as `import math`. Package dependencies are declared
+in `package.yaml` and resolved versions live in `package.lock`.
+
+JavaScript packages cannot be imported as Toit libraries. Continue with
+[imports](/language/imports) and the [package quick start](/language/package/pkgguide)
+to structure a project and add Toit dependencies.
