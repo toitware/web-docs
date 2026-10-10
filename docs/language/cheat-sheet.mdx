@@ -1,0 +1,181 @@
+# Language comparison cheat sheet
+
+Use these tables to look up familiar syntax. For explanations and runnable
+examples, read [Toit for programmers](/language/toitversus) or the guides for
+[Python](/language/from-python), [C/C++](/language/from-cpp), and
+[JavaScript](/language/from-javascript).
+
+The entries compare common tasks, not identical semantics. In particular,
+Toit annotations check values at runtime, only `false` and `null` are falsy,
+and a block can return from its enclosing function. Code fragments assume
+any required imports and enclosing declarations.
+
+<Tabs noPadding>
+<Tab label="Toit vs Python">
+
+<table><tr><th></th><th>Toit</th><th>Python</th></tr>
+<tr><td>Current object</td><td><samp style={{ whiteSpace: "pre-wrap" }}>this</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>self</samp></td></tr>
+<tr><td>Single line comments</td><td><samp style={{ whiteSpace: "pre-wrap" }}>//</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>#</samp></td></tr>
+<tr><td>Logical 'and', 'or' and 'not' operators</td><td><samp style={{ whiteSpace: "pre-wrap" }}>and or not</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>and or not</samp></td></tr>
+<tr><td>Shift left, right, unsigned right</td><td><samp style={{ whiteSpace: "pre-wrap" }}>&lt;&lt;  >>  >>></samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>&lt;&lt; >> (no unsigned shift)</samp></td></tr>
+<tr><td>Integer division</td><td><samp style={{ whiteSpace: "pre-wrap" }}>/ (on integer types)</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>//</samp></td></tr>
+<tr><td>Integer sizes</td><td><samp style={{ whiteSpace: "pre-wrap" }}>64</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>(arbitrary)</samp></td></tr>
+<tr><td>Statement grouping</td><td><samp style={{ whiteSpace: "pre-wrap" }}>(indent)</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>(indent)</samp></td></tr>
+<tr><td>Define a class Foo that inherits from Bar</td><td><samp style={{ whiteSpace: "pre-wrap" }}>class Foo extends Bar:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>class Foo(Bar):</samp></td></tr>
+<tr><td>Define constructor for class Foo</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor x:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>def __init__(self, x):</samp></td></tr>
+<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor x:<br />&#160;&#160;super x</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>def __init__(self, x):<br />&#160;&#160;super().__init__(x)</samp></td></tr>
+<tr><td>Constructor that assigns to fields</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor .x:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>def __init__(self, x):<br />&#160;&#160;self.x = x</samp></td></tr>
+<tr><td>Check object has type</td><td><samp style={{ whiteSpace: "pre-wrap" }}>bar is Foo</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>isinstance(bar, Foo)</samp></td></tr>
+<tr><td>Check object does not have type</td><td><samp style={{ whiteSpace: "pre-wrap" }}>bar is not Foo</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>not isinstance(bar, Foo)</samp></td></tr>
+<tr><td>Call a method foo with two arguments</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo(x, y)</samp></td></tr>
+<tr><td>Declare a member variable in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>x := null<br />x := ?<br />x/int := 0<br />x/int := ?</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>self.x = None  # Inside a method.</samp></td></tr>
+<tr><td>Declare a local variable in a method</td><td><samp style={{ whiteSpace: "pre-wrap" }}>x := null<br />x := ?<br />x/int := 0<br />x/int := ?</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>x = None</samp></td></tr>
+<tr><td>Define a constant</td><td><samp style={{ whiteSpace: "pre-wrap" }}>X ::= 0</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>X = 0  # By convention.</samp></td></tr>
+<tr><td>Define a constant in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>static X ::= 0</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>X = 0  # Class attribute, by convention.</samp></td></tr>
+<tr><td>Define a top-level function</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>def foo(x, y):</samp></td></tr>
+<tr><td>Define an instance method in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>def foo(self, x, y):</samp></td></tr>
+<tr><td>Define a static method in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>static foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>@staticmethod<br />def foo(x, y):</samp></td></tr>
+<tr><td>If statement</td><td><samp style={{ whiteSpace: "pre-wrap" }}>if condition:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>if condition:</samp></td></tr>
+<tr><td>Fixed loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>end.repeat: |i|</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>for i in range(end):</samp></td></tr>
+<tr><td>Three-part for loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>for i := 0; i &lt; end; i++:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>Use range or a while loop.</samp></td></tr>
+<tr><td>Iterate over collection</td><td><samp style={{ whiteSpace: "pre-wrap" }}>collection.do: |x|</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>for x in collection:</samp></td></tr>
+<tr><td>While loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>while condition:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>while condition:</samp></td></tr>
+<tr><td>Import local from library</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import .library</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>from . import library  # Within a package.</samp></td></tr>
+<tr><td>Import from library</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import library</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>import library</samp></td></tr>
+<tr><td>Import into current namespace</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import library show *</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>from library import *</samp></td></tr>
+<tr><td>Print/log</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>print("Hello")</samp></td></tr>
+<tr><td>Print with interpolation</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello $name"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>print(f"Hello &#123;name&#125;")</samp></td></tr>
+<tr><td>Interpolate with padding</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello $(%9s name)"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>print(f"Hello &#123;name:&gt;9&#125;")</samp></td></tr>
+</table>
+
+</Tab>
+<Tab label="Toit vs C++">
+
+<table>
+<tr><th></th><th><samp style={{ whiteSpace: "pre-wrap" }}>Toit</samp></th><th><samp style={{ whiteSpace: "pre-wrap" }}>C++</samp></th></tr>
+<tr><td>Current object</td><td><samp style={{ whiteSpace: "pre-wrap" }}>this</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>this</samp></td></tr>
+<tr><td>Single line comments</td><td><samp style={{ whiteSpace: "pre-wrap" }}>//</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>//</samp></td></tr>
+<tr><td>Logical 'and', 'or' and 'not' operators</td><td><samp style={{ whiteSpace: "pre-wrap" }}>and or not</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>&& || ! (or and or not)</samp></td></tr>
+<tr><td>Shift left, right, unsigned right</td><td><samp style={{ whiteSpace: "pre-wrap" }}>&lt;&lt;  >>  >>></samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>&lt;&lt; >> >>  (on unsigned type)</samp></td></tr>
+<tr><td>Integer division</td><td><samp style={{ whiteSpace: "pre-wrap" }}>/ (on integer types)</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>/ (on integer type)</samp></td></tr>
+<tr><td>Integer sizes</td><td><samp style={{ whiteSpace: "pre-wrap" }}>64</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>8/16/32/64...</samp></td></tr>
+<tr><td>Statement grouping</td><td><samp style={{ whiteSpace: "pre-wrap" }}>(indent)</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>&#123; ... &#125;</samp></td></tr>
+<tr><td>Define a class Foo that inherits from Bar</td><td><samp style={{ whiteSpace: "pre-wrap" }}>class Foo extends Bar:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>class Foo : public Bar &#123;</samp></td></tr>
+<tr><td>Define constructor for class Foo</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor x:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>Foo(int x) &#123;</samp></td></tr>
+<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor x:<br />&#160;&#160;super x</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>Foo(int x) : Bar(x) &#123;</samp></td></tr>
+<tr><td>Constructor that assigns to fields</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor .x:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>Foo(int x) : x(x) &#123;</samp></td></tr>
+<tr><td>Check object has type</td><td><samp style={{ whiteSpace: "pre-wrap" }}>bar is Foo</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>(dynamic_cast&lt;Foo*>(bar) != nullptr)</samp></td></tr>
+<tr><td>Check object does not have type</td><td><samp style={{ whiteSpace: "pre-wrap" }}>bar is not Foo</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>(dynamic_cast&lt;Foo*>(bar) == nullptr)</samp></td></tr>
+<tr><td>Call a method foo with two arguments</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo(x, y);</samp></td></tr>
+<tr><td>Declare a member variable in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>x := null<br />x := ?<br />x/int := 0<br />x/int := ?</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>int x;<br />int x = 0;</samp></td></tr>
+<tr><td>Declare a local variable in a method</td><td><samp style={{ whiteSpace: "pre-wrap" }}>x := null<br />x := ?<br />x/int := 0<br />x/int := ?</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>int x;<br />int x = 0;</samp></td></tr>
+<tr><td>Define a constant</td><td><samp style={{ whiteSpace: "pre-wrap" }}>X ::= 0</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>const int X = 0;</samp></td></tr>
+<tr><td>Define a constant in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>static X ::= 0</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>static const int X = 0;</samp></td></tr>
+<tr><td>Define a top-level function</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>int foo(int x, int y) &#123;</samp></td></tr>
+<tr><td>Define an instance method in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>int foo(int x, int y) &#123;</samp></td></tr>
+<tr><td>Define a static method in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>static foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>static int foo(int x, int y) &#123;</samp></td></tr>
+<tr><td>If statement</td><td><samp style={{ whiteSpace: "pre-wrap" }}>if condition:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>if (condition) &#123;</samp></td></tr>
+<tr><td>Fixed loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>end.repeat: |i|</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>for (int i = 0; i &lt; end; i++) &#123;</samp></td></tr>
+<tr><td>Three-part expression loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>for i := 0; i &lt; end; i++:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>for (int i = 0; i &lt; end; i++) &#123;</samp></td></tr>
+<tr><td>Iterate over collection</td><td><samp style={{ whiteSpace: "pre-wrap" }}>collection.do: |x|</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>for (auto x : collection) &#123;</samp></td></tr>
+<tr><td>While loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>while condition:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>while (condition) &#123;</samp></td></tr>
+<tr><td>Import local from library</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import .library</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>#include "file"</samp></td></tr>
+<tr><td>Import from library</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import library</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>#include &lt;file></samp></td></tr>
+<tr><td>Import into current namespace</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import library show *</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>#include &lt;file><br />using namespace file;</samp></td></tr>
+<tr><td>Print/log</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>std::cout &lt;&lt; "Hello\n";</samp></td></tr>
+<tr><td>Print with interpolation</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello $name"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>std::cout &lt;&lt; "Hello " &lt;&lt; name &lt;&lt; "\n";</samp></td></tr>
+<tr><td>Interpolate with padding</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello $(%9s name)"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>printf("Hello %9s\n", name);</samp></td></tr>
+</table>
+
+</Tab>
+<Tab label="Toit vs Java">
+
+<table>
+<tr><th></th><th><samp style={{ whiteSpace: "pre-wrap" }}>Toit</samp></th><th><samp style={{ whiteSpace: "pre-wrap" }}>Java</samp></th></tr>
+<tr><td>Current object</td><td><samp style={{ whiteSpace: "pre-wrap" }}>this</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>this</samp></td></tr>
+<tr><td>Single line comments</td><td><samp style={{ whiteSpace: "pre-wrap" }}>//</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>//</samp></td></tr>
+<tr><td>Logical 'and', 'or' and 'not' operators</td><td><samp style={{ whiteSpace: "pre-wrap" }}>and or not</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>&& || !</samp></td></tr>
+<tr><td>Shift left, right, unsigned right</td><td><samp style={{ whiteSpace: "pre-wrap" }}>&lt;&lt;  >>  >>></samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>&lt;&lt; >> >>></samp></td></tr>
+<tr><td>Integer division</td><td><samp style={{ whiteSpace: "pre-wrap" }}>/ (on integer types)</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>/ (on integer type)</samp></td></tr>
+<tr><td>Integer sizes</td><td><samp style={{ whiteSpace: "pre-wrap" }}>64</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>8/16/32/64</samp></td></tr>
+<tr><td>Statement grouping</td><td><samp style={{ whiteSpace: "pre-wrap" }}>(indent)</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>&#123; ... &#125;</samp></td></tr>
+<tr><td>Define a class Foo that inherits from Bar</td><td><samp style={{ whiteSpace: "pre-wrap" }}>class Foo extends Bar:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>public class Foo extends Bar &#123;</samp></td></tr>
+<tr><td>Define constructor for class Foo</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor x:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>public Foo(int x) &#123;</samp></td></tr>
+<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor x:<br />&#160;&#160;super x</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>public Foo(int x) &#123;<br />&#160;&#160;super(x);</samp></td></tr>
+<tr><td>Constructor that assigns to fields</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor .x:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>Foo(int x) &#123;<br />&#160;&#160;this.x = x;</samp></td></tr>
+<tr><td>Check object has type</td><td><samp style={{ whiteSpace: "pre-wrap" }}>bar is Foo</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>bar instanceof Foo</samp></td></tr>
+<tr><td>Check object does not have type</td><td><samp style={{ whiteSpace: "pre-wrap" }}>bar is not Foo</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>!(bar instanceof Foo)</samp></td></tr>
+<tr><td>Call a method foo with two arguments</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo(x, y);</samp></td></tr>
+<tr><td>Declare a member variable in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>x := null<br />x := ?<br />x/int := 0<br />x/int := ?</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>int x;<br />int x = 0;</samp></td></tr>
+<tr><td>Declare a local variable in a method</td><td><samp style={{ whiteSpace: "pre-wrap" }}>x := null<br />x := ?<br />x/int := 0<br />x/int := ?</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>int x;<br />int x = 0;</samp></td></tr>
+<tr><td>Define a constant</td><td><samp style={{ whiteSpace: "pre-wrap" }}>X ::= 0</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>final int X = 0;  // Local.</samp></td></tr>
+<tr><td>Define a constant in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>static X ::= 0</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>public static final int X = 0;</samp></td></tr>
+<tr><td>Define a top-level function</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>Use a static method in a class.</samp></td></tr>
+<tr><td>Define an instance method in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>public int foo(int x, int y) &#123;</samp></td></tr>
+<tr><td>Define a static method in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>static foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>public static int foo(int x, int y) &#123;</samp></td></tr>
+<tr><td>If statement</td><td><samp style={{ whiteSpace: "pre-wrap" }}>if condition:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>if (condition) &#123;</samp></td></tr>
+<tr><td>Fixed loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>end.repeat: |i|</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>for (int i = 0; i &lt; end; i++) &#123;</samp></td></tr>
+<tr><td>Three-part expression loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>for i := 0; i &lt; end; i++:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>for (int i = 0; i &lt; end; i++) &#123;</samp></td></tr>
+<tr><td>Iterate over collection</td><td><samp style={{ whiteSpace: "pre-wrap" }}>collection.do: |x|</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>for (Foo x : collection) &#123;</samp></td></tr>
+<tr><td>While loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>while condition:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>while (condition) &#123;</samp></td></tr>
+<tr><td>Import local from library</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import .library</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>Use package members or imports.</samp></td></tr>
+<tr><td>Import from library</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import library</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>import com.example.Library;</samp></td></tr>
+<tr><td>Import into current namespace</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import library show *</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>import com.example.Class;</samp></td></tr>
+<tr><td>Print/log</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>System.out.println("Hello");</samp></td></tr>
+<tr><td>Print with interpolation</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello $name"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>System.out.printf("Hello %s\n", name);</samp></td></tr>
+<tr><td>Interpolate with padding</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello $(%9s name)"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>System.out.printf("Hello %9s\n", name);</samp></td></tr>
+</table>
+
+</Tab>
+<Tab label="Toit vs JavaScript">
+
+<table>
+<tr><th></th><th><samp style={{ whiteSpace: "pre-wrap" }}>Toit</samp></th><th><samp style={{ whiteSpace: "pre-wrap" }}>JavaScript</samp></th></tr>
+<tr><td>Current object</td><td><samp style={{ whiteSpace: "pre-wrap" }}>this</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>this</samp></td></tr>
+<tr><td>Single line comments</td><td><samp style={{ whiteSpace: "pre-wrap" }}>//</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>//</samp></td></tr>
+<tr><td>Logical 'and', 'or' and 'not' operators</td><td><samp style={{ whiteSpace: "pre-wrap" }}>and or not</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>&& || !</samp></td></tr>
+<tr><td>Shift left, right, unsigned right</td><td><samp style={{ whiteSpace: "pre-wrap" }}>&lt;&lt;  >>  >>></samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>&lt;&lt; >> >>></samp></td></tr>
+<tr><td>Integer division</td><td><samp style={{ whiteSpace: "pre-wrap" }}>/ (on integer types)</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>Math.trunc(x / y)</samp></td></tr>
+<tr><td>Integer sizes</td><td><samp style={{ whiteSpace: "pre-wrap" }}>64</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>Number: exact integers through 2^53 - 1; BigInt: arbitrary precision</samp></td></tr>
+<tr><td>Statement grouping</td><td><samp style={{ whiteSpace: "pre-wrap" }}>(indent)</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>&#123; ... &#125;</samp></td></tr>
+<tr><td>Define a class Foo that inherits from Bar</td><td><samp style={{ whiteSpace: "pre-wrap" }}>class Foo extends Bar:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>class Foo extends Bar &#123;</samp></td></tr>
+<tr><td>Define constructor for class Foo</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor x:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor(x) &#123;</samp></td></tr>
+<tr><td>Define constructor for class Foo that calls constructor of superclass Bar</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor x:<br />&#160;&#160;super x</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor(x) &#123;<br />&#160;&#160;super(x);</samp></td></tr>
+<tr><td>Constructor that assigns to fields</td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor .x:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>constructor(x) &#123;<br />&#160;&#160;this.x = x</samp></td></tr>
+<tr><td>Check object has type</td><td><samp style={{ whiteSpace: "pre-wrap" }}>bar is Foo</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>bar instanceof Foo</samp></td></tr>
+<tr><td>Check object does not have type</td><td><samp style={{ whiteSpace: "pre-wrap" }}>bar is not Foo</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>!(bar instanceof Foo)</samp></td></tr>
+<tr><td>Call a method foo with two arguments</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo(x, y)</samp></td></tr>
+<tr><td>Declare a member variable in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>x := null<br />x := ?<br />x/int := 0<br />x/int := ?</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>this.x = null</samp></td></tr>
+<tr><td>Declare a local variable in a method</td><td><samp style={{ whiteSpace: "pre-wrap" }}>x := null<br />x := ?<br />x/int := 0<br />x/int := ?</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>let x = null</samp></td></tr>
+<tr><td>Define a constant</td><td><samp style={{ whiteSpace: "pre-wrap" }}>X ::= 0</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>const X = 0</samp></td></tr>
+<tr><td>Define a constant in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>static X ::= 0</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>static X = 0;  // Reassignable.</samp></td></tr>
+<tr><td>Define a top-level function</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>function foo(x, y) &#123;</samp></td></tr>
+<tr><td>Define an instance method in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>foo(x, y) &#123;</samp></td></tr>
+<tr><td>Define a static method in a class</td><td><samp style={{ whiteSpace: "pre-wrap" }}>static foo x y:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>static foo(x, y) &#123;</samp></td></tr>
+<tr><td>If statement</td><td><samp style={{ whiteSpace: "pre-wrap" }}>if condition:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>if (condition) &#123;</samp></td></tr>
+<tr><td>Fixed loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>end.repeat: |i|</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>for (let i = 0; i &lt; end; i++) &#123;</samp></td></tr>
+<tr><td>Three-part expression loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>for i := 0; i &lt; end; i++:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>for (let i = 0; i &lt; end; i++) &#123;</samp></td></tr>
+<tr><td>Iterate over collection</td><td><samp style={{ whiteSpace: "pre-wrap" }}>collection.do: |x|</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>for (const x of collection) &#123;</samp></td></tr>
+<tr><td>While loop</td><td><samp style={{ whiteSpace: "pre-wrap" }}>while condition:</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>while (condition) &#123;</samp></td></tr>
+<tr><td>Import local from library</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import .library</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>import * as library from './library.js';</samp></td></tr>
+<tr><td>Import from library</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import library</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>import * as library from 'library';</samp></td></tr>
+<tr><td>Import into current namespace</td><td><samp style={{ whiteSpace: "pre-wrap" }}>import library show *</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>import &#123; foo, bar &#125; from 'library';</samp></td></tr>
+<tr><td>Print/log</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>console.log("Hello")</samp></td></tr>
+<tr><td>Print with interpolation</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello $name"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>console.log("Hello " + name)</samp></td></tr>
+<tr><td>Interpolate with padding</td><td><samp style={{ whiteSpace: "pre-wrap" }}>print "Hello $(%9s name)"</samp></td><td><samp style={{ whiteSpace: "pre-wrap" }}>console.log('Hello ' + name.padStart(9));</samp></td></tr>
+</table>
+
+</Tab>
+</Tabs>
+
+A final Toit binding does not freeze its object. Python constants are a naming
+convention; JavaScript class fields are not made final by `static`.
+
+C++ type tests above assume a polymorphic base and a pointer. Toit object
+references are managed values, and `is` does not require a pointer cast.
+C/C++ `#include` is textual inclusion; Toit imports load library declarations.
+
+Python `//` floors the result; Toit integer `/` truncates toward zero. JavaScript
+`Number` division is floating point, and its bitwise operators use 32-bit values;
+Toit integers are signed 64-bit values. The tables show the closest common
+spelling, not a promise that porting the expression preserves every edge case.

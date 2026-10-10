@@ -11,16 +11,20 @@ We will now group them, so we can pass a room's whole report around as one value
 
 An *object* can hold several named values. These values are called its *fields*.
 A *class* describes the fields its objects have and the operations they support.
-Our class will be named `TemperatureReport`.
+Our class will be named `TemperatureReport`. Class names use `UpperCamelCase`:
+each word starts with a capital letter. Variables and functions use `kebab-case`,
+as in `warm-limit` and `print-reading`. We will introduce methods below; their names also use `kebab-case`.
 
 The *constructor* runs when a new object is created. Here it receives three
-arguments and stores them in the new object's fields:
+arguments and stores them in the new object's fields. The `?` in `room := ?`
+means that the constructor must supply the field's initial value. It is not a
+value stored in the field. We use the same notation for `readings` and `limit`:
 
 ```toit
 class TemperatureReport:
-  room := ""
-  readings := []
-  limit := 25
+  room := ?
+  readings := ?
+  limit := ?
 
   constructor room readings limit:
     this.room = room
@@ -48,6 +52,29 @@ constructor's argument. `report.room` reads that object's `room` field.
 Change the room name or the readings and run again. Then create a second report
 and print both room names. Each object keeps its own field values.
 
+## Initialize fields with constructor parameters
+
+Toit lets a constructor parameter initialize a field directly by prefixing its
+name with a dot. This version stores the same three arguments:
+
+<!-- RESET CODE -->
+
+```toit
+class TemperatureReport:
+  room := ?
+  readings := ?
+  limit := ?
+
+  constructor .room .readings .limit:
+
+main:
+  report := TemperatureReport "Kitchen" [21, 26] 25
+  print report.room
+```
+
+The constructor body is empty because the field assignments are expressed in
+its parameters. This is shorthand for the explicit assignments used above.
+
 ## Put an operation on the object
 
 A function inside a class is called a *method*. It can use the object's fields,
@@ -60,14 +87,11 @@ printing a string, iterating over a list, and making a decision.
 
 ```toit
 class TemperatureReport:
-  room := ""
-  readings := []
-  limit := 25
+  room := ?
+  readings := ?
+  limit := ?
 
-  constructor room readings limit:
-    this.room = room
-    this.readings = readings
-    this.limit = limit
+  constructor .room .readings .limit:
 
   print-report:
     print room
@@ -106,20 +130,17 @@ clearer by printing `No readings` when there are none.
 
 The list's `size` gives the number of values it contains. `readings.size == 0`
 asks whether that number is zero. Use `==` to compare values; a single `=` is
-an assignment, as in the constructor.
+an assignment, as in the first constructor we wrote.
 
 <!-- RESET CODE -->
 
 ```toit
 class TemperatureReport:
-  room := ""
-  readings := []
-  limit := 25
+  room := ?
+  readings := ?
+  limit := ?
 
-  constructor room readings limit:
-    this.room = room
-    this.readings = readings
-    this.limit = limit
+  constructor .room .readings .limit:
 
   print-report:
     print room
@@ -155,31 +176,6 @@ The kitchen report still reaches the loop because its list is not empty.
 Add readings to the bedroom report and check that `No readings` disappears.
 Then create a third report for another room. You should only need to add its
 creation and method call under `main`; the class can stay the same.
-
-<Expandable title="A shorter constructor, once the explicit version is familiar">
-
-Toit lets a constructor parameter initialize a field directly by prefixing its
-name with a dot. This version stores the same three arguments:
-
-<!-- RESET CODE -->
-
-```toit
-class TemperatureReport:
-  room := ""
-  readings := []
-  limit := 25
-
-  constructor .room .readings .limit:
-
-main:
-  report := TemperatureReport "Kitchen" [21, 26] 25
-  print report.room
-```
-
-The constructor body is empty because the field assignments are expressed in
-its parameters. This is shorthand for the explicit assignments used above.
-
-</Expandable>
 
 ## Continue when you need more
 

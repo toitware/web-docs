@@ -169,6 +169,33 @@ Now both `26` and `24` are reported as warm. Spaces separate the call's argument
 the first is the temperature, and the second is the limit. Commas belong between
 the values in a list, not between a function's arguments.
 
+## Name an argument
+
+At the call site, `print-reading temperature 24` does not tell us what `24`
+means. A *named argument* makes that purpose visible. Write `--limit` in both
+the function definition and its calls:
+
+<!-- RESET CODE -->
+
+```toit
+print-reading temperature --limit=25:
+  if temperature >= limit:
+    print "$temperature C: Warm"
+  else:
+    print "$temperature C: Comfortable"
+
+main:
+  print-reading 24 --limit=24
+  print-reading 24
+```
+
+This prints `24 C: Warm`, then `24 C: Comfortable`. The first call chooses a
+limit of `24`. The second leaves it out, so the function uses the *default*
+value `25` from its definition. Inside the function, the name is just `limit`.
+
+Named arguments are common in Toit. They help us read a call without looking
+up what each position means. We will use this version in the next exercise.
+
 ## Practice
 
 Create two lists named `kitchen` and `bedroom`. Print a room heading, then report
@@ -179,7 +206,7 @@ that room's readings. Use a limit of `25` for the kitchen and `23` for the bedro
 <!-- RESET CODE -->
 
 ```toit
-print-reading temperature limit:
+print-reading temperature --limit=25:
   if temperature >= limit:
     print "$temperature C: Warm"
   else:
@@ -190,10 +217,10 @@ main:
   bedroom := [22, 24]
   print "Kitchen"
   kitchen.do: |temperature|
-    print-reading temperature 25
+    print-reading temperature --limit=25
   print "Bedroom"
   bedroom.do: |temperature|
-    print-reading temperature 23
+    print-reading temperature --limit=23
 ```
 
 Expected output:

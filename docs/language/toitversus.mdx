@@ -5,7 +5,12 @@ language. It introduces Toit's syntax, values, functions, objects, libraries,
 and concurrency. Familiar concepts get a short explanation; features such as
 blocks and cooperative tasks get more space.
 
-Read it in order, or use the table of contents to skip familiar topics. We use
+<span id="language-comparison" />
+
+For the side-by-side syntax tables, use the
+[language comparison cheat sheet](/language/cheat-sheet).
+
+Read this tour in order, or use the table of contents to skip familiar topics. We use
 C/C++, JavaScript, Python, and Java/Kotlin as points of comparison. You do not
 need to know all of them: each section explains the Toit behavior directly.
 Optional example collections explore variations without interrupting the main
@@ -14,9 +19,9 @@ explanation.
 You can run the complete examples on your computer using the
 [local setup](/language/beginner#1-run-your-first-program); no hardware is required.
 If you are new to programming, use the [beginner lessons](/language/beginner).
-The language-specific guides for [JavaScript](/language/from-javascript),
-[Python](/language/from-python), and [C/C++](/language/from-cpp) highlight what to
-watch for when coming from those languages.
+The [JavaScript](/language/from-javascript) and [Python](/language/from-python)
+guides focus on differences from those languages. The [C/C++ introduction](/language/from-cpp)
+is an alternative complete tour using native programming comparisons.
 
 ## The differences that matter
 
@@ -24,44 +29,61 @@ watch for when coming from those languages.
 | --- | --- |
 | Calls use spaces; zero-argument methods need no parentheses | `sensor.read` calls a method. Wrap a call in parentheses when passing its result to another call. |
 | Optional types are enforced at runtime | An annotation is a contract, not just editor metadata. Untyped code still runs, and type errors can still occur at runtime. |
-| Blocks and lambdas are distinct | Use blocks for scoped iteration and control flow; use lambdas when code must be stored for later. Their `return` behavior differs. |
-| Objects have declared fields and methods | Use classes for structured objects and maps for dynamic keys. |
+| Blocks and lambdas are distinct | Use blocks for scoped iteration and control flow; use lambdas when code must be stored for later. |
+| Objects keep the fields and methods declared by their classes | Unlike Python and JavaScript, assigning a new property cannot change an object's shape. Use maps for dynamic keys. |
 | Tasks have their own stacks and cooperate | Waiting code reads sequentially, but calls can yield and shared state can change while you wait. |
 | Memory is garbage collected | You do not free objects; you still explicitly release resources such as open files. |
 
-## Read calls before translating syntax
+<span id="read-calls-before-translating-syntax" />
+
+## Calling functions and methods
 
 A program starts in `main`. Functions and classes can be declared at the top
 level; there is no need for a wrapper class. Indentation groups statements,
 with two spaces per level. Comments start with `//`, or use `/* ... */` for
-multiple lines. Java programmers can define `main` and other functions directly
-in a file, as in Kotlin. The `/int` and `-> int` annotations below specify parameter
-and return types; they can be omitted.
+multiple lines.
+
+Unlike Java, Toit allows `main` and other functions directly in a file. The first
+example defines `add` and calls it from `main`. We will add type annotations later.
 
 ```toit
-add a/int b/int -> int:
+add a b:
   return a + b
 
 main:
   reading-count := 3
-  reading-count = reading-count + 1
+  reading-count++
   print (add reading-count 2)
 ```
 
-This prints `6`. `:=` declares a mutable variable; `=` assigns to one.
-`::=` declares a final binding, which does not make the referenced object
-immutable. Toit uses two-space indentation and allows hyphens in names:
-`reading-count` is one identifier, while `reading - count` is subtraction.
+This prints `6`. `:=` introduces `reading-count`, and `++` increases it by one.
+Use `=` for reassignment, for example `reading-count = 10`.
 
-`add reading-count 2` calls `add` with two arguments. Commas separate elements
-in collection literals, but do not separate call arguments. Parentheses group
-expressions: `print (add reading-count 2)` passes the result to `print`.
+Toit names can contain hyphens: `reading-count` is one name. Put spaces around
+subtraction, as in `reading - count`. Variables and functions use `kebab-case`;
+classes use `UpperCamelCase`, and constants use `UPPER-KEBAB-CASE`.
+
+### Pass arguments with spaces
+
+`add reading-count 2` calls `add` with two arguments. Spaces separate arguments;
+commas belong in collection literals. To pass the result of one call to another,
+group the inner call: `print (add reading-count 2)`.
+
 Arithmetic binds more tightly than calls, so `add 1 2 * 3` means `add 1 (2 * 3)`.
+Prefer the explicit parentheses, especially in calls with several arguments.
+They make it easier to see which calculation supplies each argument.
 
-A bare method name invokes it: `clock.read` is a call, not a function value.
-This also lets a field getter become a computed method without changing callers.
-Named arguments are explicit at both ends: `sleep --ms=100`.
-See [syntax](/language/syntax) for precedence and declarations.
+### Call a method without arguments
+
+Writing `clock.read` invokes `read`. There is no `()` after a zero-argument call.
+A public field uses the same syntax, so it can become a computed getter without
+changing the code that reads it.
+
+### Name an argument
+
+A call can label an argument: `sleep --ms=100` waits for 100 milliseconds.
+The function definition also marks that parameter with `--`, as the examples
+below show. See [syntax](/language/syntax) for the full call rules.
 
 <Expandable title="More examples: call grouping, continuation lines, and named arguments">
 
@@ -89,7 +111,7 @@ main:
       add 1
           2
 
-  // 4. Omitted named arguments use defaults. Prints Value: 3.
+  // 4. Omitted arguments use defaults; here prefix and loud. Prints Value: 3.
   print (label 3)
 
   // 5. A bare boolean flag means true. Prints Count: 3!.
@@ -129,10 +151,12 @@ overloading by argument count and names, rather than selecting overloads by
 parameter types.
 
 A local name belongs to its enclosing scope. A top-level variable is a global;
-its initializer runs on first access. Use `::=` for a final binding and
-uppercase names for constants, for example `MAX-READINGS ::= 100`. Finality
-prevents reassignment, not mutation of the referenced object. These rules also
-apply to fields, which we will use in the classes section.
+its initializer runs on first access. Inside functions, normally use `:=` for local variables.
+For globals and fields, prefer final bindings when the value will not be
+reassigned. `MAX-READINGS ::= 100` declares a constant; its uppercase name is
+a convention. Finality prevents reassignment of the binding, but does not
+prevent changes to an object it refers to. We will see the common final-field
+syntax, `name/string`, in the classes section.
 
 ## String interpolation
 
@@ -238,19 +262,59 @@ and the string representation rules.
 
 ## Types are optional, but checked
 
-The `/int` parameters and `-> int` return annotation on `add` specify runtime
-checks. An omitted annotation permits dynamic values. Analysis helps find
-mistakes before execution, but does not turn Toit into a language where every
-type error is rejected before running.
+Type annotations specify checks on values. Parameters use `/Type`; return
+values use `-> Type`:
 
-Types are non-nullable by default; `string?` accepts a string or `null`.
+<!-- RESET CODE -->
+
+```toit
+add a/int b/int -> int:
+  return a + b
+
+main:
+  print (add 2 3)  // Prints 5.
+```
+
+The arguments and the result must be integers. These checks happen at runtime,
+unlike TypeScript's erased annotations or ordinary Python type hints. Analysis
+can catch some mistakes before execution, but not every type error.
+Omitting an annotation permits dynamic values.
+
 Use annotations on function signatures and fields to document and enforce
-expectations. Unlike TypeScript annotations or ordinary Python type hints,
-these annotations constrain values at runtime. `any` accepts any value,
-including `null`; `none` marks a function with no result. Kotlin readers will
-recognize the nullable `?` suffix; C++ readers should distinguish a nullable
-object reference from a pointer they can dereference or perform arithmetic on.
-Local types are often inferred by the editor and need not be written out.
+expectations. Local types are often inferred by the editor and need not be
+written out. `any` explicitly accepts any value, including `null`; `none`
+marks a function with no result.
+
+Types exclude `null` by default. Add `?` to allow it: `string?` accepts a string
+or `null`. Kotlin uses a similar suffix. A nullable reference is still an object
+reference; it does not enable C++ pointer operations.
+
+### Nullable types and assignments
+
+A nullable type such as `string?` is statically assignable to its non-nullable
+counterpart, `string`. Toit accepts the assignment and checks the actual value
+at runtime. The type `Null` itself is the exception: it is not statically
+assignable to a non-nullable type.
+
+<!-- RESET CODE -->
+
+```toit
+print-name name/string? -> none:
+  required/string := name
+  print required
+
+main:
+  print-name "Ada"  // Prints Ada.
+  error := catch: print-name null
+  if error:
+    print "A name is required"
+```
+
+Both calls are accepted by the compiler. The second fails the runtime check
+on `required`, and the handler prints `A name is required`. A nullable annotation
+does not promise that every later use accepts `null`.
+
+### Test or cast a value
 
 Use `value is Type` to test a type, and `value as Type` for a checked cast.
 The cast does not convert the value; use conversion methods such as `to-float`
@@ -338,6 +402,8 @@ main:
 ```
 
 This prints `7`: `return` inside the block returns from `first-positive`.
+This is a *non-local return*: it exits the enclosing function, across the call
+to `do`.
 A block's last expression supplies its result to its caller; it does not need
 `return`. This makes library methods such as `do`, `map`, and `repeat` work
 like control structures. Blocks cannot be saved in fields or returned for later
@@ -376,9 +442,9 @@ restrictions keep the referenced locals alive for every use of the block.
 For C/C++ readers, the VM representation helps explain the design: a block
 reference is a small integer encoding a position relative to the stack base.
 Loading that reference pushes a value; it does not allocate a heap closure to
-copy the captured locals. This is an implementation explanation, not a promise
-about instruction counts. C++ lambdas can also avoid heap allocation; the key
-Toit distinction is that the language enforces a separate lifetime for blocks.
+copy the captured locals. C++ lambdas can also avoid heap allocation, but a
+lambda capturing references can outlive the referenced locals. C++ does not
+enforce the lifetime restriction that Toit enforces for blocks.
 
 That makes blocks a practical default for scoped callbacks, including iteration
 and resource-management helpers. Use the parameter form required by the API:
@@ -490,7 +556,28 @@ readers should use byte arrays and encoding APIs for binary data, rather than
 assuming an object has a C struct's memory layout.
 
 Use slices such as `values[1..3]` for a range with an inclusive start and an
-exclusive end. A map lookup using brackets throws if the key is missing;
+exclusive end. List slices are views: they share elements with the original
+list, and keep that list alive. Updating an element through either view is
+visible through the other. Use `.copy` for an independent list of those elements:
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  values := [10, 20, 30]
+  middle := values[1..2]
+  middle[0] = 99
+  print values  // Prints [10, 99, 30].
+  separate := middle.copy
+  separate[0] = 42
+  print values  // Still prints [10, 99, 30].
+```
+
+The copy is shallow: if elements are themselves objects, both lists still
+refer to those objects. A small slice can retain a large original list, so
+copying also helps when you only need to keep a few elements.
+
+A map lookup using brackets throws if the key is missing;
 `labels.get "name"` returns `null` when absent. Use `--if-absent` when you need
 a different fallback.
 
@@ -550,9 +637,12 @@ width and byte order explicitly. See [collections](/language/listsetmap).
 ## Classes define the shape of objects
 
 A class declares fields and methods. Construct an instance by calling its class,
-without `new`. In a constructor, `.value_` stores the corresponding argument
-in the field. Elsewhere, methods can refer to fields directly; `this` names
-the receiver explicitly when needed.
+without `new`. Objects have a fixed shape: you cannot add a field by assigning
+to a new property, as you can in Python or JavaScript.
+
+In a constructor, `.value_` stores the corresponding argument in the field.
+Within methods, fields and methods are already in scope; you do not need a
+`this.` prefix. Use `this` when you need to name the receiver explicitly.
 
 <!-- RESET CODE -->
 
@@ -583,7 +673,7 @@ the representation directly.
 with the same call syntax, so you can replace a field with a computed getter
 without changing readers. A setter is defined as `value= new-value:` and called
 with `counter.value = new-value`. Kotlin readers will recognize the property-like
-call syntax; Java readers do not need a separate `getValue()` convention.
+call syntax. There is no `getValue()` naming convention as in Java.
 
 ### Inheritance, interfaces, and constructors
 
@@ -618,7 +708,7 @@ main:
 ```
 
 In a constructor, `super` calls the superclass constructor. In an overriding
-method, it calls the superclass implementation of that same method; do not
+method, it calls the superclass's method with the same name; do not
 translate a JavaScript `super.description()` into `super.description`.
 
 Use `abstract class` when you want shared implementation with abstract methods
@@ -658,6 +748,92 @@ site. See [classes and interfaces](/language/objects-constructors-inheritance-in
 for static members, factories, and constructor initialization rules.
 
 </Expandable>
+
+### Share implementation with mixins
+
+A class extends one superclass, but it can add reusable behavior with `with`.
+A mixin contributes methods and fields without becoming another superclass.
+An abstract mixin can require methods that the applying class must provide:
+
+<!-- RESET CODE -->
+
+```toit
+abstract mixin Printable:
+  abstract description -> string
+
+  print-description -> none:
+    print description
+
+class Device extends Object with Printable:
+  name/string
+
+  constructor .name:
+
+  description -> string: return name
+
+main:
+  device := Device "Kitchen"
+  device.print-description  // Prints Kitchen.
+```
+
+`Printable` supplies `print-description`; `Device` supplies the required
+`description`. Multiple mixins are listed after `with`, separated by spaces.
+This offers shared implementation while keeping a single superclass chain.
+
+### Construct an implementation through its interface
+
+Interfaces and abstract classes can have factory constructors. Calling the
+factory returns a concrete implementation, so callers do not need to name that
+implementation. A `return` in a constructor makes it a factory:
+
+<!-- RESET CODE -->
+
+```toit
+interface Named:
+  constructor name/string:
+    return Person name
+
+  name -> string
+
+class Person implements Named:
+  name/string
+
+  constructor .name:
+
+main:
+  person := Named "Ada"
+  print person.name  // Prints Ada.
+```
+
+An interface can only have factory constructors. An abstract class can also
+have regular constructors used by its subclasses. For example:
+
+<!-- RESET CODE -->
+
+```toit
+abstract class Message:
+  constructor:
+
+  constructor.text text/string:
+    return TextMessage text
+
+  abstract text -> string
+
+class TextMessage extends Message:
+  text/string
+
+  constructor .text:
+
+main:
+  message := Message.text "Hello"
+  print message.text  // Prints Hello.
+```
+
+The regular `Message` constructor initializes the base part when a subclass
+is created; it does not make the abstract class directly instantiable.
+`Message.text` is a named factory that returns a concrete `TextMessage`.
+See [factory constructors](/language/objects-constructors-inheritance-interfaces#factory-constructors)
+for more uses, including returning an existing object.
 
 ## Errors and resources need explicit handling
 
@@ -796,5 +972,7 @@ containers. See [tasks and synchronization](/language/tasks).
 You now have the language tools to read and write a Toit program: calls,
 values, blocks, collections, objects, errors, imports, and tasks. Use the
 [language reference](/language/reference) for rules and APIs as you need them.
-To work with hardware, follow [Run on your device](/getstarted/device) and
-then a [hardware or networking tutorial](/tutorials).
+For a host script, continue running your `.toit` files with the SDK and use the
+[package quick start](/language/package/pkgguide) to add libraries. For hardware,
+follow [Run on your device](/getstarted/device) and then a
+[hardware or networking tutorial](/tutorials).

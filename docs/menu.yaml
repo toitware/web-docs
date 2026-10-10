@@ -67,6 +67,8 @@ items:
       - name: Language reference
         path: /language/reference
         children:
+          - name: Comparison cheat sheet
+            path: /language/cheat-sheet
           - name: Common conversions
             path: /language/typeconversion
           - name: Definitions

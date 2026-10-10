@@ -1,8 +1,10 @@
 # Learn Toit
 
-Toit is an object-oriented, garbage-collected language designed for
-microcontrollers. You can also run programs on your computer to learn the
-language without connecting hardware.
+<span id="language-basics" />
+
+Toit is an object-oriented, garbage-collected language for scripting on your
+computer and programming connected devices. You can use the same language
+for a command-line tool, a network service, or an application on a microcontroller.
 
 ## Choose your starting point
 
@@ -15,10 +17,11 @@ The programmer's tour explains Toit directly; you do not need to know every
 language used for comparison. Familiar features are covered briefly, while
 Toit-specific concepts receive more explanation and examples.
 
-If you prefer to start with changes from one language, the guides for
-[JavaScript](/language/from-javascript), [Python](/language/from-python), and
-[C/C++](/language/from-cpp) highlight common assumptions to revisit. They link
-back to the shared tour for the full introduction.
+The [C/C++ introduction](/language/from-cpp) covers the language from a native
+programmer's starting point. The [JavaScript](/language/from-javascript) and
+[Python](/language/from-python) guides focus on differences from those languages.
+Use the [comparison cheat sheet](/language/cheat-sheet) for side-by-side syntax
+lookup.
 
 ## Look up a language feature
 
@@ -26,9 +29,36 @@ The [language reference](/language/reference) is organized by topic. It assumes
 you can already read a small Toit program; it is not a sequence of lessons.
 Use it for syntax rules, edge cases, and more detailed examples.
 
+## Find a topic
+
+The topics from the earlier language introduction are now covered in the lessons
+and programmer's tour. These links also keep its section bookmarks useful.
+
+| Topic | Continue reading |
+| --- | --- |
+| <span id="hello-world" />Your first program | [Read the explanation](/language/beginner#1-run-your-first-program) |
+| <span id="defining-a-function" />Functions | [Read the explanation](/language/toitversus#functions-and-scope) |
+| <span id="inserting-strings-in-strings" />String interpolation | [Read the explanation](/language/toitversus#string-interpolation) |
+| <span id="evolving-into-a-greeter" />Function arguments | [Read the explanation](/language/beginner/lists-and-functions#pass-a-second-argument) |
+| <span id="creating-a-greeter-object" />Creating objects | [Read the explanation](/language/beginner/objects) |
+| <span id="fields-and-methods" />Fields and methods | [Read the explanation](/language/toitversus#classes-define-the-shape-of-objects) |
+| <span id="greetings-everyone" />Reporting a list of values | [Read the explanation](/language/beginner/lists-and-functions#combine-the-function-and-the-list) |
+| <span id="comments-and-indentation" />Comments and indentation | [Read the explanation](/language/toitversus#calling-functions-and-methods) |
+| <span id="iterating-over-lists" />List iteration | [Read the explanation](/language/beginner/lists-and-functions#do-something-for-each-reading) |
+| <span id="named-arguments" />Named arguments | [Read the explanation](/language/beginner/lists-and-functions#name-an-argument) |
+| <span id="if-statements-and-basic-expressions" />Conditions and expressions | [Read the explanation](/language/toitversus#numbers-booleans-and-operators) |
+| <span id="loops" />Loops | [Read the explanation](/language/toitversus#conditions-and-loops) |
+| <span id="maps-and-sets" />Maps and sets | [Read the explanation](/language/toitversus#collections-and-binary-data) |
+| <span id="blocks-and-lambdas" />Blocks and lambdas | [Read the explanation](/language/toitversus#blocks-are-part-of-control-flow) |
+| <span id="blocks-and-lambdas-with-multiple-arguments" />Block parameters | [Read the explanation](/language/toitversus#write-a-method-that-accepts-a-block) |
+| <span id="blocks-and-lambdas-that-return-a-value" />Block and lambda results | [Read the explanation](/language/toitversus#lambdas-can-outlive-the-call) |
+
 ## Use Toit in a project
 
-After learning the language, use the [package quick start](/language/package/pkgguide)
-to add dependencies, or [run on your device](/getstarted/device) to connect an
-ESP32. The [hardware and networking tutorials](/tutorials) assume basic Toit
-knowledge and list their additional setup requirements.
+For a host script or command-line tool, save your program in a `.toit` file
+and run it with `toit run`. Use the
+[package quick start](/language/package/pkgguide) to add dependencies.
+
+For an ESP32 application, [run on your device](/getstarted/device).
+The [hardware and networking tutorials](/tutorials) list their additional setup
+requirements.

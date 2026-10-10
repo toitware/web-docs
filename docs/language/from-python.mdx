@@ -8,16 +8,48 @@ directly and draws comparisons with C/C++, JavaScript, Python, and Java/Kotlin.
 
 ## Indentation is familiar; calls are different
 
-Toit uses two spaces per level, `//` for comments, and hyphens in names.
-Define `greet name:` and call it as `greet "Ada"`. A zero-argument call is just
-`greet`. Parentheses group expressions instead of enclosing every argument list.
-Use `:=` to declare a variable and `=` to assign it again.
-
-Fields and zero-argument methods use the same access syntax: `name.trim` calls
-a method. Wrap a call in `::` to defer it; invoke that lambda with `.call`.
+Start with a function and a call. Toit uses two spaces per indentation level,
+and the function name is followed directly by its parameters:
 
 ```toit
-greet name/string --greeting/string="Hello" -> none:
+greet name:
+  print "Hello $name"
+
+main:
+  greet "Ada"
+```
+
+This prints `Hello Ada`. Spaces separate call arguments; parentheses group
+expressions. For example, `print (int.parse "42")` passes the parsed integer to
+`print`.
+
+For a zero-argument method, writing its name calls it: `name.trim` invokes
+`trim`. Reading a public field uses the same syntax.
+
+### Variables and names
+
+Use `:=` for a new variable and `=` to assign it again. Variables and functions
+use `kebab-case`, so `reading-count` is one identifier. Put spaces around
+subtraction, as in `reading - count`. Comments start with `//`.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  reading-count := 2
+  reading-count = 3
+  print reading-count  // Prints 3.
+```
+
+### Named arguments
+
+Toit writes named arguments with `--` in both the definition and the call.
+A default value applies when the caller omits the argument:
+
+<!-- RESET CODE -->
+
+```toit
+greet name --greeting="Hello":
   print "$greeting $name"
 
 main:
@@ -25,18 +57,15 @@ main:
   greet "Grace" --greeting="Welcome"
 ```
 
-This prints `Hello Ada` and `Welcome Grace`.
+This prints `Hello Ada`, then `Welcome Grace`. Positional parameters can also
+have defaults.
 
 ## Test emptiness explicitly
 
 Only `false` and `null` are falsy in Toit. Zero, empty strings, and empty
-collections are truthy. Port Python's `if items:` as `if items.size != 0:`
+collections are truthy. Port Python's `if items:` as `if not items.is-empty:`
 when the intent is to check for elements. `null` represents an absent value,
 like Python's `None`.
-
-Toit has signed 64-bit integers, rather than Python's arbitrary-precision
-integers. Integer `/` truncates toward zero: `-5 / 2` is `-2`, whereas Python's
-floor division `-5 // 2` is `-3`. Use a float operand for a fractional result.
 
 <!-- RESET CODE -->
 
@@ -44,13 +73,11 @@ floor division `-5 // 2` is `-3`. Use a float operand for a fractional result.
 describe items:
   if items:
     print "The list exists"
-  if items.size == 0:
+  if items.is-empty:
     print "The list is empty"
 
 main:
   describe []
-  print (-5 / 2)
-  print (5 / 2.0)
 ```
 
 Expected output:
@@ -58,8 +85,20 @@ Expected output:
 ```text
 The list exists
 The list is empty
--2
-2.5
+```
+
+## Integer division truncates toward zero
+
+Toit has signed 64-bit integers, rather than Python's arbitrary-precision
+integers. Integer `/` truncates toward zero, while Python's `//` rounds down.
+A float operand gives a fractional result:
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  print (-5 / 2)   // Prints -2; Python's -5 // 2 is -3.
+  print (5 / 2.0)  // Prints 2.5.
 ```
 
 ## Iteration blocks can return from their function
@@ -82,20 +121,69 @@ main:
   print (first-long ["cat", "horse", "rabbit"])
 ```
 
-This prints `horse`. Use `continue.do` to skip an iteration without returning
+This prints `horse`. Returning from the enclosing function is called a
+*non-local return*. Use `continue.do` to skip an iteration without returning
 from the function. Read [blocks and lambdas](/language/blocks-and-lambdas).
 
-## Declare fields and use runtime type contracts
+<span id="declare-fields-and-use-runtime-type-contracts" />
 
-Toit classes declare their fields; methods do not add attributes dynamically.
-Use maps for dynamic keys. `{:}` is an empty map and `{}` is an empty set.
-Methods do not declare a `self` parameter, and can refer to fields directly.
-`constructor .name:` stores the argument in the declared field.
+## Declare fields in the class
 
-Annotations use `/`, as in `name/string`; they are enforced at runtime, unlike
-ordinary Python type hints. `string?` also accepts `null`.
-See [classes](/language/objects-constructors-inheritance-interfaces) and
-[types](/language/definitions#type).
+Toit classes declare their fields. A method cannot add new attributes to an
+object, so every instance has the shape defined by its class. Methods do not
+declare a `self` parameter and can refer to fields directly:
+
+<!-- RESET CODE -->
+
+```toit
+class Person:
+  name := ?
+
+  constructor .name:
+
+  greet:
+    print "Hello $name"
+
+main:
+  person := Person "Ada"
+  person.greet
+```
+
+This prints `Hello Ada`. `:= ?` requires the constructor to initialize the
+field. The `.name` constructor parameter stores its argument directly in that
+field. Calling `Person` creates the object; `greet` is an ordinary method.
+
+When keys must be added dynamically, use a map. `{"name": "Ada"}` creates a map;
+read the value with `person["name"]`. `{:}` is an empty map and `{}` an empty set.
+See [classes](/language/objects-constructors-inheritance-interfaces).
+
+## Type annotations check values
+
+Annotations use `/`, as in `name/string`, and `->` for a return type. Unlike
+ordinary Python type hints, Toit annotations are enforced at runtime:
+
+<!-- RESET CODE -->
+
+```toit
+length text/string -> int:
+  return text.size
+
+main:
+  print (length "Ada")  // Prints 3.
+  value/any := 42
+  error := catch: length value
+  if error:
+    print "Expected text"
+```
+
+The `any` annotation permits any kind of value in `value`. Passing it to
+`length` checks whether it is a string. The second call fails this check and
+prints `Expected text`. The
+analyzer can catch some mistakes before execution, but not every type error.
+
+Types exclude `null` unless marked with `?`: `string?` accepts a string or
+`null`. Use `any` to explicitly allow any value, and `none` for a function with
+no result. See [types](/language/definitions#type) for casts and type tests.
 
 ## Ordinary functions can wait
 

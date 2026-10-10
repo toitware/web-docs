@@ -83,9 +83,11 @@ import react components.
 The programmer's tour is the complete first introduction for people who already
 program. Explain Toit directly, then use C/C++, JavaScript, Python, or Java/Kotlin
 comparisons where useful. Familiarity with every comparison language is not a
-prerequisite. Keep essential content in one reading path; language-specific
-pages highlight differences and link into it. Reference pages cover detailed
-rules rather than carrying missing parts of the introduction.
+prerequisite. Keep essential content in the shared tour. The C/C++ guide is an
+alternative complete introduction; the JavaScript and Python guides highlight
+differences and link into the tour. Keep examples and semantic explanations
+consistent across these paths. Reference pages cover detailed rules, and the
+comparison cheat sheet provides a quick syntax lookup.
 
 Beginner lessons assume no programming knowledge. Introduce concepts when a
 concrete example needs them, with time to run and modify the program before

@@ -9,32 +9,65 @@ and draws comparisons with C/C++, JavaScript, Python, and Java/Kotlin.
 Each Toit example is a complete program you can run using the
 [local setup](/language/beginner#1-run-your-first-program).
 
-## Calls do not produce function references
+<span id="calls-do-not-produce-function-references" />
 
-`console.log(value)` becomes `print value`. A zero-argument method is invoked
-by naming it: `name.trim` calls `trim`. To capture work for later, write a lambda
-such as `:: name.trim`, then invoke it with `.call`.
+## Calling functions and methods
 
-Use `:=` for a mutable declaration and `=` for reassignment. `::=` makes a
-binding final, like `const`; it does not freeze the object. Names use
-`kebab-case`, and blocks are delimited by indentation.
+`console.log(value)` becomes `print value`: spaces separate the arguments.
+When one call supplies an argument to another, group it with parentheses:
+`print (int.parse "42")`.
+
+A zero-argument method is called by naming it. In this example, `name.trim`
+calls `trim` and returns a string:
 
 ```toit
 main:
-  names ::= [" Ada "]
-  names.add " Grace "
-  show-names := ::
-    names.do: |name|
-      print name.trim
-  show-names.call
+  name := " Ada "
+  print name.trim
 ```
 
-This prints `Ada` and `Grace` on separate lines. The final `names` binding
-still refers to a mutable list.
+This prints `Ada`. Toit uses indentation to group statements, with two spaces
+per level. Names for variables and functions use `kebab-case`.
 
-Named arguments are part of the signature: `sleep --ms=100`. They are not an
-options object. Parentheses group nested calls, as in `print (int.parse "42")`.
-See [syntax](/language/syntax).
+## Variables and final bindings
+
+Use `:=` to introduce a local variable and `=` to reassign it. Toit normally
+uses mutable locals, even when a particular variable is only assigned once.
+
+<!-- RESET CODE -->
+
+```toit
+main:
+  count := 1
+  count++
+  print count  // Prints 2.
+```
+
+`::=` declares a final binding, like JavaScript's `const`: the binding cannot
+be reassigned, but the object can still change. Prefer final bindings for fields
+and globals when reassignment is unnecessary. A common field declaration is
+`name/string`, which also makes the field final; we will use it in the class
+example below.
+
+## Named arguments
+
+Named arguments are part of a function's signature and its calls. They are
+written with `--`; they are not properties of an options object:
+
+<!-- RESET CODE -->
+
+```toit
+greet name --greeting="Hello":
+  print "$greeting $name"
+
+main:
+  greet "Ada"
+  greet "Grace" --greeting="Welcome"
+```
+
+This prints `Hello Ada`, then `Welcome Grace`. The default is used when the
+argument is omitted. Positional parameters can have defaults too.
+See [syntax](/language/syntax) for more call examples.
 
 ## Strings interpolate with `$`
 
@@ -80,7 +113,8 @@ main:
   print (find-long-name ["Ada", "Grace", "Linus"])
 ```
 
-This prints `Grace`. A `return` inside a JavaScript `forEach` callback would
+This prints `Grace`. This exit from the surrounding function is called a
+*non-local return*. A `return` inside a JavaScript `forEach` callback would
 only return from that callback. Here it ends `find-long-name`.
 
 See [blocks and lambdas](/language/blocks-and-lambdas) for parameters and lifetime
@@ -185,7 +219,8 @@ and a map for dynamic keys. `{"name": "Ada"}` is a map; access it as
 
 Create an instance by calling its class, without `new`. A constructor parameter
 such as `.name` initializes the corresponding field. Within methods, `this`
-refers to the receiver; wrapping a call in a lambda is the way to defer it.
+refers to the receiver. Unlike JavaScript, fields and methods are already in
+scope inside a method: write `name` or `greet` without `this.`.
 
 <!-- RESET CODE -->
 
@@ -200,17 +235,86 @@ class Person:
 
 main:
   person := Person "Ada"
-  greet-later := :: person.greet
-  greet-later.call
+  person.greet
   labels := {"name": person.name}
   print labels["name"]
 ```
 
 This prints `Hello Ada`, followed by `Ada`.
 
-TypeScript users should also note that Toit annotations such as `/string` are
-checked at runtime. They are not erased type declarations. A nullable string
-is `string?`. See [types](/language/definitions#type) and
+## Types are checked at runtime
+
+Toit lets you choose where to add type annotations. A parameter uses `/Type`,
+and a return type uses `-> Type`. Here both arguments and the result must be
+integers:
+
+<!-- RESET CODE -->
+
+```toit
+add a/int b/int -> int:
+  return a + b
+
+main:
+  print (add 2 3)  // Prints 5.
+  value/any := "3"
+  error := catch: add 2 value
+  if error:
+    print "Expected integers"
+```
+
+The `any` annotation allows `value` to hold any kind of value. Passing it to
+`add` checks whether it is an integer. Unlike TypeScript's erased annotations,
+Toit annotations check actual values when the program runs. The second call fails its check and prints `Expected
+integers`. The analyzer catches some mistakes before execution, but not every
+type error. Omitting an annotation allows dynamic values; `any` explicitly
+accepts any value, including `null`.
+
+### Nullable values
+
+Types exclude `null` by default. Add `?` to allow it: `string?` means a string
+or `null`. This is useful for a value that may be absent:
+
+<!-- RESET CODE -->
+
+```toit
+greet name/string? -> none:
+  print "Hello $(name or "World")"
+
+main:
+  greet "Ada"
+  greet null
+```
+
+This prints `Hello Ada`, then `Hello World`. `none` marks a function with no
+result. A nullable value can be passed to a non-nullable parameter, but its
+runtime value must satisfy that parameter's check; see
+[nullable assignments](/language/toitversus#nullable-types-and-assignments).
+
+### Interfaces are explicit
+
+TypeScript can accept an object because its shape matches an interface.
+In Toit, the class must declare `implements` as well as provide the methods:
+
+<!-- RESET CODE -->
+
+```toit
+interface Named:
+  name -> string
+
+class Person implements Named:
+  name/string
+
+  constructor .name:
+
+main:
+  person/Named := Person "Ada"
+  print person.name
+```
+
+The public field supplies the `name` getter required by the interface. Use
+`value is Type` to test a type, or `value as Type` for a checked cast. A cast
+does not convert text to a number; use `int.parse` for that.
+See [types](/language/definitions#type) and
 [classes](/language/objects-constructors-inheritance-interfaces).
 
 ## Catching errors returns a value
