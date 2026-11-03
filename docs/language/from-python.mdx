@@ -49,16 +49,18 @@ A default value applies when the caller omits the argument:
 <!-- RESET CODE -->
 
 ```toit
-greet name --greeting="Hello":
-  print "$greeting $name"
+greet recipient --greeting="Hello":
+  print "$greeting $recipient"
 
 main:
   greet "Ada"
   greet "Grace" --greeting="Welcome"
 ```
 
-This prints `Hello Ada`, then `Welcome Grace`. Positional parameters can also
-have defaults.
+This prints `Hello Ada`, then `Welcome Grace`. In the second call, `"Grace"`
+supplies the positional parameter `recipient`, while `--greeting="Welcome"`
+supplies the named parameter `greeting`. Positional parameters can also have
+defaults.
 
 ## Test emptiness explicitly
 
