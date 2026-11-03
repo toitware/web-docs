@@ -136,13 +136,16 @@ be annotated `-> none`.
 <!-- RESET CODE -->
 
 ```toit
-greet name/string="World" --greeting/string="Hello" -> string:
-  return "$greeting $name"
+greet recipient/string="World" --greeting/string="Hello" -> string:
+  return "$greeting $recipient"
 
 main:
   print (greet)                         // Prints Hello World.
   print (greet "Ada" --greeting="Hi")    // Prints Hi Ada.
 ```
+
+In the second call, `"Ada"` supplies the positional parameter `recipient`,
+while `--greeting="Hi"` supplies the named parameter `greeting`.
 
 C/C++ and JavaScript programmers should notice that named arguments are part
 of the call's syntax, not fields in an options object. A boolean named argument
