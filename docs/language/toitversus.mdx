@@ -144,6 +144,10 @@ main:
   print (greet "Ada" --greeting="Hi")    // Prints Hi Ada.
 ```
 
+Here, `name` is a positional parameter: the second call passes `"Ada"` to it
+by position. `greeting` is a named parameter: the call passes `"Hi"` to it
+using the label `--greeting`.
+
 C/C++ and JavaScript programmers should notice that named arguments are part
 of the call's syntax, not fields in an options object. A boolean named argument
 can be passed as `--verbose` for true or `--no-verbose` for false. Toit supports
