@@ -57,16 +57,18 @@ written with `--`; they are not properties of an options object:
 <!-- RESET CODE -->
 
 ```toit
-greet name --greeting="Hello":
-  print "$greeting $name"
+greet recipient --greeting="Hello":
+  print "$greeting $recipient"
 
 main:
   greet "Ada"
   greet "Grace" --greeting="Welcome"
 ```
 
-This prints `Hello Ada`, then `Welcome Grace`. The default is used when the
-argument is omitted. Positional parameters can have defaults too.
+This prints `Hello Ada`, then `Welcome Grace`. In the second call, `"Grace"`
+supplies the positional parameter `recipient`, while `--greeting="Welcome"`
+supplies the named parameter `greeting`. The default greeting is used when
+`--greeting` is omitted. Positional parameters can have defaults too.
 See [syntax](/language/syntax) for more call examples.
 
 ## Strings interpolate with `$`

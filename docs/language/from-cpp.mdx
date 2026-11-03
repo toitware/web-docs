@@ -73,8 +73,8 @@ uses `--` in its definition and calls:
 <!-- RESET CODE -->
 
 ```toit
-greet name="World" --greeting="Hello" --loud=false:
-  text := "$greeting $name"
+greet recipient="World" --greeting="Hello" --loud=false:
+  text := "$greeting $recipient"
   print (loud ? "$text!" : text)
 
 main:
@@ -83,8 +83,9 @@ main:
   greet "Grace" --no-loud
 ```
 
-This prints `Hello World`, `Hi Ada!`, then `Hello Grace`. A bare boolean flag
-passes `true`; its `--no-` form passes `false`.
+This prints `Hello World`, `Hi Ada!`, then `Hello Grace`. Here, `recipient`
+is a positional parameter; `greeting` and `loud` are named parameters.
+A bare boolean flag passes `true`; its `--no-` form passes `false`.
 
 Toit overloads by argument count and names, not by parameter types. Use `return`
 to supply a function's result. Type annotations can document and check the
